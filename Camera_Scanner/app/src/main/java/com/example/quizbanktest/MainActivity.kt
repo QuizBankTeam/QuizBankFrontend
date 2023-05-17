@@ -16,9 +16,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.quizbanktest.adapters.RecentViewAdapter
+import com.example.quizbanktest.adapters.RecommendViewAdapter
+import com.example.quizbanktest.adapters.WrongViewAdapter
 import com.example.quizbanktest.databinding.ActivityMainBinding
+import com.example.quizbanktest.models.QuestionBankModel
+import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.network.ImgurService
 import com.example.quizbanktest.utils.Constants
+import com.example.quizbanktest.utils.ConstantsQuestionBank
+import com.example.quizbanktest.utils.ConstantsRecommend
+import com.example.quizbanktest.utils.ConstantsWrong
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -72,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("Saved Image : ", "Path :: $saveImageToInternalStorage")
 
 
-                binding?.cameraTest!!.setImageBitmap(selectedImageBitmap) // Set the selected image from GALLERY to imageView.
+//                binding?.cameraTest!!.setImageBitmap(selectedImageBitmap) Set the selected image from GALLERY to imageView.
             } catch (e: IOException) {
                 e.printStackTrace()
                 Toast.makeText(this@MainActivity, "Failed!", Toast.LENGTH_SHORT).show()
@@ -99,14 +110,14 @@ class MainActivity : AppCompatActivity() {
 
             val uCrop = UCrop.of(sourceUri, destinationUri)
             uCrop.withAspectRatio(1f, 1f)
-            uCrop.withMaxResultSize(450, 450)
+            uCrop.withMaxResultSize(800, 800)
 
             val uCropIntent = uCrop.getIntent(this)
             uCropActivityResultLauncher.launch(uCropIntent)
 
             Log.e("Saved Image : ", "Path :: $saveImageToInternalStorage")
 
-            binding?.cameraTest!!.setImageBitmap(thumbnail)
+//            binding?.cameraTest!!.setImageBitmap(thumbnail)
 
 
 
@@ -119,7 +130,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-
+        setupRecentRecyclerView(ConstantsQuestionBank.getQuestions())
+        setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+        setupWrongListRecyclerView(ConstantsWrong.getQuestions())
         binding?.camera?.setOnClickListener {
             val pictureDialog = AlertDialog.Builder(this)
             pictureDialog.setTitle("Select Action")
@@ -344,6 +357,35 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
     }
+
+    private fun setupRecentRecyclerView(quizBankList: ArrayList<QuestionBankModel>) {
+
+        binding?.recentQuizBankList?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        binding?.recentQuizBankList?.setHasFixedSize(true)
+
+        val placesAdapter = RecentViewAdapter(this, quizBankList)
+        binding?.recentQuizBankList?.adapter = placesAdapter
+
+
+    }
+
+    private fun setupWrongListRecyclerView(wrongList: ArrayList<QuestionModel>) {
+
+        binding?.recentWrongList?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        binding?.recentWrongList?.setHasFixedSize(true)
+
+        val placesAdapter = WrongViewAdapter(this, wrongList)
+        binding?.recentWrongList?.adapter = placesAdapter
+    }
+
+    private fun setupRecommendRecyclerView(recommendList: ArrayList<QuestionModel>) {
+
+        binding?.recentRecommendList?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        binding?.recentRecommendList?.setHasFixedSize(true)
+
+        val placesAdapter = RecommendViewAdapter(this, recommendList)
+    }
+
     companion object {
         private const val GALLERY = 1
         private const val CAMERA = 2

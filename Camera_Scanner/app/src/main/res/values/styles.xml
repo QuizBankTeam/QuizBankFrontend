@@ -7,7 +7,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
+    <style name="CustomToolbarStyle">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:colorControlNormal">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">35sp</item>
+    </style>
 
 
 </resources>

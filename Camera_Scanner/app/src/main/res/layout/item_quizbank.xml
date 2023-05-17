@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="200dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:background="@color/teal_700"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/item_quiz_bank_cv_corner_radius"
+        app:cardElevation="@dimen/item_quiz_bank_cv_elevation"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="@dimen/item_quiz_bank_content_padding">
+
+            <ImageView
+                android:id="@+id/iv_bank_image"
+                android:layout_width="@dimen/item_quiz_bank_circular_image_size"
+                android:layout_height="@dimen/item_quiz_bank_circular_image_size"
+                android:src="@drawable/folder"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/item_quiz_bank_ll_marginStart"
+                android:layout_marginEnd="@dimen/item_quiz_bank_ll_marginEnd"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/recentTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="@dimen/item_quiz_bank_title_textSize"
+                    android:textStyle="bold"
+                    tools:text="Name" />
+
+                <TextView
+                    android:id="@+id/recentType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/item_happy_place_description_text_color"
+                    android:textSize="@dimen/item_quiz_bank_description_textSize"
+                    tools:text="Type" />
+                <TextView
+                    android:id="@+id/recentDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/item_happy_place_description_text_color"
+                    android:textSize="12sp"
+                    tools:text="Date" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

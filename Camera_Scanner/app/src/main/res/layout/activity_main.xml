@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_home_detail"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:titleTextAppearance="@style/CustomToolbarStyle"
+        app:titleTextColor="@color/colorPrimaryDark"
+        app:title="Quiz Bank📑"
+        android:theme="@style/CustomToolbarStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <LinearLayout
         android:id="@+id/fl_home"
@@ -16,180 +30,183 @@
         app:layout_constraintBottom_toTopOf="@id/ll_action_buttons"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_home_detail"
         android:orientation="vertical"
         >
+        <ScrollView
 
-        <LinearLayout
+            android:id="@+id/sv_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-            <RadioGroup
-                android:id="@+id/readType"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/fl_home"
-                android:layout_margin="8dp"
-                android:background="@drawable/drawable_radio_group_tab_background"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/onePersonOnly"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="0.50"
-                    android:background="@drawable/drawable_units_tab_selector"
-                    android:button="@null"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:text="單人模式"
-                    android:textColor="@drawable/drawable_units_tab_text_color_selector"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <RadioButton
-                    android:id="@+id/MultiPerson"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="0.50"
-                    android:background="@drawable/drawable_units_tab_selector"
-                    android:button="@null"
-                    android:checked="false"
-                    android:gravity="center"
-                    android:text="多人模式"
-                    android:textColor="@drawable/drawable_units_tab_text_color_selector"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </RadioGroup>
-
-
-                <LinearLayout
-                    android:id="@+id/labelList"
+                android:layout_height="wrap_content">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/join_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp">
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="5dp"
+
+                    app:cardBackgroundColor="@color/gray"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintBottom_toTopOf="@id/recent_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent">
 
                     <LinearLayout
-                        android:id="@+id/label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:background="@color/white"
-                        >
-                        <FrameLayout
-                            android:layout_width="65dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/selected_option_border_bg"
-                            >
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="作業系統"
-                                android:layout_gravity="center"
-                                android:textColor="@color/black"
-                                android:textSize="6sp"
-                                android:textStyle="bold"
-                                />
-                        </FrameLayout>
+                        android:layout_margin="2dp"
+                        android:orientation="vertical">
 
-                        <FrameLayout
-                            android:layout_width="65dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/selected_option_border_bg"
-                            android:layout_marginLeft="10dp"
-                            >
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputEditText.OutlinedBox"
+                            app:boxBackgroundColor="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="作業系統"
-                                android:layout_gravity="center"
-                                android:textColor="@color/black"
-                                android:textSize="6sp"
-                                android:textStyle="bold"
-                                />
-                        </FrameLayout>
-                        <FrameLayout
-                            android:layout_width="65dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/selected_option_border_bg"
-                            android:layout_marginLeft="10dp"
-                            >
+                            android:layout_marginTop="1dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/join_code_text"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="作業系統"
-                                android:layout_gravity="center"
-                                android:textColor="@color/black"
-                                android:textSize="6sp"
-                                android:textStyle="bold"
-                                />
-                        </FrameLayout>
-                        <FrameLayout
-                            android:layout_width="65dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/selected_option_border_bg"
-                            android:layout_marginLeft="10dp"
-                            >
+                                android:hint="Enter a invitation               📝"
+                                android:inputType="textCapWords"
+                                android:textColor="#363A43"
+                                android:textColorHint="#7A8089" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="作業系統"
-                                android:layout_gravity="center"
-                                android:textColor="@color/black"
-                                android:textSize="6sp"
-                                android:textStyle="bold"
-                                />
-                        </FrameLayout>
-                        <FrameLayout
-                            android:layout_width="40dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/selected_option_border_bg"
-                            android:layout_marginLeft="10dp"
-                            >
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="..."
-                                android:layout_gravity="center"
-                                android:textColor="@color/black"
-                                android:textSize="15sp"
-                                android:textStyle="bold"
-                                />
-                        </FrameLayout>
+                        <android.widget.Button
+                            android:id="@+id/btn_join"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:background="@color/colorPrimary"
+                            android:text="START"
+                            android:textSize="18sp"
+                            android:textColor="@color/white"/>
+
                     </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/recent_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=" Recently Viewed : "
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/join_code"
+                    app:layout_constraintBottom_toTopOf="@id/recent_list"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    />
+                <LinearLayout
+                    android:id="@+id/recent_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/recent_text"
+                    app:layout_constraintBottom_toTopOf="@id/recent_wrong"
+                    >
+                    <View
+                        android:id="@+id/line"
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:background="@color/colorPrimaryDark"/>
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recent_quiz_bank_list"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="visible"
+                        tools:visibility="visible" />
                 </LinearLayout>
-            <ImageView
-                android:layout_below="@id/labelList"
-                android:id="@+id/cameraTest"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:fillViewport="true"
-                android:src="@color/colorRipple"
-                >
-            </ImageView>
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/quizDataList"-->
-<!--                android:layout_below="@id/sv_main"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="5dp" />-->
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/recent_wrong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=" Recently Wrong Question : "
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recent_list"
+                    app:layout_constraintBottom_toTopOf="@id/wrong_list"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    />
+                <LinearLayout
+                    android:id="@+id/wrong_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/recent_wrong"
+                    app:layout_constraintBottom_toTopOf="@id/recommend_text"
+                    >
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:background="@color/colorPrimaryDark"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recent_wrong_list"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="visible"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/recommend_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Recommend Question : "
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/recommend_list"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wrong_list" />
+
+                <LinearLayout
+                    android:id="@+id/recommend_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/recommend_text"
+                    >
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:background="@color/colorPrimaryDark"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recent_recommend_list"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="visible"
+                        tools:visibility="visible" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
 
 
-
-
-    </LinearLayout>
-
-
+   </LinearLayout>
 
 
     <LinearLayout
@@ -205,50 +222,53 @@
         app:layout_constraintEnd_toEndOf="parent">
         <ImageButton
             android:id="@+id/home"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/home"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/baseline_home_24"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
 
             />
         <ImageButton
             android:id="@+id/test"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/test"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/baseline_border_color_24"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
 
             />
         <ImageButton
             android:id="@+id/camera"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
             android:background="@color/colorRipple"
-            android:src="@drawable/camera"
+            android:src="@drawable/baseline_camera_alt_24"
             android:scaleType="fitXY"
 
             />
         <ImageButton
             android:id="@+id/bank"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/book"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/baseline_collections_bookmark_24"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
 
             />
         <ImageButton
             android:id="@+id/menu"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/menu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/baseline_menu_24"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
 
