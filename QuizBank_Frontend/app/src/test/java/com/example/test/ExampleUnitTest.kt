@@ -1,4 +1,4 @@
-package com.example.quizbank_frontend
+package com.example.test
 
 import org.junit.Test
 
