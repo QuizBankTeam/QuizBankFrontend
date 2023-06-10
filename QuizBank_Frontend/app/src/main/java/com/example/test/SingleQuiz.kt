@@ -1,4 +1,7 @@
 package com.example.test
 
-class SingleQuiz {
+import androidx.appcompat.app.AppCompatActivity
+
+class SingleQuiz: AppCompatActivity() {
+    
 }
