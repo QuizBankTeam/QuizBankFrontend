@@ -17,8 +17,8 @@ class MultiplayerQuiz: AppCompatActivity() {
         mpQuizBinding = MpQuizBinding.inflate(layoutInflater)
         setContentView(mpQuizBinding.root)
 
-        mpQuizBinding.QuizView.layoutManager = LinearLayoutManager(this)
-        mpQuizBinding.QuizView.setHasFixedSize(true)
+        mpQuizBinding.QuizList.layoutManager = LinearLayoutManager(this)
+        mpQuizBinding.QuizList.setHasFixedSize(true)
 
         init()
 //      binding.optionsView.adapter = OptionAdapter(this, optionlist)
@@ -28,12 +28,17 @@ class MultiplayerQuiz: AppCompatActivity() {
 
     private fun buttonClick(){
         val tmpQuiz = QuizList[0]
-//        intent.setClass(this@MultiplayerQuiz, SingleQuiz::class.java)
-//        intent.putExtra("Key_title", title)
-//        intent.putExtra("Key_startDate", startDate)
-//        intent.putExtra("Key_QuestionList", QuestionList)
-//        intent.putExtra("Key_endDate", endDate)
-//        startActivity(intent)
+        intent.setClass(this@MultiplayerQuiz, SingleQuiz::class.java)
+        intent.putExtra("Key_id", tmpQuiz.id)
+        intent.putExtra("Key_title", tmpQuiz.title)
+        intent.putExtra("Key_type", tmpQuiz.type)
+        intent.putExtra("Key_status", tmpQuiz.status)
+        intent.putExtra("Key_duringTime", tmpQuiz.duringTime)
+        intent.putExtra("Key_startDate", tmpQuiz.startDate)
+        intent.putExtra("Key_endDate", tmpQuiz.endDate)
+        intent.putExtra("Key_members", tmpQuiz.members)
+        intent.putExtra("Key_questions", tmpQuiz.questions)
+        startActivity(intent)
 
     }
 
@@ -50,6 +55,7 @@ class MultiplayerQuiz: AppCompatActivity() {
         val tag = arrayOf("98年", "社會", "歷史").toCollection(ArrayList())
         val tag2 = arrayOf("98年", "公民", "地理").toCollection(ArrayList())
         val QuizMember = arrayOf("jacky","wcy").toCollection(ArrayList())
+        val casualDuring = intArrayOf(20,20).toCollection(ArrayList())
         var tmpQuestion = Question("123", "題目1", "123", " 圖二為日本統治期間臺灣發電設施之設備容量\n" +
                         "變化圖。請問，使 1930 年代設備容量急遽增加\n" + "的設施為何？", optionText,
                     "single", "bank one", optionAns, "an answer description1", "jacky",
@@ -60,7 +66,7 @@ class MultiplayerQuiz: AppCompatActivity() {
                     "multi", "bank two", optionAns2, "an answer description2", "jacky", R.drawable.society9802, tag2, "2023/05/15")
         QuestionList.add(tmpQuestion)
 
-        val tmpQuiz = Quiz("testmp_quiz", title, "casual", "ready", 0, "not yet","not yet", QuizMember,QuestionList)
+        val tmpQuiz = Quiz("testmp_quiz", title, "casual", "ready", 0, casualDuring, "not yet","not yet", QuizMember,QuestionList)
 
         QuizList.add(tmpQuiz)
 
