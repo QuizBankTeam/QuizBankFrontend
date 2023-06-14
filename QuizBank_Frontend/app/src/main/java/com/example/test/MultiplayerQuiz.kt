@@ -16,14 +16,15 @@ class MultiplayerQuiz: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mpQuizBinding = MpQuizBinding.inflate(layoutInflater)
         setContentView(mpQuizBinding.root)
-
+        init()
         mpQuizBinding.QuizList.layoutManager = LinearLayoutManager(this)
         mpQuizBinding.QuizList.setHasFixedSize(true)
+        mpQuizBinding.QuizList.adapter = QuizAdapter(this, QuizList)
+        mpQuizBinding.QuizList.isClickable = true
+//        mpQuizBinding.QuizList.setOnClickListener { buttonClick() }
 
-        init()
-//      binding.optionsView.adapter = OptionAdapter(this, optionlist)
 
-//      login_button.setOnClickListener{ buttonClick() }
+
     }
 
     private fun buttonClick(){
@@ -54,7 +55,9 @@ class MultiplayerQuiz: AppCompatActivity() {
         val optionAns2 = arrayOf("B ddd text 456").toCollection(ArrayList())
         val tag = arrayOf("98年", "社會", "歷史").toCollection(ArrayList())
         val tag2 = arrayOf("98年", "公民", "地理").toCollection(ArrayList())
-        val QuizMember = arrayOf("jacky","wcy").toCollection(ArrayList())
+        val QuizMember = arrayOf("jl","wcy","yc","wt","cy").toCollection(ArrayList())
+        val QuizMember2 = arrayOf("jl").toCollection(ArrayList())
+        val QuizMember3 = arrayOf("蠟筆小新").toCollection(ArrayList())
         val casualDuring = intArrayOf(20,20).toCollection(ArrayList())
         var tmpQuestion = Question("123", "題目1", "123", " 圖二為日本統治期間臺灣發電設施之設備容量\n" +
                         "變化圖。請問，使 1930 年代設備容量急遽增加\n" + "的設施為何？", optionText,
@@ -66,9 +69,11 @@ class MultiplayerQuiz: AppCompatActivity() {
                     "multi", "bank two", optionAns2, "an answer description2", "jacky", R.drawable.society9802, tag2, "2023/05/15")
         QuestionList.add(tmpQuestion)
 
-        val tmpQuiz = Quiz("testmp_quiz", title, "casual", "ready", 0, casualDuring, "not yet","not yet", QuizMember,QuestionList)
+        val tmpQuiz = Quiz("testmp_quiz1", title, "casual", "ready", 0, casualDuring, "2023-01-05","not yet", QuizMember,QuestionList)
+        val tmpQuiz2 = Quiz("testmp_quiz2", "期中考", "casual", "script", 0, casualDuring, "2023-06-14","not yet", QuizMember2,QuestionList)
 
         QuizList.add(tmpQuiz)
-
+        QuizList.add(tmpQuiz2)
+      
     }
 }

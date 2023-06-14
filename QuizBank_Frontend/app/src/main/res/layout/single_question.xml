@@ -91,7 +91,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="55dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/corner_radius_blue"
                     android:padding="5dp"
@@ -99,27 +99,30 @@
                     android:gravity="center"
                     android:text="2009"
                     android:textSize="15dp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:drawableLeft="@drawable/tag24"/>
                 <TextView
-                    android:layout_width="55dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/corner_radius_blue"
                     android:padding="5dp"
                     android:layout_marginHorizontal="3dp"
                     android:gravity="center"
                     android:text="成大"
-                    android:textSize="15dp"
-                    android:textColor="@color/white"/>
+                    android:textSize="13dp"
+                    android:textColor="@color/white"
+                    android:drawableLeft="@drawable/tag24"/>
                 <TextView
-                    android:layout_width="55dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/corner_radius_blue"
                     android:layout_marginHorizontal="3dp"
                     android:padding="5dp"
                     android:gravity="center"
                     android:text="考古題"
-                    android:textSize="15dp"
-                    android:textColor="@color/white"/>
+                    android:textSize="13dp"
+                    android:textColor="@color/white"
+                    android:drawableLeft="@drawable/tag24"/>
             </LinearLayout>
 
         </RelativeLayout>

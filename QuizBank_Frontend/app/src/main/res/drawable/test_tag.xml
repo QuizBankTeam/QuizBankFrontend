@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 灰色背景 -->
+
+    <item android:gravity="center"
+        android:width="10dp"
+       >
+        <bitmap
+            android:src="@drawable/tag_vertical"
+            android:gravity="center" />
+    </item>
+</layer-list>
