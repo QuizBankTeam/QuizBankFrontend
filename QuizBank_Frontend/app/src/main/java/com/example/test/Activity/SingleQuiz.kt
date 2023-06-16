@@ -33,7 +33,7 @@ class SingleQuiz: AppCompatActivity() {
         val startDate = intent.getStringExtra("Key_startDate")
         val endDate = intent.getStringExtra("Key_endDate")
         val members = intent.getStringExtra("Key_members")
-        val questions = intent.getStringArrayListExtra("Key_questions")
+//        val questions = intent.getStringArrayListExtra("Key_questions")
 //        questionlist = questions
     }
 
