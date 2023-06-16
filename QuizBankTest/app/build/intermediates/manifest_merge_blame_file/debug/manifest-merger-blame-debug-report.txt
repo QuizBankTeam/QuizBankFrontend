@@ -1,0 +1,314 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.quizbanktest"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+8-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="33" />
+9-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.CAMERA" />
+11-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:5:5-65
+11-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:5:22-62
+12
+13    <uses-feature android:name="android.hardware.camera.autofocus" />
+13-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:7:5-70
+13-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:7:19-67
+14    <uses-feature
+14-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:8:5-10:35
+15        android:name="android.hardware.camera"
+15-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:9:9-47
+16        android:required="true" />
+16-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:10:9-32
+17
+18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+18-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:12:5-79
+18-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:12:22-76
+19    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+19-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:13:5-76
+19-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:13:22-73
+20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+20-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:14:5-80
+20-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:14:22-77
+21    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+21-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:15:5-81
+21-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:15:22-78
+22    <uses-permission android:name="android.permission.INTERNET" />
+22-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:16:5-67
+22-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:16:22-64
+23
+24    <permission
+24-->[androidx.core:core:1.9.0] C:\Users\jacky\.gradle\caches\transforms-3\c73afc1fa215d9ca128620a3c01802b0\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+25        android:name="com.example.quizbanktest.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+25-->[androidx.core:core:1.9.0] C:\Users\jacky\.gradle\caches\transforms-3\c73afc1fa215d9ca128620a3c01802b0\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+26        android:protectionLevel="signature" />
+26-->[androidx.core:core:1.9.0] C:\Users\jacky\.gradle\caches\transforms-3\c73afc1fa215d9ca128620a3c01802b0\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+27
+28    <uses-permission android:name="com.example.quizbanktest.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+28-->[androidx.core:core:1.9.0] C:\Users\jacky\.gradle\caches\transforms-3\c73afc1fa215d9ca128620a3c01802b0\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+28-->[androidx.core:core:1.9.0] C:\Users\jacky\.gradle\caches\transforms-3\c73afc1fa215d9ca128620a3c01802b0\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+29
+30    <application
+30-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:18:5-72:19
+31        android:allowBackup="true"
+31-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:19:9-35
+32        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+32-->[androidx.core:core:1.9.0] C:\Users\jacky\.gradle\caches\transforms-3\c73afc1fa215d9ca128620a3c01802b0\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+33        android:dataExtractionRules="@xml/data_extraction_rules"
+33-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:20:9-65
+34        android:debuggable="true"
+35        android:enableOnBackInvokedCallback="true"
+35-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:21:9-51
+36        android:extractNativeLibs="false"
+37        android:fullBackupContent="@xml/backup_rules"
+37-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:22:9-54
+38        android:icon="@drawable/qb_icon"
+38-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:23:9-41
+39        android:label="@string/app_name"
+39-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:24:9-41
+40        android:supportsRtl="true"
+40-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:25:9-35
+41        android:testOnly="true"
+42        android:theme="@style/Theme.QuizBankTest"
+42-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:26:9-50
+43        android:usesCleartextTraffic="true" >
+43-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:27:9-44
+44        <activity
+44-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:29:9-31:40
+45            android:name="com.example.quizbanktest.activity.TagActivity"
+45-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:30:13-49
+46            android:exported="false" />
+46-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:31:13-37
+47        <activity
+47-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:32:9-34:40
+48            android:name="com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity"
+48-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:33:13-66
+49            android:exported="false" />
+49-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:34:13-37
+50        <activity
+50-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:35:9-37:40
+51            android:name="com.example.quizbanktest.activity.IntroActivity"
+51-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:36:13-51
+52            android:exported="false" />
+52-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:37:13-37
+53        <activity
+53-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:38:9-40:40
+54            android:name="com.example.quizbanktest.activity.ColorPickerActivity1"
+54-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:39:13-58
+55            android:exported="false" />
+55-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:40:13-37
+56        <activity
+56-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:41:9-43:40
+57            android:name="com.example.quizbanktest.activity.BankActivity"
+57-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:42:13-50
+58            android:exported="false" />
+58-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:43:13-37
+59        <activity
+59-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:44:9-47:67
+60            android:name="com.example.quizbanktest.activity.PaintActivity"
+60-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:45:13-51
+61            android:exported="false"
+61-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:46:13-37
+62            android:parentActivityName="com.example.quizbanktest.activity.MainActivity" />
+62-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:47:13-64
+63        <activity
+63-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:48:9-51:72
+64            android:name="com.yalantis.ucrop.UCropActivity"
+64-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:49:13-60
+65            android:screenOrientation="portrait"
+65-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:50:13-49
+66            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+66-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:51:13-69
+67        <activity
+67-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:52:9-61:20
+68            android:name="com.example.quizbanktest.activity.MainActivity"
+68-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:53:13-50
+69            android:exported="true"
+69-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:54:13-36
+70            android:screenOrientation="portrait" >
+70-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:55:13-49
+71            <intent-filter>
+71-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:56:13-60:29
+72                <action android:name="android.intent.action.MAIN" />
+72-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:57:17-69
+72-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:57:25-66
+73
+74                <category android:name="android.intent.category.LAUNCHER" />
+74-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:59:17-77
+74-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:59:27-74
+75            </intent-filter>
+76        </activity>
+77
+78        <provider
+78-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:63:9-71:20
+79            android:name="androidx.core.content.FileProvider"
+79-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:64:13-62
+80            android:authorities="com.example.quizbanktest.fileprovider"
+80-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:65:13-72
+81            android:exported="false"
+81-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:66:13-37
+82            android:grantUriPermissions="true" >
+82-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:67:13-47
+83            <meta-data
+83-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:68:13-70:48
+84                android:name="android.support.FILE_PROVIDER_PATHS"
+84-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:69:17-67
+85                android:resource="@xml/path" />
+85-->C:\Users\jacky\OneDrive\文件\GitHub\QuizBankFrontend\QuizBankTest\app\src\main\AndroidManifest.xml:70:17-45
+86        </provider>
+87
+88        <activity
+88-->[com.karumi:dexter:6.0.1] C:\Users\jacky\.gradle\caches\transforms-3\63d32b221201d71ee8505cd32ffb71fc\transformed\dexter-6.0.1\AndroidManifest.xml:27:9-29:72
+89            android:name="com.karumi.dexter.DexterActivity"
+89-->[com.karumi:dexter:6.0.1] C:\Users\jacky\.gradle\caches\transforms-3\63d32b221201d71ee8505cd32ffb71fc\transformed\dexter-6.0.1\AndroidManifest.xml:28:13-60
+90            android:theme="@style/Dexter.Internal.Theme.Transparent" />
+90-->[com.karumi:dexter:6.0.1] C:\Users\jacky\.gradle\caches\transforms-3\63d32b221201d71ee8505cd32ffb71fc\transformed\dexter-6.0.1\AndroidManifest.xml:29:13-69
+91        <activity
+91-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:23:9-27:75
+92            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+92-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:24:13-93
+93            android:excludeFromRecents="true"
+93-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:25:13-46
+94            android:exported="false"
+94-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:26:13-37
+95            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+95-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:27:13-72
+96        <!--
+97            Service handling Google Sign-In user revocation. For apps that do not integrate with
+98            Google Sign-In, this service will never be started.
+99        -->
+100        <service
+100-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:33:9-37:51
+101            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+101-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:34:13-89
+102            android:exported="true"
+102-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:35:13-36
+103            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+103-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:36:13-107
+104            android:visibleToInstantApps="true" />
+104-->[com.google.android.gms:play-services-auth:20.5.0] C:\Users\jacky\.gradle\caches\transforms-3\60b669a42733e520df5927cc6ea82989\transformed\play-services-auth-20.5.0\AndroidManifest.xml:37:13-48
+105        <service
+105-->[com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0] C:\Users\jacky\.gradle\caches\transforms-3\5726c9ee95849bde80d5943a9efb31ef\transformed\play-services-mlkit-text-recognition-common-19.0.0\AndroidManifest.xml:9:9-15:19
+106            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
+106-->[com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0] C:\Users\jacky\.gradle\caches\transforms-3\5726c9ee95849bde80d5943a9efb31ef\transformed\play-services-mlkit-text-recognition-common-19.0.0\AndroidManifest.xml:10:13-91
+107            android:directBootAware="true"
+107-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:17:13-43
+108            android:exported="false" >
+108-->[com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0] C:\Users\jacky\.gradle\caches\transforms-3\5726c9ee95849bde80d5943a9efb31ef\transformed\play-services-mlkit-text-recognition-common-19.0.0\AndroidManifest.xml:11:13-37
+109            <meta-data
+109-->[com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0] C:\Users\jacky\.gradle\caches\transforms-3\5726c9ee95849bde80d5943a9efb31ef\transformed\play-services-mlkit-text-recognition-common-19.0.0\AndroidManifest.xml:12:13-14:85
+110                android:name="com.google.firebase.components:com.google.mlkit.vision.text.internal.TextRegistrar"
+110-->[com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0] C:\Users\jacky\.gradle\caches\transforms-3\5726c9ee95849bde80d5943a9efb31ef\transformed\play-services-mlkit-text-recognition-common-19.0.0\AndroidManifest.xml:13:17-114
+111                android:value="com.google.firebase.components.ComponentRegistrar" />
+111-->[com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0] C:\Users\jacky\.gradle\caches\transforms-3\5726c9ee95849bde80d5943a9efb31ef\transformed\play-services-mlkit-text-recognition-common-19.0.0\AndroidManifest.xml:14:17-82
+112            <meta-data
+112-->[com.google.mlkit:vision-common:17.3.0] C:\Users\jacky\.gradle\caches\transforms-3\c5a036824d692a09766c93a15ecae761\transformed\vision-common-17.3.0\AndroidManifest.xml:12:13-14:85
+113                android:name="com.google.firebase.components:com.google.mlkit.vision.common.internal.VisionCommonRegistrar"
+113-->[com.google.mlkit:vision-common:17.3.0] C:\Users\jacky\.gradle\caches\transforms-3\c5a036824d692a09766c93a15ecae761\transformed\vision-common-17.3.0\AndroidManifest.xml:13:17-124
+114                android:value="com.google.firebase.components.ComponentRegistrar" />
+114-->[com.google.mlkit:vision-common:17.3.0] C:\Users\jacky\.gradle\caches\transforms-3\c5a036824d692a09766c93a15ecae761\transformed\vision-common-17.3.0\AndroidManifest.xml:14:17-82
+115            <meta-data
+115-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:20:13-22:85
+116                android:name="com.google.firebase.components:com.google.mlkit.common.internal.CommonComponentRegistrar"
+116-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:21:17-120
+117                android:value="com.google.firebase.components.ComponentRegistrar" />
+117-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:22:17-82
+118        </service>
+119
+120        <provider
+120-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:9:9-13:38
+121            android:name="com.google.mlkit.common.internal.MlKitInitProvider"
+121-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:10:13-78
+122            android:authorities="com.example.quizbanktest.mlkitinitprovider"
+122-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:11:13-69
+123            android:exported="false"
+123-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:12:13-37
+124            android:initOrder="99" />
+124-->[com.google.mlkit:common:18.8.0] C:\Users\jacky\.gradle\caches\transforms-3\bed24310e8b909e23cb37c4b10b16113\transformed\common-18.8.0\AndroidManifest.xml:13:13-35
+125
+126        <activity
+126-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\jacky\.gradle\caches\transforms-3\4a609b45562cfebf81e0377800b4b683\transformed\play-services-base-18.1.0\AndroidManifest.xml:20:9-22:45
+127            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+127-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\jacky\.gradle\caches\transforms-3\4a609b45562cfebf81e0377800b4b683\transformed\play-services-base-18.1.0\AndroidManifest.xml:20:19-85
+128            android:exported="false"
+128-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\jacky\.gradle\caches\transforms-3\4a609b45562cfebf81e0377800b4b683\transformed\play-services-base-18.1.0\AndroidManifest.xml:22:19-43
+129            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+129-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\jacky\.gradle\caches\transforms-3\4a609b45562cfebf81e0377800b4b683\transformed\play-services-base-18.1.0\AndroidManifest.xml:21:19-78
+130
+131        <meta-data
+131-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\jacky\.gradle\caches\transforms-3\10bb344e124729ab17f6b129c722da63\transformed\play-services-basement-18.2.0\AndroidManifest.xml:21:9-23:69
+132            android:name="com.google.android.gms.version"
+132-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\jacky\.gradle\caches\transforms-3\10bb344e124729ab17f6b129c722da63\transformed\play-services-basement-18.2.0\AndroidManifest.xml:22:13-58
+133            android:value="@integer/google_play_services_version" />
+133-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\jacky\.gradle\caches\transforms-3\10bb344e124729ab17f6b129c722da63\transformed\play-services-basement-18.2.0\AndroidManifest.xml:23:13-66
+134
+135        <uses-library
+135-->[androidx.window:window:1.0.0] C:\Users\jacky\.gradle\caches\transforms-3\57ca3fa706d0531e32e0a842a9463d39\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
+136            android:name="androidx.window.extensions"
+136-->[androidx.window:window:1.0.0] C:\Users\jacky\.gradle\caches\transforms-3\57ca3fa706d0531e32e0a842a9463d39\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
+137            android:required="false" />
+137-->[androidx.window:window:1.0.0] C:\Users\jacky\.gradle\caches\transforms-3\57ca3fa706d0531e32e0a842a9463d39\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
+138        <uses-library
+138-->[androidx.window:window:1.0.0] C:\Users\jacky\.gradle\caches\transforms-3\57ca3fa706d0531e32e0a842a9463d39\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
+139            android:name="androidx.window.sidecar"
+139-->[androidx.window:window:1.0.0] C:\Users\jacky\.gradle\caches\transforms-3\57ca3fa706d0531e32e0a842a9463d39\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
+140            android:required="false" />
+140-->[androidx.window:window:1.0.0] C:\Users\jacky\.gradle\caches\transforms-3\57ca3fa706d0531e32e0a842a9463d39\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
+141
+142        <provider
+142-->[androidx.emoji2:emoji2:1.2.0] C:\Users\jacky\.gradle\caches\transforms-3\66814d0c9c223a08105bc116aeb53dd5\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+143            android:name="androidx.startup.InitializationProvider"
+143-->[androidx.emoji2:emoji2:1.2.0] C:\Users\jacky\.gradle\caches\transforms-3\66814d0c9c223a08105bc116aeb53dd5\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+144            android:authorities="com.example.quizbanktest.androidx-startup"
+144-->[androidx.emoji2:emoji2:1.2.0] C:\Users\jacky\.gradle\caches\transforms-3\66814d0c9c223a08105bc116aeb53dd5\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+145            android:exported="false" >
+145-->[androidx.emoji2:emoji2:1.2.0] C:\Users\jacky\.gradle\caches\transforms-3\66814d0c9c223a08105bc116aeb53dd5\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+146            <meta-data
+146-->[androidx.emoji2:emoji2:1.2.0] C:\Users\jacky\.gradle\caches\transforms-3\66814d0c9c223a08105bc116aeb53dd5\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+147                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+147-->[androidx.emoji2:emoji2:1.2.0] C:\Users\jacky\.gradle\caches\transforms-3\66814d0c9c223a08105bc116aeb53dd5\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+148                android:value="androidx.startup" />
+148-->[androidx.emoji2:emoji2:1.2.0] C:\Users\jacky\.gradle\caches\transforms-3\66814d0c9c223a08105bc116aeb53dd5\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+149            <meta-data
+149-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\jacky\.gradle\caches\transforms-3\d64e7ca6b93f4a6c092b1dd37cf249d6\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+150                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+150-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\jacky\.gradle\caches\transforms-3\d64e7ca6b93f4a6c092b1dd37cf249d6\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+151                android:value="androidx.startup" />
+151-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\jacky\.gradle\caches\transforms-3\d64e7ca6b93f4a6c092b1dd37cf249d6\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+152        </provider>
+153
+154        <service
+154-->[com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\jacky\.gradle\caches\transforms-3\d7f3908fcdb3cfacc7038da107ec2871\transformed\transport-backend-cct-2.3.3\AndroidManifest.xml:29:9-35:19
+155            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+155-->[com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\jacky\.gradle\caches\transforms-3\d7f3908fcdb3cfacc7038da107ec2871\transformed\transport-backend-cct-2.3.3\AndroidManifest.xml:30:13-103
+156            android:exported="false" >
+156-->[com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\jacky\.gradle\caches\transforms-3\d7f3908fcdb3cfacc7038da107ec2871\transformed\transport-backend-cct-2.3.3\AndroidManifest.xml:31:13-37
+157            <meta-data
+157-->[com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\jacky\.gradle\caches\transforms-3\d7f3908fcdb3cfacc7038da107ec2871\transformed\transport-backend-cct-2.3.3\AndroidManifest.xml:32:13-34:39
+158                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+158-->[com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\jacky\.gradle\caches\transforms-3\d7f3908fcdb3cfacc7038da107ec2871\transformed\transport-backend-cct-2.3.3\AndroidManifest.xml:33:17-94
+159                android:value="cct" />
+159-->[com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\jacky\.gradle\caches\transforms-3\d7f3908fcdb3cfacc7038da107ec2871\transformed\transport-backend-cct-2.3.3\AndroidManifest.xml:34:17-36
+160        </service>
+161        <service
+161-->[com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\jacky\.gradle\caches\transforms-3\c045bf0c10711ed692d4a2f5864a84bb\transformed\transport-runtime-2.2.6\AndroidManifest.xml:26:9-30:19
+162            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+162-->[com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\jacky\.gradle\caches\transforms-3\c045bf0c10711ed692d4a2f5864a84bb\transformed\transport-runtime-2.2.6\AndroidManifest.xml:27:13-117
+163            android:exported="false"
+163-->[com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\jacky\.gradle\caches\transforms-3\c045bf0c10711ed692d4a2f5864a84bb\transformed\transport-runtime-2.2.6\AndroidManifest.xml:28:13-37
+164            android:permission="android.permission.BIND_JOB_SERVICE" >
+164-->[com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\jacky\.gradle\caches\transforms-3\c045bf0c10711ed692d4a2f5864a84bb\transformed\transport-runtime-2.2.6\AndroidManifest.xml:29:13-69
+165        </service>
+166
+167        <receiver
+167-->[com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\jacky\.gradle\caches\transforms-3\c045bf0c10711ed692d4a2f5864a84bb\transformed\transport-runtime-2.2.6\AndroidManifest.xml:32:9-34:40
+168            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+168-->[com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\jacky\.gradle\caches\transforms-3\c045bf0c10711ed692d4a2f5864a84bb\transformed\transport-runtime-2.2.6\AndroidManifest.xml:33:13-132
+169            android:exported="false" />
+169-->[com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\jacky\.gradle\caches\transforms-3\c045bf0c10711ed692d4a2f5864a84bb\transformed\transport-runtime-2.2.6\AndroidManifest.xml:34:13-37
+170    </application>
+171
+172</manifest>

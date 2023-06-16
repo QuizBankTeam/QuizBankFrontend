@@ -1,0 +1,382 @@
+[
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-anydpi-v33_ic_launcher.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-anydpi-v33/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ib_eraser_press.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ib_eraser_press.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_camera_alt_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_camera_alt_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_undo_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_undo_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_large.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/large.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_intro_background.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/intro_background.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_white_border_shape_button_rounded.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/white_border_shape_button_rounded.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_save_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_save_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ic_task_image.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ic_task_image.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_menu_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_menu_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ic_photo_edit.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ic_photo_edit.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_cloud_upload_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_cloud_upload_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_activity_main.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_activity_bank.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_bank.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_nav_header_main.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/nav_header_main.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_activity_paint.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_paint.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_item_scanner_text.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_scanner_text.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_quiz.jpg.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/quiz.jpg"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_color_lens_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_color_lens_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_activity_intro.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_intro.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_content_main.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/content_main.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_border_color_press.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_border_color_press.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_image_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_image_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_item_quizbank.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_quizbank.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_drawable_units_tab_text_color_selector.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/drawable_units_tab_text_color_selector.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_brush_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_brush_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/xml_path.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/xml/path.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_medium.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/medium.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/xml_backup_rules.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ic_user_place_holder.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ic_user_place_holder.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ic_nav_sign_out.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ic_nav_sign_out.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ic_black_color_back_24dp.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ic_black_color_back_24dp.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_rotate_left_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_rotate_left_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_activity_tag.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_tag.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_rating.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/rating.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_qb_icon.jpg.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/qb_icon.jpg"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_drawable_radio_group_tab_background.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/drawable_radio_group_tab_background.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_item_tag.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_tag.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_image_search_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_image_search_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_redo_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_redo_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_selected_option_border_bg.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/selected_option_border_bg.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_activity_color_picker.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_color_picker.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ic_action_navigation_menu.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ic_action_navigation_menu.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_high_quality_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_high_quality_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ib_text_editor.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ib_text_editor.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_drawable_units_tab_selector.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/drawable_units_tab_selector.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_dialog_brush_size.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/dialog_brush_size.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_settings_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_settings_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_clipboard.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/clipboard.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_background_drawing_view_layout.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/background_drawing_view_layout.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ic_nav_user.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ic_nav_user.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_crop_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_crop_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_circular_progress_bar.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/circular_progress_bar.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/menu_activity_main_drawer.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/menu/activity_main_drawer.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_failed.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/failed.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_activity_scanner_text_work_space.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_scanner_text_work_space.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_activity_color_picker1.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_color_picker1.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_shape_button_rounded.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/shape_button_rounded.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_nav_header_main_background.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/nav_header_main_background.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_pallet_pressed.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/pallet_pressed.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_colorize_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_colorize_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_app_bar_main.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/app_bar_main.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_home_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_home_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_edit_note_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_edit_note_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_filter_center_focus_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_filter_center_focus_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_folder.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/folder.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_item_recommend.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_recommend.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_check_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_check_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_auto_mode_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_auto_mode_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_keyboard_arrow_down_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_keyboard_arrow_down_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_collections_bookmark_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_collections_bookmark_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_brush_press.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_brush_press.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_share_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_share_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_small.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/small.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_pallet_normal.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/pallet_normal.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.quizbanktest.app-main-55:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_baseline_border_color_24.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/baseline_border_color_24.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_ib_eraser.png.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/ib_eraser.png"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_item_wrong.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_wrong.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/drawable_shpae_image_border.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/drawable/shpae_image_border.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-merged_res-53:/layout_dialog_progress.xml.flat",
+        "source": "com.example.quizbanktest.app-main-55:/layout/dialog_progress.xml"
+    }
+]

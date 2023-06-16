@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_profile"
+            android:icon="@drawable/ic_nav_user"
+            android:title="my_profile" />
+        <item
+            android:id="@+id/ocrWorkSpace"
+            android:icon="@drawable/ib_text_editor"
+            android:title="Scanner Text WorkSpace" />
+        <item
+            android:id="@+id/imageEditor"
+            android:icon="@drawable/ic_photo_edit"
+            android:title="Image Workspace" />
+
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/ic_nav_sign_out"
+            android:title="sign_out" />
+    </group>
+</menu>

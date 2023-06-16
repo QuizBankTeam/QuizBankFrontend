@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="330dp"
+    android:layout_height="500dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content">
+            <androidx.cardview.widget.CardView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:background="@color/teal_700"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+
+                    <EditText
+                        android:id="@+id/iv_scanner_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:text="OCR 結果"
+                        android:inputType="textMultiLine"
+                        android:scrollbars = "vertical"
+                        android:singleLine="false" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:id="@+id/chooseTag"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#363A43"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:text="選擇標籤"
+                                />
+                            <ImageButton
+                                android:id="@+id/ib_chooseTag"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:layout_marginLeft="130dp"
+                                android:layout_marginTop="5dp"
+                                android:src="@drawable/baseline_keyboard_arrow_down_24"
+                                android:background="@color/white"
+                                />
+
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/black"
+                            />
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#363A43"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="題庫標籤"
+                            />
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <co.lujun.androidtagview.TagContainerLayout
+                                    android:id="@+id/scannerTagForBank"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    app:container_background_color="#00000000"
+                                    app:tag_enable_cross="true"
+                                    app:container_enable_drag="true"
+                                    app:horizontal_interval="3dp"
+                                    app:tag_clickable="true"
+                                    app:tag_theme="random"
+                                    app:tag_text_size="10sp"
+                                    app:vertical_interval="3dp" />
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#363A43"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="題目標籤"
+                            />
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <co.lujun.androidtagview.TagContainerLayout
+                                    android:id="@+id/scannerTagForQuestion"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    app:container_background_color="#00000000"
+                                    app:tag_enable_cross="true"
+                                    app:container_enable_drag="true"
+                                    app:horizontal_interval="3dp"
+                                    app:tag_clickable="true"
+                                    app:tag_theme="random"
+                                    app:tag_text_size="10sp"
+                                    app:vertical_interval="3dp" />
+                            </LinearLayout>
+                        </HorizontalScrollView>
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#363A43"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="範圍標籤"
+                            />
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <co.lujun.androidtagview.TagContainerLayout
+                                    android:id="@+id/scannerTagForRange"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    app:container_background_color="#00000000"
+                                    app:tag_enable_cross="true"
+                                    app:container_enable_drag="true"
+                                    app:horizontal_interval="3dp"
+                                    app:tag_clickable="true"
+                                    app:tag_theme="random"
+                                    app:tag_text_size="10sp"
+                                    app:vertical_interval="3dp" />
+                            </LinearLayout>
+                        </HorizontalScrollView>
+                        <Button
+                            android:id="@+id/btn_scan_photo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="選擇圖片  📂" />
+                        <Button
+                            android:id="@+id/btn_scan_submit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="確認送出  " />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

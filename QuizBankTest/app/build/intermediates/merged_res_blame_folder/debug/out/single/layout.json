@@ -1,0 +1,74 @@
+[
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/activity_main.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/item_wrong.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_wrong.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/item_recommend.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_recommend.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/app_bar_main.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/app_bar_main.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/dialog_progress.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/dialog_progress.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/activity_paint.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_paint.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/content_main.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/content_main.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/activity_scanner_text_work_space.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_scanner_text_work_space.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/activity_intro.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_intro.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/dialog_brush_size.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/dialog_brush_size.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/activity_color_picker.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_color_picker.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/item_quizbank.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_quizbank.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/nav_header_main.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/nav_header_main.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/activity_color_picker1.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_color_picker1.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/item_tag.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_tag.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/item_scanner_text.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/item_scanner_text.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/activity_tag.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_tag.xml"
+    },
+    {
+        "merged": "com.example.quizbanktest.app-mergeDebugResources-52:/layout/activity_bank.xml",
+        "source": "com.example.quizbanktest.app-main-55:/layout/activity_bank.xml"
+    }
+]

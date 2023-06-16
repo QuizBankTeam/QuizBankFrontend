@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="blue">#3a86ff</color>
+    <color name="button_background_color">#63ace5</color>
+    <color name="colorAccent">#adcbe3</color>
+    <color name="colorPrimary">#8ecae6</color>
+    <color name="colorPrimaryDark">#2a4d69</color>
+    <color name="colorRipple">#8ecae6</color>
+    <color name="gray">#F0F0F0</color>
+    <color name="green">#99d98c</color>
+    <color name="item_happy_place_description_text_color">#606060</color>
+    <color name="lollipop"> #a8dadc</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#fcbf49</color>
+    <color name="random">#8338ec</color>
+    <color name="red">#d62828</color>
+    <color name="secondary_text_color">#9AA2AF</color>
+    <color name="skin">#faedcd</color>
+    <color name="teal_200">#eaac8b</color>
+    <color name="teal_700">#f4f1de</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="yellow">#ffb703</color>
+    <dimen name="add_place_image_shape_radius">3dp</dimen>
+    <dimen name="add_place_select_current_location_marginTop">5dp</dimen>
+    <dimen name="add_place_select_current_location_padding">10dp</dimen>
+    <dimen name="add_place_select_current_location_textsize">16sp</dimen>
+    <dimen name="add_screen_btn_save_marginTop">24dp</dimen>
+    <dimen name="add_screen_btn_save_paddingTopBottom">8dp</dimen>
+    <dimen name="add_screen_place_image_marginTop">15dp</dimen>
+    <dimen name="add_screen_place_image_padding">2dp</dimen>
+    <dimen name="add_screen_place_image_size">200dp</dimen>
+    <dimen name="add_screen_text_add_image_marginTop">96dp</dimen>
+    <dimen name="add_screen_text_add_image_padding">10dp</dimen>
+    <dimen name="add_screen_text_add_image_textSize">18sp</dimen>
+    <dimen name="add_screen_til_marginTop">5dp</dimen>
+    <dimen name="btn_marginStartEnd">20dp</dimen>
+    <dimen name="btn_paddingTopBottom">8dp</dimen>
+    <dimen name="btn_text_size">18sp</dimen>
+    <dimen name="button_radius">10dp</dimen>
+    <dimen name="detail_screen_btn_view_on_map_PaddingTopBottom">8dp</dimen>
+    <dimen name="detail_screen_btn_view_on_map_marginStartEnd">8dp</dimen>
+    <dimen name="detail_screen_btn_view_on_map_marginTop">16dp</dimen>
+    <dimen name="detail_screen_btn_view_on_map_text_size">18sp</dimen>
+    <dimen name="detail_screen_description_margin">8dp</dimen>
+    <dimen name="detail_screen_description_text_size">16sp</dimen>
+    <dimen name="detail_screen_image_height_size">250dp</dimen>
+    <dimen name="detail_screen_location_marginStartEnd">8dp</dimen>
+    <dimen name="detail_screen_location_marginTop">16dp</dimen>
+    <dimen name="detail_screen_location_text_size">18sp</dimen>
+    <dimen name="edit_text_text_size">16sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="height_of_nav_main">200dp</dimen>
+    <dimen name="image_border_stroke_size">0.5dp</dimen>
+    <dimen name="intro_screen_image_marginTop">30dp</dimen>
+    <dimen name="intro_screen_sign_in_btn_marginTop">50dp</dimen>
+    <dimen name="intro_screen_sign_up_btn_marginTop">15dp</dimen>
+    <dimen name="intro_screen_title_text_marginTop">40dp</dimen>
+    <dimen name="intro_screen_title_text_size">40sp</dimen>
+    <dimen name="intro_text_line_spacing_extra">5dp</dimen>
+    <dimen name="intro_text_marginStartEnd">20dp</dimen>
+    <dimen name="intro_text_marginTop">10dp</dimen>
+    <dimen name="intro_text_size">16sp</dimen>
+    <dimen name="item_quiz_bank_circular_image_size">70dp</dimen>
+    <dimen name="item_quiz_bank_content_padding">5dp</dimen>
+    <dimen name="item_quiz_bank_cv_corner_radius">3dp</dimen>
+    <dimen name="item_quiz_bank_cv_elevation">3dp</dimen>
+    <dimen name="item_quiz_bank_cv_main_marginStartEnd">8dp</dimen>
+    <dimen name="item_quiz_bank_description_textSize">14sp</dimen>
+    <dimen name="item_quiz_bank_ll_marginEnd">2dp</dimen>
+    <dimen name="item_quiz_bank_ll_marginStart">10dp</dimen>
+    <dimen name="item_quiz_bank_title_textSize">16sp</dimen>
+    <dimen name="lets_get_started_text_marginTop">25dp</dimen>
+    <dimen name="lets_get_started_text_size">25sp</dimen>
+    <dimen name="main_content_padding">16dp</dimen>
+    <dimen name="nav_content_margin_StartEnd">16dp</dimen>
+    <dimen name="nav_content_margin_bottom">10dp</dimen>
+    <dimen name="nav_content_margin_top">5dp</dimen>
+    <dimen name="nav_divider_height">0.5dp</dimen>
+    <dimen name="nav_image_circular_border_width">1dp</dimen>
+    <dimen name="nav_image_size">80dp</dimen>
+    <dimen name="nav_user_name_text_size">18sp</dimen>
+    <dimen name="no_records_available_text_size">16sp</dimen>
+    <dimen name="progress_bar_size">50dp</dimen>
+    <dimen name="progress_dialog_content_padding">10dp</dimen>
+    <dimen name="progress_text_marginStart">16dp</dimen>
+    <dimen name="progress_text_size">16sp</dimen>
+    <string name="app_name">Quiz Bank</string>
+    <string name="btn_text_save">SAVE</string>
+    <string name="edit_text_hint_date">Date</string>
+    <string name="edit_text_hint_description">Description</string>
+    <string name="edit_text_hint_location">Location</string>
+    <string name="edit_text_hint_title">Title</string>
+    <string name="image_contentDescription">image</string>
+    <string name="intro_text_description">Collaborate and Plan Together Across Multiple Devices on Projemanag’s Minimalist Interface.</string>
+    <string name="let_s_get_started_text">Let\'s Get started</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="text_add_image">ADD IMAGE</string>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="CustomToolbarStyle">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:colorControlNormal">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+    <style name="Theme.QuizBankTest" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        
+    </style>
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="colorControlNormal">@color/black</item>
+    </style>
+</resources>
