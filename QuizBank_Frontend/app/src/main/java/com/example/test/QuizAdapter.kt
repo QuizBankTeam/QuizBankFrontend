@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 class QuizAdapter(private val context: Activity, private val questionList: ArrayList<Quiz>):
     RecyclerView.Adapter<QuizAdapter.MyViewHolder>()
 {
-    private var onClickListener: View.OnClickListener? = null
+    private var onClickListener: OnClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.quiz_row, null)
         return MyViewHolder(itemView)
@@ -28,6 +28,18 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
         holder.quizStartDate.text = currentItem.startDate
         holder.quizTitle.text = currentItem.title
         holder.quizMembers.text = currentItem.members.toString()
+
+        holder.itemView.setOnClickListener {  }
+    }
+
+    // A function to bind the onclickListener.
+    fun setOnClickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
+    }
+
+    // onClickListener Interface
+    interface OnClickListener {
+        fun onClick(position: Int, model: Quiz)
     }
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {

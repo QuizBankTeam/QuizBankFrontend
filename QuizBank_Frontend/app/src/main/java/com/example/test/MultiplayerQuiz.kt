@@ -19,10 +19,19 @@ class MultiplayerQuiz: AppCompatActivity() {
         init()
         mpQuizBinding.QuizList.layoutManager = LinearLayoutManager(this)
         mpQuizBinding.QuizList.setHasFixedSize(true)
-        mpQuizBinding.QuizList.adapter = QuizAdapter(this, QuizList)
+        val quizadapter = QuizAdapter(this, QuizList)
+        mpQuizBinding.QuizList.adapter = quizadapter
         mpQuizBinding.QuizList.isClickable = true
 //        mpQuizBinding.QuizList.setOnClickListener { buttonClick() }
+        quizadapter.setOnClickListener(object :
+            quizadapter.OnClickListener {
+            override fun onClick(position: Int, model: Quiz) {
+                val intent = Intent(this@MultiplayerQuiz, SingleQuiz::class.java)
 
+                intent.putExtra("key_quiz", model)
+                startActivity(intent)
+            }
+        })
 
 
     }
