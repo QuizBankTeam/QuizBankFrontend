@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.MultiplayerQuiz" />
+        <activity android:name=".Activity.SingleQuestion" />
+        <activity android:name=".Activity.SingleQuiz" />
     </application>
 
 </manifest>

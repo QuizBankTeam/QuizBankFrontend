@@ -1,10 +1,14 @@
 package com.example.test.Adapter
 import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.test.Activity.MultiplayerQuiz
+import com.example.test.Activity.SingleQuiz
 import com.example.test.R
 import com.example.test.model.Quiz
 
@@ -31,7 +35,18 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
         holder.quizMembers.text = currentItem.members.toString()
 
         holder.itemView.setOnClickListener {
-            
+            val intent = Intent()
+            intent.setClass(context, SingleQuiz::class.java)
+            intent.putExtra("Key_id", currentItem.id)
+            intent.putExtra("Key_title", currentItem.title)
+            intent.putExtra("Key_type", currentItem.type)
+            intent.putExtra("Key_status", currentItem.status)
+            intent.putExtra("Key_duringTime", currentItem.duringTime)
+            intent.putExtra("Key_startDate", currentItem.startDate)
+            intent.putExtra("Key_endDate", currentItem.endDate)
+            intent.putExtra("Key_members", currentItem.members)
+            intent.putExtra("Key_questions", currentItem.questions)
+            context.startActivity(intent)
         }
     }
 

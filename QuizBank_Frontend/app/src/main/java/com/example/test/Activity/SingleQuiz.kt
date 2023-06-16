@@ -1,5 +1,6 @@
 package com.example.test.Activity
 
+import android.content.Intent
 import com.example.test.Adapter.QuestionAdapter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -18,13 +19,22 @@ class SingleQuiz: AppCompatActivity() {
         init()
         quizBinding.QuestionList.layoutManager = LinearLayoutManager(this)
         quizBinding.QuestionList.setHasFixedSize(true)
-        quizBinding.QuestionList.adapter = QuestionAdapter(this, questionlist)
+//        quizBinding.QuestionList.adapter = QuestionAdapter(this, questionlist)
 //        quizBinding.backBtn.setOnClickListener { finish() }
     }
 
     private fun init()
     {
-
+        val id = intent.getStringExtra("Key_id")
+        val title = intent.getStringExtra("Key_title")
+        val type = intent.getStringExtra("Key_type")
+        val status = intent.getStringExtra("Key_status")
+        val duringTime = intent.getStringExtra("Key_duringTime")
+        val startDate = intent.getStringExtra("Key_startDate")
+        val endDate = intent.getStringExtra("Key_endDate")
+        val members = intent.getStringExtra("Key_members")
+        val questions = intent.getStringArrayListExtra("Key_questions")
+//        questionlist = questions
     }
 
     

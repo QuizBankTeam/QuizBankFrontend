@@ -29,21 +29,8 @@ class MultiplayerQuiz: AppCompatActivity() {
 
     }
 
-    private fun buttonClick(){
-        val tmpQuiz = QuizList[0]
-        intent.setClass(this@MultiplayerQuiz, SingleQuiz::class.java)
-        intent.putExtra("Key_id", tmpQuiz.id)
-        intent.putExtra("Key_title", tmpQuiz.title)
-        intent.putExtra("Key_type", tmpQuiz.type)
-        intent.putExtra("Key_status", tmpQuiz.status)
-        intent.putExtra("Key_duringTime", tmpQuiz.duringTime)
-        intent.putExtra("Key_startDate", tmpQuiz.startDate)
-        intent.putExtra("Key_endDate", tmpQuiz.endDate)
-        intent.putExtra("Key_members", tmpQuiz.members)
-        intent.putExtra("Key_questions", tmpQuiz.questions)
-        startActivity(intent)
 
-    }
+
 
     private fun init() //mp_quiz -> single_quiz -> single_question
     {
