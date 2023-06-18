@@ -57,7 +57,7 @@ public class BankRecyclerViewAdapter extends RecyclerView.Adapter<BankRecyclerVi
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            iv_BankImage = itemView.findViewById(R.id.bank_image);
+//            iv_BankImage = itemView.findViewById(R.id.bank_image);
             tv_BankName = itemView.findViewById(R.id.bank_name);
             tv_BankDescription = itemView.findViewById(R.id.bank_description);
             tv_BankDate = itemView.findViewById(R.id.bank_date);
