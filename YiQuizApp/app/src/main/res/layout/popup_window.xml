@@ -37,12 +37,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_bar">
 
-        <com.example.quizbank.WrapLayout
+        <com.example.yiquizapp.WrapLayout
             android:id="@+id/hot_search_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-        </com.example.quizbank.WrapLayout>
+        </com.example.yiquizapp.WrapLayout>
 
     </LinearLayout>
 
