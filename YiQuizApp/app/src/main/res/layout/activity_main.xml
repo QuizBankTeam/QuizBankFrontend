@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SearchView
+    <android.widget.SearchView
         android:id="@+id/search_bar"
         android:layout_width="330dp"
         android:layout_height="45dp"

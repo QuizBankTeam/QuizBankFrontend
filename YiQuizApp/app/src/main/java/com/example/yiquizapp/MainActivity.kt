@@ -1,8 +1,7 @@
 package com.example.yiquizapp
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -27,21 +26,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var menuButton: ImageButton
     private var wrapLayout: WrapLayout? = null
 
-    private val mBackgroundBlurRadius = 80
-    private val mBlurBehindRadius = 20
-
-    // We set a different dim amount depending on whether window blur is enabled or disabled
-    private val mDimAmountWithBlur = 0.1f
-    private val mDimAmountNoBlur = 0.4f
-
-    // We set a different alpha depending on whether window blur is enabled or disabled
-    private val mWindowBackgroundAlphaWithBlur = 170
-    private val mWindowBackgroundAlphaNoBlur = 255
-
-    // Use a rectangular shape drawable for the window background. The outline of this drawable
-    // dictates the shape and rounded corners for the window background blur area.
-    private var mWindowBackgroundDrawable: Drawable? = null
-
     var bankModels = ArrayList<BankModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,21 +42,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.setAdapter(adapter)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-//        mWindowBackgroundDrawable = getDrawable(R.drawable.window_background)
-//        getWindow().setBackgroundDrawable(mWindowBackgroundDrawable)
-//        if (buildIsAtLeastS()) {
-//            // Enable blur behind. This can also be done in xml with R.attr#windowBlurBehindEnabled
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-//
-//            // Register a listener to adjust window UI whenever window blurs are enabled/disabled
-//            setupWindowBlurListener();
-//        } else {
-//            // Window blurs are not available prior to Android S
-//            updateWindowForBlurs(false /* blursEnabled */);
-//        }
-//
-//        // Enable dim. This can also be done in xml, see R.attr#backgroundDimEnabled
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     private fun setUpBankModels() {
@@ -129,27 +98,257 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        val imageview = findViewById<ImageView>(R.id.imageview)
-        val bitmap = getBitmapFromView(imageview)
-    }
-
-    fun getBitmapFromView(view: View): Bitmap {
-        val bitmap = Bitmap.createBitmap(
-            view.width, view.height, Bitmap.Config.ARGB_8888
+        val imageView = findViewById<View>(R.id.imageview) as ImageView
+        val bitmap = BitmapFactory.decodeResource(
+            resources,
+            R.drawable.white_book
         )
-        val canvas = Canvas(bitmap)
-        view.draw(canvas)
-        return bitmap
+        imageView.viewTreeObserver.addOnPreDrawListener {
+            blur(bitmap, imageView)
+            true
+        }
+
     }
 
-    fun getBitmapFromView(view: View, defaultColor: Int): Bitmap {
-        val bitmap = Bitmap.createBitmap(
-            view.width, view.height, Bitmap.Config.ARGB_8888
+    object FastBlur {
+        fun doBlur(sentBitmap: Bitmap?, radius: Int, canReuseInBitmap: Boolean): Bitmap? {
+
+            val bitmap: Bitmap?
+            bitmap = if (canReuseInBitmap) {
+                sentBitmap
+            } else {
+                //决定图片像素点的存储，即用图片查看器看图片属性时候的位深参数。
+                sentBitmap!!.copy(sentBitmap.config, true)
+            }
+            if (radius < 1) {
+                return null
+            }
+            val w = bitmap!!.width
+            val h = bitmap.height
+            val pix = IntArray(w * h)
+            bitmap.getPixels(pix, 0, w, 0, 0, w, h)
+            val wm = w - 1
+            val hm = h - 1
+            val wh = w * h
+            val div = radius + radius + 1
+            val r = IntArray(wh)
+            val g = IntArray(wh)
+            val b = IntArray(wh)
+            var rsum: Int
+            var gsum: Int
+            var bsum: Int
+            var x: Int
+            var y: Int
+            var i: Int
+            var p: Int
+            var yp: Int
+            var yi: Int
+            var yw: Int
+            val vmin = IntArray(Math.max(w, h))
+            var divsum = div + 1 shr 1
+            divsum *= divsum
+            val dv = IntArray(256 * divsum)
+            i = 0
+            while (i < 256 * divsum) {
+                dv[i] = i / divsum
+                i++
+            }
+            yi = 0
+            yw = yi
+            val stack = Array(div) {
+                IntArray(
+                    3
+                )
+            }
+            var stackpointer: Int
+            var stackstart: Int
+            var sir: IntArray
+            var rbs: Int
+            val r1 = radius + 1
+            var routsum: Int
+            var goutsum: Int
+            var boutsum: Int
+            var rinsum: Int
+            var ginsum: Int
+            var binsum: Int
+            y = 0
+            while (y < h) {
+                bsum = 0
+                gsum = bsum
+                rsum = gsum
+                boutsum = rsum
+                goutsum = boutsum
+                routsum = goutsum
+                binsum = routsum
+                ginsum = binsum
+                rinsum = ginsum
+                i = -radius
+                while (i <= radius) {
+                    p = pix[yi + Math.min(wm, Math.max(i, 0))]
+                    sir = stack[i + radius]
+                    sir[0] = p and 0xff0000 shr 16
+                    sir[1] = p and 0x00ff00 shr 8
+                    sir[2] = p and 0x0000ff
+                    rbs = r1 - Math.abs(i)
+                    rsum += sir[0] * rbs
+                    gsum += sir[1] * rbs
+                    bsum += sir[2] * rbs
+                    if (i > 0) {
+                        rinsum += sir[0]
+                        ginsum += sir[1]
+                        binsum += sir[2]
+                    } else {
+                        routsum += sir[0]
+                        goutsum += sir[1]
+                        boutsum += sir[2]
+                    }
+                    i++
+                }
+                stackpointer = radius
+                x = 0
+                while (x < w) {
+                    r[yi] = dv[rsum]
+                    g[yi] = dv[gsum]
+                    b[yi] = dv[bsum]
+                    rsum -= routsum
+                    gsum -= goutsum
+                    bsum -= boutsum
+                    stackstart = stackpointer - radius + div
+                    sir = stack[stackstart % div]
+                    routsum -= sir[0]
+                    goutsum -= sir[1]
+                    boutsum -= sir[2]
+                    if (y == 0) {
+                        vmin[x] = Math.min(x + radius + 1, wm)
+                    }
+                    p = pix[yw + vmin[x]]
+                    sir[0] = p and 0xff0000 shr 16
+                    sir[1] = p and 0x00ff00 shr 8
+                    sir[2] = p and 0x0000ff
+                    rinsum += sir[0]
+                    ginsum += sir[1]
+                    binsum += sir[2]
+                    rsum += rinsum
+                    gsum += ginsum
+                    bsum += binsum
+                    stackpointer = (stackpointer + 1) % div
+                    sir = stack[stackpointer % div]
+                    routsum += sir[0]
+                    goutsum += sir[1]
+                    boutsum += sir[2]
+                    rinsum -= sir[0]
+                    ginsum -= sir[1]
+                    binsum -= sir[2]
+                    yi++
+                    x++
+                }
+                yw += w
+                y++
+            }
+            x = 0
+            while (x < w) {
+                bsum = 0
+                gsum = bsum
+                rsum = gsum
+                boutsum = rsum
+                goutsum = boutsum
+                routsum = goutsum
+                binsum = routsum
+                ginsum = binsum
+                rinsum = ginsum
+                yp = -radius * w
+                i = -radius
+                while (i <= radius) {
+                    yi = Math.max(0, yp) + x
+                    sir = stack[i + radius]
+                    sir[0] = r[yi]
+                    sir[1] = g[yi]
+                    sir[2] = b[yi]
+                    rbs = r1 - Math.abs(i)
+                    rsum += r[yi] * rbs
+                    gsum += g[yi] * rbs
+                    bsum += b[yi] * rbs
+                    if (i > 0) {
+                        rinsum += sir[0]
+                        ginsum += sir[1]
+                        binsum += sir[2]
+                    } else {
+                        routsum += sir[0]
+                        goutsum += sir[1]
+                        boutsum += sir[2]
+                    }
+                    if (i < hm) {
+                        yp += w
+                    }
+                    i++
+                }
+                yi = x
+                stackpointer = radius
+                y = 0
+                while (y < h) {
+
+// Preserve alpha channel: ( 0xff000000 & pix[yi] )
+                    pix[yi] =
+                        -0x1000000 and pix[yi] or (dv[rsum] shl 16) or (dv[gsum] shl 8) or dv[bsum]
+                    rsum -= routsum
+                    gsum -= goutsum
+                    bsum -= boutsum
+                    stackstart = stackpointer - radius + div
+                    sir = stack[stackstart % div]
+                    routsum -= sir[0]
+                    goutsum -= sir[1]
+                    boutsum -= sir[2]
+                    if (x == 0) {
+                        vmin[y] = Math.min(y + r1, hm) * w
+                    }
+                    p = x + vmin[y]
+                    sir[0] = r[p]
+                    sir[1] = g[p]
+                    sir[2] = b[p]
+                    rinsum += sir[0]
+                    ginsum += sir[1]
+                    binsum += sir[2]
+                    rsum += rinsum
+                    gsum += ginsum
+                    bsum += binsum
+                    stackpointer = (stackpointer + 1) % div
+                    sir = stack[stackpointer]
+                    routsum += sir[0]
+                    goutsum += sir[1]
+                    boutsum += sir[2]
+                    rinsum -= sir[0]
+                    ginsum -= sir[1]
+                    binsum -= sir[2]
+                    yi += w
+                    y++
+                }
+                x++
+            }
+            bitmap.setPixels(pix, 0, w, 0, 0, w, h)
+            return bitmap
+        }
+    }
+
+
+    private fun blur(bkg: Bitmap, view: View) {
+        val startMs = System.currentTimeMillis()
+        val scaleFactor = 8f
+        val radius = 20f
+        var overlay = Bitmap.createBitmap(
+            (view.measuredWidth / scaleFactor).toInt(),
+            (view.measuredHeight / scaleFactor).toInt(),
+            Bitmap.Config.ARGB_8888
         )
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(defaultColor)
-        view.draw(canvas)
-        return bitmap
+        val canvas = Canvas(overlay!!)
+        canvas.translate(
+            -view.left / scaleFactor, -view.top
+                    / scaleFactor
+        )
+        canvas.scale(1 / scaleFactor, 1 / scaleFactor)
+        val paint = Paint()
+        paint.setFlags(Paint.FILTER_BITMAP_FLAG)
+        canvas.drawBitmap(bkg, 0f, 0f, paint)
+        overlay = FastBlur.doBlur(overlay, radius.toInt(), true)
+        view.background = BitmapDrawable(resources, overlay)
     }
-
 }

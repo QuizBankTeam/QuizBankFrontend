@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SearchView
+    <android.widget.SearchView
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -40,9 +40,7 @@
         <com.example.yiquizapp.WrapLayout
             android:id="@+id/hot_search_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </com.example.yiquizapp.WrapLayout>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
