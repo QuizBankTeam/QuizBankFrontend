@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.yiquizapp'
+    namespace 'com.example.yiquizapptest'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.yiquizapp"
+        applicationId "com.example.yiquizapptest"
         minSdk 32
         targetSdk 33
         versionCode 1
