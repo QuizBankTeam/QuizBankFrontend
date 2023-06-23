@@ -13,6 +13,7 @@ import com.example.test.R
 import com.example.test.model.Quiz
 
 
+
 class QuizAdapter(private val context: Activity, private val questionList: ArrayList<Quiz>):
     RecyclerView.Adapter<QuizAdapter.MyViewHolder>()
 {
