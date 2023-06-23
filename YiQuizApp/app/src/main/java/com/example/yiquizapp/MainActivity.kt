@@ -149,7 +149,8 @@ class MainActivity : AppCompatActivity() {
             "快樂大本營",
             "維多利亞的秘密",
             "非誠勿擾",
-            "康熙來了"
+            "康熙來了",
+            "123"
         )
         for (i in 0 until strs.size) {
             val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)

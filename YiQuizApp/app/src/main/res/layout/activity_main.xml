@@ -32,7 +32,7 @@
     <android.widget.SearchView
         android:id="@+id/search_bar"
         android:layout_width="330dp"
-        android:layout_height="45dp"
+        android:layout_height="35dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/search_bar"
@@ -43,10 +43,10 @@
 
     <ImageButton
         android:id="@+id/menu_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:background="@null"
         android:onClick="setPopupWindow"
         android:src="@drawable/burger_menu_right_svgrepo_com"
@@ -66,12 +66,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="470dp"
+        android:layout_height="500dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/ll_action_buttons"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dividing_view">
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mRecyclerView"
@@ -103,7 +102,7 @@
             android:layout_marginBottom="7dp"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
-            android:src="" />
+            android:src="@drawable/home_svgrepo_com_2"/>
 
         <ImageButton
             android:id="@+id/test"
@@ -112,7 +111,7 @@
             android:layout_marginLeft="30dp"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
-            android:src="" />
+            android:src="@drawable/notepad_and_pen_svgrepo_com"/>
 
         <ImageButton
             android:id="@+id/camera"
@@ -121,7 +120,7 @@
             android:layout_marginLeft="30dp"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
-            android:src="" />
+            android:src="@drawable/camera_svgrepo_com_1" />
 
         <ImageButton
             android:id="@+id/bank"
@@ -130,7 +129,7 @@
             android:layout_marginLeft="30dp"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
-            android:src="" />
+            android:src="@drawable/book_and_person_winter_svgrepo_com" />
 
         <ImageButton
             android:id="@+id/setting"
@@ -140,7 +139,7 @@
             android:layout_marginRight="30dp"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
-            android:src="" />
+            android:src="@drawable/setting_setting_svgrepo_com_2" />
 
     </LinearLayout>
 
