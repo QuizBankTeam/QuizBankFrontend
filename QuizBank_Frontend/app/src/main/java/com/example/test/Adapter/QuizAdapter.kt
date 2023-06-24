@@ -46,7 +46,8 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
             intent.putExtra("Key_startDate", currentItem.startDate)
             intent.putExtra("Key_endDate", currentItem.endDate)
             intent.putExtra("Key_members", currentItem.members)
-            intent.putExtra("Key_questions", currentItem.questions)
+            intent.putParcelableArrayListExtra("Key_questions", currentItem.questions)
+            intent.putIntegerArrayListExtra("Key_casualDuringTime", currentItem.casualDuringTime)
             context.startActivity(intent)
         }
     }
@@ -67,13 +68,6 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
         val quizStartDate: TextView = itemView.findViewById(R.id.QuizStartDate)
         val quizTitle: TextView = itemView.findViewById(R.id.QuizTitle)
         val quizMembers: TextView = itemView.findViewById(R.id.QuizMembers)
-        // 點擊項目時
-//        itemView.setOnClickListener(View.OnClickListener { view ->
-//        Toast.makeText(
-//            view.context,
-//            "click " + getAdapterPosition(), Toast.LENGTH_SHORT
-//        ).show()
-//        })
     }
 
 }
