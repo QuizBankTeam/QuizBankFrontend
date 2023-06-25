@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/QuizBankTest.iml" filepath="$PROJECT_DIR$/.idea/QuizBankTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/QuizBankTest.iml" filepath="$PROJECT_DIR$/.idea/modules/QuizBankTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/QuizBankTest.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/QuizBankTest.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/QuizBankTest.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/QuizBankTest.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/QuizBankTest.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/QuizBankTest.app.main.iml" />

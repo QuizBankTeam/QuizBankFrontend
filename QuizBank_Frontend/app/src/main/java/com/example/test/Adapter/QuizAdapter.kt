@@ -33,7 +33,17 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
         holder.quizStatus.text = currentItem.status
         holder.quizStartDate.text = currentItem.startDate
         holder.quizTitle.text = currentItem.title
-        holder.quizMembers.text = currentItem.members.toString()
+        var member = "成員: "
+        if(currentItem.members.size>0) {
+            for(item in currentItem.members){
+                member += item
+                member += " "
+            }
+        }
+        else {
+            member = "無成員"
+        }
+        holder.quizMembers.text = member
 
         holder.itemView.setOnClickListener {
             val intent = Intent()

@@ -306,4 +306,5 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.mlkit:text-recognition-chinese:16.0.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.android.gms:play-services-mlkit-text-recognition-chinese:16.0.0@aar" level="project" />
   </component>
+  <component name="TestModuleProperties" production-module="QuizBankTest.app.main" />
 </module>

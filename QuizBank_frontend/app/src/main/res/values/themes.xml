@@ -18,5 +18,11 @@
         <item name="cornerSize">50dp</item>
         <item name="color">@color/white</item>
     </style>
-
+    <style name="CustomToolbarStyle">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:colorControlNormal">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 </resources>

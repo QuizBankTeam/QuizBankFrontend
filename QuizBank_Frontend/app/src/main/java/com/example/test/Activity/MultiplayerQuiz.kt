@@ -23,10 +23,8 @@ class MultiplayerQuiz: AppCompatActivity() {
         val quizadapter = QuizAdapter(this, QuizList)
         mpQuizBinding.QuizList.adapter = quizadapter
         mpQuizBinding.QuizList.isClickable = true
-//        mpQuizBinding.QuizList.setOnClickListener { buttonClick() }
 
-
-
+        mpQuizBinding.backBtn.setOnClickListener { finish() }
     }
 
 
@@ -65,5 +63,9 @@ class MultiplayerQuiz: AppCompatActivity() {
         QuizList.add(tmpQuiz)
         QuizList.add(tmpQuiz2)
       
+    }
+    private fun buttonClicked()
+    {
+
     }
 }
