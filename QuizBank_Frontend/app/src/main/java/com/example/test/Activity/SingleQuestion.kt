@@ -60,9 +60,9 @@ class SingleQuestion : AppCompatActivity(){
                 val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 tagTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.tag24, 0, 0, 0)
                 tagTextView.setBackgroundResource(R.drawable.corner_radius_blue)
-                val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
-                val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics)
-                var marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+                val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6f, resources.displayMetrics).toInt()
+                val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+                var marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
                 tagTextView.setPadding(padding)
                 layoutParam.marginStart = marginHorizontal
                 layoutParam.marginEnd = marginHorizontal
@@ -79,9 +79,9 @@ class SingleQuestion : AppCompatActivity(){
                 val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 tagTextView1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.tag24, 0, 0, 0)
                 tagTextView1.setBackgroundResource(R.drawable.corner_radius_blue)
-                val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
-                val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics)
-                var marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+                val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6f, resources.displayMetrics).toInt()
+                val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+                var marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
                 tagTextView1.setPadding(padding)
                 layoutParam.marginStart = marginHorizontal
                 layoutParam.marginEnd = marginHorizontal
@@ -99,9 +99,9 @@ class SingleQuestion : AppCompatActivity(){
                 val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 tagTextView2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.tag24, 0, 0, 0)
                 tagTextView2.setBackgroundResource(R.drawable.corner_radius_blue)
-                val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
-                val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics)
-                var marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+                val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6f, resources.displayMetrics).toInt()
+                val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+                var marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
                 tagTextView2.setPadding(padding)
                 layoutParam.marginStart = marginHorizontal
                 layoutParam.marginEnd = marginHorizontal
