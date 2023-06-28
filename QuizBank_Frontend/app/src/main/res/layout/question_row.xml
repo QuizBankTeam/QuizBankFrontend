@@ -15,7 +15,7 @@
         app:cardElevation="3dp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:orientation="vertical"
@@ -65,18 +65,18 @@
                     <TextView
                         android:id="@+id/question_bank"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="-5dp"
+                        android:paddingHorizontal="10dp"
                         android:text="題庫: 成大計算機"
-                        android:textSize="15dp"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="10dp" />
+                        android:textSize="15dp" />
                     <TextView
                         android:id="@+id/question_provider"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="提供者: 賴建宇"
                         android:textSize="15dp"
-                        android:gravity="center_vertical"
                         android:paddingHorizontal="10dp" />
 
                 </LinearLayout>

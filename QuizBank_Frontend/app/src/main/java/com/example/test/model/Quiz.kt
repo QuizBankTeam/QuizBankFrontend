@@ -1,7 +1,7 @@
 package com.example.test.model
 
 data class Quiz(val id: String,
-                val title: String,
+                var title: String,
                 val type: String, //casual, single
                 val status: String,
                 val duringTime: Int,
@@ -9,4 +9,4 @@ data class Quiz(val id: String,
                 val startDate: String,
                 val endDate: String,
                 val members: ArrayList<String>, // user id
-                val questions: ArrayList<Question>)
+                var questions: ArrayList<Question>)

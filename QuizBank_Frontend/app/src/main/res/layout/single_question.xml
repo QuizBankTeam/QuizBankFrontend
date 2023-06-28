@@ -79,7 +79,7 @@
                 android:background="@drawable/corner_radius_yellow"
                 android:padding="5dp"
                 android:minHeight="30dp"
-                android:minWidth="70dp"
+                android:minWidth="55dp"
                 android:text="20秒"
                 android:textSize="15dp"
                 android:textColor="@color/black"

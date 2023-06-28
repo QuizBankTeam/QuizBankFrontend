@@ -1,7 +1,9 @@
 package com.example.test.Activity
 
+import android.content.Intent
 import com.example.test.Adapter.QuizAdapter
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.R
@@ -27,7 +29,17 @@ class MultiplayerQuiz: AppCompatActivity() {
         mpQuizBinding.backBtn.setOnClickListener { finish() }
     }
 
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("in ", "multiplayer Quiz")
+        Log.d("request code=", requestCode.toString())
+        var tmpQuiz = QuizList[requestCode]
+        if (data != null) {
+            tmpQuiz.questions = data.getParcelableArrayListExtra<Question>("Key_questions") as ArrayList<Question>
+            tmpQuiz.title = data.getStringExtra("Key_title").toString()
+        }
+        QuizList[requestCode] = tmpQuiz
+    }
 
 
     private fun init() //mp_quiz -> single_quiz -> single_question
@@ -37,7 +49,7 @@ class MultiplayerQuiz: AppCompatActivity() {
         val endDate: String = "2023/05/21"
         val QuestionList: ArrayList<Question> = ArrayList()
         val optionText = arrayOf("恆春的核能發電廠", "高雄的火力發電廠", "C demo text 789", "D demo text 101112").toCollection(ArrayList())
-        val optionAns = arrayOf("A demo text 123").toCollection(ArrayList())
+        val optionAns = arrayOf("C demo text 789").toCollection(ArrayList())
         val optionText2 = arrayOf("A cc text 123", "B ddd text 456", "C gggg text 789", "D asdfasdf text 101112").toCollection(ArrayList())
         val optionAns2 = arrayOf("B ddd text 456").toCollection(ArrayList())
         val tag = arrayOf("98年", "社會", "歷史").toCollection(ArrayList())

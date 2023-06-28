@@ -1,5 +1,6 @@
 package com.example.test.Activity
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import com.example.test.Adapter.OptionAdapter
@@ -8,11 +9,10 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.LinearLayout
+import android.widget.ListAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.marginLeft
-import androidx.core.view.marginStart
-import androidx.core.view.setPadding
+import androidx.core.view.*
 import com.example.test.R
 import com.example.test.databinding.SingleQuestionBinding
 import com.example.test.model.Option
@@ -20,19 +20,48 @@ import com.example.test.model.Option
 class SingleQuestion : AppCompatActivity(){
     private lateinit var questionBinding: SingleQuestionBinding
     private  var optionlist : ArrayList<Option> = ArrayList()
+    private lateinit var optionListStr: ArrayList<String>
+    var answerOptionInt : ArrayList<Int> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         questionBinding = SingleQuestionBinding.inflate(layoutInflater)
         setContentView(questionBinding.root)
         init()
-        questionBinding.QuestionOption.adapter = OptionAdapter(this, optionlist)
-        questionBinding.backBtn.setOnClickListener { finish() }
+        val adapter = OptionAdapter(this, optionlist)
+        questionBinding.QuestionOption.adapter = adapter
+        questionBinding.QuestionOption.post {
+            for(i in answerOptionInt){
+                adapter.setAnswerOptions(answerOptionInt)
+            }
+        }
+
+        //回傳修改的內容
+        questionBinding.backBtn.setOnClickListener {
+            val intent = Intent()
+            var tagNum = questionBinding.QuestionTags.childCount
+            getOptions()
+            intent.putStringArrayListExtra("Key_options", optionListStr)
+            intent.putExtra("Key_description", questionBinding.questionDescription.text)
+            intent.putExtra("Key_title", questionBinding.QuestionTitle.text)
+            for(i in 0 until tagNum)
+            {
+                val name = "Key_tag$i"
+                val tmpTagTextView = questionBinding.QuestionTags[i] as TextView
+                intent.putExtra(name, tmpTagTextView.text)
+            }
+            var timeLimitInt = questionBinding.timeLimit.text.substring(0, questionBinding.timeLimit.text.length-1).toInt()
+            intent.putExtra("Key_timeLimit", timeLimitInt)
+            intent.putExtra("Key_tagNum", tagNum)
+            setResult(RESULT_OK, intent)
+            finish()
+        }
+
     }
 
     private fun init()
     {
-        val optionNum = arrayOf("A", "B", "C", "D")
+        val optionNum = arrayOf("A", "B", "C", "D", "E", "F")
         val id = intent.getStringExtra("Key_id")
         val title = intent.getStringExtra("Key_title")
         val type = intent.getStringExtra("Key_type")
@@ -41,22 +70,35 @@ class SingleQuestion : AppCompatActivity(){
         val options = intent.getStringArrayListExtra("Key_options")
         val tag = intent.getStringArrayListExtra("Key_tag")
         val description = intent.getStringExtra("Key_description")
+        val answerOption = intent.getStringArrayListExtra("Key_answerOptions")
+        var tmpAnswerOptionInt : ArrayList<Int> = ArrayList()
         if (options != null) {
+            optionListStr = options
             if(options.isNotEmpty())
                 for(i in options.indices) {
                     val tmpOption = Option(optionNum[i], options[i])
                     optionlist.add(tmpOption)
+
+                    //找到option中對的選項
+                    if (answerOption != null) {
+                        for(item in answerOption)
+                            if(options[i]==item)
+                                tmpAnswerOptionInt.add(i)
+                    }
                 }
+                answerOptionInt = tmpAnswerOptionInt
         }
         questionBinding.QuestionImage.setImageResource(image)
         questionBinding.questionDescription.text = description
         questionBinding.timeLimit.text = timeLimit
         questionBinding.QuestionTitle.text = title
+
         if(tag != null){
             if(tag.size>0)
             {
                 var tagTextView = TextView(this)
                 tagTextView.text = tag[0]
+                tagTextView.id = 0
                 val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 tagTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.tag24, 0, 0, 0)
                 tagTextView.setBackgroundResource(R.drawable.corner_radius_blue)
@@ -113,7 +155,18 @@ class SingleQuestion : AppCompatActivity(){
 //                questionBinding.QuestionTags.addView(tagTextView)
             }
         }
-
+    }
+    private fun getOptions(){
+        var tmpAdapte: ListAdapter = questionBinding.QuestionOption.adapter
+        val count = tmpAdapte.count
+        var tmpList: ArrayList<String> = ArrayList()
+        for (i in 0 until count)
+        {
+            val tmpOption  = tmpAdapte.getItem(i) as Option
+//            Log.d("option content is", tmpOption.optionContent)
+            tmpList.add(tmpOption.optionContent)
+        }
+        optionListStr = tmpList
     }
 }
 //<TextView

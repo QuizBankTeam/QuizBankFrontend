@@ -1,6 +1,7 @@
 package com.example.test.Adapter
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,7 +59,8 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
             intent.putExtra("Key_members", currentItem.members)
             intent.putParcelableArrayListExtra("Key_questions", currentItem.questions)
             intent.putIntegerArrayListExtra("Key_casualDuringTime", currentItem.casualDuringTime)
-            context.startActivity(intent)
+            context.startActivityForResult(intent, position)
+            Log.d("in quizAdapter position=", position.toString())
         }
     }
 

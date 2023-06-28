@@ -2,6 +2,7 @@ package com.example.test .Adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,12 +30,12 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = questionList[position]
-        holder.questionBank.text = currentItem.questionBank
+        holder.questionBank.text = "題庫: " + currentItem.questionBank
         holder.questionImage.setImageResource(currentItem.image)
-        holder.questionProvider.text = currentItem.provider
+        holder.questionProvider.text = "提供者: " + currentItem.provider
         holder.questionTitle.text = currentItem.title
         holder.questionType.text = currentItem.type
-        holder.questionTag0.text = currentItem.tag!![0]
+
         if(currentItem.tag!=null)
         {
             if(currentItem.tag!!.size>0)
@@ -54,9 +55,11 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
             intent.putExtra("Key_timeLimit", casualDuringTime[position])
             intent.putExtra("Key_description", currentItem.description)
             intent.putExtra("Key_image", currentItem.image)
+            intent.putStringArrayListExtra("Key_answerOptions", currentItem.answerOption)
             intent.putStringArrayListExtra("Key_options", currentItem.options)
 
-            context.startActivity(intent)
+            context.startActivityForResult(intent, position)
+
         }
 
     }
