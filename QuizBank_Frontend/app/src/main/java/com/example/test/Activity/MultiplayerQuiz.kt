@@ -60,6 +60,7 @@ class MultiplayerQuiz: AppCompatActivity() {
         val QuizMember2 = arrayOf("jl", "jacky", "hehe", "jjs").toCollection(ArrayList())
         val QuizMember3 = arrayOf("蠟筆小新").toCollection(ArrayList())
         val casualDuring = intArrayOf(20,20).toCollection(ArrayList())
+        val casualDuring2 = intArrayOf(20, 20, 30, 30).toCollection(ArrayList())
         var tmpQuestion = Question("123", "題目1", "1", " 圖二為日本統治期間臺灣發電設施之設備容量\n" +
                         "變化圖。請問，使 1930 年代設備容量急遽增加\n" + "的設施為何？", optionText,
                     "MultipleChoiceS", "bank one", optionAns, "an answer description1", "jacky",
@@ -74,7 +75,7 @@ class MultiplayerQuiz: AppCompatActivity() {
         QuestionList2.add(tmpQuestion)
         QuestionList2.add(tmpQuestion)
         val tmpQuiz = Quiz("testmp_quiz1", title, "casual", "ready", 0, casualDuring, "2023-01-05","not yet", QuizMember,QuestionList)
-        val tmpQuiz2 = Quiz("testmp_quiz2", "期中考", "casual", "script", 0, casualDuring, "2023-06-14","not yet", QuizMember2,QuestionList2)
+        val tmpQuiz2 = Quiz("testmp_quiz2", "期中考", "casual", "script", 0, casualDuring2, "2023-06-14","not yet", QuizMember2,QuestionList2)
 
         QuizList.add(tmpQuiz)
         QuizList.add(tmpQuiz2)
