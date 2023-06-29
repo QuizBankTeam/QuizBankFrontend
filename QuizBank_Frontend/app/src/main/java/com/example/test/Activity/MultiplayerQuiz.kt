@@ -53,7 +53,7 @@ class MultiplayerQuiz: AppCompatActivity() {
         val optionText2 = arrayOf("A cc text 123", "B ddd text 456", "C gggg text 789", "D asdfasdf text 101112").toCollection(ArrayList())
         val optionAns2 = arrayOf("B ddd text 456").toCollection(ArrayList())
         val tag = arrayOf("98年", "社會", "歷史").toCollection(ArrayList())
-        val tag2 = arrayOf("98年", "公民", "地理").toCollection(ArrayList())
+        val tag2 = arrayOf("94年", "地理").toCollection(ArrayList())
         val QuizMember = arrayOf("jl","wcy","yc","wt","cy").toCollection(ArrayList())
         val QuizMember2 = arrayOf("jl").toCollection(ArrayList())
         val QuizMember3 = arrayOf("蠟筆小新").toCollection(ArrayList())

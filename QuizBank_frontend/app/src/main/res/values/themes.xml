@@ -18,6 +18,11 @@
         <item name="cornerSize">50dp</item>
         <item name="color">@color/white</item>
     </style>
+    <style name="ImageRoundCorner" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+        <item name="color">@color/white</item>
+    </style>
     <style name="CustomToolbarStyle">
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:colorControlNormal">#FFFFFF</item>

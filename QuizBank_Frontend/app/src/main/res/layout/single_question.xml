@@ -58,13 +58,15 @@
             android:id="@+id/Question_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="-15dp"
+            android:paddingHorizontal="10dp"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:layout_gravity="center"
             android:paddingTop="10dp"
             android:background="@drawable/textview_border"
             android:src="@drawable/society98_1"
-            app:shapeAppearanceOverlay="@style/RoundCorner"/>
+            app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -72,18 +74,19 @@
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingTop="5dp">
+
             <Button
                 android:id="@+id/time_limit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/corner_radius_yellow"
-                android:padding="5dp"
-                android:minHeight="30dp"
+                android:drawableLeft="@drawable/alarm_clock"
                 android:minWidth="55dp"
+                android:minHeight="30dp"
+                android:padding="5dp"
                 android:text="20秒"
-                android:textSize="15dp"
                 android:textColor="@color/black"
-                android:drawableLeft="@drawable/alarm_clock"/>
+                android:textSize="15dp" />
             <LinearLayout
                 android:id="@+id/Question_Tags"
                 android:layout_width="wrap_content"
