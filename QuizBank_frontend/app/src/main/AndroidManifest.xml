@@ -25,6 +25,7 @@
         <activity android:name=".Activity.SingleQuestion" />
         <activity android:name=".Activity.SingleQuiz" />
         <activity android:name=".Activity.SingleQuizSetting" />
+        <activity android:name=".Activity.SingleQuestionSetting" />
     </application>
 
 </manifest>

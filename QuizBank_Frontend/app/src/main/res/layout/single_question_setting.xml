@@ -33,13 +33,13 @@
                     android:textSize="14dp"
                     android:background="@color/colorPrimary" />
                 <TextView
-                    android:id="@+id/quiz_title"
+                    android:id="@+id/question_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="考試設定"
+                    android:text="題目設定"
                     android:textSize="22dp"
                     android:textStyle="bold"
                     android:textAppearance="@style/CustomToolbarStyle"
@@ -78,10 +78,10 @@
             app:cardElevation="3dp">
 
             <EditText
-                android:id="@+id/Quiz_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:id="@+id/Question_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
                 android:text="第一次考試"
                 android:textSize="18dp"
                 android:layout_gravity="center_vertical"/>
@@ -90,7 +90,35 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="狀態"
+            android:text="答案描述"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+        <androidx.cardview.widget.CardView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <EditText
+                android:id="@+id/Question_answerDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="讚讚"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="題號"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="-5dp"
             android:textColor="#3C3C3C"
@@ -106,11 +134,11 @@
             app:cardElevation="3dp">
 
             <TextView
-                android:id="@+id/Quiz_status"
+                android:id="@+id/Question_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="ready"
+                android:text="1"
                 android:textSize="18dp"
                 android:layout_gravity="center_vertical"/>
         </androidx.cardview.widget.CardView>
@@ -120,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="-5dp"
-            android:text="開始日期"
+            android:text="題目類型"
             android:textColor="#3C3C3C"
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -134,20 +162,18 @@
             app:cardUseCompatPadding="true"
             app:cardElevation="3dp">
 
-            <TextView
-                android:id="@+id/Quiz_startDate"
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/Question_type"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="2023-09-06 11:01"
-                android:textSize="18dp"
                 android:layout_gravity="center_vertical"/>
         </androidx.cardview.widget.CardView>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="結束日期"
+            android:text="題庫"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="-5dp"
             android:textColor="#3C3C3C"
@@ -163,11 +189,11 @@
             app:cardElevation="3dp">
 
             <TextView
-                android:id="@+id/Quiz_endDate"
+                android:id="@+id/Question_bank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="2023-09-06 12:55"
+                android:text="題庫1號"
                 android:textSize="18dp"
                 android:layout_gravity="center_vertical"/>
         </androidx.cardview.widget.CardView>
@@ -175,7 +201,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="成員"
+            android:text="提供者"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="-5dp"
             android:textColor="#3C3C3C"
@@ -191,13 +217,42 @@
             app:cardElevation="3dp">
 
             <TextView
-                android:id="@+id/Quiz_members"
+                android:id="@+id/Question_provider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="jacky1, jacky2, jacky3"
+                android:text="jacky1"
                 android:textSize="18dp"
                 android:layout_gravity="center_vertical"/>
         </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="創建日期"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+        <androidx.cardview.widget.CardView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <TextView
+                android:id="@+id/Question_createDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="2023-06-29"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

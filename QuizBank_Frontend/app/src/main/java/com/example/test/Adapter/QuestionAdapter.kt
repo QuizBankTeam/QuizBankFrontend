@@ -34,8 +34,11 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         holder.questionImage.setImageResource(currentItem.image)
         holder.questionProvider.text = "提供者: " + currentItem.provider
         holder.questionTitle.text = currentItem.title
-        holder.questionType.text = currentItem.type
-
+        printLn("the type of"+position.toString()+"question is"+ type)
+        if(holder.questionType.text == "MultipleChoiceS")
+            holder.questionType.text = "單選"
+        else if(holder.questionType.text == "MultipleChoiceM")
+            holder.questionType.text = "多選"
         if(currentItem.tag!=null)
         {
             if(currentItem.tag!!.size>0)
@@ -45,6 +48,7 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
             if(currentItem.tag!!.size>2)
                 holder.questionTag2.text = currentItem.tag!![2]
         }
+
         holder.itemView.setOnClickListener {
             val intent = Intent()
             intent.setClass(context, SingleQuestion::class.java)
@@ -55,6 +59,11 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
             intent.putExtra("Key_timeLimit", casualDuringTime[position])
             intent.putExtra("Key_description", currentItem.description)
             intent.putExtra("Key_image", currentItem.image)
+            intent.putExtra("Key_answerDescription", currentItem.answerDescription)
+            intent.putExtra("Key_number", currentItem.number)
+            intent.putExtra("Key_questionBank", currentItem.questionBank)
+            intent.putExtra("Key_provider", currentItem.provider)
+            intent.putExtra("Key_createdDate", currentItem.createdDate)
             intent.putStringArrayListExtra("Key_answerOptions", currentItem.answerOption)
             intent.putStringArrayListExtra("Key_options", currentItem.options)
 

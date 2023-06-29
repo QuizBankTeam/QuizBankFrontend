@@ -29,7 +29,8 @@ class SingleQuizSetting: AppCompatActivity() {
         }
         quizSetAttrBinding.saveBtn.setOnClickListener {
             val intent = Intent()
-            intent.putExtra("Key_title", quizTitle)
+            val titelText = quizSetAttrBinding.QuizTitle.text.toString()
+            intent.putExtra("Key_title", titelText)
             intent.putExtra("Key_startDate", quizStartDate)
             intent.putExtra("Key_endDate", quizEndDate)
             intent.putStringArrayListExtra("Key_members", quizMembers)
@@ -38,13 +39,12 @@ class SingleQuizSetting: AppCompatActivity() {
         }
     }
     private fun init(){
-        val id = intent.getStringExtra("Key_id")
         val title = intent.getStringExtra("Key_title")
         val status = intent.getStringExtra("Key_status")
         val startDate = intent.getStringExtra("Key_startDate")
         val endDate = intent.getStringExtra("Key_endDate")
         val members = intent.getStringArrayListExtra("Key_members")
-        var MembersStr = "成員: "
+        var MembersStr = ""
         if (members != null) {
             if(members.size>0) {
                 for(item in members){
@@ -59,8 +59,6 @@ class SingleQuizSetting: AppCompatActivity() {
 
         if (title != null)
             this.quizTitle = title
-        if (id != null)
-            this.quizId = id
         if (status != null)
             this.quizStatus = status
         if (startDate != null)
@@ -70,8 +68,7 @@ class SingleQuizSetting: AppCompatActivity() {
         if (members != null)
             this.quizMembers = members
 
-        quizSetAttrBinding.QuizId.text = id
-        quizSetAttrBinding.QuizTitle.text = title
+        quizSetAttrBinding.QuizTitle.setText(title)
         quizSetAttrBinding.QuizStatus.text = status
         quizSetAttrBinding.QuizStartDate.text = startDate
         quizSetAttrBinding.QuizEndDate.text = endDate

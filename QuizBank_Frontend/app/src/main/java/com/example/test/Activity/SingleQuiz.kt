@@ -67,6 +67,9 @@ class SingleQuiz: AppCompatActivity() {
                 tmpQuestion.description = data.getStringExtra("Key_description")
                 casualDuringTime[requestCode] = data.getIntExtra("Key_timeLimit", 0)
                 tmpQuestion.answerOption = data.getStringArrayListExtra("Key_answerOptions")
+                tmpQuestion.answerDescription = data.getStringExtra("Key_answerDescription")
+                tmpQuestion.number = data.getStringExtra("Key_number")
+                tmpQuestion.type = data.getStringExtra("Key_type")
             }
             questionlist[requestCode] = tmpQuestion
         }
@@ -127,7 +130,6 @@ class SingleQuiz: AppCompatActivity() {
     private fun quizSetting(){
         val intent = Intent()
         intent.setClass(this@SingleQuiz, SingleQuizSetting::class.java)
-        intent.putExtra("Key_id", quizId)
         intent.putExtra("Key_title", quizTitle)
         intent.putExtra("Key_status", quizStatus)
         intent.putExtra("Key_startDate", quizStartDate)
