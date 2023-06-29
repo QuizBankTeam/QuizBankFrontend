@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.Activity.SingleQuestion
@@ -33,7 +34,7 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         holder.questionImage.setImageResource(currentItem.image)
         holder.questionProvider.text = "提供者: " + currentItem.provider
         holder.questionTitle.text = currentItem.title
-        println("the type of"+position.toString()+"question is"+ currentItem.type)
+
         if(currentItem.type == "MultipleChoiceS") {
             holder.questionType.text = "單選"
         }
@@ -42,12 +43,24 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         }
         if(currentItem.tag!=null)
         {
-            if(currentItem.tag!!.size>0)
+            if(currentItem.tag!!.size==0) {
+                holder.questionContainer.removeAllViews()
+            }
+            else if(currentItem.tag!!.size==1) {
                 holder.questionTag0.text = currentItem.tag!![0]
-            if(currentItem.tag!!.size>1)
+                holder.questionContainer.removeView(holder.questionTag1)
+                holder.questionContainer.removeView(holder.questionTag2)
+            }
+            else if(currentItem.tag!!.size==2) {
+                holder.questionTag0.text = currentItem.tag!![0]
                 holder.questionTag1.text = currentItem.tag!![1]
-            if(currentItem.tag!!.size>2)
+                holder.questionContainer.removeView(holder.questionTag2)
+            }
+            else if(currentItem.tag!!.size==3) {
+                holder.questionTag0.text = currentItem.tag!![0]
+                holder.questionTag1.text = currentItem.tag!![1]
                 holder.questionTag2.text = currentItem.tag!![2]
+            }
         }
 
         holder.itemView.setOnClickListener {
@@ -87,5 +100,6 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         val questionTag0: TextView = itemView.findViewById(R.id.question_tag0)
         val questionTag1: TextView = itemView.findViewById(R.id.question_tag1)
         val questionTag2: TextView = itemView.findViewById(R.id.question_tag2)
+        val questionContainer: LinearLayout = itemView.findViewById(R.id.question_tag_container)
     }
 }

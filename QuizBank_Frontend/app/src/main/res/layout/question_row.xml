@@ -81,18 +81,18 @@
 
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/question_tag_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="right">
-
-                    <TextView
+                   <TextView
                         android:id="@+id/question_tag0"
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/corner_radius_yellow"
-                        android:padding="3dp"
+                        android:padding="2sp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginHorizontal="3dp"
                         android:gravity="center"
@@ -105,12 +105,12 @@
                         android:id="@+id/question_tag1"
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
                         android:layout_marginHorizontal="3dp"
                         android:background="@drawable/corner_radius_yellow"
                         android:drawableLeft="@drawable/tag24"
                         android:gravity="center"
-                        android:padding="3dp"
-                        android:layout_marginBottom="3dp"
+                        android:padding="2sp"
                         android:text="成大"
                         android:textColor="@color/white"
                         android:textSize="15dp" />
@@ -118,9 +118,9 @@
                         android:id="@+id/question_tag2"
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
+
                         android:background="@drawable/corner_radius_yellow"
-                        android:padding="3dp"
-                        android:layout_marginBottom="3dp"
+                        android:padding="2sp"
                         android:layout_marginHorizontal="3dp"
                         android:gravity="center"
                         android:text="計系"

@@ -14,16 +14,16 @@
         app:cardElevation="3dp">
 
         <LinearLayout
-            android:layout_width="403dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="180dp"
-            android:padding="5dp"
             android:orientation="horizontal">
             <EditText
                 android:id="@+id/edit_question_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginHorizontal="20dp"
                 android:text="an example of the options\nand the content of this option is hehe xd 12345"
                 android:gravity="center" />
         </LinearLayout>

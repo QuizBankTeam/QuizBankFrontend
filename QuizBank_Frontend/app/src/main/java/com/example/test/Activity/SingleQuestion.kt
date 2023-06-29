@@ -231,7 +231,6 @@ class SingleQuestion : AppCompatActivity(){
 
     private fun backBtn(){
         val intent = Intent()
-        val tagNum = questionBinding.QuestionTags.childCount
         val answerOptionListStr: ArrayList<String> = ArrayList()
         val timeLimitInt = time_limit
         if(this.questionType=="MultipleChoiceS" && answerOptionInt.size>1){
@@ -245,17 +244,16 @@ class SingleQuestion : AppCompatActivity(){
             intent.putExtra("Key_number", questionNumber)
             intent.putExtra("Key_type", questionType)
 
-            for (i in 0 until tagNum) {
+            for (i in 0 until this.questionTag.size) {
                 val name = "Key_tag$i"
-                val tmpTagTextView = questionBinding.QuestionTags[i] as TextView
-                intent.putExtra(name, tmpTagTextView.text)
+                intent.putExtra(name, this.questionTag[i])
             }
             for (i in answerOptionInt) {
                 answerOptionListStr.add(optionListStr[i])
             }
             intent.putStringArrayListExtra("Key_answerOptions", answerOptionListStr)
             intent.putExtra("Key_timeLimit", timeLimitInt)
-            intent.putExtra("Key_tagNum", tagNum)
+            intent.putExtra("Key_tagNum", this.questionTag.size)
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -361,8 +359,12 @@ class SingleQuestion : AppCompatActivity(){
         val dialog: AlertDialog = builder.create()
         dialog.show()
         dialog.setOnDismissListener {
-            this.questionTag[position] = editTag.text.toString()
-            this.questionTagTextView[position].text = this.questionTag[position]
+            if(editTag.text.toString().length>5){
+                AlertDialog.Builder(this).setTitle("標籤過長5!").setPositiveButton("我懂", null).show()
+            }else{
+                this.questionTag[position] = editTag.text.toString()
+                this.questionTagTextView[position].text = this.questionTag[position]
+            }
         }
     }
 

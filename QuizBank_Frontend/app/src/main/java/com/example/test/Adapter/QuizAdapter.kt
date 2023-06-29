@@ -30,20 +30,23 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = questionList[position]
-        holder.quizNum.text = currentItem.questions.size.toString() + "題"
+        holder.quizNum.text = currentItem.questions?.size.toString() + "題"
         holder.quizStatus.text = currentItem.status
         holder.quizStartDate.text = currentItem.startDate
         holder.quizTitle.text = currentItem.title
         var member = "成員: "
-        if(currentItem.members.size>0) {
-            for(item in currentItem.members){
-                member += item
-                member += " "
+        if(currentItem.members!=null){
+            if(currentItem.members.size  > 0) {
+                for(item in currentItem.members){
+                    member += item
+                    member += " "
+                }
+            }
+            else {
+                member = "無成員"
             }
         }
-        else {
-            member = "無成員"
-        }
+
         holder.quizMembers.text = member
 
         holder.itemView.setOnClickListener {

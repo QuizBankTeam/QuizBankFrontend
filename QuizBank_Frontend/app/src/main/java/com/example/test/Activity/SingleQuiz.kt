@@ -31,6 +31,7 @@ class SingleQuiz: AppCompatActivity() {
         setContentView(quizBinding.root)
 //        fragM = supportFragmentManager
         init()
+        println("it's now on creating")
         quizBinding.QuestionList.layoutManager = LinearLayoutManager(this)
         quizBinding.QuestionList.setHasFixedSize(true)
         quizBinding.QuestionList.adapter = QuestionAdapter(this, questionlist, casualDuringTime)
@@ -59,9 +60,9 @@ class SingleQuiz: AppCompatActivity() {
             var tmpQuestion = questionlist[requestCode]
             if (data != null) {
                 tmpQuestion.options = data.getStringArrayListExtra("Key_options")
-                Log.d("options num", tmpQuestion.options?.size.toString())
+                tmpQuestion.tag?.clear()
                 for (i in 0 until data.getIntExtra("Key_tagNum", 0)){
-                    tmpQuestion.tag?.set(i, data.getStringExtra("Key_tag$i")!! )
+                    tmpQuestion.tag?.add(data.getStringExtra("Key_tag$i")!!)
                 }
                 tmpQuestion.title = data.getStringExtra("Key_title")
                 tmpQuestion.description = data.getStringExtra("Key_description")
@@ -73,7 +74,6 @@ class SingleQuiz: AppCompatActivity() {
             }
             questionlist[requestCode] = tmpQuestion
             quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
-
         }
         else
         {
@@ -88,6 +88,7 @@ class SingleQuiz: AppCompatActivity() {
                     quizStartDate = data.getStringExtra("Key_startDate").toString()
                     quizEndDate = data.getStringExtra("Key_endDate").toString()
                     quizMembers = data.getStringArrayListExtra("Key_members") as ArrayList<String>
+                    quizBinding.quizTitle.text = title
                 }
             }
         }

@@ -19,7 +19,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="403dp"
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:padding="5dp"
                 android:orientation="horizontal">
@@ -28,6 +28,7 @@
                     android:id="@+id/optionContent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_weight="1"
                     android:text="an example of the options\nand the content of this option is hehe xd 12345"
                     android:gravity="center" />
