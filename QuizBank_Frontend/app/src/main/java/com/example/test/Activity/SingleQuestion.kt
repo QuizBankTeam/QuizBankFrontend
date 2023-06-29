@@ -19,7 +19,7 @@ import com.example.test.model.Option
 class SingleQuestion : AppCompatActivity(){
     private lateinit var questionBinding: SingleQuestionBinding
     private  var optionlist : ArrayList<Option> = ArrayList()
-    private var questionTag : ArrayList<String> = ArrayList()
+    private lateinit var questionTag : ArrayList<String>
     private var questionTagTextView : ArrayList<TextView> = ArrayList()
     private lateinit var optionListStr: ArrayList<String>
     private var time_limit = -1
@@ -31,7 +31,7 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var questionBank: String
     private lateinit var questionProvider : String
     private lateinit var questionCreatedDate : String
-    private var answerOptionInt : ArrayList<Int> = ArrayList() //為正確答案的position
+    private lateinit var answerOptionInt : ArrayList<Int>  //為正確答案的position
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,9 +41,7 @@ class SingleQuestion : AppCompatActivity(){
         val adapter = OptionAdapter(this, optionlist)
         questionBinding.QuestionOption.adapter = adapter
         questionBinding.QuestionOption.post { //將正確選項的背景改為綠色
-            for(i in answerOptionInt){
-                adapter.setAnswerOptions(answerOptionInt)
-            }
+            adapter.setAnswerOptions(answerOptionInt)
         }
 
         //修改選項
@@ -67,6 +65,7 @@ class SingleQuestion : AppCompatActivity(){
         }
 
         //修改標籤
+        questionTagTextView.clear()
         for(i in 0 until questionTag.count()){
             questionTagTextView.add(questionBinding.QuestionTags[i] as TextView)
             questionTagTextView[i].setOnClickListener {
@@ -114,6 +113,7 @@ class SingleQuestion : AppCompatActivity(){
         val answerOption = intent.getStringArrayListExtra("Key_answerOptions")
         val answerDescription = intent.getStringExtra("Key_answerDescription")
         val tmpAnswerOptionInt : ArrayList<Int> = ArrayList()
+        optionlist.clear()
 
         if (options != null) {
             optionListStr = options
@@ -163,6 +163,7 @@ class SingleQuestion : AppCompatActivity(){
 
     private fun initTag(tag: ArrayList<String>){
         //設定tag
+        val tmpTag : ArrayList<String> = ArrayList()
         val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6f, resources.displayMetrics).toInt()
         val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
         val marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
@@ -171,6 +172,7 @@ class SingleQuestion : AppCompatActivity(){
         layoutParam.marginStart = marginHorizontal
         layoutParam.marginEnd = marginHorizontal
         layoutParam.topMargin = marginTop
+
         if(tag.size>0) {
             val tagTextView = TextView(this)
             tagTextView.isClickable = true
@@ -183,7 +185,7 @@ class SingleQuestion : AppCompatActivity(){
             tagTextView.setTextColor(Color.WHITE)
             tagTextView.textSize = textSize1
             questionBinding.QuestionTags.addView(tagTextView)
-            this.questionTag.add(tag[0]) //QuestionTags is a container of questionTag
+            tmpTag.add(tag[0]) //QuestionTags is a container of questionTag
         }
         if(tag.size>1) {
             val tagTextView1 = TextView(this)
@@ -197,7 +199,7 @@ class SingleQuestion : AppCompatActivity(){
             tagTextView1.setTextColor(Color.WHITE)
             tagTextView1.textSize = textSize1
             questionBinding.QuestionTags.addView(tagTextView1)
-            this.questionTag.add(tag[1])
+            tmpTag.add(tag[1])
         }
         if(tag.size>2){
             val tagTextView2 = TextView(this)
@@ -211,8 +213,9 @@ class SingleQuestion : AppCompatActivity(){
             tagTextView2.setTextColor(Color.WHITE)
             tagTextView2.textSize = textSize1
             questionBinding.QuestionTags.addView(tagTextView2)
-            this.questionTag.add(tag[2])
+            tmpTag.add(tag[2])
         }
+        this.questionTag = tmpTag
     }
     private fun getOptions(){
         val tmpAdapte: ListAdapter = questionBinding.QuestionOption.adapter
@@ -221,7 +224,6 @@ class SingleQuestion : AppCompatActivity(){
         for (i in 0 until count)
         {
             val tmpOption  = tmpAdapte.getItem(i) as Option
-//            Log.d("option content is", tmpOption.optionContent)
             tmpList.add(tmpOption.optionContent)
         }
         optionListStr = tmpList
@@ -232,35 +234,38 @@ class SingleQuestion : AppCompatActivity(){
         val tagNum = questionBinding.QuestionTags.childCount
         val answerOptionListStr: ArrayList<String> = ArrayList()
         val timeLimitInt = time_limit
+        if(this.questionType=="MultipleChoiceS" && answerOptionInt.size>1){
+            AlertDialog.Builder(this).setTitle("單選題只能有一個正確選項!").setPositiveButton("我懂", null).show()
+        }else {
+            getOptions()
+            intent.putStringArrayListExtra("Key_options", optionListStr)
+            intent.putExtra("Key_description", questionBinding.questionDescription.text)
+            intent.putExtra("Key_title", questionTitle)
+            intent.putExtra("Key_answerDescription", questionAnswerDescription)
+            intent.putExtra("Key_number", questionNumber)
+            intent.putExtra("Key_type", questionType)
 
-        getOptions()
-        intent.putStringArrayListExtra("Key_options", optionListStr)
-        intent.putExtra("Key_description", questionBinding.questionDescription.text)
-        intent.putExtra("Key_title", questionTitle)
-        intent.putExtra("Key_answerDescription", questionAnswerDescription)
-        intent.putExtra("Key_number", questionNumber)
-        intent.putExtra("Key_type", questionType)
-
-        for(i in 0 until tagNum) {
-            val name = "Key_tag$i"
-            val tmpTagTextView = questionBinding.QuestionTags[i] as TextView
-            intent.putExtra(name, tmpTagTextView.text)
+            for (i in 0 until tagNum) {
+                val name = "Key_tag$i"
+                val tmpTagTextView = questionBinding.QuestionTags[i] as TextView
+                intent.putExtra(name, tmpTagTextView.text)
+            }
+            for (i in answerOptionInt) {
+                answerOptionListStr.add(optionListStr[i])
+            }
+            intent.putStringArrayListExtra("Key_answerOptions", answerOptionListStr)
+            intent.putExtra("Key_timeLimit", timeLimitInt)
+            intent.putExtra("Key_tagNum", tagNum)
+            setResult(RESULT_OK, intent)
+            finish()
         }
-        for(i in answerOptionInt){
-            answerOptionListStr.add(optionListStr[i])
-        }
-        intent.putStringArrayListExtra("Key_answerOptions", answerOptionListStr)
-        intent.putExtra("Key_timeLimit", timeLimitInt)
-        intent.putExtra("Key_tagNum", tagNum)
-        setResult(RESULT_OK, intent)
-        finish()
     }
 
     private fun optionChange(position: Int, adapter: OptionAdapter) {
         val currentOption = optionlist[position]
         val builder = AlertDialog.Builder(this)
         val v:View =  layoutInflater.inflate(R.layout.edit_option, null)
-        var status = false
+        var status = false //isOptionChanged?
         var answerOptionIndices = -1
         for(i in answerOptionInt.indices){
             if(answerOptionInt[i] == position) {
@@ -299,9 +304,8 @@ class SingleQuestion : AppCompatActivity(){
                         AlertDialog.Builder(this).setTitle("至少要有一個正確選項!").setPositiveButton("我懂", null).show()
                 }
             }
-            for(i in answerOptionInt){
-                adapter.setAnswerOptions(answerOptionInt)
-            }
+
+            adapter.setAnswerOptions(answerOptionInt)
         }
     }
 
@@ -372,7 +376,7 @@ class SingleQuestion : AppCompatActivity(){
         intent.putExtra("Key_questionBank", questionBank)
         intent.putExtra("Key_provider", questionProvider)
         intent.putExtra("Key_createdDate", questionCreatedDate)
-        startActivityForResult(intent, 1000)
+        startActivityForResult(intent, 1001)
     }
 }
 //<TextView

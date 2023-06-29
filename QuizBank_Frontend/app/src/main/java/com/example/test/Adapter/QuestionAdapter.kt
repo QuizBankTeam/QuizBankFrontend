@@ -18,7 +18,6 @@ import com.example.test.model.Question
 class QuestionAdapter(private val context: Activity, private val questionList: ArrayList<Question>, private val casualDuringTime: ArrayList<Int>):
     RecyclerView.Adapter<QuestionAdapter.MyViewHolder>()
 {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.question_row, null)
         return MyViewHolder(itemView)
@@ -34,11 +33,13 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         holder.questionImage.setImageResource(currentItem.image)
         holder.questionProvider.text = "提供者: " + currentItem.provider
         holder.questionTitle.text = currentItem.title
-        printLn("the type of"+position.toString()+"question is"+ type)
-        if(holder.questionType.text == "MultipleChoiceS")
+        println("the type of"+position.toString()+"question is"+ currentItem.type)
+        if(currentItem.type == "MultipleChoiceS") {
             holder.questionType.text = "單選"
-        else if(holder.questionType.text == "MultipleChoiceM")
+        }
+        else if(currentItem.type == "MultipleChoiceM") {
             holder.questionType.text = "多選"
+        }
         if(currentItem.tag!=null)
         {
             if(currentItem.tag!!.size>0)
@@ -73,6 +74,9 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
 
     }
 
+    fun updateList(){
+        notifyDataSetChanged()
+    }
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {
         val questionBank: TextView = itemView.findViewById(R.id.question_bank)

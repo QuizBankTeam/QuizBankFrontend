@@ -31,8 +31,10 @@ class SingleQuestionSetting: AppCompatActivity()  {
         }
         questionSetAttr.saveBtn.setOnClickListener {
             val intent = Intent()
-            val titleText = questionSetAttr.QuestionTitle.text.toString()
-            val ansDesc = questionSetAttr.QuestionAnswerDescription.text.toString()
+            val tmpTitleText = questionSetAttr.QuestionTitle.text
+            val tmpAnsText = questionSetAttr.QuestionAnswerDescription.text
+            val titleText = tmpTitleText.toString()
+            val ansDesc = tmpAnsText.toString()
             intent.putExtra("Key_title", titleText)
             intent.putExtra("Key_answerDescription", ansDesc)
             intent.putExtra("Key_number", questionNumber)

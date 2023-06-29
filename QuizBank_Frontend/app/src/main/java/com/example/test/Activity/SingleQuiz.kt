@@ -16,7 +16,7 @@ import com.example.test.model.Question
 class SingleQuiz: AppCompatActivity() {
     private lateinit var quizBinding: SingleQuizBinding
     private lateinit var questionlist : ArrayList<Question>
-    private var casualDuringTime =  ArrayList<Int>()
+    private lateinit var casualDuringTime : ArrayList<Int>
     private lateinit var fragM: FragmentManager
     private lateinit var quizId: String
     private lateinit var quizTitle: String
@@ -72,6 +72,8 @@ class SingleQuiz: AppCompatActivity() {
                 tmpQuestion.type = data.getStringExtra("Key_type")
             }
             questionlist[requestCode] = tmpQuestion
+            quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
+
         }
         else
         {
