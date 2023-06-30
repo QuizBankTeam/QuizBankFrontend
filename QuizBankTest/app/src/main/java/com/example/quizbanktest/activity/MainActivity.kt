@@ -13,11 +13,8 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Base64
 import android.util.Log
-
 import android.view.MenuItem
-
 import android.widget.ImageButton
-
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +29,6 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.RecentViewAdapter
 import com.example.quizbanktest.adapters.RecommendViewAdapter
 import com.example.quizbanktest.adapters.WrongViewAdapter
-
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.network.AccountService
@@ -273,14 +269,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun login(){
-        Log.e("login fun","success")
+        getCsrfToken()
         if (Constants.isNetworkAvailable(this@MainActivity)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit.create(AccountService::class.java)
-            val body = AccountService.PostBody("test","test")
+            val body = AccountService.PostBody(Constants.username,Constants.password)
 
             //TODO 用csrf token 拿access token
 
@@ -316,7 +312,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 Log.e("in login Error 400", "Bad Re" +
                                         "" +
                                         "quest"+response.body())
-
                             }
                             404 -> {
                                 Log.e("in login Error 404", "Not Found")
@@ -382,7 +377,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 Log.e("in csrf Error 400", "Bad Re" +
                                         "" +
                                         "quest")
-
                             }
                             404 -> {
                                 Log.e("in csrf Error 404", "Not Found")
@@ -433,9 +427,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 Log.e("Error 400", "Bad Re" +
                                         "" +
                                         "quest")
-
                             }
-
                             404 -> {
                                 Log.e("Error 404", "Not Found")
                             }
