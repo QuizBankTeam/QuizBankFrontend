@@ -2,10 +2,145 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.BankActivity">
 
+    <ImageView
+        android:id="@+id/imageview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_home_detail"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:titleTextAppearance="@style/CustomToolbarStyle"
+        app:titleTextColor="@color/colorPrimaryDark"
+        app:title="Bank Page💡"
+        android:theme="@style/CustomToolbarStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.widget.SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="330dp"
+        android:layout_height="35dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/search_bar"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/search_hint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_home_detail" />
+
+    <ImageButton
+        android:id="@+id/menu_button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        android:onClick="setPopupWindow"
+        android:src="@drawable/burger_menu_right_svgrepo_com"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_home_detail" />
+
+    <View
+        android:id="@+id/dividing_view"
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/gradient_background"
+        android:paddingBottom="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/ll_action_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".activity.BankActivity">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_action_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorRipple"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/home_svgrepo_com__2_"/>
+
+        <ImageButton
+            android:id="@+id/test"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/notepad_and_pen_svgrepo_com"/>
+
+        <ImageButton
+            android:id="@+id/camera"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/camera_svgrepo_com__1_" />
+
+        <ImageButton
+            android:id="@+id/bank"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/book_and_person_winter_svgrepo_com" />
+
+        <ImageButton
+            android:id="@+id/setting"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/setting_setting_svgrepo_com__2_" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

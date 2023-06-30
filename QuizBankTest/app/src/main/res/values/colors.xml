@@ -25,5 +25,8 @@
     <color name="yellow">#ffb703</color>
     <color name="lollipop"> #a8dadc</color>
     <color name="random">#8338ec</color>
+    <color name="red_200">#D16BA5</color>
+    <color name="blue_200">#86A8E7</color>
+    <color name="cyan_200">#5FFBF1</color>
 
 </resources>
