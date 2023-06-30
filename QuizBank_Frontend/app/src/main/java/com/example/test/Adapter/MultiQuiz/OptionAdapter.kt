@@ -1,4 +1,4 @@
-package com.example.test.Adapter
+package com.example.test.Adapter.MultiQuiz
 
 import android.app.Activity
 import android.graphics.Color
@@ -12,7 +12,7 @@ import com.example.test.R
 import com.example.test.model.Option
 
 class OptionAdapter(private val context: Activity, private  val arrayList: ArrayList<Option>) :
-    ArrayAdapter<Option>(context, R.layout.option_row, arrayList) {
+    ArrayAdapter<Option>(context, R.layout.mp_option_row, arrayList) {
     private var answerOptions : ArrayList<Int> = ArrayList()
     fun setAnswerOptions(answer: ArrayList<Int>)
     {
@@ -22,7 +22,7 @@ class OptionAdapter(private val context: Activity, private  val arrayList: Array
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater : LayoutInflater = LayoutInflater.from(context)
-        val view : View = inflater.inflate(R.layout.option_row, null)
+        val view : View = inflater.inflate(R.layout.mp_option_row, null)
 
         val optionnum : TextView = view.findViewById(R.id.optionNum)
         val optioncontent : TextView = view.findViewById(R.id.optionContent)

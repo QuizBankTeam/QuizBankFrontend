@@ -122,6 +122,6 @@
             android:layout_marginHorizontal="20dp"
             android:textColor="@color/white"
             android:textSize="30sp"
-            tools:listitem="@layout/option_row"/>
+            tools:listitem="@layout/mp_option_row"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

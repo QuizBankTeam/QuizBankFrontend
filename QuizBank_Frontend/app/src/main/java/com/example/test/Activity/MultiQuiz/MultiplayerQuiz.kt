@@ -1,7 +1,7 @@
-package com.example.test.Activity
+package com.example.test.Activity.MultiQuiz
 
 import android.content.Intent
-import com.example.test.Adapter.QuizAdapter
+import com.example.test.Adapter.MultiQuiz.QuizAdapter
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +26,7 @@ class MultiplayerQuiz: AppCompatActivity() {
         mpQuizBinding.QuizList.adapter = quizadapter
         mpQuizBinding.QuizList.isClickable = true
 
-        mpQuizBinding.backBtn.setOnClickListener { finish() }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -37,8 +37,10 @@ class MultiplayerQuiz: AppCompatActivity() {
         if (data != null) {
             tmpQuiz.questions = data.getParcelableArrayListExtra<Question>("Key_questions") as ArrayList<Question>
             tmpQuiz.title = data.getStringExtra("Key_title").toString()
+            QuizList[requestCode].casualDuringTime = data.getIntegerArrayListExtra("Key_casualDuringTime")
+            QuizList[requestCode] = tmpQuiz
         }
-        QuizList[requestCode] = tmpQuiz
+
     }
 
 
@@ -79,10 +81,7 @@ class MultiplayerQuiz: AppCompatActivity() {
 
         QuizList.add(tmpQuiz)
         QuizList.add(tmpQuiz2)
-      
-    }
-    private fun buttonClicked()
-    {
 
     }
+
 }

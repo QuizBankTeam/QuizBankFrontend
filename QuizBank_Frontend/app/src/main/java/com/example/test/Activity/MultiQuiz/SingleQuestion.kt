@@ -1,9 +1,9 @@
-package com.example.test.Activity
+package com.example.test.Activity.MultiQuiz
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
-import com.example.test.Adapter.OptionAdapter
+import com.example.test.Adapter.MultiQuiz.OptionAdapter
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
@@ -13,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.*
 import com.example.test.R
-import com.example.test.databinding.SingleQuestionBinding
+import com.example.test.databinding.MpSingleQuestionBinding
 import com.example.test.model.Option
 
 class SingleQuestion : AppCompatActivity(){
-    private lateinit var questionBinding: SingleQuestionBinding
+    private lateinit var questionBinding: MpSingleQuestionBinding
     private  var optionlist : ArrayList<Option> = ArrayList()
     private lateinit var questionTag : ArrayList<String>
     private var questionTagTextView : ArrayList<TextView> = ArrayList()
@@ -35,7 +35,7 @@ class SingleQuestion : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        questionBinding = SingleQuestionBinding.inflate(layoutInflater)
+        questionBinding = MpSingleQuestionBinding.inflate(layoutInflater)
         setContentView(questionBinding.root)
         init()
         val adapter = OptionAdapter(this, optionlist)
@@ -92,6 +92,7 @@ class SingleQuestion : AppCompatActivity(){
                 this.questionAnswerDescription = data.getStringExtra("Key_answerDescription").toString()
                 this.questionNumber = data.getStringExtra("Key_number").toString()
                 this.questionType = data.getStringExtra("Key_type").toString()
+                questionBinding.QuestionTitle.text = this.questionTitle
             }
         }
     }
@@ -262,7 +263,7 @@ class SingleQuestion : AppCompatActivity(){
     private fun optionChange(position: Int, adapter: OptionAdapter) {
         val currentOption = optionlist[position]
         val builder = AlertDialog.Builder(this)
-        val v:View =  layoutInflater.inflate(R.layout.edit_option, null)
+        val v:View =  layoutInflater.inflate(R.layout.mp_edit_option, null)
         var status = false //isOptionChanged?
         var answerOptionIndices = -1
         for(i in answerOptionInt.indices){
@@ -309,7 +310,7 @@ class SingleQuestion : AppCompatActivity(){
 
     private fun selectTimeLimit(){
         val builder = AlertDialog.Builder(this)
-        val v:View =  layoutInflater.inflate(R.layout.select_time_limit, null)
+        val v:View =  layoutInflater.inflate(R.layout.mp_select_time_limit, null)
         val selectSpinner : Spinner = v.findViewById(R.id.Select_time_limit)
         val limitOptions = arrayOf("10秒", "15秒", "20秒", "30秒", "60秒")
         val limitOptionsInt = intArrayOf(10, 15, 20, 30, 60)
@@ -336,7 +337,7 @@ class SingleQuestion : AppCompatActivity(){
 
     private fun descriptionChange(){
         val builder = AlertDialog.Builder(this)
-        val v:View =  layoutInflater.inflate(R.layout.edit_question_description, null)
+        val v:View =  layoutInflater.inflate(R.layout.mp_edit_question_description, null)
         val editDescirption: EditText = v.findViewById(R.id.edit_question_description)
         editDescirption.setText(this.questionDescription)
         builder.setTitle("題目敘述")
@@ -351,7 +352,7 @@ class SingleQuestion : AppCompatActivity(){
 
     private fun tagChange(tmpText : String, position : Int){
         val builder = AlertDialog.Builder(this)
-        val v:View =  layoutInflater.inflate(R.layout.edit_question_tag, null)
+        val v:View =  layoutInflater.inflate(R.layout.mp_edit_question_tag, null)
         val editTag: EditText = v.findViewById(R.id.edit_question_tag)
         editTag.setText(tmpText)
         builder.setTitle("題目標籤")

@@ -1,4 +1,4 @@
-package com.example.test.Adapter
+package com.example.test.Adapter.MultiQuiz
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.Activity.MultiplayerQuiz
-import com.example.test.Activity.SingleQuiz
+import com.example.test.Activity.MultiQuiz.SingleQuiz
 import com.example.test.R
 import com.example.test.model.Quiz
 
@@ -20,7 +18,7 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
 {
     private var onClickListener: OnClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.quiz_row, null)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.mp_quiz_row, null)
         return MyViewHolder(itemView)
     }
 
@@ -34,10 +32,11 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
         holder.quizStatus.text = currentItem.status
         holder.quizStartDate.text = currentItem.startDate
         holder.quizTitle.text = currentItem.title
+        val tmpMember = currentItem.members
         var member = "成員: "
-        if(currentItem.members!=null){
-            if(currentItem.members.size  > 0) {
-                for(item in currentItem.members){
+        if(tmpMember!=null){
+            if(tmpMember.size  > 0) {
+                for(item in tmpMember){
                     member += item
                     member += " "
                 }

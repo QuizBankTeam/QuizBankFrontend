@@ -1,8 +1,13 @@
 package com.example.test.Activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.EditText
+import com.example.test.Activity.MultiQuiz.MultiplayerQuiz
+import com.example.test.R
 import com.example.test.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -20,10 +25,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buttonClick(){
-        var email : String = binding.account.text.toString()
-        var password : String = binding.password.text.toString()
+
+        val email : String = binding.account.text.toString()
+        val password : String = binding.password.text.toString()
         val intent = Intent()
-        intent.setClass(this@MainActivity, MultiplayerQuiz::class.java)
+//        intent.setClass(this@MainActivity, MultiplayerQuiz::class.java)
+        intent.setClass(this@MainActivity, QuizPage::class.java)
         intent.putExtra("Key_email", email)
         intent.putExtra("Key_password", password)
         startActivity(intent)

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Activity.MultiplayerQuiz">
+    tools:context=".Activity.MultiQuiz.MultiplayerQuiz">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                     android:layout_weight="4"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="多人考試"
+                    android:text="考試"
                     android:textSize="25dp"
                     android:textStyle="bold"
                     android:textAppearance="@style/CustomToolbarStyle"
@@ -54,13 +54,15 @@
                     android:background="@color/colorPrimary"
                     android:src="@drawable/add_black"/>
             </LinearLayout>
-
         </com.google.android.material.appbar.AppBarLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/QuizList"
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/select_quiz_mode"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:background="@drawable/background_gradient" />
+            android:layout_height="wrap_content"/>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/quiz_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

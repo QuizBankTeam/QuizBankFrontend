@@ -1,14 +1,12 @@
-package com.example.test.Activity
+package com.example.test.Activity.MultiQuiz
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.test.Adapter.QuestionAdapter
-import com.example.test.databinding.SingleQuizSettingBinding
+import com.example.test.databinding.MpSingleQuizSettingBinding
 
 class SingleQuizSetting: AppCompatActivity() {
-    private lateinit var quizSetAttrBinding: SingleQuizSettingBinding
+    private lateinit var quizSetAttrBinding: MpSingleQuizSettingBinding
     private lateinit var quizId: String
     private lateinit var quizTitle: String
     private lateinit var quizStatus: String
@@ -17,7 +15,7 @@ class SingleQuizSetting: AppCompatActivity() {
     private lateinit var quizMembers: ArrayList<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        quizSetAttrBinding = SingleQuizSettingBinding.inflate(layoutInflater)
+        quizSetAttrBinding = MpSingleQuizSettingBinding.inflate(layoutInflater)
         setContentView(quizSetAttrBinding.root)
 //        fragM = supportFragmentManager
         init()

@@ -1,20 +1,18 @@
-package com.example.test.Activity
+package com.example.test.Activity.MultiQuiz
 
 import android.content.Intent
-import android.os.Build
-import com.example.test.Adapter.QuestionAdapter
+import com.example.test.Adapter.MultiQuiz.QuestionAdapter
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.test.databinding.SingleQuizBinding
+import com.example.test.databinding.MpSingleQuizBinding
 import com.example.test.model.Question
 
 class SingleQuiz: AppCompatActivity() {
-    private lateinit var quizBinding: SingleQuizBinding
+    private lateinit var quizBinding: MpSingleQuizBinding
     private lateinit var questionlist : ArrayList<Question>
     private lateinit var casualDuringTime : ArrayList<Int>
     private lateinit var fragM: FragmentManager
@@ -25,27 +23,33 @@ class SingleQuiz: AppCompatActivity() {
     private lateinit var quizStartDate: String
     private lateinit var quizEndDate: String
     private lateinit var quizMembers: ArrayList<String>
+    private lateinit var quizAdapter: QuestionAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        quizBinding = SingleQuizBinding.inflate(layoutInflater)
+        quizBinding = MpSingleQuizBinding.inflate(layoutInflater)
         setContentView(quizBinding.root)
 //        fragM = supportFragmentManager
         init()
         println("it's now on creating")
         quizBinding.QuestionList.layoutManager = LinearLayoutManager(this)
         quizBinding.QuestionList.setHasFixedSize(true)
-        quizBinding.QuestionList.adapter = QuestionAdapter(this, questionlist, casualDuringTime)
+        quizAdapter = QuestionAdapter(this, questionlist, casualDuringTime)
+        quizBinding.QuestionList.adapter = quizAdapter
         quizBinding.saveBtn.setOnClickListener {
             val intent = Intent()
             intent.putExtra("Key_title", quizTitle)
             intent.putExtra("Key_startDate", quizStartDate)
             intent.putExtra("Key_endDate", quizEndDate)
+            intent.putExtra("Key_casualDuringTime", casualDuringTime)
             intent.putStringArrayListExtra("Key_members", quizMembers)
             intent.putParcelableArrayListExtra("Key_questions", questionlist)
             setResult(RESULT_OK, intent)
             finish()
         }
         quizBinding.quizSetting.setOnClickListener { quizSetting() }
+        quizBinding.startQuiz.setOnClickListener{
+            startQuiz(questionlist, quizStatus)
+        }
     }
 
 
@@ -71,9 +75,11 @@ class SingleQuiz: AppCompatActivity() {
                 tmpQuestion.answerDescription = data.getStringExtra("Key_answerDescription")
                 tmpQuestion.number = data.getStringExtra("Key_number")
                 tmpQuestion.type = data.getStringExtra("Key_type")
+                quizAdapter.updateTimeLimit(casualDuringTime[requestCode], requestCode)
+                questionlist[requestCode] = tmpQuestion
+                quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
             }
-            questionlist[requestCode] = tmpQuestion
-            quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
+
         }
         else
         {
@@ -94,6 +100,9 @@ class SingleQuiz: AppCompatActivity() {
         }
     }
 
+    private fun startQuiz(questionList: ArrayList<Question>, status: String){
+        
+    }
     private fun init()
     {
         val id = intent.getStringExtra("Key_id")

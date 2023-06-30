@@ -2,11 +2,11 @@ package com.example.test.model
 
 data class Quiz(val id: String?,
                 var title: String?,
-                val type: String?, //casual, single
-                val status: String,
-                val duringTime: Int?,
-                val casualDuringTime: ArrayList<Int>?,
-                val startDate: String?,
-                val endDate: String?,
-                val members: ArrayList<String>?, // user id
+                var type: String?, //casual, single
+                var status: String,
+                var duringTime: Int?,
+                var casualDuringTime: ArrayList<Int>?,
+                var startDate: String?,
+                var endDate: String?,
+                var members: ArrayList<String>?, // user id
                 var questions: ArrayList<Question>?)

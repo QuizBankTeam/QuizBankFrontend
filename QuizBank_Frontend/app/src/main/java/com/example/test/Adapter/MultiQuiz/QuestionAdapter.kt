@@ -1,8 +1,7 @@
-package com.example.test .Adapter
+package com.example.test.Adapter.MultiQuiz
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.Activity.SingleQuestion
-import com.example.test.Activity.SingleQuiz
+import com.example.test.Activity.MultiQuiz.SingleQuestion
 import com.example.test.R
 import com.example.test.model.Question
 
@@ -20,7 +18,7 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
     RecyclerView.Adapter<QuestionAdapter.MyViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.question_row, null)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.mp_question_row, null)
         return MyViewHolder(itemView)
     }
 
@@ -87,9 +85,10 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
 
     }
 
-    fun updateList(){
-        notifyDataSetChanged()
+    fun updateTimeLimit(timeLimit: Int, position: Int){
+        casualDuringTime[position] = timeLimit
     }
+
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {
         val questionBank: TextView = itemView.findViewById(R.id.question_bank)
