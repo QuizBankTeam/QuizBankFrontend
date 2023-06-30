@@ -8,7 +8,12 @@ object Constants {
 
     const val BASE_URL: String = "http://10.0.2.2:5000/"
     //const val BASE_URL: String = "http://10.0.0.108:5000/"
-
+    var csrfToken : String = ""
+    var session:String = ""
+    var cookie:String=""
+    var refreshToken : String = ""
+    var accessToken : String = ""
+    var COOKIE: String = ""
     fun isNetworkAvailable(context: Context): Boolean {
 
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

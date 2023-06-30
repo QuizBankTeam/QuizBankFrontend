@@ -35,12 +35,16 @@ import com.example.quizbanktest.adapters.WrongViewAdapter
 
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.network.AccountService
+import com.example.quizbanktest.network.CsrfTokenService
 import com.example.quizbanktest.network.ImgurService
+import com.example.quizbanktest.network.ScanImageService
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuestionBank
 import com.example.quizbanktest.utils.ConstantsRecommend
 import com.example.quizbanktest.utils.ConstantsWrong
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions
@@ -49,6 +53,8 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.squareup.okhttp.Headers
+import com.squareup.okhttp.ResponseBody
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -119,21 +125,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 getText(thumbnail!!)
             }
             var base64String = encodeImage(thumbnail!!)
+            scanBase64ToOcrText(base64String!! )
 
-//            uploadImageToImgur(base64String!!)
             var size = estimateBase64SizeFromBase64String(base64String!!)
-            Log.e("camera size",size.toString())
-//            val sourceUri = cameraPhotoUri!!  // The Uri of the image you want to crop
-//            val destinationUri = Uri.fromFile(File(externalCacheDir?.absoluteFile.toString()+File.separator+"QuizBank_"+SAMPLE_CROPPED_IMG_NAME))
-//
-//            val uCrop = UCrop.of(sourceUri, destinationUri)
-//            uCrop.withAspectRatio(1f, 1f)
-//            uCrop.withMaxResultSize(800, 800)
-//
-//            val uCropIntent = uCrop.getIntent(this)
-//            uCropActivityResultLauncher.launch(uCropIntent)
-//
-//            binding?.cameraTest!!.setImageBitmap(thumbnail)
+
+
         }else if(result.resultCode == RESULT_CANCELED){
             Log.e("camera result status result cancel",result.resultCode.toString())
         }
@@ -149,16 +145,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupWrongListRecyclerView(ConstantsWrong.getQuestions())
         setupActionBar()
 
+        getCsrfToken()
+
         var nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)
         nav_view.setNavigationItemSelectedListener(this)
 
         var bank : ImageButton = findViewById(R.id.bank)
         bank.setOnClickListener{
-            //TODO
+            val intent = Intent(this,BankActivity::class.java)
+            startActivity(intent)
         }
 
         var camera : ImageButton = findViewById(R.id.camera)
         camera?.setOnClickListener {
+//
             val pictureDialog = AlertDialog.Builder(this)
             pictureDialog.setTitle("Select Action")
             val pictureDialogItems =
@@ -173,6 +173,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             pictureDialog.show()
+        }
+        var settingButton : ImageButton = findViewById(R.id.setting)
+        settingButton.setOnClickListener{
+            login()
+
         }
     }
     private fun choosePhotoFromGallery() {
@@ -265,6 +270,192 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bm.compress(Bitmap.CompressFormat.JPEG, 75, baos)
         val b = baos.toByteArray()
         return Base64.encodeToString(b, Base64.DEFAULT)
+    }
+
+    private fun login(){
+        Log.e("login fun","success")
+        if (Constants.isNetworkAvailable(this@MainActivity)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(AccountService::class.java)
+            val body = AccountService.PostBody("test","test")
+
+            //TODO 用csrf token 拿access token
+
+            val call = api.login(Constants.cookie,Constants.csrfToken,Constants.session,body)
+
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+                        val cookieHeader: Headers? = response.headers()
+
+                        val cookieHeaders = response.headers().values("Set-Cookie")
+                        var accessToken: String? = null
+                        var refreshToken : String?=null
+                        for (cookie in cookieHeaders) {
+                            if (cookie.startsWith("refresh_token_cookie")) {
+                                val parts = cookie.split(";").toTypedArray()
+                                refreshToken = parts[0].substringAfter("refresh_token_cookie=").trim()
+                            }
+                            if (cookie.startsWith("access_token_cookie")) {
+                                val parts = cookie.split(";").toTypedArray()
+                                accessToken = parts[0].substringAfter("access_token_cookie=").trim()
+                            }
+                        }
+                        Constants.accessToken=accessToken!!
+                        Constants.refreshToken = refreshToken!!
+                        var cookie : String = Constants.cookie + ";"
+                        Constants.COOKIE = cookie+"access_token_cookie=" + Constants.accessToken + ";" + "refresh_token_cookie="+Constants.refreshToken
+                    } else {
+
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e("in login Error 400", "Bad Re" +
+                                        "" +
+                                        "quest"+response.body())
+
+                            }
+                            404 -> {
+                                Log.e("in login Error 404", "Not Found")
+                            }
+                            else -> {
+                                Log.e("in login Error", "Generic Error")
+                            }
+                        }
+                    }
+                }
+                override fun onFailure(t: Throwable?) {
+                    Log.e("in login Errorrrrr", t?.message.toString())
+                }
+            })
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
+    private fun getCsrfToken(){
+        if (Constants.isNetworkAvailable(this@MainActivity)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(CsrfTokenService::class.java)
+            //TODO 拿到csrf token
+            val call = api.getCSRFToken()
+
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+                        val cookies : String = response.headers().get("Set-Cookie")
+                        val cookieHeader: Headers? = response.headers()
+                        val cookiesToken : String? = cookieHeader?.get("Set-Cookie")
+                        val cookieHeaders = response.headers().values("Set-Cookie")
+                        var csrfToken: String? = null
+                        var session:String?=null
+                        for (cookie in cookieHeaders) {
+                            if (cookie.startsWith("CSRF-TOKEN")) {
+                                val parts = cookie.split(";").toTypedArray()
+                                csrfToken = parts[0].substringAfter("CSRF-TOKEN=").trim()
+                            }
+                            if (cookie.startsWith("session")) {
+                                val parts = cookie.split(";").toTypedArray()
+                                session = parts[0].substringAfter("session=").trim()
+                            }
+                        }
+                        Constants.csrfToken=csrfToken!!
+                        Constants.session = session!!
+                        Constants.cookie = "CSRF-TOKEN=" + Constants.csrfToken + ";" + "session="+Constants.session
+
+                    } else {
+
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e("in csrf Error 400", "Bad Re" +
+                                        "" +
+                                        "quest")
+
+                            }
+                            404 -> {
+                                Log.e("in csrf Error 404", "Not Found")
+                            }
+                            else -> {
+                                Log.e("in csrf Error", "Generic Error")
+                            }
+                        }
+                    }
+                }
+                override fun onFailure(t: Throwable?) {
+                    Log.e("in csrf Errorrrrr", t?.message.toString())
+                }
+            })
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+    private fun scanBase64ToOcrText(base64String:String){
+        if (Constants.isNetworkAvailable(this@MainActivity)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(ScanImageService::class.java)
+            val body = ScanImageService.PostBody(base64String)
+
+            //TODO 拿到csrf token access token
+            Log.e("access in scan ", Constants.accessToken)
+            Log.e("COOKIE in scan ", Constants.COOKIE)
+            val call = api.scanBase64(Constants.COOKIE,Constants.csrfToken, Constants.accessToken,Constants.refreshToken,body)
+
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+                        val gson = Gson()
+                        val ocrResponse = gson.fromJson(response.body().charStream(), OCRResponse::class.java)
+                        Log.e("Response Result", ocrResponse.ocrText)
+                    } else {
+
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e("Error 400", "Bad Re" +
+                                        "" +
+                                        "quest")
+
+                            }
+
+                            404 -> {
+                                Log.e("Error 404", "Not Found")
+                            }
+                            else -> {
+                                Log.e("Error", "in scan Generic Error")
+                            }
+                        }
+                    }
+                }
+                override fun onFailure(t: Throwable?) {
+                    Log.e("in scan Errorrrrr", t?.message.toString())
+                }
+            })
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun uploadImageToImgur(base64String:String){
@@ -384,14 +575,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         recentRecommendList?.adapter = placesAdapter
     }
 
-    companion object {
-        private const val GALLERY = 1
-        private const val CAMERA = 2
-
-        private const val IMAGE_DIRECTORY = "QuizTest"
-
-    }
-
     override fun onDestroy() {
         super.onDestroy()
     }
@@ -446,4 +629,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
+    companion object {
+        private const val GALLERY = 1
+        private const val CAMERA = 2
+
+        private const val IMAGE_DIRECTORY = "QuizTest"
+
+    }
+    data class OCRResponse(val ocrText: String)
 }

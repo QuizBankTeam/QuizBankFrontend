@@ -36,7 +36,7 @@
             android:contentDescription="image"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_image_24"/>
-        <com.example.quizbanktest.draw.DrawingView
+        <com.example.quizbanktest.view.DrawingView
             android:id="@+id/drawing_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

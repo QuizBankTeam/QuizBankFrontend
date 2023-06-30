@@ -19,7 +19,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
-import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -33,7 +32,7 @@ import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import com.example.quizbanktest.R
 
-import com.example.quizbanktest.draw.DrawingView
+import com.example.quizbanktest.view.DrawingView
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
