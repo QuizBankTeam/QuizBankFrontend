@@ -1,5 +1,4 @@
 package com.example.quizbanktest.activity
-
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.Context
@@ -11,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import co.lujun.androidtagview.TagContainerLayout
@@ -23,8 +23,7 @@ class TagActivity : AppCompatActivity() {
     private var mTagContainerLayout1: TagContainerLayout? = null
     private var mTagContainerLayout2: TagContainerLayout? = null
     private var mTagContainerLayout3: TagContainerLayout? = null
-    private var mTagContainerLayout4: TagContainerLayout? = null
-    private var mTagcontainerLayout5: TagContainerLayout? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +32,12 @@ class TagActivity : AppCompatActivity() {
         val list1 = ConstantsTag.getList1()
         val list2 = ConstantsTag.getList2()
         val list3 = ConstantsTag.getList3()
-        val list4 = ConstantsTag.getList4()
-        val list5 = ConstantsTag.getList5()
+
 
         mTagContainerLayout1 = findViewById(R.id.tagcontainerLayout1)
         mTagContainerLayout2 = findViewById(R.id.tagcontainerLayout2)
         mTagContainerLayout3 = findViewById(R.id.tagcontainerLayout3)
-        mTagContainerLayout4 = findViewById(R.id.tagcontainerLayout4)
-        mTagcontainerLayout5 = findViewById(R.id.tagcontainerLayout5)
+
 
         mTagContainerLayout1!!.setOnTagClickListener(object : TagView.OnTagClickListener {
             override fun onTagClick(position: Int, text: String) {
@@ -117,36 +114,26 @@ class TagActivity : AppCompatActivity() {
 
         mTagContainerLayout2!!.setTags(list2)
         mTagContainerLayout3!!.setTags(list3)
-        mTagContainerLayout4!!.setTags(list4)
 
-        val colors: MutableList<IntArray> = java.util.ArrayList()
-        //int[]color = {backgroundColor, tagBorderColor, tagTextColor, tagSelectedBackgroundColor}
-        //int[]color = {backgroundColor, tagBorderColor, tagTextColor, tagSelectedBackgroundColor}
-        val col1 = intArrayOf(
-            Color.parseColor("#ff0000"),
-            Color.parseColor("#000000"),
-            Color.parseColor("#ffffff"),
-            Color.parseColor("#999999")
-        )
-        val col2 = intArrayOf(
-            Color.parseColor("#0000ff"),
-            Color.parseColor("#000000"),
-            Color.parseColor("#ffffff"),
-            Color.parseColor("#999999")
-        )
 
-        colors.add(col1)
-        colors.add(col2)
-
-        mTagcontainerLayout5!!.setTags(list5, colors)
         val text = findViewById<View>(R.id.text_tag) as EditText
-        val btnAddTag = findViewById<View>(R.id.btn_add_tag) as Button
+        val btnAddTag = findViewById<View>(R.id.btn_add_tag) as TextView
         btnAddTag.setOnClickListener {
             mTagContainerLayout1!!.addTag(text.text.toString())
             // Add tag in the specified position
             //                mTagContainerLayout1.addTag(text.getText().toString(), 4);
         }
 
+        var enterButton : TextView = findViewById(R.id.enter_tag)
+        var cancelButton : TextView = findViewById(R.id.cancel_tag)
+
+        enterButton.setOnClickListener {
+            Toast.makeText(this@TagActivity,"this is a enter button",Toast.LENGTH_SHORT).show()
+        }
+
+        cancelButton.setOnClickListener {
+            Toast.makeText(this@TagActivity,"this is a cancel button",Toast.LENGTH_SHORT).show()
+        }
     }
 
 
@@ -192,5 +179,6 @@ class TagActivity : AppCompatActivity() {
             }
         }
     }
+
 
 }

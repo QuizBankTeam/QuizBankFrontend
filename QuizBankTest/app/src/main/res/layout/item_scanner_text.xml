@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="330dp"
-    android:layout_height="500dp">
+    android:layout_height="wrap_content">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -183,16 +183,30 @@
                                     app:vertical_interval="3dp" />
                             </LinearLayout>
                         </HorizontalScrollView>
-                        <Button
+                        <TextView
                             android:id="@+id/btn_scan_photo"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="選擇圖片  📂" />
-                        <Button
+                            android:layout_height="38dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:clickable="true"
+                            android:background="@drawable/white_border_shape_button_rounded"
+                            android:text="選擇圖片   📂" />
+                        <TextView
                             android:id="@+id/btn_scan_submit"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="確認送出  " />
+                            android:layout_height="38dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:textColor="#FFFFFF"
+                            android:clickable="true"
+                            android:background="@drawable/shape_button_rounded"
+                            android:text="確認送出   ✔" />
                     </LinearLayout>
 
                 </LinearLayout>

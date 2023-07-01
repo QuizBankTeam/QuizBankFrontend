@@ -10,10 +10,10 @@ import kotlin.collections.ArrayList
 
 interface QuizBankService {
 
-    data class DeleteQuestionBankBody(val questionBankId: UUID)
-    data class PostQuestionBankBody(val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<UUID>,val originateFrom:UUID,val creator:UUID) //questionBankType 只有 'multi', 'single', 'public' 要判斷
-    data class GetQuestionBankBody(val questionBankId:UUID)
-    data class PutQuestionBankBody(val questionBankId:UUID,val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<UUID>,val originateFrom:UUID,val creator:UUID)
+    data class DeleteQuestionBankBody(val questionBankId: String)
+    data class PostQuestionBankBody(val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String) //questionBankType 只有 'multi', 'single', 'public' 要判斷
+    data class GetQuestionBankBody(val questionBankId:String)
+    data class PutQuestionBankBody(val questionBankId:String,val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String,val creator:String)
 
     @POST("/questionBank")
     fun postQuestionBank(

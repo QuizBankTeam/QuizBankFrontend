@@ -60,13 +60,32 @@
                     android:layout_weight="1"
                     android:singleLine="true" />
 
-                <Button
+                <TextView
                     android:id="@+id/btn_add_tag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:clickable="true"
                     android:layout_weight="1"
-                    android:text="add tag" />
+                    android:textSize="17sp"
+                    android:padding = "3dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@drawable/white_border_shape_button_rounded"
+                    android:text="Add Tag" />
             </LinearLayout>
+            <co.lujun.androidtagview.TagContainerLayout
+                android:id="@+id/chooseContainerLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:padding="10dp"
+                app:container_enable_drag="true"
+                app:horizontal_interval="10dp"
+                app:tag_clickable="true"
+                app:tag_enable_cross="true"
+                app:tag_theme="pure_teal"
+                app:vertical_interval="10dp" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,6 +107,44 @@
                 app:horizontal_interval="10dp"
                 app:tag_clickable="false"
                 app:tag_theme="random"
+                app:vertical_interval="10dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/text_tag_relate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/btn_add_tag_relate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:clickable="true"
+                    android:textSize="17sp"
+                    android:padding = "3dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@drawable/white_border_shape_button_rounded"
+                    android:layout_weight="1"
+                    android:text="Add Tag" />
+            </LinearLayout>
+            <co.lujun.androidtagview.TagContainerLayout
+                android:id="@+id/chooseContainerLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:padding="10dp"
+                app:container_enable_drag="true"
+                app:horizontal_interval="10dp"
+                app:tag_clickable="true"
+                app:tag_enable_cross="true"
+                app:tag_theme="pure_teal"
                 app:vertical_interval="10dp" />
             <TextView
                 android:layout_width="match_parent"
@@ -122,35 +179,82 @@
                 app:tag_text_size="14sp"
                 app:vertical_interval="10dp" />
 
-            <co.lujun.androidtagview.TagContainerLayout
-                android:id="@+id/tagcontainerLayout4"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/text_tag_range"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/btn_add_tag_range"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_border_shape_button_rounded"
+                    android:textSize="17sp"
+                    android:padding = "3dp"
+                    android:gravity="center"
+                    android:onClick="onClick"
+                    android:clickable="true"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:text="Add Tag" />
+            </LinearLayout>
+            <co.lujun.androidtagview.TagContainerLayout
+                android:id="@+id/chooseContainerLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
                 android:padding="10dp"
-                app:container_enable_drag="false"
+                app:container_enable_drag="true"
                 app:horizontal_interval="10dp"
                 app:tag_clickable="true"
-                app:tag_ripple_alpha="47"
-                app:tag_ripple_color="#000000"
-                app:tag_ripple_duration="2000"
+                app:tag_enable_cross="true"
                 app:tag_theme="pure_teal"
                 app:vertical_interval="10dp" />
-
-            <co.lujun.androidtagview.TagContainerLayout
-                android:id="@+id/tagcontainerLayout5"
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_margin = "25dp"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                app:container_border_radius="0dp"
-                app:container_border_width="4dp"
-                app:container_enable_drag="false"
-                app:horizontal_interval="10dp"
-                app:tag_clickable="false"
-                app:tag_theme="random"
-                app:vertical_interval="10dp" />
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/cancel_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:clickable="true"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_margin="7dp"
+                    android:textStyle="bold"
+                    android:background="@drawable/white_border_shape_button_rounded"
+                    android:layout_weight="1"
+                    android:text="Cancel"
+                    />
+                <TextView
+                    android:id="@+id/enter_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:clickable="true"
+                    android:textSize="20sp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textColor = "#FFFFFF"
+                    android:background="@drawable/shape_button_rounded"
+                    android:layout_weight="1"
+                    android:text="Submit" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>
+
 
 </LinearLayout>

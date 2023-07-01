@@ -8,11 +8,11 @@ import kotlin.collections.ArrayList
 
 interface QuestionSetService {
 
-    data class DeleteQuestionSetBody(val questionSetId: UUID)
-    data class PostQuestionSetBody(val description: String,val image: ArrayList<String>,val questionBank:UUID,val questions: ArrayList<QuestionBody>,val provider: UUID,val createdDate:String,val originateFrom:UUID)
-    data class GetQuestionSetBody(val questionSetId:UUID)
-    data class PutQuestionSetBody(val questionSetId:UUID,val description: String,val image: ArrayList<String>,val questionBank:UUID,val questions: ArrayList<QuestionBody>,val provider: UUID,val createdDate:String,val originateFrom:UUID)
-    data class QuestionBody(val title: String,val number: String,val description: String,val options: ArrayList<String>,val questionType:String,val bankType:String,val questionBank:UUID,val answerOptions:ArrayList<String>,val answerDescription:String,val provider:UUID,val originateFrom:UUID,val createdDate:String,val image : String,val tag:ArrayList<String>)
+    data class DeleteQuestionSetBody(val questionSetId: String)
+    data class PostQuestionSetBody(val description: String,val image: ArrayList<String>,val questionBank:String,val questions: ArrayList<QuestionBody>,val provider: String,val createdDate:String,val originateFrom:String)
+    data class GetQuestionSetBody(val questionSetId:String)
+    data class PutQuestionSetBody(val questionSetId:String,val description: String,val image: ArrayList<String>,val questionBank:String,val questions: ArrayList<QuestionBody>,val provider: String,val createdDate:String,val originateFrom:String)
+    data class QuestionBody(val title: String,val number: String,val description: String,val options: ArrayList<String>,val questionType:String,val bankType:String,val questionBank:String,val answerOptions:ArrayList<String>,val answerDescription:String,val provider:String,val originateFrom:String,val createdDate:String,val image : String,val tag:ArrayList<String>)
 
     @POST("/questionSet")
     fun postQuestionSet(
