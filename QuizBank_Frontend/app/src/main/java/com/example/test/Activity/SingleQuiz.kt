@@ -105,7 +105,7 @@ class SingleQuiz: AppCompatActivity() {
             startActivity(intent)
         }
         else{
-            AlertDialog.Builder(this).setTitle("至少要有一個正確選項!").setPositiveButton("我懂", null).show()
+            AlertDialog.Builder(this).setTitle("考試尚未設定完成!").setPositiveButton("我懂", null).show()
         }
     }
     private fun init()

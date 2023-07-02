@@ -8,7 +8,7 @@ import com.example.test.model.Question
 
 class SPQuizFinish : AppCompatActivity(){
     private lateinit var questionlist : ArrayList<Question>
-    private lateinit var answerRecords: ArrayList< ArrayList<String> >
+    private lateinit var answerRecords: ArrayList< ArrayList<Int> >
     private lateinit var quizId: String
     private lateinit var quizTitle: String
     private lateinit var startDate: String
@@ -22,7 +22,7 @@ class SPQuizFinish : AppCompatActivity(){
     private fun init(){
         val intent = Intent()
         val questions = intent.getParcelableArrayListExtra<Question>("Key_questions")
-        val answerRecords  = getIntent().getSerializableExtra("Key_answerRecords") as ArrayList<ArrayList<String>>?
+        val answerRecords  = getIntent().getSerializableExtra("Key_answerRecords") as ArrayList<ArrayList<Int>>?
         val id = intent.getStringExtra("Key_id")
         val title = intent.getStringExtra("Key_title")
         val startDate = intent.getStringExtra("Key_startDate")
@@ -32,6 +32,7 @@ class SPQuizFinish : AppCompatActivity(){
             Log.d("answerRecords is null", "")
         }else{
             Log.d("answerRecords is not null", "")
+            Log.d("answerRecords is" , answerRecords.toString())
         }
         if (id != null) {
             this.quizId = id
@@ -53,7 +54,7 @@ class SPQuizFinish : AppCompatActivity(){
         }
     }
     private fun makeRecords(){
-        for(index in questionlist.indices){
+        for(index in answerRecords.indices){
 
         }
     }

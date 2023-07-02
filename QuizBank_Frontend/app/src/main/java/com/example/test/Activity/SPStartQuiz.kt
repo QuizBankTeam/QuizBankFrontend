@@ -1,9 +1,11 @@
 package com.example.test.Activity
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
@@ -24,7 +26,7 @@ class SPStartQuiz: AppCompatActivity() {
     private lateinit var quizId: String
     private lateinit var quizTitle: String
     private lateinit var questionlist : ArrayList<Question>
-    private var answerRecords = ArrayList<ArrayList<String>>()
+    private var answerRecords = ArrayList<ArrayList<Int>>()
     private lateinit var optionAdapter: OptionAdapter
     private var duringTime: Int = 0
     private var currentAtQuestion: Int = 0
@@ -39,7 +41,7 @@ class SPStartQuiz: AppCompatActivity() {
         setContentView(startQuizBinding.root)
         init()
         setQuestion()
-
+        setTimer(this)
         startDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-hh:mm:ss"))
         startQuizBinding.QuestionOption.setOnItemClickListener { parent, view, position, id ->
             optionSelect(position, view)
@@ -50,9 +52,13 @@ class SPStartQuiz: AppCompatActivity() {
         }
 
         startQuizBinding.exitQuiz.setOnClickListener {
-            AlertDialog.Builder(this).setTitle("確定退出考試?").setPositiveButton("確定", null).show()
-
-            finish()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("確定退出考試?")
+            builder.setPositiveButton("確定") { dialog, which ->
+                finish()
+            }
+            builder.setNegativeButton("取消", null)
+            builder.show()
         }
 
     }
@@ -74,7 +80,7 @@ class SPStartQuiz: AppCompatActivity() {
         this.duringTime = duringTime
         startQuizBinding.progressBar.progress = 1
         startQuizBinding.progressBar.max = questionlist.size
-        startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + "/" + questionlist.size.toString()
+        startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + ":" + questionlist.size.toString()
 
     }
 
@@ -156,9 +162,9 @@ class SPStartQuiz: AppCompatActivity() {
         if(currentSelection.isNotEmpty()){
             if( currentAtQuestion < questionlist.size )
             {
-                val tmpAdd = ArrayList<String>(currentSelection.size)
-                for(i in currentSelection.indices){
-                    tmpAdd.add(options[i])
+                val tmpAdd = ArrayList<Int>(currentSelection.size)
+                for(i in currentSelection){
+                    tmpAdd.add(i)
                 }
                 answerRecords.add( tmpAdd )
 
@@ -185,9 +191,9 @@ class SPStartQuiz: AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun quizEnd(){
-        val answerlist = ArrayList<ArrayList<String>>()
+        val answerlist = ArrayList<ArrayList<Int>>()
         for(item in answerRecords){
-            val first = ArrayList<String>(item.size)
+            val first = ArrayList<Int>(item.size)
             first.addAll(item)
             answerlist.add(first)
         }
@@ -202,5 +208,35 @@ class SPStartQuiz: AppCompatActivity() {
         intent.putExtra("Key_endDate", endDate)
         intent.putParcelableArrayListExtra("Key_questions", questionlist)
         startActivity(intent)
+    }
+
+    private fun setTimer(currentContext: Context){
+        object : CountDownTimer((duringTime*1000).toLong(), 1000) {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onFinish() {
+                val builder = AlertDialog.Builder(currentContext)
+                builder.setTitle("考試已結束")
+                builder.setPositiveButton("確定") { dialog, which ->
+                    quizEnd()
+                }
+                builder.show()
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                val totalRemain = millisUntilFinished/1000
+                val remainMin = totalRemain/60
+                var remainSec = (totalRemain%60).toInt()
+                var remainSecStr = ""
+                if(remainSec<10){
+                    if(remainSec==0){
+                        remainSecStr = "00"
+                    }else{
+                        remainSecStr = "0" + remainSec.toString()
+                    }
+                }
+                startQuizBinding.remainTime.text = remainMin.toString() + ":" + remainSecStr
+
+            }
+        }.start()
     }
 }

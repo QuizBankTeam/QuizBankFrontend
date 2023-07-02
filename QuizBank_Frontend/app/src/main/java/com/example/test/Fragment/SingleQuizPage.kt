@@ -85,17 +85,23 @@ class SingleQuizPage : Fragment() {
                 "變化圖。請問，使 1930 年代設備容量急遽增加\n" + "的設施為何？", optionText,
             "MultipleChoiceS", "bank one", optionAns, "an answer description1", "jacky",
             R.drawable.society98_1, tag, "2023/05/17")
-        QuestionList.add(tmpQuestion)
-        QuestionList2.add(tmpQuestion)
-        QuestionList2.add(tmpQuestion)
-        tmpQuestion = Question("123", "題目2", "2", "簡介22", optionText2,
+
+        var tmpQuestion2 = Question("123", "題目2", "2", "簡介22", optionText2,
             "MultipleChoiceM", "bank two", optionAns2, "an answer description2", "jacky",
             R.drawable.society9802, tag2, "2023/05/15")
+
         QuestionList.add(tmpQuestion)
+        QuestionList.add(tmpQuestion2)
         QuestionList2.add(tmpQuestion)
         QuestionList2.add(tmpQuestion)
-        val tmpQuiz = Quiz("sp_quiz1", title, "single", "ready", 600, null, "2023-01-05","not yet", null,QuestionList)
-        val tmpQuiz2 = Quiz("sp_quiz1", "期中考", "single", "script", 900, null, "2023-06-14","not yet", null,QuestionList2)
+        QuestionList2.add(tmpQuestion2)
+        QuestionList2.add(tmpQuestion)
+        QuestionList2.add(tmpQuestion2)
+        QuestionList2.add(tmpQuestion)
+        QuestionList2.add(tmpQuestion2)
+
+        val tmpQuiz = Quiz("sp_quiz1", title, "single", "script", 600, null, "2023-01-05","not yet", null,QuestionList)
+        val tmpQuiz2 = Quiz("sp_quiz1", "期中考", "single", "ready", 900, null, "2023-06-14","not yet", null,QuestionList2)
 
         QuizList.add(tmpQuiz)
         QuizList.add(tmpQuiz2)
