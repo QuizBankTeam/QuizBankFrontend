@@ -78,11 +78,11 @@
 
 
                 <TextView
-                    android:id="@+id/QuizMembers"
+                    android:id="@+id/Quiz_duringTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="成員: abc, def, kkk, uio"
+                    android:text="考試時長: 10分鐘"
                     android:textSize="15dp"
                     android:gravity="center_vertical"
 

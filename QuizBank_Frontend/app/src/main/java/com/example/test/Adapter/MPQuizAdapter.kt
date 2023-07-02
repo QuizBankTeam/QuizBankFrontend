@@ -1,20 +1,22 @@
-package com.example.test.Adapter.MultiQuiz
+package com.example.test.Adapter
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.Activity.MultiQuiz.SingleQuiz
+import com.example.test.Activity.SingleQuiz
 import com.example.test.R
 import com.example.test.model.Quiz
+import java.time.LocalDateTime
 
 
-
-class QuizAdapter(private val context: Activity, private val questionList: ArrayList<Quiz>):
-    RecyclerView.Adapter<QuizAdapter.MyViewHolder>()
+class MPQuizAdapter(private val context: Activity, private val questionList: ArrayList<Quiz>):
+    RecyclerView.Adapter<MPQuizAdapter.MyViewHolder>()
 {
     private var onClickListener: OnClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -26,18 +28,47 @@ class QuizAdapter(private val context: Activity, private val questionList: Array
         return questionList.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = questionList[position]
+        val datetime = LocalDateTime.now()
+        if(currentItem.startDate!=null) {
+            val yearDiff = datetime.year - currentItem.startDate!!.substring(0, 4).toInt()
+            val monthDiff = datetime.toString().substring(5, 7).toInt() - currentItem.startDate!!.substring(5, 7).toInt()
+            val dayDiff = datetime.dayOfMonth - currentItem.startDate!!.substring(8, 10).toInt()
+            if(yearDiff!=0){
+                if(yearDiff>0)
+                    holder.quizStartDate.text = yearDiff.toString() + "年前"
+                else
+                    holder.quizStartDate.text = yearDiff.toString() + "年後"
+
+            }else if(monthDiff!=0){
+                if(monthDiff>0)
+                    holder.quizStartDate.text = monthDiff.toString() + "個月前"
+                else
+                    holder.quizStartDate.text = monthDiff.toString() + "個月後"
+            }else if(dayDiff!=0){
+                if(dayDiff>0)
+                    holder.quizStartDate.text = dayDiff.toString() + "天前"
+                else
+                    holder.quizStartDate.text = dayDiff.toString() + "天後"
+            }else{
+                holder.quizStartDate.text = "今天"
+            }
+        }
         holder.quizNum.text = currentItem.questions?.size.toString() + "題"
         holder.quizStatus.text = currentItem.status
-        holder.quizStartDate.text = currentItem.startDate
         holder.quizTitle.text = currentItem.title
         val tmpMember = currentItem.members
         var member = "成員: "
         if(tmpMember!=null){
             if(tmpMember.size  > 0) {
-                for(item in tmpMember){
-                    member += item
+                for(i in tmpMember.indices){
+                    if(i>3) {
+                        member += "..."
+                        break
+                    }
+                    member += tmpMember[i]
                     member += " "
                 }
             }

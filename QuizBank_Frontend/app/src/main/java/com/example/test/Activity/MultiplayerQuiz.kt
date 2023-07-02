@@ -1,7 +1,7 @@
-package com.example.test.Activity.MultiQuiz
+package com.example.test.Activity
 
 import android.content.Intent
-import com.example.test.Adapter.MultiQuiz.QuizAdapter
+import com.example.test.Adapter.MPQuizAdapter
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +22,7 @@ class MultiplayerQuiz: AppCompatActivity() {
         init()
         mpQuizBinding.QuizList.layoutManager = LinearLayoutManager(this)
         mpQuizBinding.QuizList.setHasFixedSize(true)
-        val quizadapter = QuizAdapter(this, QuizList)
+        val quizadapter = MPQuizAdapter(this, QuizList)
         mpQuizBinding.QuizList.adapter = quizadapter
         mpQuizBinding.QuizList.isClickable = true
 

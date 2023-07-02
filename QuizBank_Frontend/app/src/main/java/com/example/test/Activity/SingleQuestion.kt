@@ -1,10 +1,11 @@
-package com.example.test.Activity.MultiQuiz
+package com.example.test.Activity
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
-import com.example.test.Adapter.MultiQuiz.OptionAdapter
+import com.example.test.Adapter.OptionAdapter
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -13,11 +14,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.*
 import com.example.test.R
-import com.example.test.databinding.MpSingleQuestionBinding
+import com.example.test.databinding.SingleQuestionBinding
 import com.example.test.model.Option
 
 class SingleQuestion : AppCompatActivity(){
-    private lateinit var questionBinding: MpSingleQuestionBinding
+    private lateinit var questionBinding: SingleQuestionBinding
     private  var optionlist : ArrayList<Option> = ArrayList()
     private lateinit var questionTag : ArrayList<String>
     private var questionTagTextView : ArrayList<TextView> = ArrayList()
@@ -32,10 +33,11 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var questionProvider : String
     private lateinit var questionCreatedDate : String
     private lateinit var answerOptionInt : ArrayList<Int>  //為正確答案的position
+    private lateinit var quizType: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        questionBinding = MpSingleQuestionBinding.inflate(layoutInflater)
+        questionBinding = SingleQuestionBinding.inflate(layoutInflater)
         setContentView(questionBinding.root)
         init()
         val adapter = OptionAdapter(this, optionlist)
@@ -55,8 +57,10 @@ class SingleQuestion : AppCompatActivity(){
         }
 
         //修改答題時長
-        questionBinding.timeLimit.setOnClickListener {
-            selectTimeLimit()
+        if(quizType=="casual") {
+            questionBinding.timeLimit.setOnClickListener {
+                selectTimeLimit()
+            }
         }
 
         //修改題目簡介
@@ -103,7 +107,6 @@ class SingleQuestion : AppCompatActivity(){
         val title = intent.getStringExtra("Key_title")
         val type = intent.getStringExtra("Key_type")
         val image = intent.getIntExtra("Key_image",0)
-        val timeLimit = intent.getIntExtra("Key_timeLimit",0).toString() + "秒"
         val options = intent.getStringArrayListExtra("Key_options")
         val tag = intent.getStringArrayListExtra("Key_tag")
         val description = intent.getStringExtra("Key_description")
@@ -113,6 +116,7 @@ class SingleQuestion : AppCompatActivity(){
         val createdDate = intent.getStringExtra("Key_createdDate")
         val answerOption = intent.getStringArrayListExtra("Key_answerOptions")
         val answerDescription = intent.getStringExtra("Key_answerDescription")
+        val quizType = intent.getStringExtra("Key_quizType")
         val tmpAnswerOptionInt : ArrayList<Int> = ArrayList()
         optionlist.clear()
 
@@ -148,12 +152,18 @@ class SingleQuestion : AppCompatActivity(){
             this.questionProvider = provider
         if (createdDate != null)
             this.questionCreatedDate = createdDate
-        this.time_limit = intent.getIntExtra("Key_timeLimit",0)
+        if (quizType != null)
+            this.quizType = quizType
 
-
+        if(quizType=="casual"){
+            val timeLimit = intent.getIntExtra("Key_timeLimit",0).toString() + "秒"
+            this.time_limit = intent.getIntExtra("Key_timeLimit",0)
+            questionBinding.timeLimit.text = timeLimit
+        }else{
+            questionBinding.containerTimeLimit.removeView(questionBinding.timeLimit)
+        }
         questionBinding.QuestionImage.setImageResource(image)
         questionBinding.questionDescription.text = description
-        questionBinding.timeLimit.text = timeLimit
         questionBinding.QuestionTitle.text = title
 
         //設定(build)tag
@@ -253,7 +263,9 @@ class SingleQuestion : AppCompatActivity(){
                 answerOptionListStr.add(optionListStr[i])
             }
             intent.putStringArrayListExtra("Key_answerOptions", answerOptionListStr)
-            intent.putExtra("Key_timeLimit", timeLimitInt)
+            if(quizType=="casual") {
+                intent.putExtra("Key_timeLimit", timeLimitInt)
+            }
             intent.putExtra("Key_tagNum", this.questionTag.size)
             setResult(RESULT_OK, intent)
             finish()
@@ -263,7 +275,7 @@ class SingleQuestion : AppCompatActivity(){
     private fun optionChange(position: Int, adapter: OptionAdapter) {
         val currentOption = optionlist[position]
         val builder = AlertDialog.Builder(this)
-        val v:View =  layoutInflater.inflate(R.layout.mp_edit_option, null)
+        val v:View =  layoutInflater.inflate(R.layout.edit_option, null)
         var status = false //isOptionChanged?
         var answerOptionIndices = -1
         for(i in answerOptionInt.indices){
@@ -337,7 +349,7 @@ class SingleQuestion : AppCompatActivity(){
 
     private fun descriptionChange(){
         val builder = AlertDialog.Builder(this)
-        val v:View =  layoutInflater.inflate(R.layout.mp_edit_question_description, null)
+        val v:View =  layoutInflater.inflate(R.layout.edit_question_description, null)
         val editDescirption: EditText = v.findViewById(R.id.edit_question_description)
         editDescirption.setText(this.questionDescription)
         builder.setTitle("題目敘述")
@@ -352,7 +364,7 @@ class SingleQuestion : AppCompatActivity(){
 
     private fun tagChange(tmpText : String, position : Int){
         val builder = AlertDialog.Builder(this)
-        val v:View =  layoutInflater.inflate(R.layout.mp_edit_question_tag, null)
+        val v:View =  layoutInflater.inflate(R.layout.edit_question_tag, null)
         val editTag: EditText = v.findViewById(R.id.edit_question_tag)
         editTag.setText(tmpText)
         builder.setTitle("題目標籤")

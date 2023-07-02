@@ -1,4 +1,4 @@
-package com.example.test.Activity.MultiQuiz
+package com.example.test.Activity
 
 import android.R
 import android.content.Intent
@@ -7,10 +7,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import com.example.test.databinding.MpSingleQuestionSettingBinding
+import com.example.test.databinding.SingleQuestionSettingBinding
 
 class SingleQuestionSetting: AppCompatActivity()  {
-    private lateinit var questionSetAttr: MpSingleQuestionSettingBinding
+    private lateinit var questionSetAttr: SingleQuestionSettingBinding
     private lateinit var questionTitle: String
     private lateinit var questionType: String
     private lateinit var questionNumber: String
@@ -18,7 +18,7 @@ class SingleQuestionSetting: AppCompatActivity()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        questionSetAttr = MpSingleQuestionSettingBinding.inflate(layoutInflater)
+        questionSetAttr = SingleQuestionSettingBinding.inflate(layoutInflater)
         setContentView(questionSetAttr.root)
 
         init()

@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.test.Adapter.MultiQuiz.QuizAdapter
+import com.example.test.Adapter.MPQuizAdapter
 import com.example.test.R
 import com.example.test.databinding.MpQuizBinding
 import com.example.test.model.Question
@@ -21,8 +21,6 @@ private const val ARG_PARAM2 = "param2"
 
 class MultiQuizPage : Fragment() {
     //Rename and change types of parameters//****
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var mpQuizBinding: MpQuizBinding
     private var QuizList : ArrayList<Quiz> = ArrayList()
 
@@ -41,7 +39,7 @@ class MultiQuizPage : Fragment() {
         init()
         mpQuizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
         mpQuizBinding.QuizList.setHasFixedSize(true)
-        val quizAdapter = QuizAdapter(requireActivity(), QuizList)
+        val quizAdapter = MPQuizAdapter(requireActivity(), QuizList)
         mpQuizBinding.QuizList.adapter = quizAdapter
         mpQuizBinding.QuizList.isClickable = true
 

@@ -21,12 +21,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MultiQuiz.MultiplayerQuiz" />
-        <activity android:name=".Activity.MultiQuiz.SingleQuestion" />
-        <activity android:name=".Activity.MultiQuiz.SingleQuiz" />
-        <activity android:name=".Activity.MultiQuiz.SingleQuizSetting" />
-        <activity android:name=".Activity.MultiQuiz.SingleQuestionSetting" />
+        <activity android:name=".Activity.SingleQuestion" />
+        <activity android:name=".Activity.SingleQuiz" />
+        <activity android:name=".Activity.SingleQuizSetting" />
+        <activity android:name=".Activity.SingleQuestionSetting" />
         <activity android:name=".Activity.QuizPage" />
+        <activity android:name=".Activity.MPStartQuiz"
+                    android:theme="@style/StartQuiz"/>
+        <activity android:name=".Activity.SPStartQuiz"/>
+        <activity android:name=".Activity.SPQuizFinish"/>
     </application>
 
 </manifest>

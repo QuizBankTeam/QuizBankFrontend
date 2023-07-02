@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Activity.MultiQuiz.MultiplayerQuiz">
+    tools:context=".Activity.QuizPage">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,21 +26,13 @@
                 android:background="@color/colorPrimary"
                 android:theme="@style/CustomToolbarStyle">
 
-                <ImageButton
-                    android:id="@+id/back_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:src="@drawable/back_black" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="考試"
+                    android:paddingLeft="13dp"
+                    android:text="考試📑"
                     android:textSize="25dp"
                     android:textStyle="bold"
                     android:textAppearance="@style/CustomToolbarStyle"
@@ -59,7 +51,8 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/select_quiz_mode"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:tabTextAppearance="@style/QuizTabLayout"/>
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/quiz_pager"
             android:layout_width="match_parent"

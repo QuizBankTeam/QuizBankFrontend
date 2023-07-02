@@ -1,4 +1,4 @@
-package com.example.test.Adapter.MultiQuiz
+package com.example.test.Adapter
 
 import android.app.Activity
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.Activity.MultiQuiz.SingleQuestion
+import com.example.test.Activity.SingleQuestion
 import com.example.test.R
 import com.example.test.model.Question
 
@@ -17,8 +17,12 @@ import com.example.test.model.Question
 class QuestionAdapter(private val context: Activity, private val questionList: ArrayList<Question>, private val casualDuringTime: ArrayList<Int>):
     RecyclerView.Adapter<QuestionAdapter.MyViewHolder>()
 {
+    private lateinit var quizType: String
+    fun setQuizType(type: String){
+        quizType=type
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.mp_question_row, null)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.question_row, null)
         return MyViewHolder(itemView)
     }
 
@@ -68,7 +72,6 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
             intent.putExtra("Key_title", currentItem.title)
             intent.putExtra("Key_type", currentItem.type)
             intent.putStringArrayListExtra("Key_tag", currentItem.tag)
-            intent.putExtra("Key_timeLimit", casualDuringTime[position])
             intent.putExtra("Key_description", currentItem.description)
             intent.putExtra("Key_image", currentItem.image)
             intent.putExtra("Key_answerDescription", currentItem.answerDescription)
@@ -76,9 +79,12 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
             intent.putExtra("Key_questionBank", currentItem.questionBank)
             intent.putExtra("Key_provider", currentItem.provider)
             intent.putExtra("Key_createdDate", currentItem.createdDate)
+            intent.putExtra("Key_quizType", quizType)
             intent.putStringArrayListExtra("Key_answerOptions", currentItem.answerOption)
             intent.putStringArrayListExtra("Key_options", currentItem.options)
-
+            if(quizType=="casual"){
+                intent.putExtra("Key_timeLimit", casualDuringTime[position])
+            }
             context.startActivityForResult(intent, position)
 
         }

@@ -1,11 +1,20 @@
 package com.example.test.Fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.test.Adapter.MPQuizAdapter
+import com.example.test.Adapter.SPQuizAdapter
 import com.example.test.R
+import com.example.test.databinding.SpQuizBinding
+import com.example.test.model.Question
+
+import com.example.test.model.Quiz
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,40 +30,76 @@ class SingleQuizPage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var quizBinding: SpQuizBinding
+    private var QuizList : ArrayList<Quiz> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        quizBinding = SpQuizBinding.inflate(inflater, container, false)
+        return quizBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
+        quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
+        quizBinding.QuizList.setHasFixedSize(true)
+        val quizAdapter = SPQuizAdapter(requireActivity(), QuizList)
+        quizBinding.QuizList.adapter = quizAdapter
+        quizBinding.QuizList.isClickable = true
+
+
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("in ", "singlePlayer Quiz Page!!")
+        Log.d("request code=", requestCode.toString())
+        var tmpQuiz = QuizList[requestCode]
+        if (data != null) {
+            tmpQuiz.questions = data.getParcelableArrayListExtra<Question>("Key_questions") as ArrayList<Question>
+            tmpQuiz.title = data.getStringExtra("Key_title").toString()
+            tmpQuiz.duringTime = data.getIntExtra("Key_duringTime", 0)
+            QuizList[requestCode] = tmpQuiz
         }
     }
+    private fun init(){
+        val title = "第一次考試"
+        Log.d("start initing=","")
+        val QuestionList: ArrayList<Question> = ArrayList()
+        val QuestionList2: ArrayList<Question> = ArrayList()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_single_quiz, container, false)
+        val optionText = arrayOf("恆春的核能發電廠", "高雄的火力發電廠", "C demo text 789", "D demo text 101112").toCollection(ArrayList())
+        val optionAns = arrayOf("C demo text 789").toCollection(ArrayList())
+        val optionText2 = arrayOf("A cc text 123", "B ddd text 456", "C gggg text 789", "D asdfasdf text 101112").toCollection(ArrayList())
+        val optionAns2 = arrayOf("B ddd text 456").toCollection(ArrayList())
+        val tag = arrayOf("98年", "社會", "歷史").toCollection(ArrayList())
+        val tag2 = arrayOf("94年", "地理").toCollection(ArrayList())
+        val QuizMember = arrayOf("jl","wcy","yc","wt","cy").toCollection(ArrayList())
+        val QuizMember2 = arrayOf("jl", "jacky", "hehe", "jjs").toCollection(ArrayList())
+
+
+        var tmpQuestion = Question("123", "題目1", "1", " 圖二為日本統治期間臺灣發電設施之設備容量\n" +
+                "變化圖。請問，使 1930 年代設備容量急遽增加\n" + "的設施為何？", optionText,
+            "MultipleChoiceS", "bank one", optionAns, "an answer description1", "jacky",
+            R.drawable.society98_1, tag, "2023/05/17")
+        QuestionList.add(tmpQuestion)
+        QuestionList2.add(tmpQuestion)
+        QuestionList2.add(tmpQuestion)
+        tmpQuestion = Question("123", "題目2", "2", "簡介22", optionText2,
+            "MultipleChoiceM", "bank two", optionAns2, "an answer description2", "jacky",
+            R.drawable.society9802, tag2, "2023/05/15")
+        QuestionList.add(tmpQuestion)
+        QuestionList2.add(tmpQuestion)
+        QuestionList2.add(tmpQuestion)
+        val tmpQuiz = Quiz("sp_quiz1", title, "single", "ready", 600, null, "2023-01-05","not yet", null,QuestionList)
+        val tmpQuiz2 = Quiz("sp_quiz1", "期中考", "single", "script", 900, null, "2023-06-14","not yet", null,QuestionList2)
+
+        QuizList.add(tmpQuiz)
+        QuizList.add(tmpQuiz2)
     }
-
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SingleQuiz.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SingleQuizPage().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

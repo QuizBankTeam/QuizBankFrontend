@@ -27,4 +27,5 @@
     <color name="colorPrimary">#8ecae6</color>
     <color name="colorPrimaryDark">#2a4d69</color>
     <color name="colorAccent">#adcbe3</color>
+    <color name="question_submit">#FF9013FE</color>
 </resources>
