@@ -9,6 +9,7 @@ import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.OcrResultViewAdapter
 import com.example.quizbanktest.models.OcrResultModel
+import com.example.quizbanktest.utils.ConstantsServiceFunction
 
 class ScannerTextWorkSpaceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,8 @@ class ScannerTextWorkSpaceActivity : AppCompatActivity() {
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
         }
+        ConstantsServiceFunction.getCsrfToken(this@ScannerTextWorkSpaceActivity)
+        ConstantsServiceFunction.login(this@ScannerTextWorkSpaceActivity)
 
     }
 
@@ -38,9 +41,10 @@ class ScannerTextWorkSpaceActivity : AppCompatActivity() {
         ocrList?.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL,false)
         ocrList?.setHasFixedSize(true)
+        Log.e("ocrText",ConstantsOcrResults.getQuestions()[0].description)
         val placesAdapter = OcrResultViewAdapter(this, ocrResultList)
         ocrList?.adapter = placesAdapter
-
-
     }
+
+
 }

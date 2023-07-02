@@ -32,19 +32,76 @@
                     android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:padding="5dp">
-
-
                     <EditText
-                        android:id="@+id/iv_scanner_text"
+                        android:id="@+id/iv_ocr_question_title"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:text="OCR 結果"
+                        android:hint="Question Title"
+                        android:gravity="left"
                         android:inputType="textMultiLine"
                         android:scrollbars = "vertical"
                         android:singleLine="false" />
-
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/black"
+                        />
+                    <EditText
+                        android:id="@+id/iv_scanner_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:hint="OCR 結果"
+                        android:gravity="left"
+                        android:inputType="textMultiLine"
+                        android:scrollbars = "vertical"
+                        android:singleLine="false" />
+                    <LinearLayout
+                        android:id="@+id/question_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginTop="3dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="horizontal"
+                        >
+                        <EditText
+                            android:id="@+id/iv_ocr_question_num"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="35dp"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:hint="Num."
+                            android:gravity="left"
+                            android:inputType="textMultiLine"
+                            android:scrollbars = "vertical"
+                            android:singleLine="false" />
+                        <Spinner
+                            android:id="@+id/spinner_question_type"
+                            android:layout_width="0dp"
+                            android:entries="@array/question_type"
+                            android:layout_weight="1"
+                            android:layout_height="35dp" />
+                        <Spinner
+                            android:id="@+id/spinner_question_bank"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="35dp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:background="@color/black"
+                        />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -183,17 +240,87 @@
                                     app:vertical_interval="3dp" />
                             </LinearLayout>
                         </HorizontalScrollView>
-                        <TextView
-                            android:id="@+id/btn_scan_photo"
+                        <LinearLayout
+                            android:id="@+id/options_list"
                             android:layout_width="match_parent"
-                            android:layout_height="38dp"
-                            android:textStyle="bold"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:onClick="onClick"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            android:layout_marginTop="3dp"
                             android:clickable="true"
-                            android:background="@drawable/white_border_shape_button_rounded"
-                            android:text="選擇圖片   📂" />
+                            android:focusable="true"
+                            android:orientation="horizontal"
+                            >
+                            <HorizontalScrollView
+                                android:id="@+id/scroll_options_view"
+                                android:layout_width="0dp"
+                                android:layout_weight="18"
+                                android:layout_marginTop="2dp"
+                                android:layout_height="wrap_content"
+                                android:scrollbarAlwaysDrawHorizontalTrack="false"
+                                android:scrollbars="none">
+
+                                <LinearLayout
+                                    android:id="@+id/MyOptions"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="9dp"
+                                    android:orientation="vertical"
+                                    >
+                                </LinearLayout>
+
+                            </HorizontalScrollView>
+                            <ImageButton
+                                android:id="@+id/setting"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="30dp"
+                                android:src="@drawable/baseline_add_circle_24"
+                                android:background="@color/white"
+                                android:scaleType="fitXY"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/upload_image_answer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            android:layout_marginTop="3dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:id="@+id/btn_add_answer"
+                                android:layout_width="0dp"
+                                android:layout_height="38dp"
+                                android:layout_weight="1"
+                                android:textStyle="bold"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:onClick="onClick"
+                                android:clickable="true"
+                                android:background="@drawable/add_answer"
+                                android:text="新增答案   ⬆" />
+
+                            <TextView
+                                android:id="@+id/btn_scan_photo"
+                                android:layout_width="0dp"
+                                android:layout_height="38dp"
+                                android:layout_weight="1"
+                                android:textStyle="bold"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:gravity="center"
+                                android:onClick="onClick"
+                                android:clickable="true"
+                                android:background="@drawable/add_image"
+                                android:text="選擇圖片   📂" />
+                        </LinearLayout>
+
                         <TextView
                             android:id="@+id/btn_scan_submit"
                             android:layout_width="match_parent"

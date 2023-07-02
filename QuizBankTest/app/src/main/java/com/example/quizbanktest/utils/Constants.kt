@@ -9,15 +9,15 @@ object Constants {
     const val BASE_URL: String = "http://10.0.2.2:5000/"
     //const val BASE_URL: String = "http://10.0.0.108:5000/"
 
-    var username : String = "test"//log out 記得清空
-    var password : String = "test"//log out 記得清空
+    var username : String = "test"
+    var password : String = "test"
 
-    var csrfToken : String = ""//log out 記得清空
-    var session:String = ""//log out 記得清空
-    var cookie:String=""//log out 記得清空
-    var refreshToken : String = ""//log out 記得清空
-    var accessToken : String = ""//log out 記得清空
-    var COOKIE: String = "" //log out 記得清空
+    var csrfToken : String = ""
+    var session:String = ""
+    var cookie:String=""
+    var refreshToken : String = ""
+    var accessToken : String = ""
+    var COOKIE: String = ""
     var EXPIRE: Int = 0 //用於在每次login 後 去判斷server token是否過期
 
 

@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.activity.TagActivity
@@ -48,6 +50,8 @@ class OcrResultViewAdapter(
                     onClickListener!!.onClick(position, model)
                 }
             }
+            var scannerText : EditText = holder.itemView.findViewById(R.id.iv_scanner_text)
+            scannerText.setText(ConstantsOcrResults.getQuestions()[position].description,TextView.BufferType.EDITABLE)
             var chooseTagButton = holder.itemView.findViewById<LinearLayout>(R.id.chooseTag)
             chooseTagButton.setOnClickListener{
                 val intent = Intent(context, TagActivity::class.java)

@@ -28,7 +28,7 @@ interface QuestionSetService {
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Body body: GetQuestionSetBody
+        @Query("questionSetId") questionSetId: String
     ): Call<ResponseBody>
 
     @PUT("/questionSet")

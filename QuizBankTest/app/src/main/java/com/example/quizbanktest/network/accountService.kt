@@ -24,7 +24,7 @@ interface AccountService {
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Body body: GetBodyForUserProfile
+        @Query("userId") userId: String
     ): Call<ResponseBody>
 
     @POST("/register")

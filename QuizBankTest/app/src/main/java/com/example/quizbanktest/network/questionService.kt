@@ -29,7 +29,7 @@ interface QuestionService {
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Body body: GetQuestionBody
+        @Query("questionId") questionId: String
     ): Call<ResponseBody>
 
     @PUT("/question")
