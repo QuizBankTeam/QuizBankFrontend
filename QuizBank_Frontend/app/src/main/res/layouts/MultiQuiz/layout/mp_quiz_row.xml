@@ -91,7 +91,7 @@
             </LinearLayout>
             <TextView
                 android:id="@+id/QuizStartDate"
-                android:layout_width="95dp"
+                android:layout_width="112dp"
                 android:layout_height="match_parent"
                 android:gravity="right"
                 android:text="2023-06-14"

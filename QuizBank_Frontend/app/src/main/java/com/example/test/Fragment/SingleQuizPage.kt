@@ -99,7 +99,8 @@ class SingleQuizPage : Fragment() {
         QuestionList2.add(tmpQuestion2)
         QuestionList2.add(tmpQuestion)
         QuestionList2.add(tmpQuestion2)
-
+        QuestionList2.add(tmpQuestion)
+        QuestionList2.add(tmpQuestion)
         val tmpQuiz = Quiz("sp_quiz1", title, "single", "script", 600, null, "2023-01-05","not yet", null,QuestionList)
         val tmpQuiz2 = Quiz("sp_quiz1", "期中考", "single", "ready", 900, null, "2023-06-14","not yet", null,QuestionList2)
 

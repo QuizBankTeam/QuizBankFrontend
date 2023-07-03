@@ -76,7 +76,12 @@ class SPStartQuiz: AppCompatActivity() {
         }
         if (questions != null) {
             questionlist = questions
+//            val intent = Intent()
+//            intent.setClass(this, SPQuizFinish::class.java)
+//            intent.putParcelableArrayListExtra("Key_questions", questionlist)
+//            startActivity(intent)
         }
+
         this.duringTime = duringTime
         startQuizBinding.progressBar.progress = 1
         startQuizBinding.progressBar.max = questionlist.size
@@ -197,7 +202,11 @@ class SPStartQuiz: AppCompatActivity() {
             first.addAll(item)
             answerlist.add(first)
         }
-
+        var questionlist1  = ArrayList<Question>(questionlist.size)
+        for(item in questionlist) {
+            questionlist1.add(item)
+            item.number?.let { Log.d("question", it) }
+        }
         val intent = Intent()
         val endDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-hh:mm:ss"))
         intent.setClass(this, SPQuizFinish::class.java)
@@ -206,7 +215,7 @@ class SPStartQuiz: AppCompatActivity() {
         intent.putExtra("Key_title", quizTitle)
         intent.putExtra("Key_startDate", startDate)
         intent.putExtra("Key_endDate", endDate)
-        intent.putParcelableArrayListExtra("Key_questions", questionlist)
+        intent.putParcelableArrayListExtra("Key_questions", questionlist1)
         startActivity(intent)
     }
 
@@ -226,7 +235,7 @@ class SPStartQuiz: AppCompatActivity() {
                 val totalRemain = millisUntilFinished/1000
                 val remainMin = totalRemain/60
                 var remainSec = (totalRemain%60).toInt()
-                var remainSecStr = ""
+                var remainSecStr = remainSec.toString()
                 if(remainSec<10){
                     if(remainSec==0){
                         remainSecStr = "00"

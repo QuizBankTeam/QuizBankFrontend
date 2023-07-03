@@ -17,10 +17,14 @@ class OptionAdapter(private val context: Activity, private  val arrayList: Array
     private var answerOptions : ArrayList<Int> = ArrayList()
     private var inStartQuiz: Boolean = false
     private var default: Boolean = true
-    private var selectOption: Int = 0
+    private var selectOption: ArrayList<Int> = ArrayList()
     fun setAnswerOptions(answer: ArrayList<Int>)
     {
         answerOptions = answer
+        notifyDataSetChanged()
+    }
+    fun setSelectOptions(select: ArrayList<Int>){
+        selectOption = select
         notifyDataSetChanged()
     }
     fun setInStartQuiz(inQuiz: Boolean){
@@ -44,6 +48,17 @@ class OptionAdapter(private val context: Activity, private  val arrayList: Array
                 {
                     val optionBackground : LinearLayout = view.findViewById(R.id.option_background)
                     optionBackground.setBackgroundColor(Color.parseColor("#c6fa73"))
+                }
+            }
+            for(item in selectOption)
+            {
+                for (item2 in answerOptions)
+                {
+                    if(item!=item2)
+                    {
+                        val optionBackground : LinearLayout = view.findViewById(R.id.option_background)
+                        optionBackground.setBackgroundColor(Color.parseColor("##CE0000"))
+                    }
                 }
             }
         }
