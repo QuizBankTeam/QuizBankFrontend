@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.databinding.SingleQuizBinding
 import com.example.test.model.Question
+import com.example.test.model.QuestionRecord
+import com.example.test.model.QuizRecord
 
 class SingleQuiz: AppCompatActivity() {
     private lateinit var quizBinding: SingleQuizBinding
@@ -62,12 +64,12 @@ class SingleQuiz: AppCompatActivity() {
         Log.d("in ", "single Quiz")
         Log.d("request code=", requestCode.toString())
 
-        if(requestCode!=1000) {
-            //從singleQuestion傳回singlequiz的內容
+        if(requestCode < 1000)  //從singleQuestion傳回singlequiz的內容
+        {
             resultFromQuestion(requestCode, resultCode, data)
         }
-        else {
-            //從quiz setting傳回
+        else if(requestCode == 1000)    //從quiz setting傳回
+        {
             if(resultCode == RESULT_CANCELED)
                 Toast.makeText(this, "modify nothing", Toast.LENGTH_SHORT).show()
             else if(resultCode == RESULT_OK)
@@ -86,6 +88,20 @@ class SingleQuiz: AppCompatActivity() {
                 }
             }
         }
+        else if(requestCode == 2000)
+        {
+            if(resultCode == RESULT_OK) {
+                val intent = Intent()
+                intent.setClass(this, QuizRecordPage::class.java)
+                val questionRecordList = data?.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
+                val quizRecord = data?.getParcelableExtra<QuizRecord>("Key_quizRecord")
+                intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
+                intent.putExtra("Key_quizRecord", quizRecord)
+                startActivity(intent)
+            }
+            else if(resultCode == RESULT_CANCELED){
+            }
+        }
     }
 
     private fun startQuiz(questionList: ArrayList<Question>, status: String,  duringTime: Int, quizStatus: String,
@@ -100,9 +116,10 @@ class SingleQuiz: AppCompatActivity() {
                 intent.putExtra("Key_id", quizId)
                 intent.putExtra("Key_quizTitle", quizTitle)
                 intent.putExtra("Key_duringTime", duringTime)
+                intent.putExtra("Key_type", quizType)
                 intent.putParcelableArrayListExtra("Key_questions", questionList)
             }
-            startActivity(intent)
+            startActivityForResult(intent, 2000)
         }
         else{
             AlertDialog.Builder(this).setTitle("考試尚未設定完成!").setPositiveButton("我懂", null).show()
@@ -172,26 +189,35 @@ class SingleQuiz: AppCompatActivity() {
 
     private fun resultFromQuestion(requestCode: Int, resultCode: Int, data: Intent?){
         val tmpQuestion = questionlist[requestCode]
-        if (data != null) {
-            tmpQuestion.options = data.getStringArrayListExtra("Key_options")
-            tmpQuestion.tag?.clear()
-            for (i in 0 until data.getIntExtra("Key_tagNum", 0)) {
-                tmpQuestion.tag?.add(data.getStringExtra("Key_tag$i")!!)
-            }
-            tmpQuestion.title = data.getStringExtra("Key_title")
-            tmpQuestion.description = data.getStringExtra("Key_description")
-            tmpQuestion.answerOption = data.getStringArrayListExtra("Key_answerOptions")
-            tmpQuestion.answerDescription = data.getStringExtra("Key_answerDescription")
-            tmpQuestion.number = data.getStringExtra("Key_number")
-            tmpQuestion.type = data.getStringExtra("Key_type")
+        if(resultCode== RESULT_OK) {
+            if (data != null) {
+                tmpQuestion.options = data.getStringArrayListExtra("Key_options")
+                tmpQuestion.tag?.clear()
+                for (i in 0 until data.getIntExtra("Key_tagNum", 0)) {
+                    tmpQuestion.tag?.add(data.getStringExtra("Key_tag$i")!!)
+                }
+                tmpQuestion.title = data.getStringExtra("Key_title")
+                tmpQuestion.description = data.getStringExtra("Key_description")
+                tmpQuestion.answerOption = data.getStringArrayListExtra("Key_answerOptions")
+                tmpQuestion.answerDescription = data.getStringExtra("Key_answerDescription")
+                tmpQuestion.number = data.getStringExtra("Key_number")
+                tmpQuestion.type = data.getStringExtra("Key_type")
 
-            if(quizType=="casual") {
-                casualDuringTime[requestCode] = data.getIntExtra("Key_timeLimit", 0)
-                Log.d("in single quiz return time is ", casualDuringTime[requestCode].toString())
-                quizAdapter.updateTimeLimit(casualDuringTime[requestCode], requestCode)
-            }
+                if (quizType == "casual") {
+                    casualDuringTime[requestCode] = data.getIntExtra("Key_timeLimit", 0)
+                    Log.d(
+                        "in single quiz return time is ",
+                        casualDuringTime[requestCode].toString()
+                    )
+                    quizAdapter.updateTimeLimit(casualDuringTime[requestCode], requestCode)
+                }
 
-            questionlist[requestCode] = tmpQuestion
+                questionlist[requestCode] = tmpQuestion
+                quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
+            }
+        }else if(resultCode== RESULT_CANCELED){
+            Toast.makeText(this, "成功刪除第"+questionlist[requestCode].number+"題" , Toast.LENGTH_SHORT).show()
+            questionlist.removeAt(requestCode)
             quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
         }
     }

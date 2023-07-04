@@ -18,13 +18,17 @@ import com.example.test.R
 import com.example.test.databinding.SpStartQuizBinding
 import com.example.test.model.Option
 import com.example.test.model.Question
+import com.example.test.model.QuestionRecord
+import com.example.test.model.QuizRecord
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.time.Duration
 
 class SPStartQuiz: AppCompatActivity() {
     private lateinit var startQuizBinding: SpStartQuizBinding
     private lateinit var quizId: String
     private lateinit var quizTitle: String
+    private lateinit var quizType: String
     private lateinit var questionlist : ArrayList<Question>
     private var answerRecords = ArrayList<ArrayList<Int>>()
     private lateinit var optionAdapter: OptionAdapter
@@ -32,9 +36,8 @@ class SPStartQuiz: AppCompatActivity() {
     private var currentAtQuestion: Int = 0
     private var currentSelection = ArrayList<Int>() //被選過的option
     private var selectedView = ArrayList<View>()  //被選過的option的background index和currentSelection 相同
-    private lateinit var startDate: String
+    private lateinit var startDate: LocalDateTime
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = SpStartQuizBinding.inflate(layoutInflater)
@@ -42,7 +45,7 @@ class SPStartQuiz: AppCompatActivity() {
         init()
         setQuestion()
         setTimer(this)
-        startDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-hh:mm:ss"))
+        startDate = LocalDateTime.now()
         startQuizBinding.QuestionOption.setOnItemClickListener { parent, view, position, id ->
             optionSelect(position, view)
         }
@@ -67,12 +70,16 @@ class SPStartQuiz: AppCompatActivity() {
         val title = intent.getStringExtra("Key_quizTitle")
         val duringTime = intent.getIntExtra("Key_duringTime", 0)
         val questions = intent.getParcelableArrayListExtra<Question>("Key_questions")
+        val type = intent.getStringExtra("Key_type")
 
         if (id != null) {
             quizId = id
         }
         if (title != null) {
             quizTitle = title
+        }
+        if (type != null) {
+            quizType = type
         }
         if (questions != null) {
             questionlist = questions
@@ -87,6 +94,23 @@ class SPStartQuiz: AppCompatActivity() {
         startQuizBinding.progressBar.max = questionlist.size
         startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + ":" + questionlist.size.toString()
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == RESULT_OK){
+            val intent = Intent()
+            val questionRecordList = data?.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
+            val quizRecord = data?.getParcelableExtra<QuizRecord>("Key_quizRecord")
+            intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
+            intent.putExtra("Key_quizRecord", quizRecord)
+            setResult(RESULT_OK, intent)
+            finish()
+        }else if(resultCode == RESULT_CANCELED){
+            setResult(RESULT_CANCELED)
+            finish()
+        }
     }
 
     private fun setQuestion(){
@@ -160,7 +184,6 @@ class SPStartQuiz: AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun questionSubmit(){
         val currentQuestion = questionlist[currentAtQuestion]
         val options = currentQuestion.options!!
@@ -194,7 +217,6 @@ class SPStartQuiz: AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun quizEnd(){
         val answerlist = ArrayList<ArrayList<Int>>()
         for(item in answerRecords){
@@ -208,20 +230,25 @@ class SPStartQuiz: AppCompatActivity() {
             item.number?.let { Log.d("question", it) }
         }
         val intent = Intent()
-        val endDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-hh:mm:ss"))
+        val endDate = LocalDateTime.now()
+        val duringTime = java.time.Duration.between(startDate, endDate).toMinutes().toInt()
+        val startDateStr = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-hh:mm:ss"))
+        val endDateStr = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-hh:mm:ss"))
+
         intent.setClass(this, SPQuizFinish::class.java)
         intent.putExtra("Key_answerRecords", answerlist)
         intent.putExtra("Key_id", quizId)
         intent.putExtra("Key_title", quizTitle)
-        intent.putExtra("Key_startDate", startDate)
-        intent.putExtra("Key_endDate", endDate)
-        intent.putParcelableArrayListExtra("Key_questions", questionlist1)
-        startActivity(intent)
+        intent.putExtra("Key_startDate", startDateStr)
+        intent.putExtra("Key_endDate", endDateStr)
+        intent.putExtra("Key_type", quizType)
+        intent.putExtra("Key_duringTime", duringTime)
+        intent.putParcelableArrayListExtra("Key_questions", questionlist)
+        startActivityForResult(intent, 1000)
     }
 
     private fun setTimer(currentContext: Context){
         object : CountDownTimer((duringTime*1000).toLong(), 1000) {
-            @RequiresApi(Build.VERSION_CODES.O)
             override fun onFinish() {
                 val builder = AlertDialog.Builder(currentContext)
                 builder.setTitle("考試已結束")

@@ -12,10 +12,12 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import com.example.test.R
 import com.example.test.databinding.SingleQuestionBinding
 import com.example.test.model.Option
+import org.w3c.dom.Text
 
 class SingleQuestion : AppCompatActivity(){
     private lateinit var questionBinding: SingleQuestionBinding
@@ -34,22 +36,37 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var questionCreatedDate : String
     private lateinit var answerOptionInt : ArrayList<Int>  //為正確答案的position
     private lateinit var quizType: String
+    private lateinit var answerDescriptionView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         questionBinding = SingleQuestionBinding.inflate(layoutInflater)
         setContentView(questionBinding.root)
         init()
-        val adapter = OptionAdapter(this, optionlist)
-        questionBinding.QuestionOption.adapter = adapter
-        questionBinding.QuestionOption.post { //將正確選項的背景改為綠色
-            adapter.setAnswerOptions(answerOptionInt)
+
+        if(questionType=="MultipleChoiceS" || questionType=="MultipleChoiceM"){
+            val adapter = OptionAdapter(this, optionlist)
+            questionBinding.QuestionOption.adapter = adapter
+            questionBinding.QuestionOption.post { //將正確選項的背景改為綠色
+                adapter.setAnswerOptions(answerOptionInt)
+            }
+
+            //修改選項
+            questionBinding.QuestionOption.setOnItemClickListener { parent, view, position, id ->
+                optionChange(position, adapter)
+            }
+        }
+        else if(questionType=="ShortAnswer"){
+            questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
+            initShortAnswer()
+        }
+        else if(questionType=="TrueOrFalse"){
+            questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
+        }
+        else{
+            questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
         }
 
-        //修改選項
-        questionBinding.QuestionOption.setOnItemClickListener { parent, view, position, id ->
-            optionChange(position, adapter)
-        }
 
         //回傳修改的內容至 singleQuiz
         questionBinding.backBtn.setOnClickListener {
@@ -86,18 +103,24 @@ class SingleQuestion : AppCompatActivity(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         //從single question setting傳回
-        if(resultCode == RESULT_CANCELED)
-            Toast.makeText(this, "modify nothing", Toast.LENGTH_SHORT).show()
-        else if(resultCode == RESULT_OK)
-        {
+        if(resultCode == RESULT_CANCELED) {  //刪除題目
+            val intent = Intent()
+            setResult(RESULT_CANCELED, intent)
+            finish()
+        }
+        else if(resultCode == RESULT_OK) {   //修改題目設定
             Toast.makeText(this, "modify something", Toast.LENGTH_SHORT).show()
             if (data != null) {
                 this.questionTitle = data.getStringExtra("Key_title").toString()
                 this.questionAnswerDescription = data.getStringExtra("Key_answerDescription").toString()
                 this.questionNumber = data.getStringExtra("Key_number").toString()
-                this.questionType = data.getStringExtra("Key_type").toString()
+                this.questionType = if(questionType=="MultipleChoiceS" || questionType=="MultipleChoiceM")
+                                        data.getStringExtra("Key_type").toString() else this.questionType
                 questionBinding.QuestionTitle.text = this.questionTitle
             }
+        }
+        else{                               //啥都沒改
+            Toast.makeText(this, "modify nothing", Toast.LENGTH_SHORT).show()
         }
     }
     private fun init()
@@ -162,9 +185,27 @@ class SingleQuestion : AppCompatActivity(){
         }else{
             questionBinding.containerTimeLimit.removeView(questionBinding.timeLimit)
         }
+
         questionBinding.QuestionImage.setImageResource(image)
         questionBinding.questionDescription.text = description
         questionBinding.QuestionTitle.text = title
+        when(type){
+            "MultipleChoiceS" -> {
+                questionBinding.QuestionType.text = "單選"
+            }
+            "MultipleChoiceM" -> {
+                questionBinding.QuestionType.text = "多選"
+            }
+            "ShortAnswer" -> {
+                questionBinding.QuestionType.text = "簡答"
+            }
+            "TrueOrFalse" -> {
+                questionBinding.QuestionType.text = "是非"
+            }
+            "Filling" -> {
+                questionBinding.QuestionType.text = "填空"
+            }
+        }
 
         //設定(build)tag
         if(tag != null){
@@ -254,7 +295,6 @@ class SingleQuestion : AppCompatActivity(){
             intent.putExtra("Key_answerDescription", questionAnswerDescription)
             intent.putExtra("Key_number", questionNumber)
             intent.putExtra("Key_type", questionType)
-
             for (i in 0 until this.questionTag.size) {
                 val name = "Key_tag$i"
                 intent.putExtra(name, this.questionTag[i])
@@ -381,6 +421,22 @@ class SingleQuestion : AppCompatActivity(){
         }
     }
 
+    private fun answerDescriptionChange(){
+        val builder = AlertDialog.Builder(this)
+        val v:View =  layoutInflater.inflate(R.layout.edit_question_description, null)
+        val editDescription: EditText = v.findViewById(R.id.edit_question_description)
+        editDescription.setText(this.questionDescription)
+        editDescription.setTextColor(Color.WHITE)
+        editDescription.setBackgroundColor( ContextCompat.getColor(this, R.color.light_red1) )
+        builder.setTitle("答案敘述")
+        builder.setView(v)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        dialog.setOnDismissListener {
+            this.questionAnswerDescription = editDescription.text.toString()
+            this.answerDescriptionView.text = this.questionAnswerDescription
+        }
+    }
     private fun questionSetting(){
         val intent = Intent()
         intent.setClass(this@SingleQuestion, SingleQuestionSetting::class.java)
@@ -393,7 +449,60 @@ class SingleQuestion : AppCompatActivity(){
         intent.putExtra("Key_createdDate", questionCreatedDate)
         startActivityForResult(intent, 1001)
     }
+
+    private fun initShortAnswer(){
+        val textView = TextView(this)
+        val answerMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150f, resources.displayMetrics).toInt()
+        val descriptionMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130f, resources.displayMetrics).toInt()
+        val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+        val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics)
+        val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics).toInt()
+        val marginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
+        val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        layoutParam.marginStart = margin
+        layoutParam.marginEnd = margin
+        layoutParam.topMargin = marginTop
+        textView.id = View.generateViewId()
+        textView.isClickable = true
+        textView.text = this.questionAnswerDescription
+        textView.setBackgroundResource(R.drawable.textview_answer_border)
+        textView.setPadding(padding)
+        textView.layoutParams = layoutParam
+        textView.gravity = Gravity.CENTER_VERTICAL
+        textView.setTextColor(Color.WHITE)
+        textView.textSize = textSize
+        textView.minHeight = answerMinH
+        textView.hint = "輕觸輸入答案敘述"
+        questionBinding.questionContainer.addView(textView)
+        questionBinding.questionDescription.minHeight = descriptionMinH
+        questionBinding.questionContainer.addView(textView)
+        val answerDescriptionView = questionBinding.root.findViewById<TextView>(textView.id)
+        this.answerDescriptionView = answerDescriptionView
+        answerDescriptionView.setOnClickListener {
+            answerDescriptionChange()
+        }
+    }
 }
+
+//answer description
+//<TextView
+//android:id="@+id/question_answerDescription"
+//android:layout_width="match_parent"
+//android:layout_height="wrap_content"
+//android:minHeight="150dp"
+//android:clickable="true"
+//android:layout_marginHorizontal="20dp"
+//android:layout_marginTop="20dp"
+//android:layout_marginBottom="10dp"
+//android:background="@drawable/textview_answer_border"
+//android:padding="10dp"
+//android:gravity="center_vertical"
+//android:text="圖一為 2008 年的推估結果，顯示臺灣人口從 1960-2060 年間出生率與死亡率
+//的預測變化，依圖所示，在不考慮社會增加率的情況下，下列何者最為正確？"
+//android:textSize="14dp"
+//android:textColor="@color/white"/>
+
+//tag
 //<TextView
 //android:id="@+id/Question_tag0"
 //android:layout_width="70dp"
@@ -406,27 +515,4 @@ class SingleQuestion : AppCompatActivity(){
 //android:textSize="15dp"
 //android:textColor="@color/white"
 //android:drawableLeft="@drawable/tag24"/>
-//<TextView
-//android:id="@+id/Question_tag1"
-//android:layout_width="70dp"
-//android:layout_height="wrap_content"
-//android:background="@drawable/corner_radius_blue"
-//android:padding="5dp"
-//android:layout_marginHorizontal="3dp"
-//android:gravity="center"
-//android:text="成大"
-//android:textSize="13dp"
-//android:textColor="@color/white"
-//android:drawableLeft="@drawable/tag24"/>
-//<TextView
-//android:id="@+id/Question_tag2"
-//android:layout_width="70dp"
-//android:layout_height="wrap_content"
-//android:background="@drawable/corner_radius_blue"
-//android:layout_marginHorizontal="3dp"
-//android:padding="5dp"
-//android:gravity="center"
-//android:text="考古題"
-//android:textSize="13dp"
-//android:textColor="@color/white"
-//android:drawableLeft="@drawable/tag24"/>
+

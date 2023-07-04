@@ -1,70 +1,102 @@
 package com.example.test.Activity
 
-import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.view.View
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
 import com.example.test.Adapter.OptionAdapter
-import com.example.test.databinding.SpStartQuizBinding
+import com.example.test.R
+import com.example.test.databinding.SpQuizFinishBinding
 import com.example.test.model.Option
 import com.example.test.model.Question
+import com.example.test.model.QuestionRecord
+import com.example.test.model.QuizRecord
+import java.util.UUID
 
 class SPQuizFinish : AppCompatActivity(){
-    private lateinit var finishQuizBinding: SpStartQuizBinding
+    private lateinit var finishQuizBinding: SpQuizFinishBinding
     private lateinit var questionlist : ArrayList<Question>
     private lateinit var answerRecords: ArrayList< ArrayList<Int> >
     private lateinit var quizId: String
+    private lateinit var quizType: String
     private lateinit var quizTitle: String
     private lateinit var startDate: String
     private lateinit var endDate: String
-    private lateinit var optionAdapter: OptionAdapter
-    private var currentAtQuestion: Int = 0
-    private var currentSelection = ArrayList<Int>() //被選過的option
-
-    @RequiresApi(Build.VERSION_CODES.O)
+    private lateinit var questionRecordList: ArrayList<QuestionRecord>
+    private lateinit var quizRecord: QuizRecord
+    private var questionSize = ""
+    private var duringTime: Int = 0
+    private var correctNum: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        finishQuizBinding = SpStartQuizBinding.inflate(layoutInflater)
+        finishQuizBinding = SpQuizFinishBinding.inflate(layoutInflater)
         setContentView(finishQuizBinding.root)
 
         init()
-//        makeRecords()
-//        setQuestion()
-        finishQuizBinding.btnSubmit.setOnClickListener {
-            questionSubmit()
+        makeRecords()
+        questionSize = questionlist.size.toString()
+        finishQuizBinding.correctNum.text = "你答對了 " + correctNum.toString()+ " / " + questionSize + " 題 !"
+        //確定答案是否正確
+        for(index in questionlist.indices){
+            if(questionlist[index].type=="ShortAnswer"){
+                setAnswerQuestion(questionlist[index], index)
+            }
+        }
+
+        finishQuizBinding.gotoHome.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("確定回到主頁?")
+            builder.setMessage("將不會保存考試紀錄")
+            builder.setPositiveButton("確定") { dialog, which ->
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+            builder.setNegativeButton("取消", null)
+            builder.show()
+        }
+
+        //傳送questionRecordList quizRecord
+        finishQuizBinding.gotoRecord.setOnClickListener {
+            val intent = Intent()
+            intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
+            intent.putExtra("Key_quizRecord", quizRecord)
+            setResult(RESULT_OK)
+            finish()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //傳送questionRecordList quizRecord
+    }
+
     private fun init(){
-        val intent = Intent()
         val questions = intent.getParcelableArrayListExtra<Question>("Key_questions")
-        val answerRecords  = getIntent().getSerializableExtra("Key_answerRecords") as ArrayList<ArrayList<Int>>?
+        val answerRecords  = intent.getSerializableExtra("Key_answerRecords") as ArrayList<ArrayList<Int>>?
         val id = intent.getStringExtra("Key_id")
         val title = intent.getStringExtra("Key_title")
         val startDate = intent.getStringExtra("Key_startDate")
         val endDate = intent.getStringExtra("Key_endDate")
-
-        if(answerRecords==null){
-            Log.d("answerRecords is null", "")
-        }else{
-            Log.d("answerRecords is not null", "")
-            Log.d("answerRecords is" , answerRecords.toString())
-        }
+        val type  = intent.getStringExtra("Key_type")
+        val duringTime = intent.getIntExtra("Key_duringTime", 0)
         if (id != null) {
             this.quizId = id
         }
         if (title != null) {
             this.quizTitle = title
         }
+        if (type != null) {
+            quizType = type
+        }
         if (questions != null) {
             questionlist = questions
-        }
-        else
-        {
-            Log.d("question is null","")
         }
         if (startDate != null) {
             this.startDate = startDate
@@ -76,51 +108,72 @@ class SPQuizFinish : AppCompatActivity(){
             this.answerRecords = answerRecords
         }
     }
-//    private fun setQuestion(){
-//        val optionNum = arrayOf("A", "B", "C", "D", "E", "F")
-//        val currentQuestion = questionlist[currentAtQuestion]
-//        val optionlist : ArrayList<Option> = ArrayList()
-//        if(currentQuestion.type=="MultipleChoiceS"){
-//            finishQuizBinding.QuestionType.text = "單選題"
-//        }
-//        else if(currentQuestion.type=="MultipleChoiceM"){
-//            finishQuizBinding.QuestionType.text = "多選題"
-//        }
-//        for(index in currentQuestion.options?.indices!!){
-//            val tmpOption = Option(optionNum[index], currentQuestion.options!![index])
-//            optionlist.add(tmpOption)
-//        }
-//        optionAdapter = OptionAdapter(this, optionlist)
-//        finishQuizBinding.QuestionOption.adapter = optionAdapter
-//        finishQuizBinding.questionDescription.text = currentQuestion.description
-//        finishQuizBinding.QuestionImage.setImageResource(currentQuestion.image)
-//        currentSelection.clear()
-//        finishQuizBinding.progressBar.progress = currentAtQuestion+1
-//        finishQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + "/" + questionlist.size.toString()
-//        currentSelection = answerRecords[currentAtQuestion]
-//        optionAdapter.setSelectOptions(currentSelection)
-//    }
-    @SuppressLint("SuspiciousIndentation")
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun questionSubmit(){
-        val currentQuestion = questionlist[currentAtQuestion]
-        val options = currentQuestion.options!!
-            if( currentAtQuestion < questionlist.size )
-            {
-                if(currentAtQuestion == questionlist.size-1)
-                {
-                    finish()
-                }
-                else
-                {
-                    currentAtQuestion += 1
-//                    setQuestion()
+
+    private fun makeRecords(){
+        val quizRecordId = UUID.randomUUID().toString()
+        val questionRecordId = ArrayList<String>()
+        var totalScore : Int = 0
+        for(index in questionlist.indices){
+            val tmpId = UUID.randomUUID().toString()
+            val tmpAns = ArrayList<String>()
+            var isCorrect = false
+            questionRecordId.add(tmpId)
+            if(index < answerRecords.size){
+                for(item in answerRecords[index]){
+                    tmpAns.add(questionlist[index].options?.get(item) ?: "nothing")
                 }
             }
+            else{
+                tmpAns.add("user answer nothing")
+            }
+            isCorrect = tmpAns.toSet() == questionlist[index].answerOption!!.toSet()
+            totalScore = if(isCorrect) totalScore+1 else totalScore
+            Log.d(index.toString(), "is correct is"+isCorrect.toString())
+//            isCorrect = tmpAns.size == answerRecords.size
+//            if(isCorrect){
+//                for(item in questionlist[index].answerOption!!){
+//                    if(item in tmpAns)
+//                        isCorrect = true
+//                    else {
+//                        isCorrect = false
+//                        break
+//                    }
+//                }
+//            }
+            val tmpQuestionRecord = QuestionRecord(tmpId, "jacky", tmpAns, isCorrect, startDate, questionlist[index].id!!, quizRecordId)
+            questionRecordList.add(tmpQuestionRecord)
+        }
+        correctNum = totalScore
+        val tmpQuizRecord = QuizRecord(quizRecordId, quizTitle, quizId, startDate, quizType, totalScore/questionlist.size,
+                                        duringTime, startDate, endDate, null, questionRecordId)
+        this.quizRecord = tmpQuizRecord
     }
-//    private fun makeRecords(){
-//        for(index in answerRecords.indices){
-//
-//        }
-//    }
+
+    private fun setAnswerQuestion(question: Question, index: Int){
+        val v: View = layoutInflater.inflate(R.layout.decide_iscorrect, null)
+        val answerDesc: TextView = v.findViewById(R.id.answer_description)
+        val questionDesc: TextView = v.findViewById(R.id.question_description)
+        val answerSwitch: SwitchCompat = v.findViewById(R.id.answer_switch)
+        val isCorrectTag: TextView = v.findViewById(R.id.answer_isCorrect)
+        val questionNum:  TextView = v.findViewById(R.id.question_number)
+
+        answerDesc.text = question.answerDescription
+        questionDesc.text = question.description
+        questionNum.text = question.number
+        answerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                isCorrectTag.text = "正確"
+                isCorrectTag.setBackgroundColor(ContextCompat.getColor(this, R.color.answer_correct))
+                questionRecordList[index].correct = true
+                correctNum++
+                finishQuizBinding.correctNum.text = "你答對了 " +correctNum.toString()+ " / " +questionSize+ " 題 !"
+            }else{
+                isCorrectTag.text = "錯誤"
+                isCorrectTag.setBackgroundColor(ContextCompat.getColor(this, R.color.answer_wrong))
+                questionRecordList[index].correct = false
+                correctNum--
+                finishQuizBinding.correctNum.text = "你答對了 " +correctNum.toString()+ " / " +questionSize+ " 題 !"
+            }
+        }
+    }
 }
