@@ -9,46 +9,41 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.Adapter.SPQuizAdapter
+import com.example.test.Adapter.SPRecordAdapter
 import com.example.test.R
-import com.example.test.databinding.SpQuizBinding
+import com.example.test.databinding.SpRecordBinding
 import com.example.test.model.Question
 import com.example.test.model.Quiz
+import com.example.test.model.QuizRecord
 
 class SingleRecordPage: Fragment() {
 
-    private lateinit var quizBinding: SpQuizBinding
+    private lateinit var recordBinding: SpRecordBinding
     private var QuizList : ArrayList<Quiz> = ArrayList()
+    private var recordList: ArrayList<QuizRecord> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        quizBinding = SpQuizBinding.inflate(inflater, container, false)
-        return quizBinding.root
+        recordBinding = SpRecordBinding.inflate(inflater, container, false)
+        return recordBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-        quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
-        quizBinding.QuizList.setHasFixedSize(true)
-        val quizAdapter = SPQuizAdapter(requireActivity(), QuizList)
-        quizBinding.QuizList.adapter = quizAdapter
-        quizBinding.QuizList.isClickable = true
+        recordBinding.QuizRecordList.layoutManager = LinearLayoutManager(requireContext())
+        recordBinding.QuizRecordList.setHasFixedSize(true)
+        val recordAdapter = SPRecordAdapter(requireActivity(), recordList)
+        recordBinding.QuizRecordList.adapter = recordAdapter
+        recordBinding.QuizRecordList.isClickable = true
 
 
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("in ", "singlePlayer Quiz Page!!")
-        Log.d("request code=", requestCode.toString())
-        var tmpQuiz = QuizList[requestCode]
-        if (data != null) {
-            tmpQuiz.questions = data.getParcelableArrayListExtra<Question>("Key_questions") as ArrayList<Question>
-            tmpQuiz.title = data.getStringExtra("Key_title").toString()
-            tmpQuiz.duringTime = data.getIntExtra("Key_duringTime", 0)
-            QuizList[requestCode] = tmpQuiz
-        }
+
     }
     private fun init(){
         val title = "第一次考試"
@@ -80,12 +75,7 @@ class SingleRecordPage: Fragment() {
         QuestionList2.add(tmpQuestion)
         QuestionList2.add(tmpQuestion)
         QuestionList2.add(tmpQuestion2)
-//        QuestionList2.add(tmpQuestion)
-//        QuestionList2.add(tmpQuestion2)
-//        QuestionList2.add(tmpQuestion)
-//        QuestionList2.add(tmpQuestion2)
-//        QuestionList2.add(tmpQuestion)
-//        QuestionList2.add(tmpQuestion)
+
         val tmpQuiz = Quiz("sp_quiz1", title, "single", "script", 600, null, "2023-01-05","not yet", null,QuestionList)
         val tmpQuiz2 = Quiz("sp_quiz1", "期中考", "single", "ready", 900, null, "2023-06-14","not yet", null,QuestionList2)
 

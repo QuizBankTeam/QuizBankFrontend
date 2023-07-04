@@ -28,7 +28,6 @@ class SPQuizAdapter(private val context: Activity, private val questionList: Arr
         return questionList.size
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = questionList[position]
         val datetime = LocalDateTime.now()

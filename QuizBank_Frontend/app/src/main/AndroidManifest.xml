@@ -30,8 +30,8 @@
                     android:theme="@style/StartQuiz"/>
         <activity android:name=".Activity.SPStartQuiz"/>
         <activity android:name=".Activity.SPQuizFinish"/>
-        <activity android:name=".Activity.QuizRecordPage"/>
         <activity android:name=".Activity.SingleQuizRecord"/>
+        <activity android:name=".Activity.SingleRecordPage"/>
     </application>
 
 </manifest>

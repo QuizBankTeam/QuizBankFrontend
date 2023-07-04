@@ -13,18 +13,18 @@ import com.example.test.databinding.QuizPageBinding
 
 class QuizPage: AppCompatActivity() {
     private lateinit var quizPageBinding: QuizPageBinding
-    private lateinit var fragmentAdater: QuizPageAdapter
+    private lateinit var fragmentAdapter: QuizPageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizPageBinding = QuizPageBinding.inflate(layoutInflater)
         setContentView(quizPageBinding.root)
 
-        fragmentAdater = QuizPageAdapter(supportFragmentManager, lifecycle)
+        fragmentAdapter = QuizPageAdapter(supportFragmentManager, lifecycle)
         quizPageBinding.selectQuizMode.addTab(quizPageBinding.selectQuizMode.newTab().setText("單人"))
         quizPageBinding.selectQuizMode.addTab(quizPageBinding.selectQuizMode.newTab().setText("多人"))
 
-        quizPageBinding.quizPager.adapter = fragmentAdater
+        quizPageBinding.quizPager.adapter = fragmentAdapter
 
         quizPageBinding.selectQuizMode.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
