@@ -6,6 +6,7 @@
     android:layout_width="330dp"
     android:layout_height="wrap_content">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -38,7 +39,7 @@
                         android:layout_height="50dp"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:hint="Question Title"
+                        android:hint="題目標題"
                         android:gravity="left"
                         android:inputType="textMultiLine"
                         android:scrollbars = "vertical"
@@ -75,10 +76,10 @@
                             android:id="@+id/iv_ocr_question_num"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:layout_height="35dp"
+                            android:layout_height="38dp"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:hint="Num."
+                            android:hint="題號."
                             android:gravity="left"
                             android:inputType="textMultiLine"
                             android:scrollbars = "vertical"
@@ -88,12 +89,12 @@
                             android:layout_width="0dp"
                             android:entries="@array/question_type"
                             android:layout_weight="1"
-                            android:layout_height="35dp" />
+                            android:layout_height="38dp" />
                         <Spinner
                             android:id="@+id/spinner_question_bank"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:layout_height="35dp" />
+                            android:layout_height="38dp" />
                     </LinearLayout>
                     <View
                         android:layout_width="match_parent"
@@ -251,31 +252,141 @@
                             android:focusable="true"
                             android:orientation="horizontal"
                             >
-                            <HorizontalScrollView
-                                android:id="@+id/scroll_options_view"
-                                android:layout_width="0dp"
-                                android:layout_weight="18"
-                                android:layout_marginTop="2dp"
-                                android:layout_height="wrap_content"
-                                android:scrollbarAlwaysDrawHorizontalTrack="false"
-                                android:scrollbars="none">
 
                                 <LinearLayout
                                     android:id="@+id/MyOptions"
                                     android:layout_width="fill_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="25"
                                     android:layout_marginBottom="9dp"
                                     android:orientation="vertical"
                                     >
+                                    <EditText
+                                        android:id="@+id/question_option1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 1"
+                                        android:gravity="left"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
+                                    <EditText
+                                        android:id="@+id/question_option2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 2"
+                                        android:gravity="left"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
+
+                                    <EditText
+                                        android:id="@+id/question_option3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:gravity="left"
+                                        android:hint="題目選項 3"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <EditText
+                                        android:id="@+id/question_option4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 4"
+                                        android:gravity="left"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
+                                    <EditText
+                                        android:id="@+id/question_option5"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 5"
+                                        android:gravity="left"
+                                        android:visibility="gone"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
+                                    <EditText
+                                        android:id="@+id/question_option6"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 6"
+                                        android:visibility="gone"
+                                        android:gravity="left"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
+                                    <EditText
+                                        android:id="@+id/question_option7"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 7"
+                                        android:gravity="left"
+                                        android:visibility="gone"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
+                                    <EditText
+                                        android:id="@+id/question_option8"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 8"
+                                        android:gravity="left"
+                                        android:visibility="gone"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
+                                    <EditText
+                                        android:id="@+id/question_option9"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 9"
+                                        android:visibility="gone"
+                                        android:gravity="left"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
+                                    <EditText
+                                        android:id="@+id/question_option10"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:hint="題目選項 10"
+                                        android:visibility="gone"
+                                        android:gravity="left"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars = "vertical"
+                                        android:singleLine="false" />
                                 </LinearLayout>
 
-                            </HorizontalScrollView>
                             <ImageButton
-                                android:id="@+id/setting"
+                                android:id="@+id/add_options_button"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_weight="1"
-                                android:layout_marginStart="30dp"
+                                android:layout_marginStart="10dp"
                                 android:src="@drawable/baseline_add_circle_24"
                                 android:background="@color/white"
                                 android:scaleType="fitXY"
@@ -334,6 +445,21 @@
                             android:clickable="true"
                             android:background="@drawable/shape_button_rounded"
                             android:text="確認送出   ✔" />
+                        <TextView
+                            android:id="@+id/btn_scan_cancel"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:textColor="@color/secondary_text_color"
+                            android:clickable="true"
+                            android:layout_marginBottom="3dp"
+                            android:background="@drawable/white_border_shape_button_rounded"
+                            android:text="刪除ocr結果   ❌" />
+
                     </LinearLayout>
 
                 </LinearLayout>

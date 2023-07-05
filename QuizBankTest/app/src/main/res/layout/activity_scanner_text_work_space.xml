@@ -66,6 +66,7 @@
                     android:id="@+id/ocr_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:orientation="vertical"
                     >
                     <TextView
@@ -82,6 +83,7 @@
                         android:id="@+id/ocr_list"
                         android:layout_marginTop="7dp"
                         android:layout_width="match_parent"
+                        android:layout_gravity="center_horizontal"
                         android:layout_height="wrap_content"
                         android:visibility="visible"
                         tools:visibility="visible" />

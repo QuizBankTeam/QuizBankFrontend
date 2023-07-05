@@ -23,7 +23,8 @@ import retrofit.Retrofit
 import java.util.UUID
 
 object ConstantsServiceFunction {
-    lateinit var allBanksReturnResponse :  AllQuestionBanksResponse
+    var allBanksReturnResponse :  AllQuestionBanksResponse ?= null
+
     fun getCsrfToken(context: Context) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()

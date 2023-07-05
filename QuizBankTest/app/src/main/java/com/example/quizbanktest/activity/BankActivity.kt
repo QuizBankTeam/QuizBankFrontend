@@ -1,22 +1,10 @@
 package com.example.quizbanktest.activity
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
-import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.Settings
-import android.util.Base64
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -26,12 +14,8 @@ import android.widget.ImageButton
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.FileProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
@@ -44,75 +28,19 @@ import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.network.ImgurService
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.view.WrapLayout
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import jp.wasabeef.blurry.Blurry
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
 
-class BankActivity : AppCompatActivity() {
+class BankActivity : BaseActivity() {
     lateinit var searchView: SearchView
     lateinit var menuButton: ImageButton
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
-    private val SAMPLE_CROPPED_IMG_NAME = "CroppedImage.jpg"
-    private var cameraPhotoUri :Uri ?=null
     var bankModels = ArrayList<BankModel>()
-    val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult() ){
-            result->
-        Log.e("gallery result status",result.resultCode.toString())
-        if(result.resultCode == RESULT_OK&&result.data!=null){
-            val contentURI = result.data!!.data
-            try {
-                val selectedImageBitmap =
-                    BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI!!))
 
-                var base64String = encodeImage(selectedImageBitmap!!)
-                var size = estimateBase64SizeFromBase64String(base64String!!)
-                Log.e("openGalleryLauncher size",size.toString())
-//                binding?.cameraTest!!.setImageBitmap(selectedImageBitmap) Set the selected image from GALLERY to imageView.
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Toast.makeText(this@BankActivity, "Failed!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    val cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()){
-            result->
-
-        if(result.resultCode == RESULT_OK){
-
-            val thumbnail: Bitmap? = BitmapFactory.decodeStream(getContentResolver().openInputStream(cameraPhotoUri!!))
-            lifecycleScope.launch{
-                var returnString = saveBitmapFileForPicturesDir(thumbnail!!)
-                Log.e("save pic dir",returnString)
-
-            }
-            var base64String = encodeImage(thumbnail!!)
-
-//            uploadImageToImgur(base64String!!)
-            var size = estimateBase64SizeFromBase64String(base64String!!)
-            Log.e("camera size",size.toString())
-
-        }else if(result.resultCode == RESULT_CANCELED){
-            Log.e("camera result status result cancel",result.resultCode.toString())
-        }
-
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
 
         getSupportActionBar()?.hide()
@@ -139,8 +67,7 @@ class BankActivity : AppCompatActivity() {
         var recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
         var homeButton : ImageButton  = findViewById(R.id.home)
         homeButton.setOnClickListener{
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
+            gotoHomeActivity()
         }
         var adapter = BankRecyclerViewAdapter(this, bankModels)
         setUpBankModels()
@@ -236,98 +163,7 @@ class BankActivity : AppCompatActivity() {
         }
 
     }
-    private fun choosePhotoFromGallery() {
 
-        Dexter.withActivity(this)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    val galleryIntent = Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    )
-
-                    openGalleryLauncher.launch(galleryIntent)
-
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    showRationalDialogForPermissions()
-                }
-            }).onSameThread()
-            .check()
-    }
-
-    var idImage = System.currentTimeMillis()/1000
-    private fun takePhotoFromCamera() {
-
-        Dexter.withActivity(this)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    val f =
-                        File(externalCacheDir?.absoluteFile.toString() + File.separator + "QuizBank_Camera_" + idImage + ".jpg")
-                    val uri1 = FileProvider.getUriForFile(this@BankActivity, "com.example.quizbanktest.fileprovider", f)
-                    intent.putExtra(
-                        MediaStore.EXTRA_OUTPUT,
-                        uri1)
-                    cameraPhotoUri = uri1
-                    cameraLauncher.launch(intent)
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    showRationalDialogForPermissions()
-                }
-            }).onSameThread()
-            .check()
-    }
-
-    private fun showRationalDialogForPermissions() {
-        AlertDialog.Builder(this)
-            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
-            .setPositiveButton("GO TO SETTINGS"
-            ) { _, _ ->
-                try {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
-            }
-            .setNegativeButton("Cancel") { dialog,
-                                           _ ->
-                dialog.dismiss()
-            }.show()
-    }
-    fun estimateBase64SizeFromBase64String(base64String: String): Int {
-        val base64Chars = base64String.length
-        val originalSizeInBytes = (base64Chars * (3.0 / 4.0)).toInt()
-        return (originalSizeInBytes * (4.0 / 3.0)).toInt()
-    }
-
-    private fun encodeImage(bm: Bitmap): String? {
-        val baos = ByteArrayOutputStream()
-//        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        bm.compress(Bitmap.CompressFormat.JPEG, 75, baos)
-        val b = baos.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
-    }
 
     private fun uploadImageToImgur(base64String:String){
         if (Constants.isNetworkAvailable(this@BankActivity)) {
@@ -392,49 +228,5 @@ class BankActivity : AppCompatActivity() {
         val placesAdapter = WrongViewAdapter(this, wrongList)
         recentWrongList?.adapter = placesAdapter
     }
-    private suspend fun saveBitmapFileForPicturesDir(mBitmap: Bitmap?): String {
-        Log.e("in sava", "save")
-        var result = ""
-        if (mBitmap != null) {
-            var base64URL = encodeImage(mBitmap)
-//            if (base64URL != null) {
-//                Log.e("base64URL:  ", base64URL)
-//            }
-        }
-        withContext(Dispatchers.IO) {
-            if (mBitmap != null) {
-                try {
-                    val fileName = "QuizBank_${idImage}.jpg"
-                    val contentValues = ContentValues().apply {
-                        put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-                        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-                        }
-                    }
 
-                    val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-                    contentResolver.openOutputStream(uri!!).use { outputStream ->
-                        mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                    }
-                    result = uri.toString()
-
-                    runOnUiThread {
-                        if (!result.isEmpty()) {
-                        } else {
-                            Toast.makeText(
-                                this@BankActivity,
-                                "Something went wrong while saving the file.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                } catch (e: Exception) {
-                    result = ""
-                    e.printStackTrace()
-                }
-            }
-        }
-        return result
-    }
 }

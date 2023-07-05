@@ -1,76 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.BankActivity">
 
-    <ImageView
-        android:id="@+id/imageview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageview"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent" />-->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_home_detail"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
         android:background="@color/colorPrimary"
-        app:titleTextAppearance="@style/CustomToolbarStyle"
-        app:titleTextColor="@color/colorPrimaryDark"
-        app:title="Bank Page💡"
         android:theme="@style/CustomToolbarStyle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:title="Quiz Bank📑"
+        app:titleTextAppearance="@style/CustomToolbarStyle"
+        app:titleTextColor="@color/colorPrimaryDark" />
 
-    <android.widget.SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="330dp"
-        android:layout_height="35dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/search_bar"
-        android:iconifiedByDefault="false"
-        android:queryHint="@string/search_hint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_home_detail" />
+    <LinearLayout
+        android:id="@+id/layout_searchBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/toolbar_home_detail">
 
-    <ImageButton
-        android:id="@+id/menu_button"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@null"
-        android:onClick="setPopupWindow"
-        android:src="@drawable/burger_menu_right_svgrepo_com"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_home_detail" />
+        <android.widget.SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="330dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/search_bar"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/search_hint" />
+
+        <ImageButton
+            android:id="@+id/menu_button"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:onClick="setPopupWindow"
+            android:src="@drawable/burger_menu_right_svgrepo_com" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/dividing_view"
         android:layout_width="wrap_content"
         android:layout_height="3dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginVertical="10dp"
+        android:layout_below="@id/layout_searchBar"
         android:background="@drawable/gradient_background"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_bar" />
+        android:paddingBottom="0dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="550dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/ll_action_buttons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_below="@+id/dividing_view">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mRecyclerView"
@@ -86,12 +84,10 @@
         android:id="@+id/ll_action_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/colorRipple"
         android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/home"
@@ -143,4 +139,4 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
@@ -11,7 +13,7 @@ import com.example.quizbanktest.adapters.OcrResultViewAdapter
 import com.example.quizbanktest.models.OcrResultModel
 import com.example.quizbanktest.utils.ConstantsServiceFunction
 
-class ScannerTextWorkSpaceActivity : AppCompatActivity() {
+class ScannerTextWorkSpaceActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner_text_work_space)
@@ -26,10 +28,48 @@ class ScannerTextWorkSpaceActivity : AppCompatActivity() {
             Log.e("nav","toolbar")
         }
 
+        var homeButton : ImageButton  = findViewById(R.id.home)
+        homeButton.setOnClickListener{
+            gotoHomeActivity()
+        }
+        var bank : ImageButton = findViewById(R.id.bank)
+        bank.setOnClickListener{
+            gotoBankActivity()
+        }
+
+        var camera : ImageButton = findViewById(R.id.camera)
+        camera?.setOnClickListener {
+            val pictureDialog = AlertDialog.Builder(this)
+            pictureDialog.setTitle("Select Action")
+            val pictureDialogItems =
+                arrayOf("Select photo from gallery", "Capture photo from camera")
+            pictureDialog.setItems(
+                pictureDialogItems
+            ) { dialog, which ->
+                when (which) {
+                    // Here we have create the methods for image selection from GALLERY
+                    0 -> choosePhotoFromGallery()
+                    1 -> takePhotoFromCamera()
+                }
+            }
+            pictureDialog.show()
+        }
         toolBar.setNavigationOnClickListener{
             Log.e("nav","toolbar")
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
+            var builder =AlertDialog.Builder(this)
+                .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
+                .setTitle("OCR結果")
+                .setIcon(R.drawable.baseline_warning_amber_24)
+            builder.setPositiveButton("確認") { dialog, which ->
+                val intent = Intent(this,MainActivity::class.java)
+                startActivity(intent)
+            }
+
+            builder.setNegativeButton("取消") { dialog, which ->
+
+            }
+            builder.show()
+
         }
         ConstantsServiceFunction.getCsrfToken(this@ScannerTextWorkSpaceActivity)
         ConstantsServiceFunction.login(this@ScannerTextWorkSpaceActivity)
@@ -41,7 +81,7 @@ class ScannerTextWorkSpaceActivity : AppCompatActivity() {
         ocrList?.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL,false)
         ocrList?.setHasFixedSize(true)
-        Log.e("ocrText",ConstantsOcrResults.getQuestions()[0].description)
+
         val placesAdapter = OcrResultViewAdapter(this, ocrResultList)
         ocrList?.adapter = placesAdapter
     }

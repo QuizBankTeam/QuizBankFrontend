@@ -55,75 +55,9 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-    private val SAMPLE_CROPPED_IMG_NAME = "CroppedImage.jpg"
-    private var cameraPhotoUri :Uri ?=null
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
 
-    private val uCropActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val uri = UCrop.getOutput(result.data!!)
-            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
-            val base64String = encodeImage(bitmap)
-            var size = estimateBase64SizeFromBase64String(base64String!!)
-            Log.e("ucrop size",size.toString())
-
-            Log.e("cropResult ",uri.toString())
-            // Use uri to get the cropped image
-        } else if (result.resultCode == UCrop.RESULT_ERROR) {
-            Log.e("cropResult","error")
-            val cropError = UCrop.getError(result.data!!)
-            // Handle the cropping error here
-        }
-    }
-    val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult() ){
-            result->
-        Log.e("gallery result status",result.resultCode.toString())
-        if(result.resultCode == RESULT_OK&&result.data!=null){
-            val contentURI = result.data!!.data
-            try {
-                val selectedImageBitmap =
-                    BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI!!))
-
-                var base64String = encodeImage(selectedImageBitmap!!)
-                ConstantsServiceFunction.scanBase64ToOcrText(base64String!!,this@MainActivity)
-                var size = estimateBase64SizeFromBase64String(base64String!!)
-                Log.e("openGalleryLauncher size",size.toString())
-//                binding?.cameraTest!!.setImageBitmap(selectedImageBitmap) Set the selected image from GALLERY to imageView.
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Toast.makeText(this@MainActivity, "Failed!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    val cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()){
-            result->
-
-        if(result.resultCode == RESULT_OK){
-
-            val thumbnail: Bitmap? = BitmapFactory.decodeStream(getContentResolver().openInputStream(cameraPhotoUri!!))
-            lifecycleScope.launch{
-                var returnString = saveBitmapFileForPicturesDir(thumbnail!!)
-                Log.e("save pic dir",returnString)
-
-            }
-            var base64String = encodeImage(thumbnail!!)
-            ConstantsServiceFunction.scanBase64ToOcrText(base64String!!,this@MainActivity)
-
-            var size = estimateBase64SizeFromBase64String(base64String!!)
-
-
-        }else if(result.resultCode == RESULT_CANCELED){
-            Log.e("camera result status result cancel",result.resultCode.toString())
-        }
-
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -134,16 +68,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupWrongListRecyclerView(ConstantsWrong.getQuestions())
         setupActionBar()
 
-
-
         var nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)
         nav_view.setNavigationItemSelectedListener(this)
 
         var bank : ImageButton = findViewById(R.id.bank)
         bank.setOnClickListener{
-            ConstantsServiceFunction.getAllUserQuestionBanks(this@MainActivity)
-            val intent = Intent(this,BankActivity::class.java)
-            startActivity(intent)
+            gotoBankActivity()
+        }
+
+        var homeButton : ImageButton  = findViewById(R.id.home)
+        homeButton.setOnClickListener{
+            gotoHomeActivity()
         }
 
         var camera : ImageButton = findViewById(R.id.camera)
@@ -164,6 +99,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             pictureDialog.show()
         }
+
         var settingButton : ImageButton = findViewById(R.id.setting)
         settingButton.setOnClickListener{
             ConstantsServiceFunction.login(this@MainActivity)
@@ -172,97 +108,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ConstantsServiceFunction.getCsrfToken(this@MainActivity)
         ConstantsServiceFunction.login(this@MainActivity)
     }
-    private fun choosePhotoFromGallery() {
 
-        Dexter.withActivity(this)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    val galleryIntent = Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    )
 
-                    openGalleryLauncher.launch(galleryIntent)
-
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    showRationalDialogForPermissions()
-                }
-            }).onSameThread()
-            .check()
-    }
-
-    var idImage = System.currentTimeMillis()/1000
-    private fun takePhotoFromCamera() {
-
-        Dexter.withActivity(this)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    val f =
-                        File(externalCacheDir?.absoluteFile.toString() + File.separator + "QuizBank_Camera_" + idImage + ".jpg")
-                    val uri1 = FileProvider.getUriForFile(this@MainActivity, "com.example.quizbanktest.fileprovider", f)
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        uri1)
-                    cameraPhotoUri = uri1
-                    cameraLauncher.launch(intent)
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    showRationalDialogForPermissions()
-                }
-            }).onSameThread()
-            .check()
-    }
-
-    private fun showRationalDialogForPermissions() {
-        AlertDialog.Builder(this)
-            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
-            .setPositiveButton("GO TO SETTINGS"
-            ) { _, _ ->
-                try {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
-            }
-            .setNegativeButton("Cancel") { dialog,
-                                           _ ->
-                dialog.dismiss()
-            }.show()
-    }
-    fun estimateBase64SizeFromBase64String(base64String: String): Int {
-        val base64Chars = base64String.length
-        val originalSizeInBytes = (base64Chars * (3.0 / 4.0)).toInt()
-        return (originalSizeInBytes * (4.0 / 3.0)).toInt()
-    }
-
-    private fun encodeImage(bm: Bitmap): String? {
-        val baos = ByteArrayOutputStream()
-//        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        bm.compress(Bitmap.CompressFormat.JPEG, 75, baos)
-        val b = baos.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
-    }
 
     private fun setupRecentRecyclerView(quizBankList: ArrayList<QuestionBankModel>) {
         var recentQuizBankList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_quiz_bank_list)
@@ -283,51 +130,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val placesAdapter = WrongViewAdapter(this, wrongList)
         recentWrongList?.adapter = placesAdapter
     }
-    private suspend fun saveBitmapFileForPicturesDir(mBitmap: Bitmap?): String {
-        Log.e("in sava", "save")
-        var result = ""
-        if (mBitmap != null) {
-            var base64URL = encodeImage(mBitmap)
-//            if (base64URL != null) {
-//                Log.e("base64URL:  ", base64URL)
-//            }
-        }
-        withContext(Dispatchers.IO) {
-            if (mBitmap != null) {
-                try {
-                    val fileName = "QuizBank_${idImage}.jpg"
-                    val contentValues = ContentValues().apply {
-                        put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-                        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-                        }
-                    }
 
-                    val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-                    contentResolver.openOutputStream(uri!!).use { outputStream ->
-                        mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                    }
-                    result = uri.toString()
-
-                    runOnUiThread {
-                        if (!result.isEmpty()) {
-                        } else {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Something went wrong while saving the file.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                } catch (e: Exception) {
-                    result = ""
-                    e.printStackTrace()
-                }
-            }
-        }
-        return result
-    }
     private fun setupRecommendRecyclerView(recommendList: ArrayList<QuestionModel>) {
         var recentRecommendList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_recommend_list)
         recentRecommendList?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
