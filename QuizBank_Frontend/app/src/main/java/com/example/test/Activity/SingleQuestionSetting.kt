@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -17,7 +18,7 @@ class SingleQuestionSetting: AppCompatActivity()  {
     private lateinit var questionTitle: String
     private lateinit var questionType: String
     private lateinit var questionNumber: String
-    private lateinit var questionAnswerDescription: String
+    private var questionAnswerDescription: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +67,16 @@ class SingleQuestionSetting: AppCompatActivity()  {
         if (number != null) {
             this.questionNumber = number
         }
+        if (type != null) {
+            this.questionType = type
+        }
+        if (answerDescription != null) {
+            this.questionAnswerDescription = answerDescription
+        }
+        if (title != null) {
+            this.questionTitle = title
+        }
+
 
         if(type=="MultipleChoiceS" || type=="MultipleChoiceM") { //多選 單選
             val typeTextArr= arrayOf("單選", "多選")
@@ -83,11 +94,11 @@ class SingleQuestionSetting: AppCompatActivity()  {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
         }else{   //填空 簡答
-            val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics)
+            val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7f, resources.displayMetrics)
             val marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
             val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             layoutParam.marginStart = marginHorizontal
-            typeTextView.text = if(type=="Filling") "填空" else "簡答"
+            typeTextView.text = if(type=="Filling") "填空" else if(type=="ShortAnswer") "簡答" else "是非"
             typeTextView.layoutParams = layoutParam
             typeTextView.gravity = Gravity.CENTER_VERTICAL
             typeTextView.textSize = textSize1
@@ -97,7 +108,7 @@ class SingleQuestionSetting: AppCompatActivity()  {
             questionSetAttr.QuestionType.setSelection(0)
         else if(type=="MultipleChoiceM")
             questionSetAttr.QuestionType.setSelection(1)
-        else if(type=="Filling" || type=="TrueOrFalse") {
+        else {
             questionSetAttr.QuestionTypeContainer.removeView(questionSetAttr.QuestionType)
             questionSetAttr.QuestionTypeContainer.addView(typeTextView)
         }
@@ -111,6 +122,7 @@ class SingleQuestionSetting: AppCompatActivity()  {
     }
 
     private fun answerDescriptionChange(){
+        Log.d("in answerDes change", "single question setting")
         val builder = AlertDialog.Builder(this)
         val v:View =  layoutInflater.inflate(com.example.test.R.layout.edit_question_description, null)
         val editDescription: EditText = v.findViewById(com.example.test.R.id.edit_question_description)

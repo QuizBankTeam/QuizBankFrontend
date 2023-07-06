@@ -1,87 +1,95 @@
-package com.example.test.Activity
+package com.example.test.Adapter
 
-import android.content.Intent
-import com.example.test.Adapter.MPQuizAdapter
-import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.app.Activity
+import android.graphics.Color
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.test.R
-import com.example.test.databinding.MpQuizBinding
-import com.example.test.model.Question
-import com.example.test.model.Quiz
+import com.example.test.model.Option
 
-class MultiplayerQuiz: AppCompatActivity() {
-    private lateinit var mpQuizBinding: MpQuizBinding
-    private var QuizList : ArrayList<Quiz> = ArrayList()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mpQuizBinding = MpQuizBinding.inflate(layoutInflater)
-        setContentView(mpQuizBinding.root)
-        init()
-        mpQuizBinding.QuizList.layoutManager = LinearLayoutManager(this)
-        mpQuizBinding.QuizList.setHasFixedSize(true)
-        val quizadapter = MPQuizAdapter(this, QuizList)
-        mpQuizBinding.QuizList.adapter = quizadapter
-        mpQuizBinding.QuizList.isClickable = true
-
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d("in ", "multiplayer Quiz")
-        Log.d("request code=", requestCode.toString())
-        var tmpQuiz = QuizList[requestCode]
-        if (data != null) {
-            tmpQuiz.questions = data.getParcelableArrayListExtra<Question>("Key_questions") as ArrayList<Question>
-            tmpQuiz.title = data.getStringExtra("Key_title").toString()
-            QuizList[requestCode].casualDuringTime = data.getIntegerArrayListExtra("Key_casualDuringTime")
-            QuizList[requestCode] = tmpQuiz
-        }
-
-    }
-
-
-    private fun init() //mp_quiz -> single_quiz -> single_question
+class OptionAdapter1(private val context: Activity, private  val arrayList: ArrayList<Option>) :
+    ArrayAdapter<Option>(context, R.layout.option_row, arrayList) {
+    private var answerOptions : ArrayList<Int> = ArrayList()
+    private var inStartQuiz: Boolean = false
+    private var inRecord: Boolean = false
+    private var selectOption: ArrayList<Int> = ArrayList()
+    private var answerIsCorrect: Boolean = false
+    fun setAnswerOptions(answer: ArrayList<Int>)
     {
-        val title: String = "第一次考試"
-        val startDate: String = "2023/05/20"
-        val endDate: String = "2023/05/21"
-        val QuestionList: ArrayList<Question> = ArrayList()
-        val QuestionList2: ArrayList<Question> = ArrayList()
+        answerOptions = answer
+        notifyDataSetChanged()
+    }
+    fun setInStartQuiz(inQuiz: Boolean){
+        inStartQuiz = inQuiz
+    }
+    fun setRecord(inRecord: Boolean, answerIsCorrect: Boolean, selectOptions: ArrayList<Int>){
+        this.selectOption = selectOptions
+        this.inRecord = inRecord
+        this.answerIsCorrect = answerIsCorrect
+        this.inStartQuiz = true
+    }
 
-        val optionText = arrayOf("恆春的核能發電廠", "高雄的火力發電廠", "C demo text 789", "D demo text 101112").toCollection(ArrayList())
-        val optionAns = arrayOf("C demo text 789").toCollection(ArrayList())
-        val optionText2 = arrayOf("A cc text 123", "B ddd text 456", "C gggg text 789", "D asdfasdf text 101112").toCollection(ArrayList())
-        val optionAns2 = arrayOf("B ddd text 456").toCollection(ArrayList())
-        val tag = arrayOf("98年", "社會", "歷史").toCollection(ArrayList())
-        val tag2 = arrayOf("94年", "地理").toCollection(ArrayList())
-        val QuizMember = arrayOf("jl","wcy","yc","wt","cy").toCollection(ArrayList())
-        val QuizMember2 = arrayOf("jl", "jacky", "hehe", "jjs").toCollection(ArrayList())
-        val QuizMember3 = arrayOf("蠟筆小新").toCollection(ArrayList())
-        val casualDuring = intArrayOf(20,20).toCollection(ArrayList())
-        val casualDuring2 = intArrayOf(20, 20, 30, 30).toCollection(ArrayList())
-        var tmpQuestion = Question("123", "題目1", "1", " 圖二為日本統治期間臺灣發電設施之設備容量\n" +
-                        "變化圖。請問，使 1930 年代設備容量急遽增加\n" + "的設施為何？", optionText,
-                    "MultipleChoiceS", "bank one", optionAns, "an answer description1", "jacky",
-            R.drawable.society98_1, tag, "2023/05/17")
-        QuestionList.add(tmpQuestion)
-        QuestionList2.add(tmpQuestion)
-        QuestionList2.add(tmpQuestion)
-        tmpQuestion = Question("123", "題目2", "2", "簡介22", optionText2,
-                    "MultipleChoiceM", "bank two", optionAns2, "an answer description2", "jacky",
-            R.drawable.society9802, tag2, "2023/05/15")
-        QuestionList.add(tmpQuestion)
-        QuestionList2.add(tmpQuestion)
-        QuestionList2.add(tmpQuestion)
-        val tmpQuiz = Quiz("testmp_quiz1", title, "casual", "ready", 0, casualDuring, "2023-01-05","not yet", QuizMember,QuestionList)
-        val tmpQuiz2 = Quiz("testmp_quiz2", "期中考", "casual", "script", 0, casualDuring2, "2023-06-14","not yet", QuizMember2,QuestionList2)
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val inflater : LayoutInflater = LayoutInflater.from(context)
+        val view : View = inflater.inflate(R.layout.option_row, null)
 
-        QuizList.add(tmpQuiz)
-        QuizList.add(tmpQuiz2)
+        val optionnum : TextView = view.findViewById(R.id.optionNum)
+        val optioncontent : TextView = view.findViewById(R.id.optionContent)
+        val optionBackground : LinearLayout = view.findViewById(R.id.option_background)
 
+        optionnum.text = arrayList[position].optionNum
+        optioncontent.text = arrayList[position].optionContent
+        if(!inStartQuiz){
+            for (item in answerOptions)
+            {
+                if(item==position)
+                {
+                    optionBackground.setBackgroundColor(Color.parseColor("#c6fa73"))
+                }
+            }
+            for(item in selectOption)
+            {
+                for (item2 in answerOptions)
+                {
+                    if(item!=item2)
+                    {
+                        optionBackground.setBackgroundColor(Color.parseColor("##CE0000"))
+                    }
+                }
+            }
+        }
+        if(inRecord){
+            for (item in answerOptions)
+            {
+                if(item==position)
+                {
+                    optionnum.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_check,0, 0, 0)
+                }
+            }
+            for(item in selectOption)
+            {
+                if(item==position && !answerOptions.contains(item))
+                {
+                    optioncontent.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.baseline_edit, 0)
+                }
+            }
+            if(position == arrayList.size-1){
+                optionBackground.removeView(optionnum)
+                optioncontent.gravity = Gravity.CENTER
+                if(answerIsCorrect){
+                    optionBackground.setBackgroundColor(ContextCompat.getColor(context, R.color.light_red2))
+                }else{
+                    optionBackground.setBackgroundColor(ContextCompat.getColor(context, R.color.answer_correct))
+                }
+            }
+        }
+        return view
     }
 
 }

@@ -29,7 +29,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="6"
                     android:layout_gravity="center"
                     android:paddingLeft="13dp"
                     android:text="考試📑"
@@ -37,6 +37,14 @@
                     android:textStyle="bold"
                     android:textAppearance="@style/CustomToolbarStyle"
                     android:textColor="@color/colorPrimaryDark"/>
+                <ImageButton
+                    android:id="@+id/quiz_record"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/baseline_record"/>
                 <ImageButton
                     android:id="@+id/quiz_add"
                     android:layout_width="0dp"

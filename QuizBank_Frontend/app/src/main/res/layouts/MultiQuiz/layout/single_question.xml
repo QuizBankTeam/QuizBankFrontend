@@ -133,13 +133,14 @@
             android:textSize="14dp"
             android:hint="輕觸輸入答案敘述"/>
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/QuestionOption"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:overScrollMode="never"
             android:textColor="@color/white"
-            android:textSize="30sp"
-            tools:listitem="@layout/option_row"/>
+            android:textSize="30sp"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

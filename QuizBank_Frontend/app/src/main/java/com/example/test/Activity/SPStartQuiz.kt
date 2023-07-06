@@ -7,12 +7,18 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.Adapter.OptionAdapter
 import com.example.test.R
 import com.example.test.databinding.SpStartQuizBinding
@@ -30,14 +36,17 @@ class SPStartQuiz: AppCompatActivity() {
     private lateinit var quizTitle: String
     private lateinit var quizType: String
     private lateinit var questionlist : ArrayList<Question>
-    private var answerRecords = ArrayList<ArrayList<Int>>()
+    private var answerRecords = ArrayList<ArrayList<String>>()
     private lateinit var optionAdapter: OptionAdapter
+    private var currentAnswer : String = ""
     private var duringTime: Int = 0
     private var currentAtQuestion: Int = 0
     private var currentSelection = ArrayList<Int>() //被選過的option
     private var selectedView = ArrayList<View>()  //被選過的option的background index和currentSelection 相同
     private lateinit var startDate: LocalDateTime
-
+    private var shortAnswerView : EditText? = null
+    private var trueOrFalseView: View? = null
+    private var trueOrFalseSelected = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = SpStartQuizBinding.inflate(layoutInflater)
@@ -46,9 +55,6 @@ class SPStartQuiz: AppCompatActivity() {
         setQuestion()
         setTimer(this)
         startDate = LocalDateTime.now()
-        startQuizBinding.QuestionOption.setOnItemClickListener { parent, view, position, id ->
-            optionSelect(position, view)
-        }
 
         startQuizBinding.btnSubmit.setOnClickListener {
             questionSubmit()
@@ -98,15 +104,20 @@ class SPStartQuiz: AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        Log.d("in start quiz request code is", requestCode.toString())
         if(resultCode == RESULT_OK){
-            val intent = Intent()
-            val questionRecordList = data?.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
-            val quizRecord = data?.getParcelableExtra<QuizRecord>("Key_quizRecord")
-            intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
-            intent.putExtra("Key_quizRecord", quizRecord)
-            setResult(RESULT_OK, intent)
-            finish()
+            if(data!=null) {
+                val questionRecordList =
+                    data.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
+                val quizRecord = data.getParcelableExtra<QuizRecord>("Key_quizRecord")
+                val intent = Intent()
+                intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
+                intent.putExtra("Key_quizRecord", quizRecord)
+                setResult(RESULT_OK, intent)
+                finish()
+            }else{
+                Log.d("data is null", "")
+            }
         }else if(resultCode == RESULT_CANCELED){
             setResult(RESULT_CANCELED)
             finish()
@@ -114,113 +125,156 @@ class SPStartQuiz: AppCompatActivity() {
     }
 
     private fun setQuestion(){
-        val optionNum = arrayOf("A", "B", "C", "D", "E", "F")
+        val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
         val currentQuestion = questionlist[currentAtQuestion]
         val optionlist : ArrayList<Option> = ArrayList()
-        if(currentQuestion.type=="MultipleChoiceS"){
-            startQuizBinding.QuestionType.text = "單選題"
-        }
-        else if(currentQuestion.type=="MultipleChoiceM"){
-            startQuizBinding.QuestionType.text = "多選題"
-        }
-        for(index in currentQuestion.options?.indices!!){
-            val tmpOption = Option(optionNum[index], currentQuestion.options!![index])
-            optionlist.add(tmpOption)
-        }
-        startQuizBinding.remainTime.text = duringTime.toString()
-        optionAdapter = OptionAdapter(this, optionlist)
-        optionAdapter.setInStartQuiz(true)
-        startQuizBinding.QuestionOption.adapter = optionAdapter
+
+
         startQuizBinding.questionDescription.text = currentQuestion.description
         startQuizBinding.QuestionImage.setImageResource(currentQuestion.image)
         currentSelection.clear()
         startQuizBinding.progressBar.progress = currentAtQuestion+1
         startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + "/" + questionlist.size.toString()
-    }
+        startQuizBinding.QuestionType.text = if(currentQuestion.type=="MultipleChoiceS") "單選題"
+                                        else if(currentQuestion.type=="MultipleChoiceM") "多選題"
+                                        else if(currentQuestion.type=="TrueOrFalse") "是非題"
+                                        else if(currentQuestion.type=="ShortAnswer") "簡答題"
+                                        else "填充題"
+        when(currentQuestion.type){
+            "MultipleChoiceS",  "MultipleChoiceM"->{
+                if(this.shortAnswerView!=null)
+                    shortAnswerView!!.visibility = View.GONE
+                if(this.trueOrFalseView!=null)
+                    trueOrFalseView!!.visibility = View.GONE
 
-    private fun optionSelect(position: Int, view: View){
-        val optionBackground: LinearLayout = view.findViewById(R.id.option_background)
-        val currentQuestion = questionlist[currentAtQuestion]
-        Log.d("in option select", "")
-
-        if(currentQuestion.type=="MultipleChoiceS") { //單選
-            if (currentSelection.isNotEmpty()) { // 有選項被選過
-                if(position==currentSelection[0]) {  // 被選過的選項又被選了一次
-                    selectedView[0].setBackgroundResource(0)
-                    currentSelection.clear()
-                    selectedView.clear()
+                for(index in currentQuestion.options?.indices!!){
+                    val tmpOption = Option(optionNum[index], currentQuestion.options!![index])
+                    optionlist.add(tmpOption)
                 }
-                else{                          // 被選的選項 和原來的不同
-                    currentSelection.clear()
-                    currentSelection.add(position)
-                    selectedView[0].setBackgroundResource(0)
-                    selectedView.clear()
-                    selectedView.add(optionBackground)
-                    optionBackground.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
-                }
+                startQuizBinding.QuestionOption.visibility = View.VISIBLE
+                optionAdapter = OptionAdapter(this, optionlist)
+                startQuizBinding.QuestionOption.adapter = optionAdapter
+                startQuizBinding.QuestionOption.layoutManager = LinearLayoutManager(this)
+                startQuizBinding.QuestionOption.setHasFixedSize(true)
+                optionAdapter.setSelectClickListener(object: OptionAdapter.SelectOnClickListener{
+                    override fun onclick(position: Int, holder: OptionAdapter.MyViewHolder) {
+                        optionSelect(position, holder, currentQuestion.type!!)
+                    }
+                })
             }
-            else{  //目前沒有選項被選過
-                currentSelection.add(position)
-                selectedView.add(optionBackground)
-                optionBackground.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
+            "TrueOrFalse" -> {
+                if(this.shortAnswerView!=null)
+                    shortAnswerView!!.visibility = View.GONE
+                startQuizBinding.QuestionOption.visibility = View.GONE
+                initTrueOrFalse()
+            }
+            "ShortAnswer" -> {
+                if(this.trueOrFalseView!=null)
+                    this.trueOrFalseView!!.visibility = View.GONE
+                startQuizBinding.QuestionOption.visibility = View.GONE
+                initShortAnswer()
             }
         }
-        else if(currentQuestion.type=="MultipleChoiceM"){   //多選
-            var selected = false
-            for(index in currentSelection.indices){
-                if(position == currentSelection[index]){    // 被選過的選項又被選了一次
-                    selectedView[index].setBackgroundResource(0)
-                    currentSelection.removeAt(index)
-                    selectedView.removeAt(index)
-                    selected = true
-                    break
+
+
+    }
+
+    private fun optionSelect(position: Int, holder: OptionAdapter.MyViewHolder, type: String){
+        val currentQuestion = questionlist[currentAtQuestion]
+
+        when(type){ //多選 單選
+            "MultipleChoiceS" -> {
+                if (currentSelection.isNotEmpty()) { // 有選項被選過
+                    if(position==currentSelection[0]) {  // 被選過的選項又被選了一次
+                        holder.optionBackground.setBackgroundResource(0)
+                        currentSelection.clear()
+                        selectedView.clear()
+                    }
+                    else{                          // 被選的選項 和原來的不同
+                        currentSelection.clear()
+                        currentSelection.add(position)
+                        selectedView[0].setBackgroundResource(0)
+                        selectedView.clear()
+                        selectedView.add(holder.optionBackground)
+                        holder.optionBackground.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
+                    }
+                }
+                else{  //目前沒有選項被選過
+                    currentSelection.add(position)
+                    selectedView.add(holder.optionBackground)
+                    holder.optionBackground.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
                 }
             }
-            if(!selected){  // 被選的選項沒被選過
-                currentSelection.add(position)
-                selectedView.add(optionBackground)
-                optionBackground.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
+            "MultipleChoiceM" -> {
+                if( currentSelection.contains(position) ){    // 被選過的選項又被選了一次
+                    holder.optionBackground.setBackgroundResource(0)
+                    currentSelection.remove(position)
+                    selectedView.remove(holder.optionBackground)
+                }else{           // 被選的選項沒被選過
+                    currentSelection.add(position)
+                    selectedView.add(holder.optionBackground)
+                    holder.optionBackground.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
+                }
             }
         }
     }
 
     private fun questionSubmit(){
         val currentQuestion = questionlist[currentAtQuestion]
-        val options = currentQuestion.options!!
-        if(currentSelection.isNotEmpty()){
-            if( currentAtQuestion < questionlist.size )
-            {
-                val tmpAdd = ArrayList<Int>(currentSelection.size)
-                for(i in currentSelection){
-                    tmpAdd.add(i)
-                }
-                answerRecords.add( tmpAdd )
+        val addUserAns = ArrayList<String>()
+        var readyToEnd = false
+        var gotoNext = true
+        Log.d("in question submit", "")
 
-                if(currentAtQuestion == questionlist.size-1)
-                {
-                    quizEnd()
-                }
-                else
-                {
+        when(currentQuestion.type){
+            "MultipleChoiceS", "MultipleChoiceM" -> {
+                val options = currentQuestion.options!!
+                if(currentSelection.isEmpty()) {
+                    Toast.makeText(this, "請至少選擇一個選項", Toast.LENGTH_LONG).show()
+                    gotoNext = false
+                }else{
+                    val tmpAdd = ArrayList<String>(currentSelection.size)
+                    for(i in currentSelection){
+                        tmpAdd.add(options[i])
+                    }
+                    answerRecords.add( tmpAdd )
                     selectedView.clear()
                     currentSelection.clear()
-                    currentAtQuestion += 1
-                    setQuestion()
-                    if (currentAtQuestion == questionlist.size - 1) {
-                        startQuizBinding.btnSubmit.text = "考試結束"
-                    }
+                }
+
+            }
+            "ShortAnswer" -> {
+                addUserAns.add(this.shortAnswerView?.text.toString())
+                Log.d("short ans is", this.shortAnswerView?.text.toString())
+                answerRecords.add( addUserAns )
+            }
+            "TrueOrFalse" -> {
+                if(trueOrFalseSelected) {
+                    addUserAns.add(currentAnswer)
+                    answerRecords.add(addUserAns)
+                }else{
+                    Toast.makeText(this, "請選擇一個選項", Toast.LENGTH_LONG).show()
+                    gotoNext = false
                 }
             }
         }
-        else{
-            Toast.makeText(this, "請至少選擇一個選項", Toast.LENGTH_LONG).show()
+
+        if(currentAtQuestion == questionlist.size-1) {
+            quizEnd()
+        }
+        else if(gotoNext){
+            currentAtQuestion += 1
+            setQuestion()
+            if (currentAtQuestion == questionlist.size - 1) {
+                startQuizBinding.btnSubmit.text = "考試結束"
+            }
         }
     }
 
     private fun quizEnd(){
-        val answerlist = ArrayList<ArrayList<Int>>()
+        val answerlist = ArrayList<ArrayList<String>>()
         for(item in answerRecords){
-            val first = ArrayList<Int>(item.size)
+            val first = ArrayList<String>(item.size)
             first.addAll(item)
             answerlist.add(first)
         }
@@ -274,5 +328,64 @@ class SPStartQuiz: AppCompatActivity() {
 
             }
         }.start()
+    }
+
+    private fun initShortAnswer(){
+        if(this.shortAnswerView!=null){
+            this.shortAnswerView!!.visibility = View.VISIBLE
+            Log.d("answerDesc is not null", "")
+        }else{
+            val textView = EditText(this)
+            val answerMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150f, resources.displayMetrics).toInt()
+            val descriptionMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130f, resources.displayMetrics).toInt()
+            val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+            val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7f, resources.displayMetrics)
+            val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics).toInt()
+            val marginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
+            val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            layoutParam.marginStart = margin
+            layoutParam.marginEnd = margin
+            layoutParam.topMargin = marginTop
+            layoutParam.bottomMargin = marginTop
+            textView.id = View.generateViewId()
+
+            textView.setBackgroundResource(R.drawable.textview_answer_border)
+            textView.setPadding(padding)
+            textView.layoutParams = layoutParam
+            textView.gravity = Gravity.CENTER_VERTICAL
+            textView.textSize = textSize
+            textView.minHeight = answerMinH
+            textView.hint = "輕觸輸入答案"
+            startQuizBinding.startQuizContainer.addView(textView, 4)
+            startQuizBinding.questionDescription.minHeight = descriptionMinH
+            val answerDescriptionView = startQuizBinding.root.findViewById<EditText>(textView.id)
+            this.shortAnswerView = answerDescriptionView
+        }
+
+    }
+
+    private fun initTrueOrFalse(){
+        trueOrFalseSelected = false
+        if(trueOrFalseView!=null){
+            this.trueOrFalseView!!.visibility = View.VISIBLE
+        }else{
+            val v:View =  layoutInflater.inflate(R.layout.option_trueorfalse, startQuizBinding.startQuizContainer, false)
+            val textViewTrue : TextView = v.findViewById(R.id.option_true)
+            val textViewFalse: TextView = v.findViewById(R.id.option_false)
+            textViewTrue.setOnClickListener {
+                textViewTrue.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
+                textViewFalse.setBackgroundResource(0)
+                this.currentAnswer = "true"
+                trueOrFalseSelected = true
+            }
+            textViewFalse.setOnClickListener {
+                textViewTrue.setBackgroundResource(0)
+                textViewFalse.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
+                this.currentAnswer  = "false"
+                trueOrFalseSelected = true
+            }
+            startQuizBinding.startQuizContainer.addView(v, 4)
+            this.trueOrFalseView = v
+        }
     }
 }

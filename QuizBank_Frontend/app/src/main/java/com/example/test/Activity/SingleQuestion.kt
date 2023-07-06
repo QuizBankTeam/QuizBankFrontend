@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.R
 import com.example.test.databinding.SingleQuestionBinding
 import com.example.test.model.Option
@@ -23,6 +24,7 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var questionBinding: SingleQuestionBinding
     private  var optionlist : ArrayList<Option> = ArrayList()
     private lateinit var questionTag : ArrayList<String>
+    private lateinit var answerOptions : ArrayList<String>
     private var questionTagTextView : ArrayList<TextView> = ArrayList()
     private lateinit var optionListStr: ArrayList<String>
     private var time_limit = -1
@@ -37,24 +39,33 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var answerOptionInt : ArrayList<Int>  //為正確答案的position
     private lateinit var quizType: String
     private lateinit var answerDescriptionView: TextView
+    private lateinit var optionAdapter: OptionAdapter
+    private var selectedView =  ArrayList<View>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         questionBinding = SingleQuestionBinding.inflate(layoutInflater)
         setContentView(questionBinding.root)
         init()
 
         if(questionType=="MultipleChoiceS" || questionType=="MultipleChoiceM"){
-            val adapter = OptionAdapter(this, optionlist)
-            questionBinding.QuestionOption.adapter = adapter
-            questionBinding.QuestionOption.post { //將正確選項的背景改為綠色
-                adapter.setAnswerOptions(answerOptionInt)
+            initMultiChoice()
+            questionBinding.QuestionOption.layoutManager = LinearLayoutManager(this)
+            questionBinding.QuestionOption.setHasFixedSize(true)
+            optionAdapter = OptionAdapter(this, optionlist)
+            questionBinding.QuestionOption.adapter = optionAdapter
+            optionAdapter.setInSingleQuestion(true)
+            questionBinding.QuestionOption.post{    //將正確選項的背景改為綠色
+                optionAdapter.setAnswerOptions(answerOptionInt)
+                optionAdapter.itemChange(answerOptionInt)
             }
 
+
             //修改選項
-            questionBinding.QuestionOption.setOnItemClickListener { parent, view, position, id ->
-                optionChange(position, adapter)
-            }
+            optionAdapter.setSelectClickListener(object: OptionAdapter.SelectOnClickListener{
+                override fun onclick(position: Int, holder: OptionAdapter.MyViewHolder) {
+                    optionChange(position, holder)
+                }
+            })
         }
         else if(questionType=="ShortAnswer"){
             questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
@@ -62,6 +73,7 @@ class SingleQuestion : AppCompatActivity(){
         }
         else if(questionType=="TrueOrFalse"){
             questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
+            initTrueOrFalse()
         }
         else{
             questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
@@ -125,7 +137,7 @@ class SingleQuestion : AppCompatActivity(){
     }
     private fun init()
     {
-        val optionNum = arrayOf("A", "B", "C", "D", "E", "F")
+
         val id = intent.getStringExtra("Key_id")
         val title = intent.getStringExtra("Key_title")
         val type = intent.getStringExtra("Key_type")
@@ -140,25 +152,9 @@ class SingleQuestion : AppCompatActivity(){
         val answerOption = intent.getStringArrayListExtra("Key_answerOptions")
         val answerDescription = intent.getStringExtra("Key_answerDescription")
         val quizType = intent.getStringExtra("Key_quizType")
-        val tmpAnswerOptionInt : ArrayList<Int> = ArrayList()
         optionlist.clear()
 
-        if (options != null) {
-            optionListStr = options
-            if(options.isNotEmpty())
-                for(i in options.indices) {
-                    val tmpOption = Option(optionNum[i], options[i])
-                    optionlist.add(tmpOption)
 
-                    //找到option中對的選項
-                    if (answerOption != null) {
-                        for(item in answerOption)
-                            if(options[i]==item)
-                                tmpAnswerOptionInt.add(i)
-                    }
-                }
-                answerOptionInt = tmpAnswerOptionInt
-        }
         if(description!=null)
             this.questionDescription = description
         if (type != null)
@@ -177,7 +173,11 @@ class SingleQuestion : AppCompatActivity(){
             this.questionCreatedDate = createdDate
         if (quizType != null)
             this.quizType = quizType
-
+        if (answerOption != null)
+            this.answerOptions = answerOption
+        if (options != null){
+            optionListStr = options
+        }
         if(quizType=="casual"){
             val timeLimit = intent.getIntExtra("Key_timeLimit",0).toString() + "秒"
             this.time_limit = intent.getIntExtra("Key_timeLimit",0)
@@ -270,21 +270,23 @@ class SingleQuestion : AppCompatActivity(){
         this.questionTag = tmpTag
     }
     private fun getOptions(){
-        val tmpAdapte: ListAdapter = questionBinding.QuestionOption.adapter
-        val count = tmpAdapte.count
         val tmpList: ArrayList<String> = ArrayList()
-        for (i in 0 until count)
-        {
-            val tmpOption  = tmpAdapte.getItem(i) as Option
-            tmpList.add(tmpOption.optionContent)
+        for (item in this.optionlist) {
+            tmpList.add(item.optionContent)
         }
         optionListStr = tmpList
     }
 
     private fun backBtn(){
         val intent = Intent()
-        val answerOptionListStr: ArrayList<String> = ArrayList()
-        val timeLimitInt = time_limit
+        var answerOptionListStr: ArrayList<String> = ArrayList()
+        if (this.questionType=="MultipleChoiceS" || this.questionType=="MultipleChoiceM"){
+            for (i in answerOptionInt)
+                answerOptionListStr.add(optionListStr[i])
+        }else if(this.questionType!="ShortAnswer"){
+            answerOptionListStr = answerOptions
+        }
+
         if(this.questionType=="MultipleChoiceS" && answerOptionInt.size>1){
             AlertDialog.Builder(this).setTitle("單選題只能有一個正確選項!").setPositiveButton("我懂", null).show()
         }else {
@@ -299,12 +301,10 @@ class SingleQuestion : AppCompatActivity(){
                 val name = "Key_tag$i"
                 intent.putExtra(name, this.questionTag[i])
             }
-            for (i in answerOptionInt) {
-                answerOptionListStr.add(optionListStr[i])
-            }
+
             intent.putStringArrayListExtra("Key_answerOptions", answerOptionListStr)
             if(quizType=="casual") {
-                intent.putExtra("Key_timeLimit", timeLimitInt)
+                intent.putExtra("Key_timeLimit", time_limit)
             }
             intent.putExtra("Key_tagNum", this.questionTag.size)
             setResult(RESULT_OK, intent)
@@ -312,11 +312,12 @@ class SingleQuestion : AppCompatActivity(){
         }
     }
 
-    private fun optionChange(position: Int, adapter: OptionAdapter) {
+    private fun optionChange(position: Int, holder: OptionAdapter.MyViewHolder) {
         val currentOption = optionlist[position]
         val builder = AlertDialog.Builder(this)
         val v:View =  layoutInflater.inflate(R.layout.edit_option, null)
-        var status = false //isOptionChanged?
+        val needToChange = ArrayList<Int>()
+        var status = false
         var answerOptionIndices = -1
         for(i in answerOptionInt.indices){
             if(answerOptionInt[i] == position) {
@@ -336,14 +337,16 @@ class SingleQuestion : AppCompatActivity(){
         ansSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             status = isChecked
         }
+
         dialog.setOnDismissListener {
             val tmpText =  editOption.text
             currentOption.optionContent = tmpText.toString()
-//                println("edit option text type is "+editOption.text::class.simpleName)
             if(status) {
                 if(answerOptionIndices==-1) { //原先不是正確答案 後來是
-                    if (this.questionType == "MultipleChoiceS")
+                    if (this.questionType == "MultipleChoiceS") {
+                        needToChange.add(answerOptionInt[0])
                         answerOptionInt.clear()
+                    }
                     answerOptionInt.add(position)
                 }
             }
@@ -351,12 +354,15 @@ class SingleQuestion : AppCompatActivity(){
                 if(answerOptionIndices!=-1) {  //原先是正確答案 後來不是
                     if(answerOptionInt.size > 1)
                         answerOptionInt.removeAt(answerOptionIndices)
-                    else
-                        AlertDialog.Builder(this).setTitle("至少要有一個正確選項!").setPositiveButton("我懂", null).show()
+                    else {
+                        AlertDialog.Builder(this).setTitle("至少要有一個正確選項!")
+                            .setPositiveButton("我懂", null).show()
+                    }
                 }
             }
-
-            adapter.setAnswerOptions(answerOptionInt)
+            optionAdapter.setAnswerOptions(answerOptionInt)
+            needToChange.add(position)
+            optionAdapter.itemChange(needToChange)
         }
     }
 
@@ -426,8 +432,6 @@ class SingleQuestion : AppCompatActivity(){
         val v:View =  layoutInflater.inflate(R.layout.edit_question_description, null)
         val editDescription: EditText = v.findViewById(R.id.edit_question_description)
         editDescription.setText(this.questionDescription)
-        editDescription.setTextColor(Color.WHITE)
-        editDescription.setBackgroundColor( ContextCompat.getColor(this, R.color.light_red1) )
         builder.setTitle("答案敘述")
         builder.setView(v)
         val dialog: AlertDialog = builder.create()
@@ -455,7 +459,7 @@ class SingleQuestion : AppCompatActivity(){
         val answerMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150f, resources.displayMetrics).toInt()
         val descriptionMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130f, resources.displayMetrics).toInt()
         val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
-        val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics)
+        val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7f, resources.displayMetrics)
         val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics).toInt()
         val marginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
         val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -469,17 +473,57 @@ class SingleQuestion : AppCompatActivity(){
         textView.setPadding(padding)
         textView.layoutParams = layoutParam
         textView.gravity = Gravity.CENTER_VERTICAL
-        textView.setTextColor(Color.WHITE)
         textView.textSize = textSize
         textView.minHeight = answerMinH
         textView.hint = "輕觸輸入答案敘述"
         questionBinding.questionContainer.addView(textView)
         questionBinding.questionDescription.minHeight = descriptionMinH
-        questionBinding.questionContainer.addView(textView)
         val answerDescriptionView = questionBinding.root.findViewById<TextView>(textView.id)
         this.answerDescriptionView = answerDescriptionView
         answerDescriptionView.setOnClickListener {
             answerDescriptionChange()
+        }
+    }
+
+    private fun initTrueOrFalse(){
+        val v:View =  layoutInflater.inflate(R.layout.option_trueorfalse, questionBinding.questionContainer, false)
+        val textViewTrue : TextView = v.findViewById(R.id.option_true)
+        val textViewFalse: TextView = v.findViewById(R.id.option_false)
+
+        if(answerOptions[0] == "true"){
+            textViewTrue.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
+        }else{
+            textViewFalse.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
+        }
+
+        textViewTrue.setOnClickListener {
+            textViewTrue.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
+            textViewFalse.setBackgroundColor( 0 )
+            answerOptions[0] = "true"
+        }
+        textViewFalse.setOnClickListener {
+            textViewTrue.setBackgroundColor( 0 )
+            textViewFalse.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
+            answerOptions[0] = "false"
+        }
+        questionBinding.questionContainer.addView(v)
+    }
+    private fun initMultiChoice(){
+        val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
+        val tmpAnswerOptionInt : ArrayList<Int> = ArrayList()
+
+        if (optionListStr.isNotEmpty()) {
+            for(i in optionListStr.indices) {
+                val tmpOption = Option(optionNum[i], optionListStr[i])
+                optionlist.add(tmpOption)
+
+                if (this.answerOptions.isNotEmpty()) {  //找到option中對的選項
+                    for(item in answerOptions)
+                        if(optionListStr[i]==item)
+                            tmpAnswerOptionInt.add(i)
+                }
+            }
+            answerOptionInt = tmpAnswerOptionInt
         }
     }
 }

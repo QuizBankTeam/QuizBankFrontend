@@ -75,6 +75,9 @@ class SingleQuizPage : Fragment() {
         val optionAns = arrayOf("C demo text 789").toCollection(ArrayList())
         val optionText2 = arrayOf("A cc text 123", "B ddd text 456", "C gggg text 789", "D asdfasdf text 101112").toCollection(ArrayList())
         val optionAns2 = arrayOf("B ddd text 456").toCollection(ArrayList())
+        val optionText3 = arrayOf("true", "false").toCollection(ArrayList())
+        val optionAns3 = arrayOf("true").toCollection(ArrayList())
+
         val tag = arrayOf("98年", "社會", "歷史").toCollection(ArrayList())
         val tag2 = arrayOf("94年", "地理").toCollection(ArrayList())
         val QuizMember = arrayOf("jl","wcy","yc","wt","cy").toCollection(ArrayList())
@@ -90,17 +93,19 @@ class SingleQuizPage : Fragment() {
             "MultipleChoiceM", "bank two", optionAns2, "an answer description2", "jacky",
             R.drawable.society9802, tag2, "2023/05/15")
 
+        var tmpQuestion3 = Question("123", "題目2", "3", "簡介2asdaffffffffffff2", optionText3,
+            "TrueOrFalse", "bank two", optionAns3, "an answer description2", "jacky",
+            R.drawable.society9802, tag2, "2023/05/15")
+        var tmpQuestion4 = Question("123", "題目2", "3", "簡介2asdaffffffffffff2", null,
+            "ShortAnswer", "bank two", null, "an answer description2", "jacky",
+            R.drawable.society9802, tag2, "2023/05/15")
+
         QuestionList.add(tmpQuestion)
         QuestionList.add(tmpQuestion2)
         QuestionList2.add(tmpQuestion)
-        QuestionList2.add(tmpQuestion)
         QuestionList2.add(tmpQuestion2)
-//        QuestionList2.add(tmpQuestion)
-//        QuestionList2.add(tmpQuestion2)
-//        QuestionList2.add(tmpQuestion)
-//        QuestionList2.add(tmpQuestion2)
-//        QuestionList2.add(tmpQuestion)
-//        QuestionList2.add(tmpQuestion)
+        QuestionList2.add(tmpQuestion3)
+        QuestionList2.add(tmpQuestion4)
         val tmpQuiz = Quiz("sp_quiz1", title, "single", "script", 600, null, "2023-01-05","not yet", null,QuestionList)
         val tmpQuiz2 = Quiz("sp_quiz1", "期中考", "single", "ready", 900, null, "2023-06-14","not yet", null,QuestionList2)
 

@@ -92,15 +92,17 @@ class SingleQuiz: AppCompatActivity() {
         {
             if(resultCode == RESULT_OK) {
                 val intent = Intent()
-                intent.setClass(this, SingleRecordPage::class.java)
+                intent.setClass(this, SPSingleRecord::class.java)
                 val questionRecordList = data?.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
                 val quizRecord = data?.getParcelableExtra<QuizRecord>("Key_quizRecord")
+
                 intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
                 intent.putParcelableArrayListExtra("Key_questions", questionlist)
                 intent.putExtra("Key_quizRecord", quizRecord)
                 startActivity(intent)
             }
             else if(resultCode == RESULT_CANCELED){
+                finish()
             }
         }
     }

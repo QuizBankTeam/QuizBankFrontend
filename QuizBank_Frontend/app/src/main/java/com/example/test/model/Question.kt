@@ -9,7 +9,7 @@ data class Question(
     var number: String?,//題號
     var description: String?,
     var options: ArrayList<String>?,
-    var type: String?, // Filling, MultipleChoiceS, ShortAnswer, MultipleChoiceM, TrueOrFalse
+    var type: String?, // Filling, MultipleChoiceS, ShortAnswer, MultipleChoiceM, TrueOrFalse: true, false
     var questionBank: String?, //questionBank id
     var answerOption: ArrayList<String>?,
     var answerDescription: String?,

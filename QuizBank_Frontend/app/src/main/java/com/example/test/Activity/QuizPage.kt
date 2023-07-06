@@ -1,5 +1,6 @@
 package com.example.test.Activity
 
+import android.content.Intent
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 
@@ -20,6 +21,12 @@ class QuizPage: AppCompatActivity() {
         quizPageBinding = QuizPageBinding.inflate(layoutInflater)
         setContentView(quizPageBinding.root)
 
+        quizPageBinding.quizAdd.setOnClickListener {  }
+        quizPageBinding.quizRecord.setOnClickListener {
+            val intent = Intent()
+            intent.setClass(this, RecordPage::class.java)
+            startActivity(intent)
+        }
         fragmentAdapter = QuizPageAdapter(supportFragmentManager, lifecycle)
         quizPageBinding.selectQuizMode.addTab(quizPageBinding.selectQuizMode.newTab().setText("單人"))
         quizPageBinding.selectQuizMode.addTab(quizPageBinding.selectQuizMode.newTab().setText("多人"))

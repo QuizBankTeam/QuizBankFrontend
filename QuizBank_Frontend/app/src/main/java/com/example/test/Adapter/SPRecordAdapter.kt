@@ -13,7 +13,7 @@ import com.example.test.model.QuizRecord
 class SPRecordAdapter(private val context: Activity, private val recordList: ArrayList<QuizRecord>):
     RecyclerView.Adapter<SPQuizAdapter.MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SPQuizAdapter.MyViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.sp_record_row, null)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.sp_record_row, parent, false)
         return SPQuizAdapter.MyViewHolder(itemView)
     }
 

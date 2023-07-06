@@ -23,15 +23,15 @@ import java.util.UUID
 class SPQuizFinish : AppCompatActivity(){
     private lateinit var finishQuizBinding: SpQuizFinishBinding
     private lateinit var questionlist : ArrayList<Question>
-    private lateinit var answerRecords: ArrayList< ArrayList<Int> >
+    private lateinit var answerRecords: ArrayList< ArrayList<String> >
     private lateinit var quizId: String
     private lateinit var quizType: String
     private lateinit var quizTitle: String
     private lateinit var startDate: String
     private lateinit var endDate: String
-    private lateinit var questionRecordList: ArrayList<QuestionRecord>
+    private  var questionRecordList = ArrayList<QuestionRecord>()
     private lateinit var quizRecord: QuizRecord
-    private var questionSize = ""
+    private var quizSize = ""
     private var duringTime: Int = 0
     private var correctNum: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +41,9 @@ class SPQuizFinish : AppCompatActivity(){
 
         init()
         makeRecords()
-        questionSize = questionlist.size.toString()
-        finishQuizBinding.correctNum.text = "你答對了 " + correctNum.toString()+ " / " + questionSize + " 題 !"
-        //確定答案是否正確
-        for(index in questionlist.indices){
-            if(questionlist[index].type=="ShortAnswer"){
-                setAnswerQuestion(questionlist[index], index)
-            }
-        }
+        quizSize = questionlist.size.toString()
+        finishQuizBinding.correctNum.text = "你答對了 " + correctNum.toString()+ " / " + quizSize + " 題 !"
+
 
         finishQuizBinding.gotoHome.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -64,11 +59,17 @@ class SPQuizFinish : AppCompatActivity(){
 
         //傳送questionRecordList quizRecord
         finishQuizBinding.gotoRecord.setOnClickListener {
-            val intent = Intent()
-            intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
-            intent.putExtra("Key_quizRecord", quizRecord)
-            setResult(RESULT_OK)
-            finish()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("確定保存考試紀錄?")
+            builder.setPositiveButton("確定") { dialog, which ->
+                val intent = Intent()
+                intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
+                intent.putExtra("Key_quizRecord", quizRecord)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+            builder.setNegativeButton("取消", null)
+            builder.show()
         }
     }
 
@@ -79,7 +80,7 @@ class SPQuizFinish : AppCompatActivity(){
 
     private fun init(){
         val questions = intent.getParcelableArrayListExtra<Question>("Key_questions")
-        val answerRecords  = intent.getSerializableExtra("Key_answerRecords") as ArrayList<ArrayList<Int>>?
+        val answerRecords  = intent.getSerializableExtra("Key_answerRecords") as ArrayList<ArrayList<String>>?
         val id = intent.getStringExtra("Key_id")
         val title = intent.getStringExtra("Key_title")
         val startDate = intent.getStringExtra("Key_startDate")
@@ -113,33 +114,42 @@ class SPQuizFinish : AppCompatActivity(){
         val quizRecordId = UUID.randomUUID().toString()
         val questionRecordId = ArrayList<String>()
         var totalScore : Int = 0
+        var hasShorAns = false
+        for(index in answerRecords.indices){
+            for(item1 in answerRecords[index]){
+                Log.d("確認答案", index.toString()+item1)
+            }
+        }
+        Log.d("answer record size is", answerRecords.size.toString())
         for(index in questionlist.indices){
             val tmpId = UUID.randomUUID().toString()
             val tmpAns = ArrayList<String>()
             var isCorrect = false
+            Log.d("index is", index.toString())
             questionRecordId.add(tmpId)
             if(index < answerRecords.size){
                 for(item in answerRecords[index]){
-                    tmpAns.add(questionlist[index].options?.get(item) ?: "nothing")
+                    tmpAns.add(item)
                 }
             }
             else{
                 tmpAns.add("user answer nothing")
+                Log.d("in wtf zone", "index >= answerRecords.size")
             }
-            isCorrect = tmpAns.toSet() == questionlist[index].answerOption!!.toSet()
+
+            if(questionlist[index].type=="ShortAnswer") {
+                hasShorAns = true
+                setAnswerQuestion(questionlist[index], index, tmpAns[0]) //確定答案是否正確
+            }
+            else {
+                isCorrect = tmpAns.toSet() == questionlist[index].answerOption!!.toSet()
+            }
+            if(!hasShorAns){
+                finishQuizBinding.decideShortAns.text = ""
+            }
             totalScore = if(isCorrect) totalScore+1 else totalScore
-            Log.d(index.toString(), "is correct is"+isCorrect.toString())
-//            isCorrect = tmpAns.size == answerRecords.size
-//            if(isCorrect){
-//                for(item in questionlist[index].answerOption!!){
-//                    if(item in tmpAns)
-//                        isCorrect = true
-//                    else {
-//                        isCorrect = false
-//                        break
-//                    }
-//                }
-//            }
+
+//            Log.d(index.toString(), "is correct is"+isCorrect.toString())
             val tmpQuestionRecord = QuestionRecord(tmpId, "jacky", tmpAns, isCorrect, startDate, questionlist[index].id!!, quizRecordId)
             questionRecordList.add(tmpQuestionRecord)
         }
@@ -149,31 +159,32 @@ class SPQuizFinish : AppCompatActivity(){
         this.quizRecord = tmpQuizRecord
     }
 
-    private fun setAnswerQuestion(question: Question, index: Int){
-        val v: View = layoutInflater.inflate(R.layout.decide_iscorrect, null)
+    private fun setAnswerQuestion(question: Question, index: Int, userAns: String){
+        val v: View = layoutInflater.inflate(R.layout.decide_iscorrect, finishQuizBinding.questionContainer, false)
         val answerDesc: TextView = v.findViewById(R.id.answer_description)
         val questionDesc: TextView = v.findViewById(R.id.question_description)
         val answerSwitch: SwitchCompat = v.findViewById(R.id.answer_switch)
         val isCorrectTag: TextView = v.findViewById(R.id.answer_isCorrect)
         val questionNum:  TextView = v.findViewById(R.id.question_number)
 
-        answerDesc.text = question.answerDescription
+        answerDesc.text = userAns
         questionDesc.text = question.description
-        questionNum.text = question.number
+        questionNum.text = "第" + question.number + "題"
         answerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
                 isCorrectTag.text = "正確"
                 isCorrectTag.setBackgroundColor(ContextCompat.getColor(this, R.color.answer_correct))
                 questionRecordList[index].correct = true
                 correctNum++
-                finishQuizBinding.correctNum.text = "你答對了 " +correctNum.toString()+ " / " +questionSize+ " 題 !"
+                finishQuizBinding.correctNum.text = "你答對了 " +correctNum.toString()+ " / " +quizSize+ " 題 !"
             }else{
                 isCorrectTag.text = "錯誤"
                 isCorrectTag.setBackgroundColor(ContextCompat.getColor(this, R.color.answer_wrong))
                 questionRecordList[index].correct = false
                 correctNum--
-                finishQuizBinding.correctNum.text = "你答對了 " +correctNum.toString()+ " / " +questionSize+ " 題 !"
+                finishQuizBinding.correctNum.text = "你答對了 " +correctNum.toString()+ " / " +quizSize+ " 題 !"
             }
         }
+        finishQuizBinding.questionContainer.addView(v)
     }
 }

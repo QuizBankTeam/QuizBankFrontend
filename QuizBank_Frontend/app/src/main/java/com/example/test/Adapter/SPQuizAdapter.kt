@@ -20,7 +20,7 @@ class SPQuizAdapter(private val context: Activity, private val questionList: Arr
 {
     private var onClickListener: OnClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.sp_quiz_row, null)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.sp_quiz_row, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -74,7 +74,6 @@ class SPQuizAdapter(private val context: Activity, private val questionList: Arr
             intent.putExtra("Key_endDate", currentItem.endDate)
             intent.putParcelableArrayListExtra("Key_questions", currentItem.questions)
             context.startActivityForResult(intent, position)
-            Log.d("in quizAdapter position=", position.toString())
         }
     }
 

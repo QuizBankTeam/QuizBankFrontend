@@ -22,7 +22,7 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         quizType=type
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.question_row, null)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.question_row, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -36,13 +36,12 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         holder.questionImage.setImageResource(currentItem.image)
         holder.questionProvider.text = "提供者: " + currentItem.provider
         holder.questionTitle.text = currentItem.title
+        holder.questionType.text = if(currentItem.type=="MultipleChoiceS") "單選"
+                                else if(currentItem.type=="MultipleChoiceM") "多選"
+                                else if(currentItem.type=="TrueOrFalse") "是非"
+                                else if(currentItem.type=="ShortAnswer") "簡答"
+                                else "填充"
 
-        if(currentItem.type == "MultipleChoiceS") {
-            holder.questionType.text = "單選"
-        }
-        else if(currentItem.type == "MultipleChoiceM") {
-            holder.questionType.text = "多選"
-        }
         if(currentItem.tag!=null)
         {
             if(currentItem.tag!!.size==0) {

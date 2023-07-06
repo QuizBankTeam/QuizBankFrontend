@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
+        android:id="@+id/start_quiz_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -121,23 +122,37 @@
             android:textSize="14dp" />
 
 
-        <ListView
-            android:id="@+id/QuestionOption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            tools:listitem="@layout/option_row"/>
-        <Button
-            android:id="@+id/btn_submit"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/option_scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="23dp"
-            android:background="@color/question_submit"
-            android:text="下一題"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/QuestionOption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:overScrollMode="never"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"/>
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="23dp"
+                    android:background="@color/question_submit"
+                    android:layout_below="@id/QuestionOption"
+                    android:text="下一題"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

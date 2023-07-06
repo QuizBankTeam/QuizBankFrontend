@@ -2,68 +2,140 @@ package com.example.test.Adapter
 
 import android.app.Activity
 import android.graphics.Color
+import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
+import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
 import com.example.test.model.Option
 
 class OptionAdapter(private val context: Activity, private  val arrayList: ArrayList<Option>) :
-    ArrayAdapter<Option>(context, R.layout.option_row, arrayList) {
-    private var answerOptions : ArrayList<Int> = ArrayList()
-    private var inStartQuiz: Boolean = false
-    private var default: Boolean = true
+    RecyclerView.Adapter<OptionAdapter.MyViewHolder>() {
+
+    private var answerOptions: ArrayList<Int> = ArrayList()
+    private var inSingleQuestion: Boolean = false
+    private var inRecord: Boolean = false
     private var selectOption: ArrayList<Int> = ArrayList()
-    fun setAnswerOptions(answer: ArrayList<Int>)
-    {
-        answerOptions = answer
-        notifyDataSetChanged()
-    }
-    fun setSelectOptions(select: ArrayList<Int>){
-        selectOption = select
-        notifyDataSetChanged()
-    }
-    fun setInStartQuiz(inQuiz: Boolean){
-        inStartQuiz = inQuiz
+    private var answerIsCorrect: Boolean = false
+    private var selectOnClickListener: SelectOnClickListener? = null
+
+    interface SelectOnClickListener {
+        fun onclick(position: Int, holder: MyViewHolder)
     }
 
+    fun setSelectClickListener(selectOnClickListener: SelectOnClickListener) {
+        this.selectOnClickListener = selectOnClickListener
+    }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater : LayoutInflater = LayoutInflater.from(context)
-        val view : View = inflater.inflate(R.layout.option_row, null)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = LayoutInflater.from(context).inflate(R.layout.option_row, parent,false)
+        return MyViewHolder(itemView)
+    }
 
-        val optionnum : TextView = view.findViewById(R.id.optionNum)
-        val optioncontent : TextView = view.findViewById(R.id.optionContent)
-
-        optionnum.text = arrayList[position].optionNum
-        optioncontent.text = arrayList[position].optionContent
-        if(!inStartQuiz){
-            for (item in answerOptions)
-            {
-                if(item==position)
-                {
-                    val optionBackground : LinearLayout = view.findViewById(R.id.option_background)
-                    optionBackground.setBackgroundColor(Color.parseColor("#c6fa73"))
-                }
-            }
-            for(item in selectOption)
-            {
-                for (item2 in answerOptions)
-                {
-                    if(item!=item2)
-                    {
-                        val optionBackground : LinearLayout = view.findViewById(R.id.option_background)
-                        optionBackground.setBackgroundColor(Color.parseColor("##CE0000"))
-                    }
-                }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val currentItem = arrayList[position]
+        holder.optionContent.text = currentItem.optionContent
+        holder.optionNum.text = currentItem.optionNum
+        holder.itemView.setOnClickListener {
+            if (this.selectOnClickListener != null) {
+                selectOnClickListener!!.onclick(position, holder)
             }
         }
-
-        return view
+        if (inSingleQuestion) {
+            adaptSingleQuestion(holder, position)
+        } else if (inRecord) {
+            adaptInRecord(holder, position)
+        }
     }
 
+
+    override fun getItemCount(): Int {
+        return arrayList.size
+    }
+
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val optionBackground = itemView.findViewById<LinearLayout>(R.id.option_background)
+        val optionNum = itemView.findViewById<TextView>(R.id.optionNum)
+        val optionContent = itemView.findViewById<TextView>(R.id.optionContent)
+    }
+
+    private fun adaptSingleQuestion(holder: MyViewHolder, position: Int) {
+        if(position in answerOptions){
+            holder.optionBackground.setBackgroundColor(Color.parseColor("#c6fa73"))
+        }else{
+            holder.optionBackground.setBackgroundColor(0)
+        }
+    }
+
+    private fun adaptInRecord(holder: MyViewHolder, position: Int) {
+        for (item in answerOptions) {
+            if (item == position) {
+                holder.optionNum.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_check, 0, 0, 0)
+                holder.optionNum.compoundDrawablePadding = 0
+            }
+        }
+        for (item in selectOption) {
+            if (item == position) {
+                holder.optionContent.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.baseline_edit,
+                    0
+                )
+            }
+        }
+        if (position == arrayList.size - 1) {
+            holder.optionBackground.removeView(holder.optionNum)
+//            holder.optionBackground.setPadding(20, 10, 20, 10)
+            holder.optionContent.gravity = Gravity.CENTER
+            if (answerIsCorrect) {
+                holder.optionBackground.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.answer_correct
+                    )
+                )
+            } else {
+                holder.optionBackground.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.light_red2
+                    )
+                )
+            }
+        }
+    }
+
+    fun setInSingleQuestion(inQuiz: Boolean) {
+        inSingleQuestion = inQuiz
+    }
+
+    fun setRecord(
+        inRecord: Boolean,
+        answerIsCorrect: Boolean,
+        selectOptions: ArrayList<Int>,
+        answerOptions: ArrayList<Int>
+    ) {
+        this.selectOption = selectOptions
+        this.inRecord = inRecord
+        this.answerIsCorrect = answerIsCorrect
+        this.answerOptions = answerOptions
+    }
+
+    fun setAnswerOptions(answerOptions: ArrayList<Int>) {
+        this.answerOptions = answerOptions
+    }
+
+    fun itemChange(change: ArrayList<Int>){
+        for(index in change){
+            notifyItemChanged(index)
+        }
+    }
 }
