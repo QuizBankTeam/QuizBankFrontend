@@ -3,6 +3,7 @@ package com.example.quizbanktest.adapters
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +13,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.activity.TagActivity
 import com.example.quizbanktest.models.OcrResultModel
-import com.example.quizbanktest.utils.ConstantsServiceFunction
+import com.example.quizbanktest.utils.ConstantsDialogFunction
+import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
 
 
 class OcrResultViewAdapter(
+    private val activity: BaseActivity,
     private val context: Context,
     private var list: ArrayList<OcrResultModel>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
@@ -51,20 +55,20 @@ class OcrResultViewAdapter(
                     onClickListener!!.onClick(position, model)
                 }
             }
-            var scannerText : EditText = holder.itemView.findViewById(R.id.iv_scanner_text)
+            val scannerText : EditText = holder.itemView.findViewById(R.id.iv_scanner_text)
             scannerText.setText(ConstantsOcrResults.getQuestions()[position].description,TextView.BufferType.EDITABLE)
-            var chooseTagButton = holder.itemView.findViewById<LinearLayout>(R.id.chooseTag)
+            val chooseTagButton = holder.itemView.findViewById<LinearLayout>(R.id.chooseTag)
             chooseTagButton.setOnClickListener{
                 val intent = Intent(context, TagActivity::class.java)
                 context.startActivity(intent)
             }
-            var questionBankType : Spinner = holder.itemView.findViewById(R.id.spinner_question_bank)
-            var bankTypeList : ArrayList<String> = ArrayList()
-            var hintType : String = "請選擇將題目新增至下列題庫"
+            val questionBankType : Spinner = holder.itemView.findViewById(R.id.spinner_question_bank)
+            val bankTypeList : ArrayList<String> = ArrayList()
+            val hintType : String = "請選擇將題目新增至下列題庫"
             bankTypeList.add(hintType)
 
-            if(ConstantsServiceFunction.allBanksReturnResponse!=null){
-                for(i in ConstantsServiceFunction.allBanksReturnResponse!!.questionBanks) bankTypeList.add(i.title)
+            if(ConstantsAccountServiceFunction.allBanksReturnResponse!=null){
+                for(i in ConstantsAccountServiceFunction.allBanksReturnResponse!!.questionBanks) bankTypeList.add(i.title)
             }
 
 
@@ -72,7 +76,7 @@ class OcrResultViewAdapter(
                 ArrayAdapter(context, android.R.layout.simple_spinner_item, bankTypeList)
 
             //btn_scan_submit
-            var btnAddAnswer : TextView = holder.itemView.findViewById(R.id.btn_add_answer)
+            val btnAddAnswer : TextView = holder.itemView.findViewById(R.id.btn_add_answer)
             btnAddAnswer.setOnClickListener {
                 Toast.makeText(context,"the add button press",Toast.LENGTH_SHORT).show()
                 val answerDialog = Dialog(context)
@@ -85,11 +89,25 @@ class OcrResultViewAdapter(
                 val answerChoosePhoto: TextView = answerDialog.findViewById(R.id.answer_choose_photo)!! //選擇圖片 iv_answer_image用於顯示圖片
                 answerChoosePhoto.setOnClickListener(View.OnClickListener {
                     //TODO
-                    Toast.makeText(context," answerChoosePhoto",Toast.LENGTH_SHORT).show()
+                    //iv_answer_image
+                    var selectBitmap : Bitmap?= null
+                    ConstantsDialogFunction.dialogChoosePhotoFromGallery(activity) {
+                        bitmap ->
+                            if(bitmap!=null){
+                                selectBitmap = bitmap
+                                Toast.makeText(context," success choose photo",Toast.LENGTH_SHORT).show()
+                                val showImage : ImageView = answerDialog.findViewById(R.id.iv_answer_image)
+                                showImage.setImageBitmap(selectBitmap)
+                            }else{
+                                Toast.makeText(context," choosePhoto has error",Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                    Log.e("in answer pic",selectBitmap.toString())
+
                 })
                 val answerCancel : TextView = answerDialog.findViewById(R.id.answer_cancel)
                 answerCancel.setOnClickListener(View.OnClickListener {
-                    var builder =AlertDialog.Builder(context)
+                    val builder =AlertDialog.Builder(context)
                         .setMessage(" 您確定要取消所有目前的新增結果嗎 ")
                         .setTitle("取消新增答案")
                         .setIcon(R.drawable.baseline_warning_amber_24)
@@ -114,7 +132,7 @@ class OcrResultViewAdapter(
                 answerDialog.show()
             }
 
-            var btnScanPhoto : TextView  = holder.itemView.findViewById(R.id.btn_scan_photo)
+            val btnScanPhoto : TextView  = holder.itemView.findViewById(R.id.btn_scan_photo)
             btnScanPhoto.setOnClickListener {
                 Toast.makeText(context,"the add image button press",Toast.LENGTH_SHORT).show()
                 val imageDialog = Dialog(context)
@@ -124,6 +142,19 @@ class OcrResultViewAdapter(
                 val createPhoto: TextView = imageDialog.findViewById(R.id.answer_choose_image)!! //新增圖片(最多三張) iv_answer_image0 iv_answer_image1 iv_answer_image2
                 createPhoto.setOnClickListener(View.OnClickListener {
                     //TODO
+                    var selectBitmap : Bitmap?= null
+                    ConstantsDialogFunction.dialogChoosePhotoFromGallery(activity) {
+                            bitmap ->
+                        if(bitmap!=null){
+                            selectBitmap = bitmap
+                            Toast.makeText(context," success choose photo",Toast.LENGTH_SHORT).show()
+                            val showImage : ImageView = imageDialog.findViewById(R.id.iv_answer_image0)
+                            showImage.setImageBitmap(selectBitmap)
+                        }else{
+                            Toast.makeText(context," choosePhoto has error",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    Log.e("in answer pic",selectBitmap.toString())
                     Toast.makeText(context," answerChoosePhoto",Toast.LENGTH_SHORT).show()
                 })
                 val createImageCancel : TextView = imageDialog.findViewById(R.id.answer_image_cancel)
@@ -150,32 +181,7 @@ class OcrResultViewAdapter(
                 imageDialog.show()
             }
 
-            var btnScanSubmit : TextView  = holder.itemView.findViewById(R.id.btn_scan_submit)
-            btnScanSubmit.setOnClickListener {
-                //TODO 寫進資料庫
-                Toast.makeText(context,"the scan submit button press",Toast.LENGTH_SHORT).show()
-            }
-            var btnScanCancel : TextView  = holder.itemView.findViewById(R.id.btn_scan_cancel)
-            btnScanCancel.setOnClickListener {
-                //TODO 取消新增
-                Toast.makeText(context,"the scan cancel button press",Toast.LENGTH_SHORT).show()
-                var builder =AlertDialog.Builder(context)
-                    .setMessage(" 您確定要取消這次的掃描結果嗎 ")
-                    .setTitle("取消掃描結果")
-                    .setIcon(R.drawable.baseline_warning_amber_24)
-                builder.setPositiveButton("確認") { dialog, which ->
-                    ConstantsOcrResults.questionList.removeAt(position)
-                    val intent = Intent(context, ScannerTextWorkSpaceActivity::class.java)
-                    context.startActivity(intent)
-                }
-                builder.setNegativeButton("取消") { dialog, which ->
-
-                }
-                builder.show()
-            }
-
-
-            var addOptionsButton : ImageButton = holder.itemView.findViewById(R.id.add_options_button)
+            val addOptionsButton : ImageButton = holder.itemView.findViewById(R.id.add_options_button)
             addOptionsButton.setOnClickListener{
                 if(optionsNum == 10){
                     Toast.makeText(context,"已達最多的選項限制了喔",Toast.LENGTH_SHORT).show()
@@ -211,6 +217,30 @@ class OcrResultViewAdapter(
                 }
 
             }
+
+            val btnScanSubmit : TextView  = holder.itemView.findViewById(R.id.btn_scan_submit)
+            btnScanSubmit.setOnClickListener {
+                //TODO 寫進資料庫
+                Toast.makeText(context,"the scan submit button press",Toast.LENGTH_SHORT).show()
+            }
+            var btnScanCancel : TextView  = holder.itemView.findViewById(R.id.btn_scan_cancel)
+            btnScanCancel.setOnClickListener {
+                //TODO 取消新增
+                Toast.makeText(context,"the scan cancel button press",Toast.LENGTH_SHORT).show()
+                var builder =AlertDialog.Builder(context)
+                    .setMessage(" 您確定要取消這次的掃描結果嗎 ")
+                    .setTitle("取消掃描結果")
+                    .setIcon(R.drawable.baseline_warning_amber_24)
+                builder.setPositiveButton("確認") { dialog, which ->
+                    ConstantsOcrResults.questionList.removeAt(position)
+                    val intent = Intent(context, ScannerTextWorkSpaceActivity::class.java)
+                    context.startActivity(intent)
+                }
+                builder.setNegativeButton("取消") { dialog, which ->
+
+                }
+                builder.show()
+            }
         }
     }
 
@@ -218,8 +248,6 @@ class OcrResultViewAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
-
-
 
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener

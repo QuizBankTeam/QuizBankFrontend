@@ -1,104 +1,74 @@
 package com.example.quizbanktest.activity
 
 import android.Manifest
-import android.app.Activity
-import android.app.Dialog
-import android.content.ActivityNotFoundException
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
 import android.provider.MediaStore
-import android.provider.Settings
-import android.util.Base64
+
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
+
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+
 import androidx.lifecycle.lifecycleScope
-import com.example.quizbanktest.utils.ConstantsFunction
-import com.example.quizbanktest.utils.ConstantsServiceFunction
-import com.google.android.material.snackbar.Snackbar
+
+import com.example.quizbanktest.utils.*
+
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.yalantis.ucrop.UCrop
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
+
 import java.io.File
 import java.io.IOException
 
 open class BaseActivity : AppCompatActivity() {
 
     private val SAMPLE_CROPPED_IMG_NAME = "CroppedImage.jpg"
-    private var cameraPhotoUri : Uri?=null
-
-
-    val uCropActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            val uri = UCrop.getOutput(result.data!!)
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            val base64String = ConstantsFunction.encodeImage(bitmap)
-            var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
-            Log.e("ucrop size",size.toString())
-
-            Log.e("cropResult ",uri.toString())
-            // Use uri to get the cropped image
-        } else if (result.resultCode == UCrop.RESULT_ERROR) {
-            Log.e("cropResult","error")
-            val cropError = UCrop.getError(result.data!!)
-            // Handle the cropping error here
-        }
-    }
-
-
+    private var onImageSelected: ((Bitmap?) -> Unit)? = null
+    private var cameraPhotoUri : Uri ?=null
 
     val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult() ){
             result->
         Log.e("gallery result status",result.resultCode.toString())
         Toast.makeText(this, "gallery!", Toast.LENGTH_SHORT).show()
-        if(result.resultCode == AppCompatActivity.RESULT_OK &&result.data!=null){
+
+        if(result.resultCode == RESULT_OK &&result.data!=null){
+
             val contentURI = result.data!!.data
             try {
                 val selectedImageBitmap =
                     BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI!!))
+                if(selectedImageBitmap!=null){
+                    onImageSelected?.invoke(selectedImageBitmap)
+                }
 
-                var base64String = ConstantsFunction.encodeImage(selectedImageBitmap!!)
-                ConstantsServiceFunction.scanBase64ToOcrText(base64String!!,this)
-                var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
-                Log.e("openGalleryLauncher size",size.toString())
-//            binding?.cameraTest!!.setImageBitmap(selectedImageBitmap) Set the selected image from GALLERY to imageView.
+
             } catch (e: IOException) {
+                onImageSelected?.invoke(null)
                 e.printStackTrace()
                 Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
-
-
     val cameraLauncher: ActivityResultLauncher<Intent> =registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()){
             result->
-
-        if(result.resultCode == AppCompatActivity.RESULT_OK){
+        if(result.resultCode == RESULT_OK){
             val thumbnail: Bitmap? = BitmapFactory.decodeStream(getContentResolver().openInputStream(cameraPhotoUri!!))
             lifecycleScope.launch{
                 var returnString = saveBitmapFileForPicturesDir(thumbnail!!)
@@ -106,12 +76,12 @@ open class BaseActivity : AppCompatActivity() {
 
             }
             var base64String = ConstantsFunction.encodeImage(thumbnail!!)
-            ConstantsServiceFunction.scanBase64ToOcrText(base64String!!,this)
+            ConstantsScanFunction.scanBase64ToOcrText(base64String!!,this@BaseActivity)
 
             var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
 
 
-        }else if(result.resultCode == AppCompatActivity.RESULT_CANCELED){
+        }else if(result.resultCode == RESULT_CANCELED){
             Log.e("camera result status result cancel",result.resultCode.toString())
         }
 
@@ -123,13 +93,11 @@ open class BaseActivity : AppCompatActivity() {
         var result = ""
         if (mBitmap != null) {
             var base64URL = ConstantsFunction.encodeImage(mBitmap)
-
         }
         withContext(Dispatchers.IO) {
             if (mBitmap != null) {
                 try {
                     val fileName = "QuizBank_${idImage}.jpg"
-
                     val contentValues = ContentValues().apply {
                         put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
                         put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -146,6 +114,11 @@ open class BaseActivity : AppCompatActivity() {
 
                     runOnUiThread {
                         if (!result.isEmpty()) {
+                            Toast.makeText(
+                                this@BaseActivity,
+                                "success scan",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             Toast.makeText(
                                 this@BaseActivity,
@@ -163,35 +136,10 @@ open class BaseActivity : AppCompatActivity() {
         return result
     }
 
-    fun choosePhotoFromGallery() {
 
-        Dexter.withActivity(this)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    val galleryIntent = Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    )
-
-                    openGalleryLauncher.launch(galleryIntent)
-
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    showRationalDialogForPermissions()
-                }
-            }).onSameThread()
-            .check()
-    }
 
     var idImage = System.currentTimeMillis()/1000
+
     fun takePhotoFromCamera() {
 
         Dexter.withActivity(this)
@@ -216,14 +164,14 @@ open class BaseActivity : AppCompatActivity() {
                     permissions: MutableList<PermissionRequest>?,
                     token: PermissionToken?
                 ) {
-                    showRationalDialogForPermissions()
+                    ConstantsFunction.showRationalDialogForPermissions(this@BaseActivity)
                 }
             }).onSameThread()
             .check()
     }
 
     fun gotoBankActivity(){
-        ConstantsServiceFunction.getAllUserQuestionBanks(this)
+        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this)
         val intent = Intent(this,BankActivity::class.java)
         startActivity(intent)
     }
@@ -232,25 +180,45 @@ open class BaseActivity : AppCompatActivity() {
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
     }
-
-    fun showRationalDialogForPermissions() {
-        AlertDialog.Builder(this)
-            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
-            .setPositiveButton("GO TO SETTINGS"
-            ) { _, _ ->
-                try {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
+    fun choosePhotoFromGallery(onImageSelected: (Bitmap?) -> Unit) {
+        this.onImageSelected = onImageSelected
+        Dexter.withActivity(this)
+            .withPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    val galleryIntent = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
+                    openGalleryLauncher.launch(galleryIntent)
                 }
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    ConstantsFunction.showRationalDialogForPermissions(this@BaseActivity)
+                }
+            }).onSameThread()
+            .check()
+    }
+    fun  choosePhotoToOcr(){
+
+        choosePhotoFromGallery {
+            bitmap ->
+            if (bitmap != null) {
+
+                var base64String = ConstantsFunction.encodeImage(bitmap)
+                ConstantsScanFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity)
+                var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
+//                Log.e("openGalleryLauncher size", size.toString())
+            }else{
+                Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("Cancel") { dialog,
-                                           _ ->
-                dialog.dismiss()
-            }.show()
+        }
+
     }
 
 }

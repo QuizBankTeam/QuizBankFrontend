@@ -1,7 +1,6 @@
 package com.example.quizbanktest.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
@@ -11,7 +10,7 @@ import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.OcrResultViewAdapter
 import com.example.quizbanktest.models.OcrResultModel
-import com.example.quizbanktest.utils.ConstantsServiceFunction
+import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
 
 class ScannerTextWorkSpaceActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +47,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             ) { dialog, which ->
                 when (which) {
                     // Here we have create the methods for image selection from GALLERY
-                    0 -> choosePhotoFromGallery()
+                    0 -> choosePhotoToOcr()
                     1 -> takePhotoFromCamera()
                 }
             }
@@ -71,8 +70,8 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             builder.show()
 
         }
-        ConstantsServiceFunction.getCsrfToken(this@ScannerTextWorkSpaceActivity)
-        ConstantsServiceFunction.login(this@ScannerTextWorkSpaceActivity)
+        ConstantsAccountServiceFunction.getCsrfToken(this@ScannerTextWorkSpaceActivity)
+        ConstantsAccountServiceFunction.login(this@ScannerTextWorkSpaceActivity)
 
     }
 
@@ -82,7 +81,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             LinearLayoutManager.HORIZONTAL,false)
         ocrList?.setHasFixedSize(true)
 
-        val placesAdapter = OcrResultViewAdapter(this, ocrResultList)
+        val placesAdapter = OcrResultViewAdapter(this@ScannerTextWorkSpaceActivity,this, ocrResultList)
         ocrList?.adapter = placesAdapter
     }
 

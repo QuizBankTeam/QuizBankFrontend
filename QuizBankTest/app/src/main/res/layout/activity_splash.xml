@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/tv_app_icon"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_width="275dp"
+        android:layout_height="275dp"
         android:gravity="center"
         android:src="@drawable/splash_quizbank"
         />

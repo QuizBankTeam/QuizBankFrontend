@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.utils.ConstantsServiceFunction
+import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
 
 class IntroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,8 +13,8 @@ class IntroActivity : AppCompatActivity() {
         setContentView(R.layout.activity_intro)
         var signIn : TextView = findViewById(R.id.sign_in_intro)
         signIn.setOnClickListener {
-            ConstantsServiceFunction.getCsrfToken(this)
-            ConstantsServiceFunction.login(this)
+            ConstantsAccountServiceFunction.getCsrfToken(this)
+            ConstantsAccountServiceFunction.login(this)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

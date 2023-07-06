@@ -1,13 +1,12 @@
 package com.example.quizbanktest.activity
 
 import android.content.Intent
-import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
 import com.example.quizbanktest.R
-import com.example.quizbanktest.utils.ConstantsServiceFunction
+import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
 
 class SplashActivity : AppCompatActivity() {
 
@@ -24,9 +23,9 @@ class SplashActivity : AppCompatActivity() {
         )
 
         Handler().postDelayed({
-            ConstantsServiceFunction.getCsrfToken(this@SplashActivity)
+            ConstantsAccountServiceFunction.getCsrfToken(this@SplashActivity)
 
-            if (true) {
+            if (true) { //TODO 用於紀錄使用者是否登入過
                 // Start the Main Activity
                 startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             } else {

@@ -1,7 +1,13 @@
 package com.example.quizbanktest.utils
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.Settings
 import android.util.Base64
+import androidx.appcompat.app.AlertDialog
 import java.io.ByteArrayOutputStream
 
 
@@ -21,4 +27,23 @@ object ConstantsFunction {
         return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
+    fun showRationalDialogForPermissions(context: Context) {
+        AlertDialog.Builder(context)
+            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
+            .setPositiveButton("GO TO SETTINGS"
+            ) { _, _ ->
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", context.packageName, null)
+                    intent.data = uri
+                    context.startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+            .setNegativeButton("Cancel") { dialog,
+                                           _ ->
+                dialog.dismiss()
+            }.show()
+    }
 }

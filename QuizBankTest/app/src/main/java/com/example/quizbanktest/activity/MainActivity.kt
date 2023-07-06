@@ -1,59 +1,21 @@
 package com.example.quizbanktest.activity
-import android.Manifest
-import android.content.ActivityNotFoundException
-import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.Settings
-import android.util.Base64
-import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.RecentViewAdapter
 import com.example.quizbanktest.adapters.RecommendViewAdapter
 import com.example.quizbanktest.adapters.WrongViewAdapter
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
-
 import com.example.quizbanktest.utils.*
 import com.google.android.material.navigation.NavigationView
-
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-
-import com.squareup.okhttp.ResponseBody
-import com.yalantis.ucrop.UCrop
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit.Callback
-import retrofit.GsonConverterFactory
-import retrofit.Response
-import retrofit.Retrofit
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -93,7 +55,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             ) { dialog, which ->
                 when (which) {
                     // Here we have create the methods for image selection from GALLERY
-                    0 -> choosePhotoFromGallery()
+                    0 -> choosePhotoToOcr()
                     1 -> takePhotoFromCamera()
                 }
             }
@@ -102,11 +64,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         var settingButton : ImageButton = findViewById(R.id.setting)
         settingButton.setOnClickListener{
-            ConstantsServiceFunction.login(this@MainActivity)
+            ConstantsAccountServiceFunction.login(this@MainActivity)
 
         }
-        ConstantsServiceFunction.getCsrfToken(this@MainActivity)
-        ConstantsServiceFunction.login(this@MainActivity)
+        ConstantsAccountServiceFunction.getCsrfToken(this@MainActivity)
+        ConstantsAccountServiceFunction.login(this@MainActivity)
     }
 
 
@@ -158,7 +120,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
 
             R.id.nav_sign_out -> {
-               ConstantsServiceFunction.logout(this@MainActivity)
+               ConstantsAccountServiceFunction.logout(this@MainActivity)
             }
             R.id.imageEditor ->{
                 val intent = Intent(this,PaintActivity::class.java)
