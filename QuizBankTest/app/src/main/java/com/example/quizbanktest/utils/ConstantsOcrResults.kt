@@ -1,65 +1,39 @@
 package com.example.introducemyself.utils
 
-import com.example.quizbanktest.models.OcrResultModel
+import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
+import java.text.SimpleDateFormat
+
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 object ConstantsOcrResults {
-    val list1: MutableList<String> = ArrayList()
-    val list2: MutableList<String> = ArrayList()
-    val list3: MutableList<String> = ArrayList()
-    val optionList : ArrayList<String> = ArrayList()
+    var questionList = ArrayList<QuestionModel>()
+    var questionTypeList = ArrayList<String>()
 
-    val questionList = ArrayList<OcrResultModel>()
-    val answerOptionsList : ArrayList<String> = ArrayList()
+    fun setOcrResult(description : String){
+        if(questionTypeList.size == 0){
+            questionTypeList.add("Filling")
+            questionTypeList.add("MultipleChoiceS")
+            questionTypeList.add("ShortAnswer")
+            questionTypeList.add("TrueOrFalse")
+        }
 
-
-    var que1 = OcrResultModel(
-
-        "1",list1,list2,list3, "test",
-        "1234567890",
-        "This is a test.",
-        optionList,
-        "MultipleChoiceS",
-        "single",
-        "224171b8-cb82-4eac-9601-6bfd03869e5a",
-        answerOptionsList,
-        "This is test2.",
-        "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
-        "2023-7-01",
-        null,
-        null
-    )
-
-    fun getQuestions():ArrayList<OcrResultModel>{
-        if(optionList.size == 0){
-            optionList.add("test1")
-            optionList.add("test2")
-            optionList.add("test3")
-        }
-        if(list1.size == 0){
-            list1.add("Java")
-            list1.add("演算法")
-            list1.add("資料結構")
-        }
-        if(list2.size == 0){
-            list2.add("search tree")
-            list2.add("graph")
-            list2.add("b tree")
-            list2.add("b + tree")
-            list2.add("key")
-            list2.add("value")
-            list2.add("map")
-        }
-        if(list3.size==0){
-            list3.add("第三章")
-            list3.add("第四章")
-        }
-        if(answerOptionsList.size == 0){
-            answerOptionsList.add("test2")
-        }
-        if(questionList.size == 0){
-            questionList.add(que1)
-        }
-        return questionList
+        val currentDate = Date()
+        val formatter = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+        val formattedDate = formatter.format(currentDate)
+        val options : ArrayList<String> = ArrayList()
+        val answerOptions : ArrayList<String> = ArrayList()
+        val images : ArrayList<String> = ArrayList()
+        val tag : ArrayList<String> = ArrayList()
+        tag.add("123")
+        tag.add("cs design")
+        val ocrResult = QuestionModel(bankType = "single",options=options, answerOptions = answerOptions, image = images, tag = tag,description = description, createdDate = formattedDate.toString(), orginateFrom = ConstantsAccountServiceFunction.userAccount!!._id)
+        questionList.add(ocrResult)
     }
+    fun getOcrResult():ArrayList<QuestionModel>{
+        return  questionList
+    }
+
 }

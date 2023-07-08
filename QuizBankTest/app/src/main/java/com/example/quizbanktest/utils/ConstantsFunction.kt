@@ -1,18 +1,38 @@
 package com.example.quizbanktest.utils
 
+import android.Manifest
 import android.content.ActivityNotFoundException
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Base64
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import com.example.quizbanktest.activity.BaseActivity
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 object ConstantsFunction {
-
+    var idImage = System.currentTimeMillis()/1000
+    private val SAMPLE_CROPPED_IMG_NAME = "CroppedImage.jpg"
+    private var cameraPhotoUri : Uri ?=null
     fun estimateBase64SizeFromBase64String(base64String: String): Int {
         val base64Chars = base64String.length
         val originalSizeInBytes = (base64Chars * (3.0 / 4.0)).toInt()
@@ -46,4 +66,6 @@ object ConstantsFunction {
                 dialog.dismiss()
             }.show()
     }
+
+
 }

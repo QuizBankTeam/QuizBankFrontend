@@ -47,10 +47,10 @@
                     <EditText
                         android:id="@+id/iv_answer_option_text"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="120dp"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:hint="答案選項"
+                        android:hint="*選擇跟多選須填其餘可跳過*\n答案選項 ( *多選題 每個選項用空格區隔)\n ex: 答案為AB則填寫方式為 A B"
                         android:gravity="left"
                         android:inputType="textMultiLine"
                         android:scrollbars = "vertical"
@@ -64,7 +64,7 @@
                     <EditText
                         android:id="@+id/iv_answer_description_text"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="175dp"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginTop="10dp"

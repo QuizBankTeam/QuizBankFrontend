@@ -51,11 +51,11 @@
     </string-array>
 
     <string-array name="question_type">
-        <item>Filling</item>
-        <item>MultipleChoiceS</item>
-        <item>ShortAnswer</item>
-        <item>MultipleChoiceM</item>
-        <item>TrueOrFalse</item>
+        <item>填充題</item>
+        <item>單選題</item>
+        <item>簡答題</item>
+        <item>多選題</item>
+        <item>是非題</item>
 
     </string-array>
 

@@ -45,21 +45,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         var camera : ImageButton = findViewById(R.id.camera)
         camera?.setOnClickListener {
-//
-            val pictureDialog = AlertDialog.Builder(this)
-            pictureDialog.setTitle("Select Action")
-            val pictureDialogItems =
-                arrayOf("Select photo from gallery", "Capture photo from camera")
-            pictureDialog.setItems(
-                pictureDialogItems
-            ) { dialog, which ->
-                when (which) {
-                    // Here we have create the methods for image selection from GALLERY
-                    0 -> choosePhotoToOcr()
-                    1 -> takePhotoFromCamera()
-                }
-            }
-            pictureDialog.show()
+            cameraPick()
         }
 
         var settingButton : ImageButton = findViewById(R.id.setting)
@@ -69,6 +55,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
         ConstantsAccountServiceFunction.getCsrfToken(this@MainActivity)
         ConstantsAccountServiceFunction.login(this@MainActivity)
+
     }
 
 

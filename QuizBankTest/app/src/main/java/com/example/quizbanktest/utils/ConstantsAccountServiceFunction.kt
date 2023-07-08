@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.network.AccountService
 import com.example.quizbanktest.network.CsrfTokenService
+import com.google.gson.Gson
 import com.squareup.okhttp.Headers
 import com.squareup.okhttp.ResponseBody
 import retrofit.Callback
@@ -16,8 +17,8 @@ import retrofit.Response
 import retrofit.Retrofit
 
 object ConstantsAccountServiceFunction {
-    var allBanksReturnResponse :  AllQuestionBanksResponse ?= null
 
+    var userAccount : AccountResponse ? = null
     fun getCsrfToken(context: Context) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -85,8 +86,9 @@ object ConstantsAccountServiceFunction {
             ).show()
         }
     }
+
     fun login(context: Context) {
-        ConstantsAccountServiceFunction.getCsrfToken(context)
+        getCsrfToken(context)
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -120,11 +122,20 @@ object ConstantsAccountServiceFunction {
                                 accessToken = parts[0].substringAfter("access_token_cookie=").trim()
                             }
                         }
+                        val gson = Gson()
+                        val accountResponse = gson.fromJson(
+                            response.body().charStream(),
+                            LoginApiResponse::class.java
+                        )
+                        userAccount = accountResponse.user
+                        Log.e("account",accountResponse.toString())
                         Constants.accessToken = accessToken!!
                         Constants.refreshToken = refreshToken!!
                         var cookie: String = Constants.cookie + ";"
                         Constants.COOKIE =
                             cookie + "access_token_cookie=" + Constants.accessToken + ";" + "refresh_token_cookie=" + Constants.refreshToken
+
+
                     } else {
 
                         val sc = response.code()
@@ -223,7 +234,7 @@ object ConstantsAccountServiceFunction {
         }
 
     }
-    data class OCRResponse(val text: String)
-    data class QuestionBankResponse(val _id:String ,val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String)
-    data class AllQuestionBanksResponse(val questionBanks:ArrayList<QuestionBankResponse>)
+    data class LoginApiResponse(val message: String, val status: Int, val user: AccountResponse)
+    data class AccountResponse(val _id: String,val username:String,val email : String,val password:String, val preference : ArrayList<String>,val createdDate : String,val roles : ArrayList<Role>,val introduction : String,val avatar : String,val group : ArrayList<String>,val status:Boolean,val questionRecords:ArrayList<String>)
+    data class Role(val  entityId:String,val  permission: String)
 }

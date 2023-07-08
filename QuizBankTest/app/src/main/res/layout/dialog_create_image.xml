@@ -132,7 +132,7 @@
                             android:onClick="onClick"
                             android:clickable="true"
                             android:background="@drawable/add_image"
-                            android:text="新增答案 ✅" />
+                            android:text="上傳圖片 ✅" />
                     </LinearLayout>
 
                 </LinearLayout>

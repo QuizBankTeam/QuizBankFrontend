@@ -12,19 +12,19 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.introducemyself.utils.ConstantsOcrResults
+import com.example.introducemyself.utils.ConstantsTag
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.activity.TagActivity
-import com.example.quizbanktest.models.OcrResultModel
-import com.example.quizbanktest.utils.ConstantsDialogFunction
-import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
+import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.utils.*
 
 
 class OcrResultViewAdapter(
     private val activity: BaseActivity,
     private val context: Context,
-    private var list: ArrayList<OcrResultModel>
+    private var list: ArrayList<QuestionModel>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private var onClickListener: OnClickListener? = null
 
@@ -41,14 +41,26 @@ class OcrResultViewAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        var imageList : ArrayList<String> = ArrayList()
         var optionsNum : Int = 4
         val model = list[position]
+        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForBank).tags = ConstantsTag.getList1()
+        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags = ConstantsTag.getList2()
+        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags = ConstantsTag.getList3()
         if (holder is MyViewHolder) {
+            val option1 : EditText = holder.itemView.findViewById(R.id.question_option1)
+            val option2 : EditText = holder.itemView.findViewById(R.id.question_option2)
+            val option3 : EditText = holder.itemView.findViewById(R.id.question_option3)
+            val option4 : EditText = holder.itemView.findViewById(R.id.question_option4)
+            val option5 : EditText = holder.itemView.findViewById(R.id.question_option5)
+            val option6 : EditText = holder.itemView.findViewById(R.id.question_option6)
+            val option7 : EditText = holder.itemView.findViewById(R.id.question_option7)
+            val option8 : EditText = holder.itemView.findViewById(R.id.question_option8)
+            val option9 : EditText = holder.itemView.findViewById(R.id.question_option9)
+            val option10 : EditText = holder.itemView.findViewById(R.id.question_option10)
 
-            holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForBank).tags = model.bankList
-            holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags = model.questionList
-            holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags = model.rangList
-
+            ConstantsOcrResults.getOcrResult()[position].answerDescription = "目前為空"
             holder.itemView.setOnClickListener {
 
                 if (onClickListener != null) {
@@ -56,22 +68,22 @@ class OcrResultViewAdapter(
                 }
             }
             val scannerText : EditText = holder.itemView.findViewById(R.id.iv_scanner_text)
-            scannerText.setText(ConstantsOcrResults.getQuestions()[position].description,TextView.BufferType.EDITABLE)
+            scannerText.setText(ConstantsOcrResults.getOcrResult()[position].description,TextView.BufferType.EDITABLE)
+
             val chooseTagButton = holder.itemView.findViewById<LinearLayout>(R.id.chooseTag)
             chooseTagButton.setOnClickListener{
                 val intent = Intent(context, TagActivity::class.java)
                 context.startActivity(intent)
             }
+
+            //question bank type
             val questionBankType : Spinner = holder.itemView.findViewById(R.id.spinner_question_bank)
             val bankTypeList : ArrayList<String> = ArrayList()
             val hintType : String = "請選擇將題目新增至下列題庫"
             bankTypeList.add(hintType)
-
-            if(ConstantsAccountServiceFunction.allBanksReturnResponse!=null){
-                for(i in ConstantsAccountServiceFunction.allBanksReturnResponse!!.questionBanks) bankTypeList.add(i.title)
+            if(ConstantsQuestionBankFunction.allBanksReturnResponse!=null){
+                for(i in ConstantsQuestionBankFunction.allBanksReturnResponse!!.questionBanks) bankTypeList.add(i.title)
             }
-
-
             questionBankType.adapter =
                 ArrayAdapter(context, android.R.layout.simple_spinner_item, bankTypeList)
 
@@ -83,8 +95,8 @@ class OcrResultViewAdapter(
                 answerDialog.setContentView(R.layout.dialog_create_answer)
                 answerDialog.setTitle("新增答案")
 
-                val answerOption: EditText = answerDialog.findViewById(R.id.iv_answer_option_text)!! //題目描述
-                val answerDescription: EditText = answerDialog.findViewById(R.id.iv_answer_description_text)!! //題目描述
+                val answerOption: EditText = answerDialog.findViewById(R.id.iv_answer_option_text)!! //答案選項
+                val answerDescription: EditText = answerDialog.findViewById(R.id.iv_answer_description_text)!! //答案描述
 
                 val answerChoosePhoto: TextView = answerDialog.findViewById(R.id.answer_choose_photo)!! //選擇圖片 iv_answer_image用於顯示圖片
                 answerChoosePhoto.setOnClickListener(View.OnClickListener {
@@ -98,13 +110,19 @@ class OcrResultViewAdapter(
                                 Toast.makeText(context," success choose photo",Toast.LENGTH_SHORT).show()
                                 val showImage : ImageView = answerDialog.findViewById(R.id.iv_answer_image)
                                 showImage.setImageBitmap(selectBitmap)
+                                val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
+                                ConstantsOcrResults.questionList[position].image?.add(selectPhotoBase64String)
+                                imageList.add(selectPhotoBase64String)
+
                             }else{
                                 Toast.makeText(context," choosePhoto has error",Toast.LENGTH_SHORT).show()
                             }
                     }
+
                     Log.e("in answer pic",selectBitmap.toString())
 
                 })
+
                 val answerCancel : TextView = answerDialog.findViewById(R.id.answer_cancel)
                 answerCancel.setOnClickListener(View.OnClickListener {
                     val builder =AlertDialog.Builder(context)
@@ -125,7 +143,16 @@ class OcrResultViewAdapter(
                     //TODO 將結果記錄至常數字串
                     Toast.makeText(context," answerEnter"+answerDescription.text,Toast.LENGTH_SHORT).show()
                     btnAddAnswer.text = "查看答案   ✅"
-                    ConstantsOcrResults.questionList[position].answerDescription = answerDescription.text.toString()
+                    if(answerDescription.text.toString()!=""){
+                        ConstantsOcrResults.questionList[position].answerDescription = answerDescription.text.toString()
+                    }
+
+                    val str =  answerOption.text.toString()
+                    val answerOptionsList : ArrayList<String> = ArrayList(str.split(" "))
+
+                    ConstantsOcrResults.questionList[position].answerOptions = answerOptionsList
+
+
                     answerDialog.dismiss()
 
                 })
@@ -138,7 +165,7 @@ class OcrResultViewAdapter(
                 val imageDialog = Dialog(context)
                 imageDialog.setContentView(R.layout.dialog_create_image)
                 imageDialog.setTitle("新增圖片")
-
+                var imageCount : Int = 1 //TODO 先暫時做只有一張的
                 val createPhoto: TextView = imageDialog.findViewById(R.id.answer_choose_image)!! //新增圖片(最多三張) iv_answer_image0 iv_answer_image1 iv_answer_image2
                 createPhoto.setOnClickListener(View.OnClickListener {
                     //TODO
@@ -150,12 +177,16 @@ class OcrResultViewAdapter(
                             Toast.makeText(context," success choose photo",Toast.LENGTH_SHORT).show()
                             val showImage : ImageView = imageDialog.findViewById(R.id.iv_answer_image0)
                             showImage.setImageBitmap(selectBitmap)
+                            val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
+                            imageList.add(selectPhotoBase64String)
                         }else{
                             Toast.makeText(context," choosePhoto has error",Toast.LENGTH_SHORT).show()
                         }
                     }
                     Log.e("in answer pic",selectBitmap.toString())
                     Toast.makeText(context," answerChoosePhoto",Toast.LENGTH_SHORT).show()
+
+
                 })
                 val createImageCancel : TextView = imageDialog.findViewById(R.id.answer_image_cancel)
                 createImageCancel.setOnClickListener(View.OnClickListener {
@@ -190,29 +221,23 @@ class OcrResultViewAdapter(
                 }
                 when (optionsNum) {
                     5 -> {
-                        val optionsEdit : EditText = holder.itemView.findViewById(R.id.question_option5)
-                        optionsEdit.visibility = View.VISIBLE
+                        option5.visibility = View.VISIBLE
                         Log.e("options5","success")
                     }
                     6 -> {
-                        val optionsEdit : EditText = holder.itemView.findViewById(R.id.question_option6)
-                        optionsEdit.visibility = View.VISIBLE
+                        option6.visibility = View.VISIBLE
                     }
                     7-> {
-                        val optionsEdit : EditText = holder.itemView.findViewById(R.id.question_option7)
-                        optionsEdit.visibility = View.VISIBLE
+                        option7.visibility = View.VISIBLE
                     }
                     8-> {
-                        val optionsEdit : EditText = holder.itemView.findViewById(R.id.question_option8)
-                        optionsEdit.visibility = View.VISIBLE
+                        option8.visibility = View.VISIBLE
                     }
                     9-> {
-                        val optionsEdit : EditText = holder.itemView.findViewById(R.id.question_option9)
-                        optionsEdit.visibility = View.VISIBLE
+                        option9.visibility = View.VISIBLE
                     }
                     10-> {
-                        val optionsEdit : EditText = holder.itemView.findViewById(R.id.question_option10)
-                        optionsEdit.visibility = View.VISIBLE
+                        option10.visibility = View.VISIBLE
                     }
                 }
 
@@ -221,7 +246,82 @@ class OcrResultViewAdapter(
             val btnScanSubmit : TextView  = holder.itemView.findViewById(R.id.btn_scan_submit)
             btnScanSubmit.setOnClickListener {
                 //TODO 寫進資料庫
-                Toast.makeText(context,"the scan submit button press",Toast.LENGTH_SHORT).show()
+
+                val options: ArrayList<String> = ArrayList()
+                val editTextList = listOf(
+                    option1, option2, option3, option4, option5,
+                    option6, option7, option8, option9, option10
+                )
+                val bankIndex: Int = questionBankType.selectedItemPosition
+                var qb_id : String = ""
+                if(ConstantsQuestionBankFunction.allBanksReturnResponse?.questionBanks!=null){
+                    for(i in ConstantsQuestionBankFunction.allBanksReturnResponse?.questionBanks!!){
+                        if(i.title == bankTypeList[bankIndex]){
+                            qb_id = i._id
+                        }
+                    }
+                }
+
+                if(imageList.isNotEmpty()){
+                    ConstantsOcrResults.questionList[position].image = imageList
+                }
+                for (editText in editTextList) {
+                    val optionText = editText.text.toString().trim()
+                    if (optionText.isNotEmpty()) {
+                        options.add(optionText)
+                    }
+                }
+                val questionNum : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_num)
+                val title : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_title)
+
+                val questionTypeOption : Spinner = holder.itemView.findViewById(R.id.spinner_question_type)
+                val questionTypeIndex : Int = questionTypeOption.selectedItemPosition
+
+                ConstantsOcrResults.questionList[position].questionBank= qb_id
+                ConstantsOcrResults.questionList[position].description = scannerText.text.toString()
+                ConstantsOcrResults.questionList[position].title = title.text.toString()
+                ConstantsOcrResults.questionList[position].number = questionNum.text.toString()
+                ConstantsOcrResults.questionList[position].options = options
+                ConstantsOcrResults.questionList[position].questionType =ConstantsOcrResults.questionTypeList[questionTypeIndex]
+
+                Log.e("post question",ConstantsOcrResults.questionList[position].toString())
+
+                if(ConstantsOcrResults.questionList[position].answerDescription==""){
+                    ConstantsOcrResults.questionList[position].answerDescription = "目前沒有答案描述"
+                }
+
+                if(ConstantsOcrResults.questionList[position].title==""){
+                    val builder =AlertDialog.Builder(context)
+                        .setMessage(" 您的標題(title)不能為空喔 ")
+                        .setTitle("確認標題")
+                        .setIcon(R.drawable.baseline_warning_amber_24)
+                    builder.show()
+
+                }else if(ConstantsOcrResults.questionList[position].number==""){
+                    val builder =AlertDialog.Builder(context)
+                        .setMessage(" 您的題號(number)不能為空喔 ")
+                        .setTitle("確認題號")
+                        .setIcon(R.drawable.baseline_warning_amber_24)
+                    builder.show()
+                }else if((questionTypeIndex==1||questionTypeIndex==3||questionTypeIndex==4)&&ConstantsOcrResults.questionList[position].options?.size==0){
+                    val builder =AlertDialog.Builder(context)
+                        .setMessage(" 您的題目選項(options)不能為空喔 ")
+                        .setTitle("題目選項")
+                        .setIcon(R.drawable.baseline_warning_amber_24)
+                    builder.show()
+                    if(ConstantsOcrResults.questionList[position].answerOptions?.size == 0){
+                        ConstantsOcrResults.questionList[position].answerOptions?.add("目前答案選項為空")
+                    }
+                }else if(ConstantsOcrResults.questionList[position].questionBank=="") {
+                    val builder = AlertDialog.Builder(context)
+                        .setMessage(" 選擇放入的題庫不能為空如果目前無可選擇的請先新增題庫喔 ")
+                        .setTitle("選擇放入題庫")
+                        .setIcon(R.drawable.baseline_warning_amber_24)
+                    builder.show()
+                }else{
+                    ConstantsQuestionFunction.postQuestion( ConstantsOcrResults.questionList[position],activity)
+                }
+
             }
             var btnScanCancel : TextView  = holder.itemView.findViewById(R.id.btn_scan_cancel)
             btnScanCancel.setOnClickListener {
@@ -254,7 +354,7 @@ class OcrResultViewAdapter(
     }
 
     interface OnClickListener {
-        fun onClick(position: Int, model: OcrResultModel)
+        fun onClick(position: Int, model: QuestionModel)
     }
 
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)

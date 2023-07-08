@@ -12,6 +12,8 @@ import retrofit.Response
 import retrofit.Retrofit
 
 object ConstantsQuestionBankFunction {
+    var allBanksReturnResponse : AllQuestionBanksResponse?= null
+
     fun getAllUserQuestionBanks(context: Context) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -35,10 +37,10 @@ object ConstantsQuestionBankFunction {
                         val gson = Gson()
                         val allBanksResponse = gson.fromJson(
                             response.body().charStream(),
-                            ConstantsAccountServiceFunction.AllQuestionBanksResponse::class.java
+                            AllQuestionBanksResponse::class.java
                         )
                         Log.e("Response Result", allBanksResponse.questionBanks[0].toString())
-                        ConstantsAccountServiceFunction.allBanksReturnResponse = allBanksResponse
+                        allBanksReturnResponse = allBanksResponse
 
                     } else {
 
@@ -73,4 +75,6 @@ object ConstantsQuestionBankFunction {
             ).show()
         }
     }
+    data class QuestionBankResponse(val _id:String ,val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String)
+    data class AllQuestionBanksResponse(val questionBanks:ArrayList<QuestionBankResponse>)
 }

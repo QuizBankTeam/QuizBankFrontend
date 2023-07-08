@@ -1,6 +1,5 @@
 package com.example.quizbanktest.utils
 
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
@@ -42,11 +41,10 @@ object ConstantsScanFunction {
                         val gson = Gson()
                         val ocrResponse = gson.fromJson(
                             response.body().charStream(),
-                            ConstantsAccountServiceFunction.OCRResponse::class.java
+                            OCRResponse::class.java
                         )
                         Log.e("Response Result", ocrResponse.text)
-                        ConstantsOcrResults.que1.description = ocrResponse.text
-
+                        ConstantsOcrResults.setOcrResult(ocrResponse.text)
                         val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
                         intent.putExtra("ocrText", ocrResponse.text)
                         activity.startActivity(intent)
@@ -84,4 +82,6 @@ object ConstantsScanFunction {
             ).show()
         }
     }
+    data class OCRResponse(val text: String)
+
 }

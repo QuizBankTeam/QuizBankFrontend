@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/intro_background"
     tools:context=".activity.ScannerTextWorkSpaceActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_ocr_detail"
@@ -41,6 +42,42 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
+                <LinearLayout
+                    android:id="@+id/empty_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"
+                    android:background="@color/white"
+                    >
+                    <ImageView
+                        android:id="@+id/iv_answer_image"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="80dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_height="300dp"
+                        android:contentDescription="image"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/empty"/>
+                    <TextView
+                        android:layout_marginTop="100dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="#363A43"
+                        android:textSize="18sp"
+                        android:background="@drawable/white_border_shape_button_rounded"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:text="目前還未新增任何題目喔  ‼️"
+                        />
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/enter_buttons"
                     android:layout_width="match_parent"

@@ -22,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:background="@color/colorPrimary"
         android:theme="@style/CustomToolbarStyle"
-        app:title="Quiz Bank📑"
+        app:title="Bank Page 📑"
         app:titleTextAppearance="@style/CustomToolbarStyle"
         app:titleTextColor="@color/colorPrimaryDark" />
 

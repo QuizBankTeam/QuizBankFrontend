@@ -1,6 +1,7 @@
 package com.example.quizbanktest.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
 
@@ -38,23 +40,26 @@ class BankActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
+        var toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
+        setSupportActionBar(toolBar)
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            Log.e("in action bar","not null")
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
+            Log.e("nav","toolbar")
+        }
+        toolBar.setNavigationOnClickListener{
+
+           val intent = Intent(this,MainActivity::class.java)
+           startActivity(intent)
+
+        }
         var camera : ImageButton = findViewById(R.id.camera)
         camera?.setOnClickListener {
-            val pictureDialog = AlertDialog.Builder(this)
-            pictureDialog.setTitle("Select Action")
-            val pictureDialogItems =
-                arrayOf("Select photo from gallery", "Capture photo from camera")
-            pictureDialog.setItems(
-                pictureDialogItems
-            ) { dialog, which ->
-                when (which) {
-                    // Here we have create the methods for image selection from GALLERY
-                    0 ->choosePhotoToOcr()
-                    1 -> takePhotoFromCamera()
-                }
-            }
-            pictureDialog.show()
+            cameraPick()
         }
+
         var recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
         var homeButton : ImageButton  = findViewById(R.id.home)
         homeButton.setOnClickListener{

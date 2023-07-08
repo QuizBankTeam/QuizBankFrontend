@@ -31,8 +31,8 @@ class WrongViewAdapter (private val context: Context,
         if (holder is MyViewHolder) {
 
             holder.itemView.findViewById<TextView>(R.id.wrongTitle).text = model.title
-            holder.itemView.findViewById<TextView>(R.id.wrongType).text = model.tag
-            holder.itemView.findViewById<TextView>(R.id.wrongDate).text = model.createDate
+            holder.itemView.findViewById<TextView>(R.id.wrongType).text = "wrong tag"
+            holder.itemView.findViewById<TextView>(R.id.wrongDate).text = model.createdDate
 
             holder.itemView.setOnClickListener {
 

@@ -14,6 +14,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -139,6 +140,24 @@ open class BaseActivity : AppCompatActivity() {
 
 
     var idImage = System.currentTimeMillis()/1000
+
+    fun cameraPick(){
+        val pictureDialog = AlertDialog.Builder(this)
+        pictureDialog.setTitle("Select Action")
+        val pictureDialogItems =
+            arrayOf("Select photo from gallery", "Capture photo from camera")
+        pictureDialog.setItems(
+            pictureDialogItems
+        ) { dialog, which ->
+            when (which) {
+                // Here we have create the methods for image selection from GALLERY
+                0 -> choosePhotoToOcr()
+                1 -> takePhotoFromCamera()
+            }
+        }
+        pictureDialog.show()
+    }
+
 
     fun takePhotoFromCamera() {
 
