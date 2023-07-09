@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 
 import com.example.quizbanktest.activity.IntroActivity
+import com.example.quizbanktest.models.AccountModel
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.AccountService
 import com.example.quizbanktest.network.CsrfTokenService
@@ -19,7 +20,7 @@ import retrofit.Retrofit
 
 object ConstantsAccountServiceFunction {
 
-    var userAccount : AccountResponse ? = null
+    var userAccount : AccountModel ? = null
     fun getCsrfToken(context: Context) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -237,7 +238,6 @@ object ConstantsAccountServiceFunction {
         }
 
     }
-    data class LoginApiResponse(val message: String, val status: Int, val user: AccountResponse)
-    data class AccountResponse(val _id: String,val username:String,val email : String,val password:String, val preference : ArrayList<String>,val createdDate : String,val roles : ArrayList<Role>,val introduction : String,val avatar : String,val group : ArrayList<String>,val status:Boolean,val questionRecords:ArrayList<String>)
-    data class Role(val  entityId:String,val  permission: String)
+    data class LoginApiResponse(val message: String, val status: Int, val user: AccountModel)
+
 }

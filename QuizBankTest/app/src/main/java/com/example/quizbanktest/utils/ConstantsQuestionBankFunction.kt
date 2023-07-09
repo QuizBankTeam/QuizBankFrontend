@@ -80,6 +80,6 @@ object ConstantsQuestionBankFunction {
             ).show()
         }
     }
-//    data class QuestionBankResponse(val _id:String ,val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String,val creator:String)
+
     data class AllQuestionBanksResponse(val questionBanks:ArrayList<QuestionBankModel>)
 }
