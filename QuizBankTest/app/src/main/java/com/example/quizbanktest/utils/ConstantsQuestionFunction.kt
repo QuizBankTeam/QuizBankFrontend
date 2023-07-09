@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
+import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.network.QuestionService
 import com.example.quizbanktest.network.ScanImageService
@@ -18,7 +19,7 @@ import retrofit.Retrofit
 
 object ConstantsQuestionFunction {
     var postQuestionPosition : Int = 0
-    fun postQuestion(question : QuestionModel, activity: AppCompatActivity) {
+    fun postQuestion(question : QuestionModel, activity: AppCompatActivity,onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
 
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -47,6 +48,7 @@ object ConstantsQuestionFunction {
                         Log.e("Response Result","success post question")
                         Toast.makeText(activity,"upload successfully",Toast.LENGTH_SHORT).show()
                         ConstantsOcrResults.questionList.removeAt(postQuestionPosition)
+                        onSuccess("upload ok")
                     } else {
 
                         val sc = response.code()
@@ -68,9 +70,11 @@ object ConstantsQuestionFunction {
                                 Toast.makeText(activity,"error",Toast.LENGTH_SHORT).show()
                             }
                         }
+                        onFailure("bad request")
                     }
                 }
                 override fun onFailure(t: Throwable?) {
+                    onFailure("bad request")
                     Log.e("in post question Errorrrrr", t?.message.toString())
                 }
             })

@@ -14,11 +14,10 @@ import android.widget.ImageButton
 import android.widget.PopupWindow
 import android.widget.TextView
 
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.introducemyself.utils.ConstantsOcrResults
+
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
 

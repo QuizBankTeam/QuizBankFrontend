@@ -29,7 +29,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             onSuccess = {
                 ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
                     onSuccess = { questionBanks ->
-                        setupRecentRecyclerView(ConstantsQuestionBankFunction.questionBankList)
+                        setupRecentRecyclerView(questionBanks)
                         setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
                         setupWrongListRecyclerView(ConstantsWrong.getQuestions())
                     },

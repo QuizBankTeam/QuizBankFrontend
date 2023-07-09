@@ -6,15 +6,14 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.Toast
+
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.OcrResultViewAdapter
 import com.example.quizbanktest.models.QuestionModel
-import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
-import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
+
 
 class ScannerTextWorkSpaceActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

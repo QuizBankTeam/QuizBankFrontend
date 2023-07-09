@@ -151,15 +151,14 @@ class OcrResultViewAdapter(
                     if(answerDescription.text.toString()!=""){
                         ConstantsOcrResults.questionList[position].answerDescription = answerDescription.text.toString()
                     }
-
-                    val str =  answerOption.text.toString()
-                    val answerOptionsList : ArrayList<String> = ArrayList(str.split(" "))
-
-                    ConstantsOcrResults.questionList[position].answerOptions = answerOptionsList
-
-
+                    if(answerOption.text.toString().isNotEmpty()){
+                        val str =  answerOption.text.toString()
+                        val answerOptionsList : ArrayList<String> = ArrayList(str.split(" "))
+                        ConstantsOcrResults.questionList[position].answerOptions = answerOptionsList
+                    }else{
+                        ConstantsOcrResults.questionList[position].answerOptions?.add("目前為空")
+                    }
                     answerDialog.dismiss()
-
                 })
                 answerDialog.show()
             }
@@ -321,10 +320,17 @@ class OcrResultViewAdapter(
                     builder.show()
                 }else{
                     ConstantsQuestionFunction.postQuestionPosition=position
-                    ConstantsQuestionFunction.postQuestion( ConstantsOcrResults.questionList[position],activity)
-                    Thread.sleep(500)
-                    val intent = Intent(activity,ScannerTextWorkSpaceActivity::class.java)
-                    activity.startActivity(intent)
+                    ConstantsQuestionFunction.postQuestion( ConstantsOcrResults.questionList[position],activity,
+                        onSuccess = {
+                            val intent = Intent(activity,ScannerTextWorkSpaceActivity::class.java)
+                            activity.startActivity(intent)
+                        },
+                        onFailure = {
+                            it -> Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
+                        }
+                        )
+
+
                 }
 
             }
