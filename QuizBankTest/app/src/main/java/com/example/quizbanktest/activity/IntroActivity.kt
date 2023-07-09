@@ -11,10 +11,10 @@ class IntroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
-        var signIn : TextView = findViewById(R.id.sign_in_intro)
+        val signIn : TextView = findViewById(R.id.sign_in_intro)
         signIn.setOnClickListener {
             ConstantsAccountServiceFunction.getCsrfToken(this)
-            ConstantsAccountServiceFunction.login(this)
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

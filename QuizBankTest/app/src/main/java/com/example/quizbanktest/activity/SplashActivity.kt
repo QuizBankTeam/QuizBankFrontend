@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.WindowManager
 import com.example.quizbanktest.R
 import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
+import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 
 class SplashActivity : AppCompatActivity() {
 

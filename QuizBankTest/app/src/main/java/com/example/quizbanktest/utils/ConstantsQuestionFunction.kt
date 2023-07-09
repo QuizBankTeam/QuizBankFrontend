@@ -17,8 +17,9 @@ import retrofit.Response
 import retrofit.Retrofit
 
 object ConstantsQuestionFunction {
-
+    var postQuestionPosition : Int = 0
     fun postQuestion(question : QuestionModel, activity: AppCompatActivity) {
+
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -43,9 +44,9 @@ object ConstantsQuestionFunction {
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
-
                         Log.e("Response Result","success post question")
-
+                        Toast.makeText(activity,"upload successfully",Toast.LENGTH_SHORT).show()
+                        ConstantsOcrResults.questionList.removeAt(postQuestionPosition)
                     } else {
 
                         val sc = response.code()
@@ -56,17 +57,19 @@ object ConstantsQuestionFunction {
                                             "" +
                                             "quest"+response.toString()
                                 )
+                                Toast.makeText(activity,"Error 400",Toast.LENGTH_SHORT).show()
                             }
                             404 -> {
                                 Log.e("Error 404", "Not Found")
+                                Toast.makeText(activity,"Not Found 400",Toast.LENGTH_SHORT).show()
                             }
                             else -> {
                                 Log.e("Error", "in post question Error")
+                                Toast.makeText(activity,"error",Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                 }
-
                 override fun onFailure(t: Throwable?) {
                     Log.e("in post question Errorrrrr", t?.message.toString())
                 }
@@ -79,4 +82,9 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
+
+
+
+
+
 }

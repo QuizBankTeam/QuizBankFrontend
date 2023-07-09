@@ -3,6 +3,7 @@ package com.example.quizbanktest.utils
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.QuestionBankService
 import com.google.gson.Gson
 import com.squareup.okhttp.ResponseBody
@@ -13,8 +14,10 @@ import retrofit.Retrofit
 
 object ConstantsQuestionBankFunction {
     var allBanksReturnResponse : AllQuestionBanksResponse?= null
+    var questionBankList : ArrayList<QuestionBankModel> = ArrayList()
 
-    fun getAllUserQuestionBanks(context: Context) {
+
+    fun getAllUserQuestionBanks(context: Context,onSuccess: (ArrayList<QuestionBankModel>) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -41,9 +44,9 @@ object ConstantsQuestionBankFunction {
                         )
                         Log.e("Response Result", allBanksResponse.questionBanks[0].toString())
                         allBanksReturnResponse = allBanksResponse
-
+                        questionBankList = allBanksResponse.questionBanks
+                        onSuccess(allBanksResponse.questionBanks)
                     } else {
-
                         val sc = response.code()
                         when (sc) {
                             400 -> {
@@ -60,10 +63,12 @@ object ConstantsQuestionBankFunction {
                                 Log.e("Error", "in get all banks Generic Error")
                             }
                         }
+                        onFailure("Request failed with status code $sc")
                     }
                 }
 
                 override fun onFailure(t: Throwable?) {
+                    onFailure("Request failed with status code ")
                     Log.e("in get all banks Errorrrrr", t?.message.toString())
                 }
             })
@@ -75,6 +80,6 @@ object ConstantsQuestionBankFunction {
             ).show()
         }
     }
-    data class QuestionBankResponse(val _id:String ,val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String)
-    data class AllQuestionBanksResponse(val questionBanks:ArrayList<QuestionBankResponse>)
+//    data class QuestionBankResponse(val _id:String ,val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String,val creator:String)
+    data class AllQuestionBanksResponse(val questionBanks:ArrayList<QuestionBankModel>)
 }

@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 
 import com.example.quizbanktest.activity.IntroActivity
+import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.AccountService
 import com.example.quizbanktest.network.CsrfTokenService
 import com.google.gson.Gson
@@ -87,7 +88,7 @@ object ConstantsAccountServiceFunction {
         }
     }
 
-    fun login(context: Context) {
+    fun login(context: Context, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         getCsrfToken(context)
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -134,7 +135,7 @@ object ConstantsAccountServiceFunction {
                         var cookie: String = Constants.cookie + ";"
                         Constants.COOKIE =
                             cookie + "access_token_cookie=" + Constants.accessToken + ";" + "refresh_token_cookie=" + Constants.refreshToken
-
+                        onSuccess("Ok")
 
                     } else {
 
@@ -154,11 +155,13 @@ object ConstantsAccountServiceFunction {
                                 Log.e("in login Error", "Generic Error")
                             }
                         }
+                        onFailure("Request failed with status code $sc")
                     }
                 }
 
                 override fun onFailure(t: Throwable?) {
                     Log.e("in login Errorrrrr", t?.message.toString())
+                    onFailure("Request failed with status code ")
                 }
             })
         } else {

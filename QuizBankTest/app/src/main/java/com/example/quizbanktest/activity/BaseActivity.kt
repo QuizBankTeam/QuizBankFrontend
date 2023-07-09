@@ -77,7 +77,7 @@ open class BaseActivity : AppCompatActivity() {
 
             }
             var base64String = ConstantsFunction.encodeImage(thumbnail!!)
-            ConstantsScanFunction.scanBase64ToOcrText(base64String!!,this@BaseActivity)
+            ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!,this@BaseActivity)
 
             var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
 
@@ -160,7 +160,6 @@ open class BaseActivity : AppCompatActivity() {
 
 
     fun takePhotoFromCamera() {
-
         Dexter.withActivity(this)
             .withPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -190,15 +189,22 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun gotoBankActivity(){
-        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this)
-        val intent = Intent(this,BankActivity::class.java)
-        startActivity(intent)
+        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+            onSuccess = { questionBanks ->
+                val intent = Intent(this,BankActivity::class.java)
+                startActivity(intent)
+            },
+            onFailure = { errorMessage ->
+                Toast.makeText(this,"server error",Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     fun gotoHomeActivity(){
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
     }
+
     fun choosePhotoFromGallery(onImageSelected: (Bitmap?) -> Unit) {
         this.onImageSelected = onImageSelected
         Dexter.withActivity(this)
@@ -223,6 +229,7 @@ open class BaseActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
+
     fun  choosePhotoToOcr(){
 
         choosePhotoFromGallery {
@@ -230,7 +237,7 @@ open class BaseActivity : AppCompatActivity() {
             if (bitmap != null) {
 
                 var base64String = ConstantsFunction.encodeImage(bitmap)
-                ConstantsScanFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity)
+                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity)
                 var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
 //                Log.e("openGalleryLauncher size", size.toString())
             }else{

@@ -36,11 +36,9 @@ class BankActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        getSupportActionBar()?.hide()
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
-        var toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
+        val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
         setSupportActionBar(toolBar)
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -55,29 +53,29 @@ class BankActivity : BaseActivity() {
            startActivity(intent)
 
         }
-        var camera : ImageButton = findViewById(R.id.camera)
-        camera?.setOnClickListener {
+        val camera : ImageButton = findViewById(R.id.camera)
+        camera.setOnClickListener {
             cameraPick()
         }
 
-        var recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
-        var homeButton : ImageButton  = findViewById(R.id.home)
+        val recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
+        val homeButton : ImageButton  = findViewById(R.id.home)
         homeButton.setOnClickListener{
             gotoHomeActivity()
         }
-        var adapter = BankRecyclerViewAdapter(this, bankModels)
+        val adapter = BankRecyclerViewAdapter(this, bankModels)
         setUpBankModels()
 
-        recyclerView.setAdapter(adapter)
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
 
     }
 
     private fun setUpBankModels() {
-        var bankNames : Array<String> = resources.getStringArray(R.array.bank_name_txt)
-        var bankDescriptions : Array<String> = resources.getStringArray(R.array.bank_description_txt)
-        var bankDates : Array<String> = resources.getStringArray(R.array.bank_date_txt)
+        val bankNames : Array<String> = resources.getStringArray(R.array.bank_name_txt)
+        val bankDescriptions : Array<String> = resources.getStringArray(R.array.bank_description_txt)
+        val bankDates : Array<String> = resources.getStringArray(R.array.bank_date_txt)
 
         for (i in 0 until bankNames.size) {
             val bankModel = BankModel(bankNames[i], bankDescriptions[i], bankDates[i], i)

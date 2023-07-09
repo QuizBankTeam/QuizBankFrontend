@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introducemyself.utils.ConstantsOcrResults
@@ -28,9 +29,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
 
         val enterToTal : LinearLayout = findViewById(R.id.enter_buttons)
         enterToTal.visibility = View.VISIBLE
-        if( ConstantsQuestionBankFunction.allBanksReturnResponse==null){
-            ConstantsQuestionBankFunction.getAllUserQuestionBanks(this)
-        }
+
         if(ConstantsOcrResults.getOcrResult().size ==0){
             val emptyShow : LinearLayout = findViewById(R.id.empty_show)
             emptyShow.visibility = View.VISIBLE
@@ -38,35 +37,33 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             enterToTal.visibility = View.GONE
         }
 
-        var toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_ocr_detail)
+        val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_ocr_detail)
         setSupportActionBar(toolBar)
         val actionBar = supportActionBar
         if (actionBar != null) {
-            Log.e("in action bar","not null")
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
-            Log.e("nav","toolbar")
         }
 
-        var homeButton : ImageButton  = findViewById(R.id.home)
+        val homeButton : ImageButton  = findViewById(R.id.home)
         homeButton.setOnClickListener{
             gotoHomeActivity()
         }
-        var bank : ImageButton = findViewById(R.id.bank)
+        val bank : ImageButton = findViewById(R.id.bank)
         bank.setOnClickListener{
             gotoBankActivity()
         }
-        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this)
-        var camera : ImageButton = findViewById(R.id.camera)
 
-        camera?.setOnClickListener {
+        val camera : ImageButton = findViewById(R.id.camera)
+
+        camera.setOnClickListener {
             cameraPick()
         }
 
         toolBar.setNavigationOnClickListener{
             if(ConstantsOcrResults.getOcrResult().size!=0){
                 Log.e("nav","toolbar")
-                var builder =AlertDialog.Builder(this)
+                val builder =AlertDialog.Builder(this)
                     .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
                     .setTitle("OCR結果")
                     .setIcon(R.drawable.baseline_warning_amber_24)
@@ -84,19 +81,18 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
                 startActivity(intent)
             }
         }
-        ConstantsAccountServiceFunction.getCsrfToken(this@ScannerTextWorkSpaceActivity)
-        ConstantsAccountServiceFunction.login(this@ScannerTextWorkSpaceActivity)
+
 
     }
 
     private fun setupOcrRecyclerView(ocrResultList: ArrayList<QuestionModel>) {
-        var ocrList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.ocr_list)
-        ocrList?.layoutManager = LinearLayoutManager(this,
+        val ocrList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.ocr_list)
+        ocrList.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL,false)
-        ocrList?.setHasFixedSize(true)
+        ocrList.setHasFixedSize(true)
 
         val placesAdapter = OcrResultViewAdapter(this@ScannerTextWorkSpaceActivity,this, ocrResultList)
-        ocrList?.adapter = placesAdapter
+        ocrList.adapter = placesAdapter
     }
 
 

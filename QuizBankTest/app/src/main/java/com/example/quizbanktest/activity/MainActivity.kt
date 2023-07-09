@@ -24,76 +24,87 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        ConstantsAccountServiceFunction.getCsrfToken(this@MainActivity)
+        ConstantsAccountServiceFunction.login(this@MainActivity,
+            onSuccess = {
+                ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+                    onSuccess = { questionBanks ->
+                        setupRecentRecyclerView(ConstantsQuestionBankFunction.questionBankList)
+                        setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+                        setupWrongListRecyclerView(ConstantsWrong.getQuestions())
+                    },
+                    onFailure = { errorMessage ->
+                        Toast.makeText(this,"get banklist error",Toast.LENGTH_SHORT).show()
+                    }
+                )
+            },
+            onFailure = {
+                Toast.makeText(this,"login error",Toast.LENGTH_SHORT).show()
+            }
+        )
 
-        setupRecentRecyclerView(ConstantsQuestionBank.getQuestions())
-        setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
-        setupWrongListRecyclerView(ConstantsWrong.getQuestions())
         setupActionBar()
-
-        var nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)
+        val nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)
         nav_view.setNavigationItemSelectedListener(this)
 
-        var bank : ImageButton = findViewById(R.id.bank)
+        val bank : ImageButton = findViewById(R.id.bank)
         bank.setOnClickListener{
             gotoBankActivity()
         }
 
-        var homeButton : ImageButton  = findViewById(R.id.home)
+        val homeButton : ImageButton  = findViewById(R.id.home)
         homeButton.setOnClickListener{
             gotoHomeActivity()
         }
 
-        var camera : ImageButton = findViewById(R.id.camera)
-        camera?.setOnClickListener {
+        val camera : ImageButton = findViewById(R.id.camera)
+        camera.setOnClickListener {
             cameraPick()
         }
 
-        var settingButton : ImageButton = findViewById(R.id.setting)
+        val settingButton : ImageButton = findViewById(R.id.setting)
         settingButton.setOnClickListener{
-            ConstantsAccountServiceFunction.login(this@MainActivity)
 
         }
-        ConstantsAccountServiceFunction.getCsrfToken(this@MainActivity)
-        ConstantsAccountServiceFunction.login(this@MainActivity)
-
     }
 
 
 
     private fun setupRecentRecyclerView(quizBankList: ArrayList<QuestionBankModel>) {
-        var recentQuizBankList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_quiz_bank_list)
-        recentQuizBankList?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-        recentQuizBankList?.setHasFixedSize(true)
+        val recentQuizBankList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_quiz_bank_list)
+        recentQuizBankList.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        recentQuizBankList.setHasFixedSize(true)
 
         val placesAdapter = RecentViewAdapter(this, quizBankList)
-        recentQuizBankList?.adapter = placesAdapter
+        recentQuizBankList.adapter = placesAdapter
 
 
     }
 
     private fun setupWrongListRecyclerView(wrongList: ArrayList<QuestionModel>) {
-        var recentWrongList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_wrong_list)
-        recentWrongList?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-        recentWrongList?.setHasFixedSize(true)
+        val recentWrongList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_wrong_list)
+        recentWrongList.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        recentWrongList.setHasFixedSize(true)
 
         val placesAdapter = WrongViewAdapter(this, wrongList)
-        recentWrongList?.adapter = placesAdapter
+        recentWrongList.adapter = placesAdapter
     }
 
     private fun setupRecommendRecyclerView(recommendList: ArrayList<QuestionModel>) {
-        var recentRecommendList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_recommend_list)
-        recentRecommendList?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-        recentRecommendList?.setHasFixedSize(true)
+        val recentRecommendList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_recommend_list)
+        recentRecommendList.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        recentRecommendList.setHasFixedSize(true)
 
         val placesAdapter = RecommendViewAdapter(this, recommendList)
-        recentRecommendList?.adapter = placesAdapter
+        recentRecommendList.adapter = placesAdapter
     }
 
     override fun onDestroy() {
         super.onDestroy()
     }
+
     private fun toggleDrawer() {
-        var drawer_layout :DrawerLayout = findViewById(R.id.drawer_layout)
+        val drawer_layout :DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
@@ -118,12 +129,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 startActivity(intent)
             }
         }
-        var drawer_layout :DrawerLayout = findViewById(R.id.drawer_layout)
+        val drawer_layout :DrawerLayout = findViewById(R.id.drawer_layout)
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
     private fun setupActionBar() {
-        var toolbar_main_activity : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
+        val toolbar_main_activity : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
         setSupportActionBar(toolbar_main_activity)
         toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
 

@@ -14,7 +14,7 @@ import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
 
-object ConstantsScanFunction {
+object ConstantsScanServiceFunction {
     fun scanBase64ToOcrText(base64String: String, activity:AppCompatActivity) {
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
