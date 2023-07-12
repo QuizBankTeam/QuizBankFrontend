@@ -1,18 +1,16 @@
 package com.example.quizbanktest.activity
 import android.app.AlertDialog
 import android.content.ClipData
-import android.content.Context
-import android.graphics.Color
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
+
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
+
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
+
 import co.lujun.androidtagview.TagContainerLayout
 import co.lujun.androidtagview.TagView
 import com.example.introducemyself.utils.ConstantsTag
@@ -137,48 +135,8 @@ class TagActivity : AppCompatActivity() {
     }
 
 
-    class TagRecyclerViewAdapter(private val mContext: Context, private val mData: Array<String>) :
-        RecyclerView.Adapter<TagRecyclerViewAdapter.TagViewHolder>() {
-        private var mOnClickListener: View.OnClickListener? = null
-        override fun getItemCount(): Int {
-            return 10
-        }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
-            return TagViewHolder(
-                LayoutInflater.from(mContext)
-                    .inflate(R.layout.item_tag, parent, false), mOnClickListener
-            )
-        }
-
-        override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
-            holder.tagContainerLayout.setTags(*mData)
-            holder.button.setOnClickListener(mOnClickListener)
-        }
-
-        fun setOnClickListener(listener: View.OnClickListener?) {
-            mOnClickListener = listener
-        }
-
-        inner class TagViewHolder(v: View, var clickListener: View.OnClickListener?) :
-            RecyclerView.ViewHolder(v), View.OnClickListener {
-            var tagContainerLayout: TagContainerLayout
-            var button: Button
-
-            init {
-                tagContainerLayout =
-                    v.findViewById<View>(R.id.tagcontainerLayout) as TagContainerLayout
-                button = v.findViewById<View>(R.id.button) as Button
-
-            }
-
-            override fun onClick(v: View) {
-                if (clickListener != null) {
-                    clickListener!!.onClick(v)
-                }
-            }
-        }
-    }
 
 
 }
+

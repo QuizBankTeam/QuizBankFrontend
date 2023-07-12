@@ -89,6 +89,7 @@ object ConstantsAccountServiceFunction {
         }
     }
 
+
     fun login(context: Context, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         getCsrfToken(context)
         if (Constants.isNetworkAvailable(context)) {

@@ -1,6 +1,8 @@
 package com.example.quizbanktest.adapters
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import co.lujun.androidtagview.TagContainerLayout
+import co.lujun.androidtagview.TagView
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.introducemyself.utils.ConstantsTag
 import com.example.quizbanktest.R
@@ -20,6 +24,7 @@ import com.example.quizbanktest.activity.TagActivity
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.*
 import java.io.ByteArrayOutputStream
+import java.lang.Boolean
 
 
 class OcrResultViewAdapter(
@@ -41,9 +46,12 @@ class OcrResultViewAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, @SuppressLint("RecyclerView") position: Int) {
 
-        var imageList : ArrayList<String> = ArrayList()
+        val tagBankList:ArrayList<String> = ArrayList()
+        val tagRelateList:ArrayList<String> = ArrayList()
+        val tagRangeList:ArrayList<String> = ArrayList()
+        val imageList : ArrayList<String> = ArrayList()
         val out = ByteArrayOutputStream()
         var optionsNum : Int = 4
         val model = list[position]
@@ -75,10 +83,174 @@ class OcrResultViewAdapter(
             val scannerText : EditText = holder.itemView.findViewById(R.id.iv_scanner_text)
             scannerText.setText(ConstantsOcrResults.getOcrResult()[position].description,TextView.BufferType.EDITABLE)
 
+
+            //選擇標籤
             val chooseTagButton = holder.itemView.findViewById<LinearLayout>(R.id.chooseTag)
             chooseTagButton.setOnClickListener{
-                val intent = Intent(context, TagActivity::class.java)
-                context.startActivity(intent)
+                val tagDialog = Dialog(context)
+                tagDialog.setContentView(R.layout.dialog_choose_tag)
+                var mTagContainerLayout1: TagContainerLayout? = null
+                var mTagContainerLayout2: TagContainerLayout? = null
+                var mTagContainerLayout3: TagContainerLayout? = null
+                val list1 = ConstantsTag.getList1()
+                val list2 = ConstantsTag.getList2()
+                val list3 = ConstantsTag.getList3()
+                tagDialog.setTitle("選擇標籤")
+                tagDialog.show()
+                mTagContainerLayout1 = tagDialog.findViewById(R.id.tagcontainerLayout1)
+                mTagContainerLayout2 = tagDialog.findViewById(R.id.tagcontainerLayout2)
+                mTagContainerLayout3 = tagDialog.findViewById(R.id.tagcontainerLayout3)
+                mTagContainerLayout1!!.setTags(list1)
+                mTagContainerLayout2!!.setTags(list2)
+                mTagContainerLayout3!!.setTags(list3)
+
+                mTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
+                    override fun onTagClick(tag_position: Int, text: String) {
+                        tagBankList.add(text)
+                        ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
+                        Toast.makeText(
+                            activity, "click-position:$tag_position, text:$text",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    override fun onTagLongClick(position: Int, text: String) {
+                        val dialog = android.app.AlertDialog.Builder(activity)
+                            .setTitle("long click")
+                            .setMessage("You will delete this tag!")
+                            .setPositiveButton("Delete") { dialog, which ->
+                                if (position < mTagContainerLayout1.getChildCount()) {
+                                    mTagContainerLayout1.removeTag(position)
+                                }
+                            }
+                            .setNegativeButton(
+                                "Cancel"
+                            ) { dialog, which -> dialog.dismiss() }
+                            .create()
+                        dialog.show()
+                    }
+
+                    override fun onSelectedTagDrag(position: Int, text: String) {}
+                    override fun onTagCrossClick(position: Int) {
+                        mTagContainerLayout1.removeTag(position);
+                        Toast.makeText(
+                            activity, "Click TagView cross! position = $position",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+
+                mTagContainerLayout2.setOnTagClickListener(object : TagView.OnTagClickListener {
+                    override fun onTagClick(tag_position: Int, text: String) {
+                        tagRelateList.add(text)
+                        ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
+                        Toast.makeText(
+                            activity, "click-position:$tag_position, text:$text",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    override fun onTagLongClick(position: Int, text: String) {
+                        val dialog = android.app.AlertDialog.Builder(activity)
+                            .setTitle("long click")
+                            .setMessage("You will delete this tag!")
+                            .setPositiveButton("Delete") { dialog, which ->
+                                if (position < mTagContainerLayout2.getChildCount()) {
+                                    mTagContainerLayout2.removeTag(position)
+                                }
+                            }
+                            .setNegativeButton(
+                                "Cancel"
+                            ) { dialog, which -> dialog.dismiss() }
+                            .create()
+                        dialog.show()
+                    }
+
+                    override fun onSelectedTagDrag(position: Int, text: String) {}
+                    override fun onTagCrossClick(position: Int) {
+                        mTagContainerLayout2.removeTag(position)
+                        Toast.makeText(
+                            activity, "Click TagView cross! position = $position",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+                mTagContainerLayout3.setOnTagClickListener(object : TagView.OnTagClickListener {
+                    override fun onTagClick(tag_position: Int, text: String) {
+                        tagRangeList.add(text)
+                        ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
+                        val selectedPositions = mTagContainerLayout3.getSelectedTagViewPositions()
+                        //deselect all tags when click on an unselected tag. Otherwise show toast.
+                        if (selectedPositions.isEmpty() || selectedPositions.contains(position)) {
+                            Toast.makeText(
+                                activity, "click-position:$tag_position, text:$text",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            //deselect all tags
+                            for (i in selectedPositions) {
+                                mTagContainerLayout3.deselectTagView(i)
+                            }
+                        }
+                    }
+
+                    override fun onTagLongClick(position: Int, text: String) {
+                        mTagContainerLayout3.toggleSelectTagView(position)
+                        val selectedPositions = mTagContainerLayout3.getSelectedTagViewPositions()
+                        Toast.makeText(
+                            activity, "selected-positions:$selectedPositions",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    override fun onSelectedTagDrag(position: Int, text: String) {
+                        val clip = ClipData.newPlainText("Text", text)
+                        val view: View = mTagContainerLayout3.getTagView(position)
+                        val shadow = View.DragShadowBuilder(view)
+                        view.startDrag(clip, shadow, Boolean.TRUE, 0)
+                    }
+
+                    override fun onTagCrossClick(position: Int) {
+                        mTagContainerLayout3.removeTag(position)
+                    }
+                })
+
+                val text = tagDialog.findViewById<View>(R.id.text_tag) as EditText
+                val btnAddTag = tagDialog.findViewById<View>(R.id.btn_add_tag) as TextView
+                btnAddTag.setOnClickListener {
+                    mTagContainerLayout1.addTag(text.text.toString())
+
+                }
+
+                val text_relate = tagDialog.findViewById<View>(R.id.text_tag_relate) as EditText
+                val btnAddTag_relate = tagDialog.findViewById<View>(R.id.btn_add_tag_relate) as TextView
+                btnAddTag_relate.setOnClickListener {
+                    mTagContainerLayout2.addTag(text_relate.text.toString())
+
+                }
+
+                val text_range = tagDialog.findViewById<View>(R.id.text_tag_range) as EditText
+                val btnAddTag_range = tagDialog.findViewById<View>(R.id.btn_add_tag_range) as TextView
+                btnAddTag_range.setOnClickListener {
+                    mTagContainerLayout3.addTag(text_range.text.toString())
+
+                }
+
+                val enterButton : TextView = tagDialog.findViewById(R.id.enter_tag)
+                val cancelButton : TextView = tagDialog.findViewById(R.id.cancel_tag)
+
+                enterButton.setOnClickListener {
+                    holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForBank).tags=tagBankList
+                    holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags=tagRelateList
+                    holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags=tagRangeList
+                    tagDialog.dismiss()
+                    Toast.makeText(activity,"successful upload tag",Toast.LENGTH_SHORT).show()
+                }
+
+                cancelButton.setOnClickListener {
+                    ConstantsOcrResults.getOcrResult()[position].tag?.clear()
+                    tagDialog.dismiss()
+                }
             }
 
             //question bank type
@@ -343,6 +515,7 @@ class OcrResultViewAdapter(
                     .setIcon(R.drawable.baseline_warning_amber_24)
                 builder.setPositiveButton("確認") { dialog, which ->
                     ConstantsOcrResults.questionList.removeAt(position)
+
                     val intent = Intent(context, ScannerTextWorkSpaceActivity::class.java)
                     context.startActivity(intent)
                 }
@@ -350,7 +523,10 @@ class OcrResultViewAdapter(
                 }
                 builder.show()
             }
+
+
         }
+
 
     }
 

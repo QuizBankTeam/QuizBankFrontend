@@ -12,7 +12,9 @@ object ConstantsOcrResults {
     var questionList = ArrayList<QuestionModel>()
     var questionTypeList = ArrayList<String>()
 
+
     fun setOcrResult(description : String){
+
         if(questionTypeList.size == 0){
             questionTypeList.add("Filling")
             questionTypeList.add("MultipleChoiceS")
@@ -35,6 +37,5 @@ object ConstantsOcrResults {
     fun getOcrResult():ArrayList<QuestionModel>{
         return  questionList
     }
-
 
 }

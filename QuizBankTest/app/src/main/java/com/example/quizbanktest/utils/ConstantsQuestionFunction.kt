@@ -48,6 +48,7 @@ object ConstantsQuestionFunction {
                         Log.e("Response Result","success post question")
                         Toast.makeText(activity,"upload successfully",Toast.LENGTH_SHORT).show()
                         ConstantsOcrResults.questionList.removeAt(postQuestionPosition)
+
                         onSuccess("upload ok")
                     } else {
 
