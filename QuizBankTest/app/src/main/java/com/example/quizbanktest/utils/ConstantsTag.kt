@@ -43,5 +43,10 @@ object ConstantsTag {
         list3.add("第六章")
         return list3
     }
+    fun getEmptyList():MutableList<String>{
+        val list: MutableList<String> = ArrayList()
+        list.add("目前為空喔")
+        return list
+    }
 
 }

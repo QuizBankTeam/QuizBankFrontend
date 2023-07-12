@@ -55,9 +55,9 @@ class OcrResultViewAdapter(
         val out = ByteArrayOutputStream()
         var optionsNum : Int = 4
         val model = list[position]
-        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForBank).tags = ConstantsTag.getList1()
-        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags = ConstantsTag.getList2()
-        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags = ConstantsTag.getList3()
+        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForBank).tags = ConstantsTag.getEmptyList()
+        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags = ConstantsTag.getEmptyList()
+        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags = ConstantsTag.getEmptyList()
         val title : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_title)
         val questionNum : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_num)
 
@@ -243,6 +243,7 @@ class OcrResultViewAdapter(
                     holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForBank).tags=tagBankList
                     holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags=tagRelateList
                     holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags=tagRangeList
+
                     tagDialog.dismiss()
                     Toast.makeText(activity,"successful upload tag",Toast.LENGTH_SHORT).show()
                 }
