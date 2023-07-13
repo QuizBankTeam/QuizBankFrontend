@@ -1,0 +1,226 @@
+[
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_gradient_background.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\gradient_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\layout_recycler_view_row.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\layout\\recycler_view_row.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\anim_main_to_bank_in.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\anim\\main_to_bank_in.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_popup_window.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\popup_window.xml"
+    },
+    {
+        "merged": "com.example.yiquizapp-merged_res-29:/layout_activity_bank_main.xml.flat",
+        "source": "com.example.yiquizapp-main-31:/layout/activity_bank_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_notepad_and_pen_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\notepad_and_pen_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_menu_hamburger_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\menu_hamburger_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\anim_main_to_bank_out.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\anim\\main_to_bank_out.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_white_book.png.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\white_book.png"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_magnifying_glass_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\magnifying_glass_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_shape_textview.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\shape_textview.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_back_arrow_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\back_arrow_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\anim_slide_in.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\anim\\slide_in.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\layout_layout_item.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\layout\\layout_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_window_background.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\window_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_focus_tint.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\focus_tint.xml"
+    },
+    {
+        "merged": "com.example.yiquizapp-merged_res-29:/drawable_arrow_left_svgrepo_com.xml.flat",
+        "source": "com.example.yiquizapp-main-31:/drawable/arrow_left_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_paper_clip_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\paper_clip_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-anydpi-v33_ic_launcher.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-anydpi-v33\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_search_bar.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\search_bar.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\anim_bank_to_main_in.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\anim\\bank_to_main_in.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_avatar_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\avatar_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_book_and_person_winter_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\book_and_person_winter_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_book_square_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\book_square_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\layout_popup_window.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\layout\\popup_window.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\anim_popup_exit.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\anim\\popup_exit.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\anim_popup_enter.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\anim\\popup_enter.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_sort_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\sort_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\layout_activity_bank_main.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\layout\\activity_bank_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_camera_svgrepo_com_1.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\camera_svgrepo_com_1.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_reading_image.png.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\reading_image.png"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_silver_blue_book_logo.png.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\silver_blue_book_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_left_back_arrow_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\left_back_arrow_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_setting_setting_svgrepo_com_2.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\setting_setting_svgrepo_com_2.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable-v24\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_text_area.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\text_area.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_home_svgrepo_com_2.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\home_svgrepo_com_2.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\anim_slide_out.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\anim\\slide_out.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\drawable_burger_menu_right_svgrepo_com.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\drawable\\burger_menu_right_svgrepo_com.xml"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-merged_res-29:\\anim_bank_to_main_out.xml.flat",
+        "source": "C:\\Users\\sycn0\\.gradle\\daemon\\7.5\\com.example.yiquizapp-main-31:\\anim\\bank_to_main_out.xml"
+    }
+]

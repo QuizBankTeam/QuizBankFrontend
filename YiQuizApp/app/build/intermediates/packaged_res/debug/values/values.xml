@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="bank_date_txt">
+        <item>10/01</item>
+        <item>10/02</item>
+        <item>10/03</item>
+        <item>10/04</item>
+        <item>10/05</item>
+        <item>10/06</item>
+        <item>10/07</item>
+        <item>10/08</item>
+        <item>10/31</item>
+    </string-array>
+    <string-array name="bank_description_txt">
+        <item>computer organization</item>
+        <item>discrete math</item>
+        <item>data structure</item>
+        <item>algorithm</item>
+        <item>linear algebra</item>
+        <item>calculus</item>
+        <item>programming language</item>
+        <item>digital logic</item>
+        <item>useless programming compiler</item>
+    </string-array>
+    <string-array name="bank_name_txt">
+        <item>計算機組織</item>
+        <item>離散數學</item>
+        <item>資料結構</item>
+        <item>演算法</item>
+        <item>線性代數</item>
+        <item>微積分</item>
+        <item>程式語言</item>
+        <item>數位邏輯</item>
+        <item>垃圾android studio</item>
+    </string-array>
+    <color name="azure">#007FFF</color>
+    <color name="black">#FF000000</color>
+    <color name="blue_200">#86A8E7</color>
+    <color name="colorAccent">#adcbe3</color>
+    <color name="colorPrimary">#8ecae6</color>
+    <color name="colorPrimaryDark">#2a4d69</color>
+    <color name="colorRipple">#8ecae6</color>
+    <color name="cream">#FFED9E</color>
+    <color name="cyan_200">#5FFBF1</color>
+    <color name="dream_pink">#FFA6FF</color>
+    <color name="light_green">#90EE90</color>
+    <color name="mauve">#E0B0FF</color>
+    <color name="pale_turquoise">#AFEEEE</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="red_200">#D16BA5</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <string name="app_name">QuizBank</string>
+    <string name="search_hint">SEARCH FILES…</string>
+    <string name="test">testing</string>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="CustomToolbarStyle">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:colorControlNormal">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+    <style name="PopupAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/popup_enter</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit</item>
+    </style>
+    <style name="Theme.BlurryDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="Theme.YiQuizApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        
+
+    </style>
+</resources>
