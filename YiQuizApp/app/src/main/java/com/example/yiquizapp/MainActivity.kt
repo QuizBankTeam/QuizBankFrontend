@@ -1,7 +1,7 @@
 package com.example.yiquizapp
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,6 +12,7 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,52 +22,30 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.wasabeef.blurry.Blurry
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RecyclerViewInterface {
 
     lateinit var searchView: SearchView
     lateinit var menuButton: ImageButton
+    lateinit var view: LinearLayout
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
 
     var bankModels = ArrayList<BankModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        getSupportActionBar()?.hide()
+        supportActionBar?.hide()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         var recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
-        var adapter = BankRecyclerViewAdapter(this, bankModels)
+        var adapter = BankRecyclerViewAdapter(this, bankModels, this)
         setUpBankModels()
 
         recyclerView.setAdapter(adapter)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-//        findViewById<View>(R.id.menu_button).setOnClickListener(object : View.OnClickListener {
-//
-////            private var blurred = false
-//
-//            override fun onClick(v: View) {
-//                if (blurred) {
-//                    Blurry.delete(findViewById(R.id.content))
-//                } else {
-//                    val startMs = System.currentTimeMillis()
-//                    Blurry.with(this@MainActivity)
-//                        .radius(25)
-//                        .sampling(2)
-//                        .async()
-//                        .animate(500)
-//                        .onto(findViewById<View>(R.id.content) as ViewGroup)
-//                    Log.d(getString(R.string.app_name),
-//                        "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms")
-//                }
-//
-//                blurred = !blurred
-////                return true
-//            }
-//        })
+//        view = findViewById(R.id.view_layout)
 
     }
 
@@ -126,18 +105,6 @@ class MainActivity : AppCompatActivity() {
                 blurred = false
                 Blurry.delete(findViewById(R.id.content))
             }
-//            } else {
-//                blurred = true
-//                val startMs = System.currentTimeMillis()
-//                Blurry.with(this@MainActivity)
-//                    .radius(25)
-//                    .sampling(2)
-//                    .async()
-//                    .animate(200)
-//                    .onto(findViewById<View>(R.id.content) as ViewGroup)
-//                Log.d(getString(R.string.app_name),
-//                    "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms")
-//            }
         })
 
         // automatically newline tags view
@@ -166,5 +133,15 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, BankMainActivity:: class.java)
+
+        intent.putExtra("NAME", bankModels.get(position).getBankName())
+
+        startActivity(intent)
+        overridePendingTransition(R.anim.main_to_bank_out, R.anim.main_to_bank_in);
+    }
+
 
 }

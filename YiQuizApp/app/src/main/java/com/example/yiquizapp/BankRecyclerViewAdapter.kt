@@ -9,13 +9,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yiquizapp.BankRecyclerViewAdapter.MyViewHolder
 
-class BankRecyclerViewAdapter(var context: Context, var bankModels: ArrayList<BankModel>) :
+class BankRecyclerViewAdapter(var context: Context, var bankModels: ArrayList<BankModel>, recyclerViewInterface: RecyclerViewInterface) :
     RecyclerView.Adapter<MyViewHolder>() {
+
+    var recyclerViewInterface = recyclerViewInterface
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 //        This is where you inflate the layout (Giving a look to our rows)
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.recycler_view_row, parent, false)
-        return MyViewHolder(view)
+        return MyViewHolder(view, recyclerViewInterface)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -32,7 +35,7 @@ class BankRecyclerViewAdapter(var context: Context, var bankModels: ArrayList<Ba
         return bankModels.size
     }
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
         //        Grabbing the views from our recycler_view_row layout file
         //        Kinda like in the onCreate method
         var tv_BankImage: ImageView? = null
@@ -46,6 +49,15 @@ class BankRecyclerViewAdapter(var context: Context, var bankModels: ArrayList<Ba
             tv_BankName = itemView.findViewById(R.id.bank_name)
             tv_BankDescription = itemView.findViewById(R.id.bank_description)
             tv_BankDate = itemView.findViewById(R.id.bank_date)
+
+            itemView.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(view: View?) {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        recyclerViewInterface.onItemClick(position)
+                    }
+                }
+            })
         }
     }
 }

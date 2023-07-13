@@ -8,10 +8,11 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/imageview"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent" />-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/view_layout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical">-->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_home_detail"
@@ -81,6 +82,8 @@
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
+
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/ll_action_buttons"
