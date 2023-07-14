@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
 
         val recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
         val bankRecyclerViewAdapter = BankRecyclerViewAdapter(this, bankModels, this)
-        setupBankModels()
 
+        setupBankModels()
         recyclerView.adapter = bankRecyclerViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 

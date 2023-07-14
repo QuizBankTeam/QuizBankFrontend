@@ -1,4 +1,4 @@
-package com.example.quizbanktest.utils
+package com.example.yiquizapp.utils
 
 import android.util.Log
 import android.widget.Toast
@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.yiquizapp.models.QuestionModel
 import com.example.yiquizapp.network.QuestionService
-import com.example.yiquizapp.utils.Constants
 import com.squareup.okhttp.ResponseBody
 import retrofit.Callback
 import retrofit.GsonConverterFactory
