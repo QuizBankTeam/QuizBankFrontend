@@ -1,4 +1,4 @@
-package com.example.yiquizapp
+package com.example.yiquizapp.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -19,6 +19,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.yiquizapp.*
+import com.example.yiquizapp.adapter.BankRecyclerViewAdapter
+import com.example.yiquizapp.interfaces.RecyclerViewInterface
+import com.example.yiquizapp.models.BankModel
+import com.example.yiquizapp.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
 
 
@@ -38,23 +43,22 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
-        var adapter = BankRecyclerViewAdapter(this, bankModels, this)
-        setUpBankModels()
+        val recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
+        val bankRecyclerViewAdapter = BankRecyclerViewAdapter(this, bankModels, this)
+        setupBankModels()
 
-        recyclerView.setAdapter(adapter)
+        recyclerView.adapter = bankRecyclerViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-//        view = findViewById(R.id.view_layout)
 
     }
 
-    private fun setUpBankModels() {
+    private fun setupBankModels() {
         var bankNames : Array<String> = resources.getStringArray(R.array.bank_name_txt)
         var bankDescriptions : Array<String> = resources.getStringArray(R.array.bank_description_txt)
         var bankDates : Array<String> = resources.getStringArray(R.array.bank_date_txt)
 
-        for (i in 0 until bankNames.size) {
+        for (i in bankNames.indices) {
             val bankModel = BankModel(bankNames[i], bankDescriptions[i], bankDates[i], i)
             bankModels.add(bankModel)
         }
@@ -78,9 +82,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
             Log.d(getString(R.string.app_name),
                 "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms")
         }
-
-//        blurred = !blurred
-//        return true
 
         val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val myContentView = popupInflater.inflate(R.layout.popup_window, null)
@@ -119,14 +120,14 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
             "康熙來了",
             "123"
         )
-        for (i in 0 until strs.size) {
+        for (element in strs) {
             val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)
             val name = itemLayout.findViewById<View>(R.id.name) as TextView
-            name.text = strs[i]
+            name.text = element
             wrapLayout!!.addView(itemLayout)
         }
 
-        popupWindow.showAtLocation(view, Gravity.CENTER,     0, 0)
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         myContentView.setOnTouchListener { _, _ ->
             popupWindow.dismiss()     /* It will dismiss the popup window when tapped in it */
             return@setOnTouchListener true
@@ -137,7 +138,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
     override fun onItemClick(position: Int) {
         val intent = Intent(this, BankMainActivity:: class.java)
 
-        intent.putExtra("NAME", bankModels.get(position).getBankName())
+        intent.putExtra("NAME", bankModels.get(position).bankName)
 
         startActivity(intent)
         overridePendingTransition(R.anim.main_to_bank_out, R.anim.main_to_bank_in);

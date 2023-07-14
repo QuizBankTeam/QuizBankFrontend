@@ -1,4 +1,4 @@
-package com.example.yiquizapp
+package com.example.yiquizapp.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.yiquizapp.BankRecyclerViewAdapter.MyViewHolder
+import com.example.yiquizapp.models.BankModel
+import com.example.yiquizapp.R
+import com.example.yiquizapp.interfaces.RecyclerViewInterface
+import com.example.yiquizapp.adapter.BankRecyclerViewAdapter.MyViewHolder
 
 class BankRecyclerViewAdapter(var context: Context, var bankModels: ArrayList<BankModel>, recyclerViewInterface: RecyclerViewInterface) :
     RecyclerView.Adapter<MyViewHolder>() {
@@ -24,9 +27,9 @@ class BankRecyclerViewAdapter(var context: Context, var bankModels: ArrayList<Ba
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 //        Assigning values to the views we created in the recycler_view_row layout file
 //        Based on the position of the recycler view
-        holder.tv_BankName.text = bankModels[position].getBankName()
-        holder.tv_BankDescription.text = bankModels[position].getBankDescription()
-        holder.tv_BankDate.text = bankModels[position].getBankDate()
+        holder.tv_BankName.text = bankModels[position].bankName
+        holder.tv_BankDescription.text = bankModels[position].bankDescription
+        holder.tv_BankDate.text = bankModels[position].bankDate
         //        holder.tv_BankImage.setImageResource(bankModels.get(position).getImage());
     }
 
