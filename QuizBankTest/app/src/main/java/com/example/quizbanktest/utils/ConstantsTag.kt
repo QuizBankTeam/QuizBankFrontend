@@ -43,16 +43,10 @@ object ConstantsTag {
         list3.add("第六章")
         return list3
     }
-    fun getList4():MutableList<String>{
-        val list4 : MutableList<String> = ArrayList()
-        list4.add("Adele")
-        list4.add("Whitney Houston")
-        return list4
+    fun getEmptyList():MutableList<String>{
+        val list: MutableList<String> = ArrayList()
+        list.add("目前為空喔")
+        return list
     }
-    fun getList5():MutableList<String>{
-        val list5: MutableList<String> = ArrayList()
-        list5.add("Custom Red Color")
-        list5.add("Custom Blue Color")
-        return list5
-    }
+
 }

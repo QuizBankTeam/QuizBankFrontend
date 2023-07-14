@@ -1,57 +1,41 @@
 package com.example.introducemyself.utils
 
-import com.example.quizbanktest.models.OcrResultModel
+import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
+import java.text.SimpleDateFormat
+
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 object ConstantsOcrResults {
-    fun getQuestions():ArrayList<OcrResultModel>{
-        val list1: MutableList<String> = ArrayList()
-        val list2: MutableList<String> = ArrayList()
-        val list3: MutableList<String> = ArrayList()
-        list1.add("Java")
-        list1.add("演算法")
-        list1.add("資料結構")
-        list2.add("search tree")
-        list2.add("graph")
-        list2.add("b tree")
-        list2.add("b + tree")
-        list2.add("key")
-        list2.add("value")
-        list2.add("map")
-        list3.add("第三章")
-        list3.add("第四章")
-        val questionList = ArrayList<OcrResultModel>()
+    var questionList = ArrayList<QuestionModel>()
+    var questionTypeList = ArrayList<String>()
 
 
-        val que1 = OcrResultModel(
-            "1",list1,
-            list2,list3
-        )
-        questionList.add(que1)
+    fun setOcrResult(description : String){
 
-        val que2 = OcrResultModel(
-            "2",list1,
-            list2,list3
-        )
-        questionList.add(que2)
+        if(questionTypeList.size == 0){
+            questionTypeList.add("Filling")
+            questionTypeList.add("MultipleChoiceS")
+            questionTypeList.add("ShortAnswer")
+            questionTypeList.add("TrueOrFalse")
+        }
 
-        val que3 = OcrResultModel(
-            "3",list1,
-            list2,list3
-        )
-        questionList.add(que3)
-
-        val que4 = OcrResultModel(
-            "4",list1,
-            list2,list3
-        )
-        questionList.add(que4)
-
-        val que5 = OcrResultModel(
-            "5",list1,
-            list2,list3
-        )
-
-        return questionList
+        val currentDate = Date()
+        val formatter = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+        val formattedDate = formatter.format(currentDate)
+        val options : ArrayList<String> = ArrayList()
+        val answerOptions : ArrayList<String> = ArrayList()
+        val images : ArrayList<String> = ArrayList()
+        val tag : ArrayList<String> = ArrayList()
+        tag.add("123")
+        tag.add("cs design")
+        val ocrResult = QuestionModel(bankType = "single",options=options, answerOptions = answerOptions, image = images, tag = tag,description = description, createdDate = formattedDate.toString(), orginateFrom = ConstantsAccountServiceFunction.userAccount!!._id)
+        questionList.add(ocrResult)
     }
+    fun getOcrResult():ArrayList<QuestionModel>{
+        return  questionList
+    }
+
 }

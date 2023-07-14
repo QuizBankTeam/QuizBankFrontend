@@ -6,32 +6,83 @@ object ConstantsRecommend {
 
     fun getQuestions():ArrayList<QuestionModel>{
         val questionList = ArrayList<QuestionModel>()
+        val options: ArrayList<String> = ArrayList()
+        options.add("test1")
+        val answerOptions: ArrayList<String> = ArrayList()
+        answerOptions.add("answer1")
+        val image: ArrayList<String> = ArrayList()
+        val tag: ArrayList<String> = ArrayList()
 
-        val que1 = QuestionModel(
-            "1","In a hypertonic solution, a bacterial cell will typically?",
-            "none","(A) lyse","(B) burst","(C) stay the same","(D) plasmolyze","none","college","2023/5/17"
-
+        var que1 = QuestionModel(
+            "123",
+            "test",
+        "1234567890",
+        "This is a test.",
+        options,
+        "MultipleChoiceS",
+        "single",
+        "224171b8-cb82-4eac-9601-6bfd03869e5a",
+        answerOptions,
+        "This is test2.",
+        "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
+        "2023-6-29",
+        image,   //todo
+        tag
         )
         questionList.add(que1)
 
         val que2 = QuestionModel(
-            "1","In a hypertonic solution, a bacterial cell will typically?",
-            "none","(A) lyse","(B) burst","(C) stay the same","(D) plasmolyze","none","college","2023/5/17"
+            "123",
+            "test2",
+            "1234567890",
+            "This is a test.",
+            options,
+            "MultipleChoiceS",
+            "single",
+            "224171b8-cb82-4eac-9601-6bfd03869e5a",
+            answerOptions,
+            "This is test2.",
+            "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
+            "2023-6-29",
+            image,   //todo
+            tag
 
         )
         questionList.add(que2)
 
         val que3 = QuestionModel(
-            "1","In a hypertonic solution, a bacterial cell will typically?",
-            "none","(A) lyse","(B) burst","(C) stay the same","(D) plasmolyze","none","college","2023/5/17"
-
+            "123",
+            "test3",
+            "1234567890",
+            "This is a test.",
+            options,
+            "MultipleChoiceS",
+            "single",
+            "224171b8-cb82-4eac-9601-6bfd03869e5a",
+            answerOptions,
+            "This is test2.",
+            "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
+            "2023-6-29",
+            image,   //todo
+            tag
         )
         questionList.add(que3)
 
         val que4 = QuestionModel(
-            "1","In a hypertonic solution, a bacterial cell will typically?",
-            "none","(A) lyse","(B) burst","(C) stay the same","(D) plasmolyze","none","college","2023/5/17"
-
+            "123",
+            "test4",
+            "1234567890",
+            "This is a test.",
+            options,
+            "MultipleChoiceS",
+            "single",
+            "224171b8-cb82-4eac-9601-6bfd03869e5a",
+            answerOptions,
+            "This is test2.",
+            "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
+            "2023-6-29",
+            image,   //todo
+            tag
         )
         questionList.add(que4)
 

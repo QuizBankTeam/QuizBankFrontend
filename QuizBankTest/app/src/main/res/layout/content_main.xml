@@ -104,7 +104,7 @@
                     android:id="@+id/recent_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" Recently Viewed : "
+                    android:text=" Recently Created : "
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/join_code"
@@ -161,9 +161,9 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recent_wrong_list"
-                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
                         android:visibility="visible"
                         tools:visibility="visible" />
                 </LinearLayout>
@@ -224,10 +224,10 @@
             android:id="@+id/home"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/baseline_home_24"
+            android:src="@drawable/home_svgrepo_com__2_"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
 
@@ -237,7 +237,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="30dp"
-            android:src="@drawable/baseline_edit_note_24"
+            android:src="@drawable/notepad_and_pen_svgrepo_com"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
 
@@ -248,7 +248,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="30dp"
             android:background="@color/colorRipple"
-            android:src="@drawable/baseline_camera_alt_24"
+            android:src="@drawable/camera_svgrepo_com__1_"
             android:scaleType="fitXY"
 
             />
@@ -257,7 +257,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="30dp"
-            android:src="@drawable/baseline_collections_bookmark_24"
+            android:src="@drawable/book_and_person_winter_svgrepo_com"
+            android:foregroundTint="@color/white"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
 
@@ -268,7 +269,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:src="@drawable/baseline_settings_24"
+            android:src="@drawable/setting_setting_svgrepo_com__2_"
             android:background="@color/colorRipple"
             android:scaleType="fitXY"
             />

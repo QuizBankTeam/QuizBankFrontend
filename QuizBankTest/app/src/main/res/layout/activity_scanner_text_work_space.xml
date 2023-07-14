@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/intro_background"
     tools:context=".activity.ScannerTextWorkSpaceActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_ocr_detail"
@@ -18,88 +19,179 @@
         app:layout_constraintTop_toTopOf="parent"
         />
     <LinearLayout
-        android:id="@+id/enter_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_ocr_detail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/fl_home"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:padding="1dp"
         android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/ll_action_buttons"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_ocr_detail"
+        android:orientation="vertical"
         >
-        <ImageButton
-            android:id="@+id/ib_auto_submit"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/baseline_cloud_upload_24"
-            android:background="@color/white"
-            android:scaleType="fitXY"
-            />
-    </LinearLayout>
-    <ScrollView
-        android:id="@+id/sv_ocr_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enter_buttons">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
+            android:id="@+id/sv_ocr_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            >
             <LinearLayout
-                android:id="@+id/ocr_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 >
-                <TextView
-                    android:layout_marginTop="5dp"
+                <LinearLayout
+                    android:id="@+id/empty_show"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#363A43"
-                    android:textSize="18sp"
-                    android:layout_marginLeft="5dp"
-                    android:textStyle="bold"
-                    android:text="下列為待處理之掃描結果"
-                    />
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/ocr_list"
-                    android:layout_marginTop="7dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="560dp"
-                    android:visibility="visible"
-                    tools:visibility="visible" />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"
+                    android:background="@color/white"
+                    >
+                    <ImageView
+                        android:id="@+id/iv_answer_image"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="80dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_height="300dp"
+                        android:contentDescription="image"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/empty"/>
+                    <TextView
+                        android:layout_marginTop="100dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="#363A43"
+                        android:textSize="18sp"
+                        android:background="@drawable/white_border_shape_button_rounded"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:text="目前還未新增任何題目喔  ‼️"
+                        />
+                </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-<!--    <LinearLayout-->
-<!--        android:id="@+id/enter_buttons"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:gravity="right"-->
-<!--        android:orientation="horizontal"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:background="@color/colorRipple"-->
-<!--        >-->
-<!--        <ImageButton-->
-<!--            android:id="@+id/ib_auto_submit"-->
-<!--            android:layout_width="30dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:layout_marginRight="15dp"-->
-<!--            android:src="@drawable/baseline_cloud_upload_24"-->
-<!--            android:background="@color/colorRipple"-->
-<!--            android:scaleType="fitXY"-->
-<!--            />-->
-<!--    </LinearLayout>-->
+                <LinearLayout
+                    android:id="@+id/enter_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@color/white"
+                    >
+                    <ImageButton
+                        android:id="@+id/ib_auto_submit"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="15dp"
+                        android:src="@drawable/baseline_cloud_upload_24"
+                        android:background="@color/white"
+                        android:scaleType="fitXY"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ocr_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_marginTop="3dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#363A43"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold"
+                        android:text="下列為待處理之掃描結果"
+                        />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/ocr_list"
+                        android:layout_marginTop="7dp"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_action_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@color/colorRipple"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/home_svgrepo_com__2_"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+
+            />
+        <ImageButton
+            android:id="@+id/test"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/notepad_and_pen_svgrepo_com"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+
+            />
+        <ImageButton
+            android:id="@+id/camera"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:background="@color/colorRipple"
+            android:src="@drawable/camera_svgrepo_com__1_"
+            android:scaleType="fitXY"
+
+            />
+        <ImageButton
+            android:id="@+id/bank"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/book_and_person_winter_svgrepo_com"
+            android:foregroundTint="@color/white"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+
+            />
+        <ImageButton
+            android:id="@+id/setting"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/setting_setting_svgrepo_com__2_"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

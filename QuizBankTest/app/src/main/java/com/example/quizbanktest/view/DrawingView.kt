@@ -1,4 +1,4 @@
-package com.example.quizbanktest.draw
+package com.example.quizbanktest.view
 
 import android.content.Context
 import android.graphics.*
