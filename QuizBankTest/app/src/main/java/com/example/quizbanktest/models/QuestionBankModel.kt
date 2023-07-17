@@ -9,6 +9,6 @@ data class QuestionBankModel(
     val createdDate: String,
     val members : ArrayList<String>,
     val originateFrom : String,
-    val creator:String
+    val creator : String
 ): Serializable
 

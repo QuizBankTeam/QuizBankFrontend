@@ -1,6 +1,7 @@
 package com.example.quizbanktest.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,47 +11,64 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.BankModel
+import com.example.quizbanktest.models.QuestionBankModel
+import org.w3c.dom.Text
 
-class BankRecyclerViewAdapter(var context: Context, var bankModels: ArrayList<BankModel>, recyclerViewInterface: RecyclerViewInterface) :
+class BankRecyclerViewAdapter(var context: Context,
+                              var questionBankModels: ArrayList<QuestionBankModel>, recyclerViewInterface: RecyclerViewInterface) :
     RecyclerView.Adapter<BankRecyclerViewAdapter.MyViewHolder>() {
 
     var recyclerViewInterface = recyclerViewInterface
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 //        This is where you inflate the layout (Giving a look to our rows)
-        val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.item_bankcard, parent, false)
-        return MyViewHolder(view, recyclerViewInterface)
+        try {
+            val inflater = LayoutInflater.from(context)
+            val view = inflater.inflate(R.layout.item_bankcard, parent, false)
+            return MyViewHolder(view, recyclerViewInterface)
+        } catch (e: Exception) {
+            Log.e("BankRecyclerViewAdapter", "onCreateView", e)
+            throw e
+        }
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 //        Assigning values to the views we created in the recycler_view_row layout file
 //        Based on the position of the recycler view
-        holder.tv_BankName.text = bankModels[position].bankName
-        holder.tv_BankDescription.text = bankModels[position].bankDescription
-        holder.tv_BankDate.text = bankModels[position].bankDate
-        //        holder.tv_BankImage.setImageResource(bankModels.get(position).getImage());
+//        TODO: bankID
+        holder.tv_BankTitle.text = questionBankModels[position].title
+        holder.tv_BankType.text = questionBankModels[position].questionBankType
+        holder.tv_BankCreatedDate.text = questionBankModels[position].createdDate
+        holder.tv_BankMembers.text = questionBankModels[position].members.joinToString(separator = ",")
+        holder.tv_BankOriginateFrom.text = questionBankModels[position].originateFrom
+        holder.tv_BankCreator.text = questionBankModels[position].creator
     }
 
     override fun getItemCount(): Int {
 //        The recycler view just wants to know the number of items you want displayed
-        return bankModels.size
+        return questionBankModels.size
     }
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
         //        Grabbing the views from our recycler_view_row layout file
         //        Kinda like in the onCreate method
-        var iv_BankImage: ImageView? = null
-        var tv_BankName: TextView
-        var tv_BankDescription: TextView
-        var tv_BankDate: TextView
+//        TODO: BankID
+        var tv_BankTitle: TextView
+        var tv_BankType: TextView
+        var tv_BankCreatedDate: TextView
+        var tv_BankMembers: TextView
+        var tv_BankOriginateFrom: TextView
+        var tv_BankCreator: TextView
 
         init {
 
-//            iv_BankImage = itemView.findViewById(R.id.bank_image);
-            tv_BankName = itemView.findViewById(R.id.bank_name)
-            tv_BankDescription = itemView.findViewById(R.id.bank_description)
-            tv_BankDate = itemView.findViewById(R.id.bank_date)
+//          TODO: bankID
+            tv_BankTitle = itemView.findViewById(R.id.bank_title)
+            tv_BankType = itemView.findViewById(R.id.bank_type)
+            tv_BankCreatedDate = itemView.findViewById(R.id.bank_createdDate)
+            tv_BankMembers = itemView.findViewById(R.id.bank_members)
+            tv_BankOriginateFrom = itemView.findViewById(R.id.bank_from)
+            tv_BankCreator = itemView.findViewById(R.id.bank_creator)
 
             itemView.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(view: View?) {

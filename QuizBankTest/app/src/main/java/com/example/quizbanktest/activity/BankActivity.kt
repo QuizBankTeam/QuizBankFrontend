@@ -23,6 +23,7 @@ import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
 import com.example.quizbanktest.interfaces.RecyclerViewInterface
 
 import com.example.quizbanktest.models.BankModel
+import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 
 import com.example.quizbanktest.view.WrapLayout
@@ -34,12 +35,12 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     lateinit var bank_warning: TextView
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
-    var bankModels = ArrayList<BankModel>()
+    var questionBankModels = ArrayList<QuestionBankModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
+
         val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
         setSupportActionBar(toolBar)
         val actionBar = supportActionBar
@@ -66,31 +67,39 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             gotoHomeActivity()
         }
         setUpBankModels()
-        val adapter = BankRecyclerViewAdapter(this, bankModels, this)
+        val adapter = BankRecyclerViewAdapter(this, questionBankModels, this)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-
     }
 
     private fun setUpBankModels() {
-        var bankNames = ArrayList<String>()
-        var bankTypes = ArrayList<String>()
-        var bankDates = ArrayList<String>()
+        var bankID = ArrayList<String>()
+        var bankTitle = ArrayList<String>()
+        var bankType = ArrayList<String>()
+        var bankCreatedDate = ArrayList<String>()
+        var bankMembers = ArrayList<ArrayList<String>>()
+        var bankOriginateFrom = ArrayList<String>()
+        var bankCreators = ArrayList<String>()
+
         Log.e("MainActivity", "ConstantsQuestionBankFunction.questionBankList")
 
         if (ConstantsQuestionBankFunction.questionBankList != null) {
-            var index : Int = 0
-
             for (item in ConstantsQuestionBankFunction.questionBankList) {
-                bankNames.add(item.title)
-                bankTypes.add(item.questionBankType)
-                bankDates.add(item.createdDate)
+                bankID.add(item._id)
+                bankTitle.add(item.title)
+                bankType.add(item.questionBankType)
+                bankCreatedDate.add(item.createdDate)
+                bankMembers.add(item.members)
+                bankOriginateFrom.add(item.originateFrom)
+                bankCreators.add(item.creator)
             }
-            for (i in bankNames.indices) {
-                val bankModel = BankModel(bankNames[i], bankTypes[i], bankDates[i], i)
-                bankModels.add(bankModel)
+            for (i in bankTitle.indices) {
+                val questionBankModel = QuestionBankModel(bankID[i], bankTitle[i], bankType[i], bankCreatedDate[i],
+                    bankMembers[i], bankOriginateFrom[i], bankCreators[i])
+
+                questionBankModels.add(questionBankModel)
             }
         } else {
             bank_warning = findViewById(R.id.bank_warning)
@@ -155,10 +164,10 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             "康熙來了",
             "123"
         )
-        for (i in 0 until strs.size) {
+        for (element in strs) {
             val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)
             val name = itemLayout.findViewById<View>(R.id.name) as TextView
-            name.text = strs[i]
+            name.text = element
             wrapLayout!!.addView(itemLayout)
         }
 
@@ -173,7 +182,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     override fun onItemClick(position: Int) {
         val intent = Intent(this, BankQuestionActivity:: class.java)
 
-        intent.putExtra("NAME", bankModels[position].bankName)
+        intent.putExtra("Title", questionBankModels[position].title)
 
         startActivity(intent)
         overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
