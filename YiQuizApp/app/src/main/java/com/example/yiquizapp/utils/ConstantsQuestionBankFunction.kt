@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.yiquizapp.models.QuestionBankModel
-import com.example.yiquizapp.network.QuestionBankService
+import com.example.yiquizapp.QuestionBankService
 import com.google.gson.Gson
 import com.squareup.okhttp.ResponseBody
 import retrofit.Callback
@@ -17,7 +17,7 @@ object ConstantsQuestionBankFunction {
     var questionBankList : ArrayList<QuestionBankModel> = ArrayList()
 
 
-    fun getAllUserQuestionBanks(context: Context,onSuccess: (ArrayList<QuestionBankModel>) -> Unit, onFailure: (String) -> Unit) {
+    fun getAllUserQuestionBanks(context: Context, onSuccess: (ArrayList<QuestionBankModel>) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

@@ -4,9 +4,8 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.introducemyself.utils.ConstantsOcrResults
+import com.example.yiquizapp.ScanImageService
 import com.example.yiquizapp.activity.ScannerTextWorkSpaceActivity
-import com.example.yiquizapp.network.ScanImageService
 import com.google.gson.Gson
 import com.squareup.okhttp.ResponseBody
 import retrofit.Callback

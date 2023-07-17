@@ -1,4 +1,4 @@
-package com.example.introducemyself.utils
+package com.example.yiquizapp.utils
 
 object ConstantsTag {
     fun getList1():MutableList<String>{

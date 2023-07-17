@@ -3,9 +3,8 @@ package com.example.yiquizapp.utils
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.introducemyself.utils.ConstantsOcrResults
+import com.example.yiquizapp.QuestionService
 import com.example.yiquizapp.models.QuestionModel
-import com.example.yiquizapp.network.QuestionService
 import com.squareup.okhttp.ResponseBody
 import retrofit.Callback
 import retrofit.GsonConverterFactory
@@ -14,7 +13,7 @@ import retrofit.Retrofit
 
 object ConstantsQuestionFunction {
     var postQuestionPosition : Int = 0
-    fun postQuestion(question : QuestionModel, activity: AppCompatActivity,onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    fun postQuestion(question : QuestionModel, activity: AppCompatActivity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
 
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -24,7 +23,22 @@ object ConstantsQuestionFunction {
             val api = retrofit.create(QuestionService::class.java)
 //            data class PostQuestionBody(val title: String,val number: String,val description: String,val options: ArrayList<String>,val questionType:String,val bankType:String,val questionBank:String,val answerOptions:ArrayList<String>,val answerDescription:String,val provider:String,val originateFrom:String,val createdDate:String,val image : String,val tag:ArrayList<String>)
 
-            val body = QuestionService.PostQuestionBody(question.title!!,question.number!!,question.description,question.options!!,question.questionType!!,question.bankType!!,question.questionBank!!,question.answerOptions!!,question.answerDescription!!,ConstantsAccountServiceFunction.userAccount!!._id,question.orginateFrom!!,question.createdDate!!,question.image!!,question.tag!!)
+            val body = QuestionService.PostQuestionBody(
+                question.title!!,
+                question.number!!,
+                question.description,
+                question.options!!,
+                question.questionType!!,
+                question.bankType!!,
+                question.questionBank!!,
+                question.answerOptions!!,
+                question.answerDescription!!,
+                ConstantsAccountServiceFunction.userAccount!!._id,
+                question.orginateFrom!!,
+                question.createdDate!!,
+                question.image!!,
+                question.tag!!
+            )
 
             //TODO 拿到csrf token access token
             Log.e("access in scan ", Constants.accessToken)

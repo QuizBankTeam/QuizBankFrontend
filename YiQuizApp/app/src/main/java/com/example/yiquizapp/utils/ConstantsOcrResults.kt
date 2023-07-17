@@ -1,7 +1,6 @@
-package com.example.introducemyself.utils
+package com.example.yiquizapp.utils
 
-import com.example.quizbanktest.models.QuestionModel
-import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
+import com.example.yiquizapp.models.QuestionModel
 import java.text.SimpleDateFormat
 
 import java.util.*

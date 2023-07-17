@@ -1,9 +1,8 @@
-package com.example.yiquizapp.network
+package com.example.yiquizapp
 
 import com.squareup.okhttp.ResponseBody
 import retrofit.Call
 import retrofit.http.*
-import retrofit2.http.Headers
 
 interface ScanImageService {
 

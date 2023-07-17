@@ -23,8 +23,11 @@ import com.example.yiquizapp.*
 import com.example.yiquizapp.adapter.BankRecyclerViewAdapter
 import com.example.yiquizapp.interfaces.RecyclerViewInterface
 import com.example.yiquizapp.models.BankModel
+import com.example.yiquizapp.utils.ConstantsQuestionBankFunction
 import com.example.yiquizapp.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), RecyclerViewInterface {
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
     lateinit var view: LinearLayout
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
+    lateinit var bank_warning: TextView
 
     var bankModels = ArrayList<BankModel>()
 
@@ -43,10 +47,12 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
-        val bankRecyclerViewAdapter = BankRecyclerViewAdapter(this, bankModels, this)
+        var recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
 
         setupBankModels()
+
+        var bankRecyclerViewAdapter = BankRecyclerViewAdapter(this, bankModels, this)
+
         recyclerView.adapter = bankRecyclerViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -54,14 +60,32 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
     }
 
     private fun setupBankModels() {
-        var bankNames : Array<String> = resources.getStringArray(R.array.bank_name_txt)
-        var bankDescriptions : Array<String> = resources.getStringArray(R.array.bank_description_txt)
-        var bankDates : Array<String> = resources.getStringArray(R.array.bank_date_txt)
+//        var bankNames : Array<String> = resources.getStringArray(R.array.bank_name_txt)
+//        var bankDescriptions : Array<String> = resources.getStringArray(R.array.bank_description_txt)
+//        var bankDates : Array<String> = resources.getStringArray(R.array.bank_date_txt)
+        var bankNames = arrayOf<String>()
+        var bankTypes = arrayOf<String>()
+        var bankDates = arrayOf<String>()
+        Log.e("MainActivity", "ConstantsQuestionBankFunction.questionBankList")
 
-        for (i in bankNames.indices) {
-            val bankModel = BankModel(bankNames[i], bankDescriptions[i], bankDates[i], i)
-            bankModels.add(bankModel)
+        if (ConstantsQuestionBankFunction.questionBankList != null) {
+            var index : Int = 0
+
+            for (item in ConstantsQuestionBankFunction.questionBankList) {
+                bankNames[index] = item.title
+                bankTypes[index] = item.questionBankType
+                bankDates[index] = item.createdDate
+                index += 1
+            }
+            for (i in bankNames.indices) {
+                val bankModel = BankModel(bankNames[i], bankTypes[i], bankDates[i], i)
+                bankModels.add(bankModel)
+            }
+        } else {
+            bank_warning = findViewById(R.id.bank_warning)
+            bank_warning.text = "這裡還沒有任何資料喔~"
         }
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -138,7 +162,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface {
     override fun onItemClick(position: Int) {
         val intent = Intent(this, BankMainActivity:: class.java)
 
-        intent.putExtra("NAME", bankModels.get(position).bankName)
+        intent.putExtra("NAME", bankModels[position].bankName)
 
         startActivity(intent)
         overridePendingTransition(R.anim.main_to_bank_out, R.anim.main_to_bank_in);

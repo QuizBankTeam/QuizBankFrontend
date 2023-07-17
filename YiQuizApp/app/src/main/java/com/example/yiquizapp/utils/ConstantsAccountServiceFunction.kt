@@ -4,12 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-
+import com.example.yiquizapp.AccountService
+import com.example.yiquizapp.CsrfTokenService
 import com.example.yiquizapp.activity.IntroActivity
 import com.example.yiquizapp.models.AccountModel
-import com.example.yiquizapp.models.QuestionBankModel
-import com.example.yiquizapp.network.AccountService
-import com.example.yiquizapp.network.CsrfTokenService
+
 import com.google.gson.Gson
 import com.squareup.okhttp.Headers
 import com.squareup.okhttp.ResponseBody
@@ -20,7 +19,7 @@ import retrofit.Retrofit
 
 object ConstantsAccountServiceFunction {
 
-    var userAccount : AccountModel ? = null
+    var userAccount : AccountModel? = null
     fun getCsrfToken(context: Context) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()

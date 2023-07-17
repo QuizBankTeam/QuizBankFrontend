@@ -20,15 +20,18 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
+import com.example.quizbanktest.interfaces.RecyclerViewInterface
 
 import com.example.quizbanktest.models.BankModel
+import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
 
-class BankActivity : BaseActivity() {
+class BankActivity : BaseActivity(), RecyclerViewInterface {
     lateinit var searchView: SearchView
     lateinit var menuButton: ImageButton
+    lateinit var bank_warning: TextView
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
     var bankModels = ArrayList<BankModel>()
@@ -62,8 +65,8 @@ class BankActivity : BaseActivity() {
         homeButton.setOnClickListener{
             gotoHomeActivity()
         }
-        val adapter = BankRecyclerViewAdapter(this, bankModels)
         setUpBankModels()
+        val adapter = BankRecyclerViewAdapter(this, bankModels, this)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -72,13 +75,26 @@ class BankActivity : BaseActivity() {
     }
 
     private fun setUpBankModels() {
-        val bankNames : Array<String> = resources.getStringArray(R.array.bank_name_txt)
-        val bankDescriptions : Array<String> = resources.getStringArray(R.array.bank_description_txt)
-        val bankDates : Array<String> = resources.getStringArray(R.array.bank_date_txt)
+        var bankNames = ArrayList<String>()
+        var bankTypes = ArrayList<String>()
+        var bankDates = ArrayList<String>()
+        Log.e("MainActivity", "ConstantsQuestionBankFunction.questionBankList")
 
-        for (i in 0 until bankNames.size) {
-            val bankModel = BankModel(bankNames[i], bankDescriptions[i], bankDates[i], i)
-            bankModels.add(bankModel)
+        if (ConstantsQuestionBankFunction.questionBankList != null) {
+            var index : Int = 0
+
+            for (item in ConstantsQuestionBankFunction.questionBankList) {
+                bankNames.add(item.title)
+                bankTypes.add(item.questionBankType)
+                bankDates.add(item.createdDate)
+            }
+            for (i in bankNames.indices) {
+                val bankModel = BankModel(bankNames[i], bankTypes[i], bankDates[i], i)
+                bankModels.add(bankModel)
+            }
+        } else {
+            bank_warning = findViewById(R.id.bank_warning)
+            bank_warning.text = "這裡還沒有任何資料喔~"
         }
     }
 
@@ -100,9 +116,6 @@ class BankActivity : BaseActivity() {
             Log.d(getString(R.string.app_name),
                 "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms")
         }
-
-//        blurred = !blurred
-//        return true
 
         val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val myContentView = popupInflater.inflate(R.layout.popup_window, null)
@@ -155,5 +168,14 @@ class BankActivity : BaseActivity() {
             return@setOnTouchListener true
         }
 
+    }
+
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, BankQuestionActivity:: class.java)
+
+        intent.putExtra("NAME", bankModels[position].bankName)
+
+        startActivity(intent)
+        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
     }
 }

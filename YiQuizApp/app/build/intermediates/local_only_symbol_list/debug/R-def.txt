@@ -6,9 +6,6 @@ anim main_to_bank_in
 anim main_to_bank_out
 anim popup_enter
 anim popup_exit
-array bank_date_txt
-array bank_description_txt
-array bank_name_txt
 color azure
 color black
 color blue_200
@@ -59,10 +56,11 @@ drawable text_area
 drawable white_book
 drawable window_background
 id bank
-id bank_date
-id bank_description
+id bank_createdDate
 id bank_image
-id bank_name
+id bank_title
+id bank_type
+id bank_warning
 id btn_back_arrow
 id camera
 id clip_layout

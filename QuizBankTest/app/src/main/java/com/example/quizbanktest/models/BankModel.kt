@@ -1,8 +1,8 @@
-package com.example.yiquizapp.models
+package com.example.quizbanktest.models
 
 class BankModel(
     var bankName: String,
-    var bankType: String,
+    var bankDescription: String,
     var bankDate: String,
     var image: Int
 )

@@ -30,15 +30,15 @@ interface QuestionBankService {
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Query("questionBankId") questionBankId: String
+        @Path("questionBankId") questionBankId: String
     ): Call<ResponseBody>
 
-    @GET("/questionBanks")
+    @GET("/questionBanks/{bankType}")
     fun getAllQuestionBanks(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Query("bankType") bankType: String
+        @Path("bankType") bankType: String
     ): Call<ResponseBody>
 
     @PUT("/questionBank")

@@ -1,4 +1,4 @@
-package com.example.yiquizapp.network
+package com.example.yiquizapp
 
 import com.squareup.okhttp.ResponseBody
 import retrofit.Call
