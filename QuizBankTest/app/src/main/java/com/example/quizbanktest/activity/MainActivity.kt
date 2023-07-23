@@ -1,6 +1,7 @@
 package com.example.quizbanktest.activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.Toast
@@ -24,29 +25,40 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ConstantsAccountServiceFunction.getCsrfToken(this@MainActivity)
-        ConstantsAccountServiceFunction.login(this@MainActivity,
-            onSuccess = {
-                ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
-                    onSuccess = { questionBanks ->
-                        setupRecentRecyclerView(questionBanks)
-                        setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
-                        setupWrongListRecyclerView(ConstantsWrong.getQuestions())
+
+        ConstantsAccountServiceFunction.getCsrfToken(this,
+            onSuccess = { it1 ->
+                ConstantsAccountServiceFunction.login(this, " ", " ",
+                    onSuccess = {   message->
+                        Log.d("login success", message)
+
+                        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+                            onSuccess = { questionBanks ->
+                                setupRecentRecyclerView(questionBanks)
+                                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+                                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
+                            },
+                            onFailure = { errorMessage ->
+                                Toast.makeText(this,"get banklist error",Toast.LENGTH_SHORT).show()
+                            }
+                        )
                     },
-                    onFailure = { errorMessage ->
-                        Toast.makeText(this,"get banklist error",Toast.LENGTH_SHORT).show()
-                    }
-                )
+                    onFailure = { message->
+                        Log.d("login fail", message)
+                    })
             },
-            onFailure = {
-                Toast.makeText(this,"login error",Toast.LENGTH_SHORT).show()
-            }
-        )
+            onFailure = { it1 ->
+                Log.d("get csrf fail", it1)
+            })
 
         setupActionBar()
         val nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)
         nav_view.setNavigationItemSelectedListener(this)
 
+        val quiz : ImageButton = findViewById(R.id.test)
+        quiz.setOnClickListener {
+            gotoQuizActivity()
+        }
         val bank : ImageButton = findViewById(R.id.bank)
         bank.setOnClickListener{
             gotoBankActivity()

@@ -21,7 +21,7 @@ import retrofit.Retrofit
 object ConstantsAccountServiceFunction {
 
     var userAccount : AccountModel ? = null
-    fun getCsrfToken(context: Context) {
+    fun getCsrfToken(context: Context, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -54,7 +54,7 @@ object ConstantsAccountServiceFunction {
                         Constants.session = session!!
                         Constants.cookie =
                             "CSRF-TOKEN=" + Constants.csrfToken + ";" + "session=" + Constants.session
-
+                        onSuccess(Constants.cookie)
                     } else {
 
                         val sc = response.code()
@@ -73,11 +73,13 @@ object ConstantsAccountServiceFunction {
                                 Log.e("in csrf Error", "Generic Error")
                             }
                         }
+                        onFailure(sc.toString())
                     }
                 }
 
                 override fun onFailure(t: Throwable?) {
                     Log.e("in csrf Errorrrrr", t?.message.toString())
+                    onFailure(t?.message.toString())
                 }
             })
         } else {
@@ -90,8 +92,8 @@ object ConstantsAccountServiceFunction {
     }
 
 
-    fun login(context: Context, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
-        getCsrfToken(context)
+    fun login(context: Context, email: String, password: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -101,7 +103,7 @@ object ConstantsAccountServiceFunction {
             Constants.username = "test"
             Constants.password = "test"
             val body = AccountService.PostBody(Constants.username, Constants.password)
-
+//            val body = accountService.PostBody(email, password)
             //TODO 用csrf token 拿access token
 
             val call = api.login(Constants.cookie, Constants.csrfToken, Constants.session, body)

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 
 import androidx.lifecycle.lifecycleScope
+import com.example.quizbanktest.activity.quiz.QuizPage
 
 import com.example.quizbanktest.utils.*
 
@@ -205,6 +206,10 @@ open class BaseActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun gotoQuizActivity(){
+        val intent = Intent(this,QuizPage::class.java)
+        startActivity(intent)
+    }
     fun choosePhotoFromGallery(onImageSelected: (Bitmap?) -> Unit) {
         this.onImageSelected = onImageSelected
         Dexter.withActivity(this)
