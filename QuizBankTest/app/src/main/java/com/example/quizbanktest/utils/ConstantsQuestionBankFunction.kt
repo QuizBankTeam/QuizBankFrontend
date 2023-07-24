@@ -81,5 +81,9 @@ object ConstantsQuestionBankFunction {
         }
     }
 
+    fun postBank() {
+
+    }
+
     data class AllQuestionBanksResponse(val questionBanks:ArrayList<QuestionBankModel>)
 }

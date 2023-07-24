@@ -5,14 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.interfaces.RecyclerViewInterface
-import com.example.quizbanktest.models.BankModel
 import com.example.quizbanktest.models.QuestionBankModel
-import org.w3c.dom.Text
 
 class BankRecyclerViewAdapter(var context: Context,
                               var questionBankModels: ArrayList<QuestionBankModel>, recyclerViewInterface: RecyclerViewInterface) :

@@ -1,5 +1,6 @@
 package com.example.quizbanktest.utils
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
@@ -8,6 +9,7 @@ import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.network.QuestionBankService
 import com.example.quizbanktest.network.QuestionService
 import com.example.quizbanktest.network.ScanImageService
 import com.google.gson.Gson
@@ -51,7 +53,6 @@ object ConstantsQuestionFunction {
 
                         onSuccess("upload ok")
                     } else {
-
                         val sc = response.code()
                         when (sc) {
                             400 -> {
@@ -88,8 +89,68 @@ object ConstantsQuestionFunction {
         }
     }
 
+    fun getQuestion(context: Context, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        if (Constants.isNetworkAvailable(context)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(QuestionBankService::class.java)
+            //TODO 拿到csrf token access token
+            Log.e("access in scan ", Constants.accessToken)
+            Log.e("COOKIE in scan ", Constants.COOKIE)
+            val call = api.getAllQuestionBanks(
+                Constants.COOKIE,
+                Constants.csrfToken,
+                Constants.session,
+                "single"
+            )
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+                        //TODO
+//                        val gson = Gson()
+//                        val allBanksResponse = gson.fromJson(
+//                            response.body().charStream(),
+//                            ConstantsQuestionBankFunction.AllQuestionBanksResponse::class.java
+//                        )
+//                        Log.e("Response Result", allBanksResponse.questionBanks[0].toString())
+//                        ConstantsQuestionBankFunction.allBanksReturnResponse = allBanksResponse
+//                        ConstantsQuestionBankFunction.questionBankList = allBanksResponse.questionBanks
+//                        onSuccess(allBanksResponse.questionBanks)
+                    } else {
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e(
+                                    "Error 400", "Bad Re" +
+                                            "" +
+                                            "quest"
+                                )
+                            }
+                            404 -> {
+                                Log.e("Error 404", "Not Found")
+                            }
+                            else -> {
+                                Log.e("Error", "in get all banks Generic Error")
+                            }
+                        }
+                        onFailure("Request failed with status code $sc")
+                    }
+                }
 
-
-
+                override fun onFailure(t: Throwable?) {
+                    onFailure("Request failed with status code ")
+                    Log.e("in get all banks Errorrrrr", t?.message.toString())
+                }
+            })
+        } else {
+            Toast.makeText(
+                context,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
 }

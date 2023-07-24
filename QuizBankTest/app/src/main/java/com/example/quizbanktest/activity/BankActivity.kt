@@ -22,7 +22,6 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
 import com.example.quizbanktest.interfaces.RecyclerViewInterface
 
-import com.example.quizbanktest.models.BankModel
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 
@@ -35,8 +34,9 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     lateinit var bank_warning: TextView
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
-    var questionBankModels = ArrayList<QuestionBankModel>()
+    private var questionBankModels = ArrayList<QuestionBankModel>()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
@@ -61,12 +61,13 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             cameraPick()
         }
 
-        val recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
         val homeButton : ImageButton  = findViewById(R.id.home)
         homeButton.setOnClickListener{
             gotoHomeActivity()
         }
-        setUpBankModels()
+
+        val recyclerView : RecyclerView = findViewById(R.id.bankRecyclerView)
+        setBankModels()
         val adapter = BankRecyclerViewAdapter(this, questionBankModels, this)
 
         recyclerView.adapter = adapter
@@ -74,7 +75,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
     }
 
-    private fun setUpBankModels() {
+    private fun setBankModels() {
         var bankID = ArrayList<String>()
         var bankTitle = ArrayList<String>()
         var bankType = ArrayList<String>()

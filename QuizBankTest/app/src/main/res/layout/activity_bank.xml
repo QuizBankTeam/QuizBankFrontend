@@ -8,11 +8,6 @@
     android:orientation="vertical"
     tools:context=".activity.BankActivity">
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/imageview"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent" />-->
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_home_detail"
         android:layout_width="match_parent"
@@ -74,7 +69,7 @@
         >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mRecyclerView"
+            android:id="@+id/bankRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".activity.BankActivity">

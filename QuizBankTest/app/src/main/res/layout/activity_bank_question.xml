@@ -6,27 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".activity.BankQuestionActivity">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorRipple"
-        android:gravity="center"
-        android:text=""
-        android:textSize="35sp" />
 
-    <ImageButton
-        android:id="@+id/btn_back_arrow"
+    <RelativeLayout
+        android:id="@+id/title_bar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@null"
-        android:onClick="backToPreviousPage"
-        android:src="@drawable/arrow_left_svgrepo_com" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorRipple"
+            android:gravity="center"
+            android:text="Bank Title"
+            android:textSize="35sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btn_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:onClick="backToPreviousPage"
+            android:src="@drawable/arrow_left_svgrepo_com" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:layout_below="@+id/title_bar"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/questionRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".activity.BankActivity">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
 
 
 </RelativeLayout>
