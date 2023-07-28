@@ -5,17 +5,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import com.example.quizbanktest.R
+import com.example.quizbanktest.databinding.ActivityIntroBinding
 import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
 
 class IntroActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityIntroBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
-        val signIn : TextView = findViewById(R.id.sign_in_intro)
-        signIn.setOnClickListener {
-            ConstantsAccountServiceFunction.getCsrfToken(this)
+        binding = ActivityIntroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-            val intent = Intent(this, MainActivity::class.java)
+        binding.signInIntro.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }

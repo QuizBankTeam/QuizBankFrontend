@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="3dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:orientation="vertical"
+            android:background="#ebebeb">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/question_image"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/society9802" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:id="@+id/question_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="第一題"
+                            android:textSize="20dp"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="5dp"/>
+                        <TextView
+                            android:id="@+id/question_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/light_blue2"
+                            android:layout_marginLeft="5dp"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="5dp"
+                            android:text="單選"
+                            android:textSize="20dp"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/question_bank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="-5dp"
+                        android:paddingHorizontal="10dp"
+                        android:text="題庫: 成大計算機"
+                        android:textSize="15dp" />
+                    <TextView
+                        android:id="@+id/question_provider"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="提供者: 賴建宇"
+                        android:textSize="15dp"
+                        android:paddingHorizontal="10dp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/question_tag_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right">
+                   <TextView
+                        android:id="@+id/question_tag0"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/corner_radius_yellow"
+                        android:padding="2sp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginHorizontal="3dp"
+                        android:gravity="center"
+                        android:text="2009"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:drawableLeft="@drawable/baseline_tag"/>
+
+                    <TextView
+                        android:id="@+id/question_tag1"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginHorizontal="3dp"
+                        android:background="@drawable/corner_radius_yellow"
+                        android:drawableLeft="@drawable/baseline_tag"
+                        android:gravity="center"
+                        android:padding="2sp"
+                        android:text="成大"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+                    <TextView
+                        android:id="@+id/question_tag2"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/corner_radius_yellow"
+                        android:padding="2sp"
+                        android:layout_marginHorizontal="3dp"
+                        android:gravity="center"
+                        android:text="計系"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:drawableLeft="@drawable/baseline_tag"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="3dp"
+                android:background="@color/underline" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 灰色背景 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#888888" />/>
+        </shape>
+    </item>
+    <item android:gravity="center"
+        android:top="20dp"
+        android:bottom="20dp"
+        android:right="20dp"
+        android:left="20dp">
+        <bitmap
+            android:src="@drawable/quizbank_icon"
+            android:gravity="center" />
+    </item>
+</layer-list>

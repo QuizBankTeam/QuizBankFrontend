@@ -30,4 +30,22 @@
     <color name="cyan_200">#5FFBF1</color>
     <color name="bank_cardStroke">#4F4F4F</color>
 
+    <color name="dark_blue3">#000814</color>
+    <color name="dark_blue2">#001d3d</color>
+    <color name="dark_blue1">#003566</color>
+    <color name="dark_yellow1">#ffc300</color>
+    <color name="light_yellow2">#ffd60a</color>
+    <color name="navy_blue3">#355070</color>
+    <color name="navy_blue1">#0C90F1</color>
+    <color name="light_red2">#e56b6f</color>
+    <color name="navy_blue2">#4361ee</color>
+    <color name="dark_yellow2">#fcbf49</color>
+    <color name="light_red1">#eaac8b</color>
+    <color name="light_yellow1">#f4f1de</color>
+    <color name="light_blue2">#8ecae6</color>
+    <color name="light_blue1">#4bc9f0</color>
+    <color name="answer_correct">#A6FFA6</color>
+    <color name="answer_wrong">#FF7575</color>
+    <color name="question_submit">#FF9013FE</color>
+    <color name="underline">#D0CDCD</color>
 </resources>

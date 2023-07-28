@@ -74,6 +74,19 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
+        <activity android:name=".activity.quiz.SingleQuestion"/>
+        <activity android:name=".activity.quiz.SingleQuestionSetting"/>
+        <activity android:name=".activity.quiz.SingleQuiz"
+                    android:theme="@style/AppTheme"/>
+        <activity android:name=".activity.quiz.SingleQuizSetting"/>
+        <activity android:name=".activity.quiz.QuizPage"/>
+        <activity android:name=".activity.quiz.RecordPage"/>
+        <activity android:name=".activity.quiz.SPStartQuiz"/>
+        <activity android:name=".activity.quiz.SPQuizFinish"/>
+        <activity android:name=".activity.quiz.SPSingleRecord"/>
+        <activity android:name=".activity.quiz.MPStartQuiz"
+                    android:theme="@style/StartQuiz"/>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"

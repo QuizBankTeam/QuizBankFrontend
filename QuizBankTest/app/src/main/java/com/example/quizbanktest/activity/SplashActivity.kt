@@ -16,7 +16,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // This is used to align the xml view to this class
         setContentView(R.layout.activity_splash)
-        ConstantsAccountServiceFunction.getCsrfToken(this)
+
         // This is used to hide the status bar and make the splash screen as a full screen activity.
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -24,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
         )
 
         Handler().postDelayed({
-            ConstantsAccountServiceFunction.getCsrfToken(this@SplashActivity)
+
 
             if (true) { //TODO 用於紀錄使用者是否登入過
                 // Start the Main Activity

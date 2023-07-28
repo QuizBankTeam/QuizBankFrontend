@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical">
+
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:orientation="horizontal"
+                android:background="@color/colorPrimary"
+                android:theme="@style/CustomToolbarStyle">
+                <ImageButton
+                    android:id="@+id/save_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/baseline_save_alt" />
+                <TextView
+                    android:id="@+id/quiz_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="考試名稱"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/CustomToolbarStyle"
+                    android:textColor="@color/colorPrimaryDark"/>
+                <ImageButton
+                    android:id="@+id/quiz_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/baseline_settings"/>
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Question_List"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/start_quiz"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="20dp"
+        android:padding="5dp"
+        android:text="開始考試"
+        android:textSize="15sp"
+        app:iconSize="30sp"
+        app:iconPadding="0dp"
+        app:backgroundTint="@color/dark_yellow1"
+        app:icon="@drawable/start_quiz" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:id="@+id/setting_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical"
+        android:elevation="100dp">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:orientation="horizontal"
+                android:background="@color/colorPrimary"
+                android:theme="@style/CustomToolbarStyle">
+                <Button
+                    android:id="@+id/back_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingEnd="100dp"
+                    android:text="返回"
+                    android:textSize="14dp"
+                    android:background="@android:color/transparent" />
+                <TextView
+                    android:id="@+id/question_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="題目設定"
+                    android:textSize="22dp"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/CustomToolbarStyle"
+                    android:textColor="@color/colorPrimaryDark"/>
+                <Button
+                    android:id="@+id/save_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="100dp"
+                    android:text="儲存"
+                    android:textSize="14dp"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="標題"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <EditText
+                android:id="@+id/Question_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:text="第一次考試"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="答案描述"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="10"
+                app:cardCornerRadius="10dp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="3dp">
+
+                <TextView
+                    android:id="@+id/Question_answerDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="讚讚"
+                    android:textSize="18dp" />
+            </androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/set_answerDescription"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="10dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/background_round_primary"
+                android:src="@drawable/baseline_edit" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="題號"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <TextView
+                android:id="@+id/Question_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="1"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/question_type_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:text="題目類型"
+            android:textColor="#3C3C3C"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/Question_type_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <Spinner
+                android:id="@+id/Question_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="題庫"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <TextView
+                android:id="@+id/Question_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="題庫1號"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提供者"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <TextView
+                android:id="@+id/Question_provider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="jacky1"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="創建日期"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <TextView
+                android:id="@+id/Question_createDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="2023-06-29"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="170dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="15dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="3dp"
+        android:backgroundTint="@color/light_red2">
+
+        <Button
+            android:id="@+id/Question_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:text="刪除題目"
+            android:textSize="18dp"/>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
