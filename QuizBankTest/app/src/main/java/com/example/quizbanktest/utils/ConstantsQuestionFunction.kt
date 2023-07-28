@@ -20,6 +20,8 @@ import retrofit.Response
 import retrofit.Retrofit
 
 object ConstantsQuestionFunction {
+    var allQuestionsReturnResponse : ConstantsQuestionFunction.AllQuestionsResponse?= null
+    var questionList : ArrayList<QuestionModel> = ArrayList()
     var postQuestionPosition : Int = 0
     fun postQuestion(question : QuestionModel, activity: AppCompatActivity,onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
 
@@ -89,7 +91,7 @@ object ConstantsQuestionFunction {
         }
     }
 
-    fun getQuestion(context: Context, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    fun getAllQuestions(context: Context, ID: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -99,25 +101,25 @@ object ConstantsQuestionFunction {
             //TODO 拿到csrf token access token
             Log.e("access in scan ", Constants.accessToken)
             Log.e("COOKIE in scan ", Constants.COOKIE)
-            val call = api.getAllQuestionBanks(
+            val call = api.getQuestionBankByID(
                 Constants.COOKIE,
                 Constants.csrfToken,
                 Constants.session,
-                "single"
+                ID
             )
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
                         //TODO
-//                        val gson = Gson()
-//                        val allBanksResponse = gson.fromJson(
-//                            response.body().charStream(),
-//                            ConstantsQuestionBankFunction.AllQuestionBanksResponse::class.java
-//                        )
-//                        Log.e("Response Result", allBanksResponse.questionBanks[0].toString())
-//                        ConstantsQuestionBankFunction.allBanksReturnResponse = allBanksResponse
-//                        ConstantsQuestionBankFunction.questionBankList = allBanksResponse.questionBanks
-//                        onSuccess(allBanksResponse.questionBanks)
+                        val gson = Gson()
+                        val allQuestionsResponse = gson.fromJson(
+                            response.body().charStream(),
+                            ConstantsQuestionFunction.AllQuestionsResponse::class.java
+                        )
+                        ConstantsQuestionFunction.allQuestionsReturnResponse = allQuestionsResponse
+                        ConstantsQuestionFunction.questionList = allQuestionsResponse.questions
+                        Log.e("Response Result", questionList.toString())
+                        onSuccess("123")
                     } else {
                         val sc = response.code()
                         when (sc) {
@@ -152,5 +154,7 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
+
+    data class AllQuestionsResponse(val questions:ArrayList<QuestionModel>)
 
 }

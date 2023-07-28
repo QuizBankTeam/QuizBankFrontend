@@ -7,18 +7,23 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
 import com.example.quizbanktest.models.QuestionBankModel
+import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
+import com.example.quizbanktest.utils.ConstantsQuestionFunction
+import com.example.quizbanktest.utils.ConstantsRecommend
+import com.example.quizbanktest.utils.ConstantsWrong
 
 class BankQuestionActivity : AppCompatActivity() {
 
     private lateinit var tv_title: TextView
     private lateinit var backArrowBtn: ImageButton
-    private var questionModels = ArrayList<QuestionBankModel>()
+    private var questionModel = ArrayList<QuestionModel>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +38,21 @@ class BankQuestionActivity : AppCompatActivity() {
 
         backArrowBtn = findViewById(R.id.btn_back_arrow)
 
-        val recyclerView : RecyclerView = findViewById(R.id.questionRecyclerView)
-        setQuestionModels()
+//        val recyclerView : RecyclerView = findViewById(R.id.questionRecyclerView)
+//        setQuestionModels()
 //        val adapter = BankRecyclerViewAdapter(this, questionModels)
 
 //        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+
+//        ConstantsQuestionFunction.getAllQuestions(this, "123",
+//            onSuccess = { questionBanks ->
+//
+//            },
+//            onFailure = { errorMessage ->
+//                Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
+//            }
+//        )
     }
 
     fun backToPreviousPage(view: View?) {

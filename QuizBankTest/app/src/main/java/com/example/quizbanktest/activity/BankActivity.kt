@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ import com.example.quizbanktest.interfaces.RecyclerViewInterface
 
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
+import com.example.quizbanktest.utils.ConstantsQuestionFunction
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
@@ -40,6 +42,15 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
+
+        ConstantsQuestionFunction.getAllQuestions(this, "123",
+            onSuccess = { questionBanks ->
+
+            },
+            onFailure = { errorMessage ->
+                Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
+            }
+        )
 
         val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
         setSupportActionBar(toolBar)

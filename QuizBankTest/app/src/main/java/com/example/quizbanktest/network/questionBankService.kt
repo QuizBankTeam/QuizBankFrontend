@@ -25,7 +25,7 @@ interface QuestionBankService {
         @Body body: PostQuestionBankBody
     ): Call<ResponseBody>
 
-    @GET("/questionBank")
+    @GET("/questionBank/{questionBankId}")
     fun getQuestionBankByID(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
