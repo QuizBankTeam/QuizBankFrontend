@@ -32,8 +32,8 @@ private var list: ArrayList<QuestionModel>
         if (holder is MyViewHolder) {
 
             holder.itemView.findViewById<TextView>(R.id.rcTitle).text = model.title
-            holder.itemView.findViewById<TextView>(R.id.rcType).text = model.tag
-            holder.itemView.findViewById<TextView>(R.id.rcDate).text = model.createDate
+            holder.itemView.findViewById<TextView>(R.id.rcType).text = "test"
+            holder.itemView.findViewById<TextView>(R.id.rcDate).text = model.createdDate
 
             holder.itemView.setOnClickListener {
 

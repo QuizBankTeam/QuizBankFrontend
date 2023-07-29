@@ -44,38 +44,45 @@
         android:text="@string/intro_text_description"
         android:textColor="@color/secondary_text_color"
         android:textSize="@dimen/intro_text_size" />
-
-    <Button
-        android:id="@+id/btn_sign_in_intro"
+    <TextView
+        android:id="@+id/sign_in_intro"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_button_rounded"
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
+        android:textStyle="bold"
+        android:onClick="onClick"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:text="@string/sign_in"
+        android:clickable="true"
+        android:background="@drawable/shape_button_rounded"
+        android:textSize="@dimen/btn_text_size"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/btn_text_size" />
+        android:text="@string/sign_in"/>
 
-    <Button
-        android:id="@+id/btn_sign_up_intro"
+    <TextView
+        android:id="@+id/sign_up_intro"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/btn_marginStartEnd"
-        android:layout_marginTop="@dimen/intro_screen_sign_up_btn_marginTop"
-        android:layout_marginEnd="@dimen/btn_marginStartEnd"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/white_border_shape_button_rounded"
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
-        android:paddingTop="@dimen/btn_paddingTopBottom"
-        android:paddingBottom="@dimen/btn_paddingTopBottom"
-        android:text="@string/sign_up"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/btn_text_size" />
+        android:textStyle="bold"
+        android:onClick="onClick"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clickable="true"
+        android:textSize="@dimen/btn_text_size"
+        android:textColor="#0080FF"
+        android:text="@string/sign_up"/>
+
+
 </LinearLayout>

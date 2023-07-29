@@ -171,8 +171,20 @@ class PaintActivity : AppCompatActivity() {
 
         toolBar.setNavigationOnClickListener{
             Log.e("nav","toolbar")
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
+            var builder = androidx.appcompat.app.AlertDialog.Builder(this)
+                .setMessage(" 您確定要離開嗎系統不會保存這次圖片修改喔 ")
+                .setTitle("圖片工作區")
+                .setIcon(R.drawable.baseline_warning_amber_24)
+            builder.setPositiveButton("確認") { dialog, which ->
+                val intent = Intent(this,MainActivity::class.java)
+                startActivity(intent)
+            }
+
+            builder.setNegativeButton("取消") { dialog, which ->
+
+            }
+            builder.show()
+
         }
 
         drawingView = findViewById(R.id.drawing_view)

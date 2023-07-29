@@ -11,7 +11,7 @@
     <string name="intro_text_description">Collaborate and Plan Together Across Multiple Devices on Projemanag’s Minimalist Interface.</string>
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
-
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_hint">SEARCH FILES…</string>
     <string name="test">testing</string>
     <string-array name="bank_name_txt">
@@ -49,4 +49,14 @@
         <item>10/08</item>
         <item>10/31</item>
     </string-array>
+
+    <string-array name="question_type">
+        <item>填充題</item>
+        <item>單選題</item>
+        <item>簡答題</item>
+        <item>多選題</item>
+        <item>是非題</item>
+
+    </string-array>
+
 </resources>

@@ -35,8 +35,8 @@ open class RecentViewAdapter(
         if (holder is MyViewHolder) {
 
             holder.itemView.findViewById<TextView>(R.id.recentTitle).text = model.title
-            holder.itemView.findViewById<TextView>(R.id.recentType).text = model.type
-            holder.itemView.findViewById<TextView>(R.id.recentDate).text = model.date
+            holder.itemView.findViewById<TextView>(R.id.recentType).text = model.questionBankType
+            holder.itemView.findViewById<TextView>(R.id.recentDate).text = model.createdDate
 
             holder.itemView.setOnClickListener {
 

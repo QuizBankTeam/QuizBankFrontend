@@ -17,4 +17,31 @@
         <item name="colorControlNormal">@color/black</item>
     </style>
 
+
+    //apptheme是為了懸浮按鈕問題改的
+
+    <style name="StartQuiz" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="QuizTabLayout" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+    <style name="RoundCorner" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50dp</item>
+        <item name="color">@color/white</item>
+    </style>
+    <style name="ImageRoundCorner" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+
 </resources>

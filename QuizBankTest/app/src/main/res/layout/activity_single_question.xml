@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/question_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical"
+        android:background="@drawable/background_gradient">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:background="@color/white">
+
+            <ImageButton
+                android:id="@+id/back_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="@color/white"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/baseline_arrow_down"/>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4">
+
+                <TextView
+                    android:id="@+id/Question_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="18dp"
+                    android:text="題目名稱"
+                    android:textColor="#000000"
+                    android:textSize="22dp" />
+                <TextView
+                    android:id="@+id/Question_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/Question_title"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/colorPrimary"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="3dp"
+                    android:text="類型"
+                    android:textSize="15dp"
+                    android:textColor="@color/black" />
+
+            </RelativeLayout>
+            <ImageButton
+                android:id="@+id/question_setting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="@color/white"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/baseline_more_selection"/>
+       </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="3dp"
+            android:elevation="5dp"
+            android:background="@color/underline"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/Question_image"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginBottom="-15dp"
+            android:paddingHorizontal="10dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"
+            android:paddingTop="10dp"
+            android:background="@drawable/textview_border"
+            android:src="@drawable/society98_1"
+            app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
+
+        <RelativeLayout
+            android:id="@+id/container_timeLimit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingTop="5dp">
+
+            <Button
+                android:id="@+id/time_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corner_radius_yellow"
+                android:drawableLeft="@drawable/baseline_alarm_clock"
+                android:minWidth="55dp"
+                android:minHeight="30dp"
+                android:padding="5dp"
+                android:text="20秒"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+            <LinearLayout
+                android:id="@+id/Question_Tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/question_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            android:clickable="true"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/textview_border"
+            android:padding="10dp"
+            android:textSize="14dp"
+            android:hint="輕觸輸入答案敘述"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/QuestionOption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:overScrollMode="never"
+            android:textColor="@color/white"
+            android:textSize="30sp"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
