@@ -24,12 +24,12 @@ interface QuestionService {
         @Body body: PostQuestionBody
     ): Call<ResponseBody>
 
-    @GET("/question")
+    @GET("/question/{questionId}")
     fun getQuestionByID(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Query("questionId") questionId: String
+        @Path("questionId") questionId: String
     ): Call<ResponseBody>
 
     @PUT("/question")
@@ -41,13 +41,13 @@ interface QuestionService {
         @Body body: PutQuestionBody
     ): Call<ResponseBody>
 
-    @DELETE("/question")
+    @DELETE("/question/{questionId}")
     fun deleteQuestionByID(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("accessToken") accessToken: String,
         @Header("refreshToken") refreshToken: String,
-        @Body body: DeleteQuestionBody
+        @Path("questionId") questionId: String
     ): Call<ResponseBody>
 
 }
