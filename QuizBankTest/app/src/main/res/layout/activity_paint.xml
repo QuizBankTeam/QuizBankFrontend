@@ -12,7 +12,7 @@
         android:background="@color/colorPrimary"
         app:titleTextAppearance="@style/CustomToolbarStyle"
         app:titleTextColor="@color/colorPrimaryDark"
-        app:title="Image Editor ⚙️"
+        app:title="圖片工作區 ⚙️"
         android:theme="@style/ToolbarTheme"
         app:layout_constraintTop_toTopOf="parent"
         />

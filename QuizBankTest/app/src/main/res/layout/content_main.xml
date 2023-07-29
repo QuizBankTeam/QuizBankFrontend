@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_home_detail"
         android:layout_width="match_parent"
@@ -81,7 +82,7 @@
                                 android:id="@+id/join_code_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Enter a invitation               📝"
+                                android:hint="輸入邀請碼               📝"
                                 android:inputType="textCapWords"
                                 android:textColor="#363A43"
                                 android:textColorHint="#7A8089" />
@@ -104,12 +105,12 @@
                     android:id="@+id/recent_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" Recently Created : "
+                    android:text="  最近新增之題庫 : "
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/join_code"
                     app:layout_constraintBottom_toTopOf="@id/recent_list"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     />
                 <LinearLayout
@@ -138,12 +139,12 @@
                     android:id="@+id/recent_wrong"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" Recently Wrong Question : "
+                    android:text="  最近錯的題目 : "
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recent_list"
                     app:layout_constraintBottom_toTopOf="@id/wrong_list"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     />
                 <LinearLayout
@@ -172,8 +173,8 @@
                     android:id="@+id/recommend_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Recommend Question : "
-                    android:textSize="25sp"
+                    android:text="  推薦題目 : "
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/recommend_list"
                     app:layout_constraintEnd_toEndOf="parent"

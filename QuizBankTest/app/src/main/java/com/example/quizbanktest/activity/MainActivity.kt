@@ -5,14 +5,15 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.R
-import com.example.quizbanktest.adapters.RecentViewAdapter
-import com.example.quizbanktest.adapters.RecommendViewAdapter
-import com.example.quizbanktest.adapters.WrongViewAdapter
+import com.example.quizbanktest.activity.paint.PaintActivity
+import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
+import com.example.quizbanktest.adapters.main.RecentViewAdapter
+import com.example.quizbanktest.adapters.main.RecommendViewAdapter
+import com.example.quizbanktest.adapters.main.WrongViewAdapter
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.*
@@ -55,29 +56,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)
         nav_view.setNavigationItemSelectedListener(this)
 
-        val quiz : ImageButton = findViewById(R.id.test)
-        quiz.setOnClickListener {
-            gotoQuizActivity()
-        }
-        val bank : ImageButton = findViewById(R.id.bank)
-        bank.setOnClickListener{
-            gotoBankActivity()
-        }
-
-        val homeButton : ImageButton  = findViewById(R.id.home)
-        homeButton.setOnClickListener{
-            gotoHomeActivity()
-        }
-
-        val camera : ImageButton = findViewById(R.id.camera)
-        camera.setOnClickListener {
-            cameraPick()
-        }
-
-        val settingButton : ImageButton = findViewById(R.id.setting)
-        settingButton.setOnClickListener{
-
-        }
+        setupNavigationView()
     }
 
 
@@ -133,11 +112,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                ConstantsAccountServiceFunction.logout(this@MainActivity)
             }
             R.id.imageEditor ->{
-                val intent = Intent(this,PaintActivity::class.java)
+                val intent = Intent(this, PaintActivity::class.java)
                 startActivity(intent)
             }
             R.id.ocrWorkSpace ->{
-                val intent = Intent(this,ScannerTextWorkSpaceActivity::class.java)
+                val intent = Intent(this, ScannerTextWorkSpaceActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -148,6 +127,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun setupActionBar() {
         val toolbar_main_activity : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
         setSupportActionBar(toolbar_main_activity)
+        supportActionBar?.title = ""
         toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
 
         toolbar_main_activity.setNavigationOnClickListener {

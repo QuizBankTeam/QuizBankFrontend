@@ -1,10 +1,11 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.bank
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -19,7 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.quizbanktest.R
-import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
+import com.example.quizbanktest.activity.BaseActivity
+import com.example.quizbanktest.activity.MainActivity
+import com.example.quizbanktest.adapters.bank.BankRecyclerViewAdapter
 
 import com.example.quizbanktest.models.BankModel
 
@@ -37,38 +40,21 @@ class BankActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
-        val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
-        setSupportActionBar(toolBar)
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            Log.e("in action bar","not null")
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
-            Log.e("nav","toolbar")
-        }
-        toolBar.setNavigationOnClickListener{
-
-           val intent = Intent(this,MainActivity::class.java)
-           startActivity(intent)
-
-        }
-        val camera : ImageButton = findViewById(R.id.camera)
-        camera.setOnClickListener {
-            cameraPick()
-        }
+        val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_bank_detail)
 
         val recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
-        val homeButton : ImageButton  = findViewById(R.id.home)
-        homeButton.setOnClickListener{
-            gotoHomeActivity()
-        }
-        val adapter = BankRecyclerViewAdapter(this, bankModels)
+
+        val adapter =
+            BankRecyclerViewAdapter(
+                this,
+                bankModels
+            )
         setUpBankModels()
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-
+        setupNavigationView()
     }
 
     private fun setUpBankModels() {
@@ -113,8 +99,11 @@ class BankActivity : BaseActivity() {
         val popupWindow = PopupWindow(this).apply {
             contentView = myContentView
 //            width = ViewGroup.LayoutParams.MATCH_PARENT
-            width = 1400
-            height = 1600
+            val displayMetrics = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            height = displayMetrics.heightPixels-200
+            width = displayMetrics.widthPixels-200
+
             animationStyle = R.style.PopupAnimation
             isFocusable = true
             isOutsideTouchable = false

@@ -1,4 +1,4 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.paint
 
 import android.Manifest
 import android.app.Activity
@@ -31,6 +31,7 @@ import androidx.core.content.FileProvider
 import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.MainActivity
 
 import com.example.quizbanktest.view.DrawingView
 import com.karumi.dexter.Dexter
@@ -176,7 +177,7 @@ class PaintActivity : AppCompatActivity() {
                 .setTitle("圖片工作區")
                 .setIcon(R.drawable.baseline_warning_amber_24)
             builder.setPositiveButton("確認") { dialog, which ->
-                val intent = Intent(this,MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
 

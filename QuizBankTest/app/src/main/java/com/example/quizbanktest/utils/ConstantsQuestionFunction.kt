@@ -1,16 +1,11 @@
 package com.example.quizbanktest.utils
 
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
-import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
-import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.network.QuestionService
-import com.example.quizbanktest.network.ScanImageService
-import com.google.gson.Gson
 import com.squareup.okhttp.ResponseBody
 import retrofit.Callback
 import retrofit.GsonConverterFactory

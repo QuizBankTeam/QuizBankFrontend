@@ -1,9 +1,9 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.account
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.databinding.ActivityLoginBinding
 import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
 class LoginActivity : AppCompatActivity() {

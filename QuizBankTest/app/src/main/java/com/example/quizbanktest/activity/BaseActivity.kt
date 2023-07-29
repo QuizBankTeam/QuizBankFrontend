@@ -1,6 +1,7 @@
 package com.example.quizbanktest.activity
 
 import android.Manifest
+import android.app.Dialog
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,18 +12,24 @@ import android.os.Environment
 import android.provider.MediaStore
 
 import android.util.Log
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 
 import androidx.lifecycle.lifecycleScope
+import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.bank.BankActivity
 import com.example.quizbanktest.activity.quiz.QuizPage
 
 import com.example.quizbanktest.utils.*
+import com.google.android.material.snackbar.Snackbar
 
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -42,7 +49,7 @@ open class BaseActivity : AppCompatActivity() {
     private val SAMPLE_CROPPED_IMG_NAME = "CroppedImage.jpg"
     private var onImageSelected: ((Bitmap?) -> Unit)? = null
     private var cameraPhotoUri : Uri ?=null
-
+    private lateinit var mProgressDialog: Dialog
     val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult() ){
             result->
@@ -78,6 +85,7 @@ open class BaseActivity : AppCompatActivity() {
 
             }
             var base64String = ConstantsFunction.encodeImage(thumbnail!!)
+            showProgressDialog("目前正在處理ocr之結果")
             ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!,this@BaseActivity)
 
             var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
@@ -89,8 +97,36 @@ open class BaseActivity : AppCompatActivity() {
 
     }
 
+    fun showProgressDialog(text: String) {
+        mProgressDialog = Dialog(this)
 
+        /*Set the screen content from a layout resource.
+        The resource will be inflated, adding all top-level views to the screen.*/
+        mProgressDialog.setContentView(R.layout.dialog_progress)
+
+        mProgressDialog.findViewById<TextView>(R.id.tv_progressbar_text).text=text
+
+        //Start the dialog and display it on screen.
+        mProgressDialog.show()
+    }
+
+    fun showErrorSnackBar(message: String) {
+        val snackBar =
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+        val snackBarView = snackBar.view
+        snackBarView.setBackgroundColor(
+            ContextCompat.getColor(
+                this@BaseActivity,
+                R.color.red
+            )
+        )
+        snackBar.show()
+    }
+    fun hideProgressDialog() {
+        mProgressDialog.dismiss()
+    }
     suspend fun saveBitmapFileForPicturesDir(mBitmap: Bitmap?): String {
+        showProgressDialog("目前正在儲存圖片請稍等")
         Log.e("in sava", "save")
         var result = ""
         if (mBitmap != null) {
@@ -121,17 +157,20 @@ open class BaseActivity : AppCompatActivity() {
                                 "success scan",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            hideProgressDialog()
                         } else {
                             Toast.makeText(
                                 this@BaseActivity,
                                 "Something went wrong while saving the file.",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            hideProgressDialog()
                         }
                     }
                 } catch (e: Exception) {
                     result = ""
                     e.printStackTrace()
+                    hideProgressDialog()
                 }
             }
         }
@@ -192,7 +231,7 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoBankActivity(){
         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
             onSuccess = { questionBanks ->
-                val intent = Intent(this,BankActivity::class.java)
+                val intent = Intent(this, BankActivity::class.java)
                 startActivity(intent)
             },
             onFailure = { errorMessage ->
@@ -242,6 +281,7 @@ open class BaseActivity : AppCompatActivity() {
             if (bitmap != null) {
 
                 var base64String = ConstantsFunction.encodeImage(bitmap)
+                showProgressDialog("目前正在處理ocr之結果")
                 ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity)
                 var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
 //                Log.e("openGalleryLauncher size", size.toString())
@@ -250,6 +290,31 @@ open class BaseActivity : AppCompatActivity() {
             }
         }
 
+    }
+    fun setupNavigationView() {
+        val quiz : ImageButton = findViewById(R.id.test)
+        quiz.setOnClickListener {
+            gotoQuizActivity()
+        }
+        val bank : ImageButton = findViewById(R.id.bank)
+        bank.setOnClickListener{
+            gotoBankActivity()
+        }
+
+        val homeButton : ImageButton = findViewById(R.id.home)
+        homeButton.setOnClickListener{
+            gotoHomeActivity()
+        }
+
+        val camera : ImageButton = findViewById(R.id.camera)
+        camera.setOnClickListener {
+            cameraPick()
+        }
+
+        val settingButton : ImageButton = findViewById(R.id.setting)
+        settingButton.setOnClickListener{
+
+        }
     }
 
 }

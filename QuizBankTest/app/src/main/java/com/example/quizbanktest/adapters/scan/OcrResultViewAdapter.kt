@@ -1,4 +1,4 @@
-package com.example.quizbanktest.adapters
+package com.example.quizbanktest.adapters.scan
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -19,8 +19,7 @@ import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.introducemyself.utils.ConstantsTag
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
-import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
-import com.example.quizbanktest.activity.TagActivity
+import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.*
 import java.io.ByteArrayOutputStream
@@ -495,7 +494,7 @@ class OcrResultViewAdapter(
                     ConstantsQuestionFunction.postQuestionPosition=position
                     ConstantsQuestionFunction.postQuestion( ConstantsOcrResults.questionList[position],activity,
                         onSuccess = {
-                            val intent = Intent(activity,ScannerTextWorkSpaceActivity::class.java)
+                            val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
                             activity.startActivity(intent)
                         },
                         onFailure = {

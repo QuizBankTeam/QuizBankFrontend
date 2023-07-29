@@ -54,5 +54,6 @@ class QuizPage: BaseActivity() {
             }
         })
 
+        setupNavigationView()
     }
 }

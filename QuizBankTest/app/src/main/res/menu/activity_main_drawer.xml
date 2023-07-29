@@ -4,19 +4,23 @@
         <item
             android:id="@+id/nav_my_profile"
             android:icon="@drawable/ic_nav_user"
-            android:title="my_profile" />
+            android:background="@color/teal_700"
+            android:title="個人檔案" />
         <item
             android:id="@+id/ocrWorkSpace"
+            android:background="@color/teal_700"
             android:icon="@drawable/ib_text_editor"
-            android:title="Scanner Text WorkSpace" />
+            android:title="掃描工作區" />
         <item
             android:id="@+id/imageEditor"
+            android:background="@color/teal_700"
             android:icon="@drawable/ic_photo_edit"
-            android:title="Image Workspace" />
+            android:title="圖片工作區" />
 
         <item
             android:id="@+id/nav_sign_out"
+            android:background="@color/teal_700"
             android:icon="@drawable/ic_nav_sign_out"
-            android:title="sign_out" />
+            android:title="登出" />
     </group>
 </menu>

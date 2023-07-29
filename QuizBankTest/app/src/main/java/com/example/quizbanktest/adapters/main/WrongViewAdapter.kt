@@ -1,4 +1,4 @@
-package com.example.quizbanktest.adapters
+package com.example.quizbanktest.adapters.main
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-
 import com.example.quizbanktest.models.QuestionModel
 
-open class RecommendViewAdapter (private val context: Context,
-private var list: ArrayList<QuestionModel>
+class WrongViewAdapter (private val context: Context,
+                        private var list: ArrayList<QuestionModel>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private var onClickListener: OnClickListener? = null
 
@@ -19,7 +18,7 @@ private var list: ArrayList<QuestionModel>
 
         return MyViewHolder(
             LayoutInflater.from(context).inflate(
-                R.layout.item_recommend,
+                R.layout.item_wrong,
                 parent,
                 false
             )
@@ -31,9 +30,9 @@ private var list: ArrayList<QuestionModel>
 
         if (holder is MyViewHolder) {
 
-            holder.itemView.findViewById<TextView>(R.id.rcTitle).text = model.title
-            holder.itemView.findViewById<TextView>(R.id.rcType).text = "test"
-            holder.itemView.findViewById<TextView>(R.id.rcDate).text = model.createdDate
+            holder.itemView.findViewById<TextView>(R.id.wrongTitle).text = model.title
+            holder.itemView.findViewById<TextView>(R.id.wrongType).text = "wrong tag"
+            holder.itemView.findViewById<TextView>(R.id.wrongDate).text = model.createdDate
 
             holder.itemView.setOnClickListener {
 

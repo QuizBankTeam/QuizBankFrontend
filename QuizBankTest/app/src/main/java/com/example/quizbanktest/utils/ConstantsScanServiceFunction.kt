@@ -3,9 +3,9 @@ package com.example.quizbanktest.utils
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
-import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
+import com.example.quizbanktest.activity.BaseActivity
+import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.network.ScanImageService
 import com.google.gson.Gson
 import com.squareup.okhttp.ResponseBody
@@ -15,7 +15,7 @@ import retrofit.Response
 import retrofit.Retrofit
 
 object ConstantsScanServiceFunction {
-    fun scanBase64ToOcrText(base64String: String, activity:AppCompatActivity) {
+    fun scanBase64ToOcrText(base64String: String, activity:BaseActivity) {
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -45,6 +45,7 @@ object ConstantsScanServiceFunction {
                         )
                         Log.e("Response Result", ocrResponse.text)
                         ConstantsOcrResults.setOcrResult(ocrResponse.text)
+                        activity.hideProgressDialog()
                         val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
                         intent.putExtra("ocrText", ocrResponse.text)
                         activity.startActivity(intent)
@@ -52,8 +53,11 @@ object ConstantsScanServiceFunction {
                     } else {
 
                         val sc = response.code()
+                        activity.hideProgressDialog()
+
                         when (sc) {
                             400 -> {
+                                activity.showErrorSnackBar("發生了錯誤(BAD REQUEST)")
                                 Log.e(
                                     "Error 400", "Bad Re" +
                                             "" +
@@ -61,6 +65,7 @@ object ConstantsScanServiceFunction {
                                 )
                             }
                             404 -> {
+                                activity.showErrorSnackBar("系統找不到")
                                 Log.e("Error 404", "Not Found")
                             }
                             else -> {
@@ -71,16 +76,19 @@ object ConstantsScanServiceFunction {
                 }
 
                 override fun onFailure(t: Throwable?) {
+                    activity.showErrorSnackBar("掃描發生錯誤")
                     Log.e("in scan Errorrrrr", t?.message.toString())
                 }
             })
         } else {
+
             Toast.makeText(
                 activity,
                 "No internet connection available.",
                 Toast.LENGTH_SHORT
             ).show()
         }
+
     }
     data class OCRResponse(val text: String)
 

@@ -37,22 +37,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.TagActivity"
+            android:name=".activity.scan.TagActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ScannerTextWorkSpaceActivity"
+            android:name=".activity.scan.ScannerTextWorkSpaceActivity"
             android:exported="false" />
         <activity
             android:name=".activity.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ColorPickerActivity1"
+            android:name=".activity.paint.ColorPickerActivity1"
             android:exported="false" />
         <activity
-            android:name=".activity.BankActivity"
+            android:name=".activity.bank.BankActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.PaintActivity"
+            android:name=".activity.paint.PaintActivity"
             android:exported="false"
             android:parentActivityName=".activity.MainActivity" />
         <activity

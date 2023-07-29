@@ -1,4 +1,4 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.scan
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
-import com.example.quizbanktest.adapters.OcrResultViewAdapter
+import com.example.quizbanktest.activity.BaseActivity
+import com.example.quizbanktest.activity.MainActivity
+import com.example.quizbanktest.adapters.scan.OcrResultViewAdapter
 import com.example.quizbanktest.models.QuestionModel
 
 
@@ -44,20 +46,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
         }
 
-        val homeButton : ImageButton  = findViewById(R.id.home)
-        homeButton.setOnClickListener{
-            gotoHomeActivity()
-        }
-        val bank : ImageButton = findViewById(R.id.bank)
-        bank.setOnClickListener{
-            gotoBankActivity()
-        }
-
-        val camera : ImageButton = findViewById(R.id.camera)
-
-        camera.setOnClickListener {
-            cameraPick()
-        }
+       setupNavigationView()
 
         toolBar.setNavigationOnClickListener{
             if(ConstantsOcrResults.getOcrResult().size!=0){
@@ -67,7 +56,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
                     .setTitle("OCR結果")
                     .setIcon(R.drawable.baseline_warning_amber_24)
                 builder.setPositiveButton("確認") { dialog, which ->
-                    val intent = Intent(this,MainActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 }
 
@@ -76,7 +65,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
                 }
                 builder.show()
             }else{
-                val intent = Intent(this,MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
         }
