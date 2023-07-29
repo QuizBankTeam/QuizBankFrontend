@@ -134,7 +134,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             toggleDrawer()
         }
     }
-
+    override fun onBackPressed() {
+        Log.e("double","pick")
+        doubleBackToExit()
+    }
     companion object {
         private const val GALLERY = 1
         private const val CAMERA = 2

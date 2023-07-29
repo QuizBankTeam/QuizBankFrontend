@@ -182,6 +182,7 @@ class PaintActivity : AppCompatActivity() {
             builder.setPositiveButton("確認") { dialog, which ->
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
             builder.setNegativeButton("取消") { dialog, which ->

@@ -7,6 +7,7 @@ import com.google.android.material.tabs.TabLayout
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.quiz.QuizPageAdapter
@@ -55,5 +56,10 @@ class QuizPage: BaseActivity() {
         })
 
         setupNavigationView()
+
+    }
+    override fun onBackPressed() {
+        Log.e("double","pick")
+        doubleBackToExit()
     }
 }

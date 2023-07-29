@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
 
 import android.util.Log
@@ -22,11 +23,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.GravityCompat
 
 import androidx.lifecycle.lifecycleScope
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.bank.BankActivity
 import com.example.quizbanktest.activity.quiz.QuizPage
+import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 
 import com.example.quizbanktest.utils.*
 import com.google.android.material.snackbar.Snackbar
@@ -233,6 +236,7 @@ open class BaseActivity : AppCompatActivity() {
             onSuccess = { questionBanks ->
                 val intent = Intent(this, BankActivity::class.java)
                 startActivity(intent)
+                finish()
             },
             onFailure = { errorMessage ->
                 Toast.makeText(this,"server error",Toast.LENGTH_SHORT).show()
@@ -243,12 +247,15 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoHomeActivity(){
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     fun gotoQuizActivity(){
         val intent = Intent(this,QuizPage::class.java)
         startActivity(intent)
+        finish()
     }
+
     fun choosePhotoFromGallery(onImageSelected: (Bitmap?) -> Unit) {
         this.onImageSelected = onImageSelected
         Dexter.withActivity(this)
@@ -316,5 +323,25 @@ open class BaseActivity : AppCompatActivity() {
 
         }
     }
+
+    private var backPressedTime: Long = 0
+    private val BACK_PRESS_THRESHOLD = 2000  // 2000 milliseconds = 2 seconds
+    private var doubleBackToExitPressedOnce = false
+    fun doubleBackToExit() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(
+            this,
+            "按兩下會離開喔",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+    }
+
 
 }
