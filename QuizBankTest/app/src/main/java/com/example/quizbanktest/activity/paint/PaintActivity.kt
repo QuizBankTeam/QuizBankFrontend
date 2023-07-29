@@ -22,12 +22,14 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.*
+import android.window.OnBackInvokedDispatcher
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.os.BuildCompat
 import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import com.example.quizbanktest.R
@@ -173,6 +175,7 @@ class PaintActivity : AppCompatActivity() {
             Log.e("nav","toolbar")
         }
 
+        doubleCheckExit()
         toolBar.setNavigationOnClickListener{
             Log.e("nav","toolbar")
             var builder = androidx.appcompat.app.AlertDialog.Builder(this)
@@ -605,7 +608,8 @@ class PaintActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
-
+    private var backPressedTime: Long = 0
+    private val BACK_PRESS_THRESHOLD = 2000  // 2000 milliseconds = 2 seconds
     private fun showRationalDialogForPermissions() {
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
@@ -625,7 +629,31 @@ class PaintActivity : AppCompatActivity() {
                 dialog.dismiss()
             }.show()
     }
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                doubleBackToExit()
+            }
+        }
+    }
 
+    private var doubleBackToExitPressedOnce = false
+    private fun doubleBackToExit() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - backPressedTime > BACK_PRESS_THRESHOLD) {
+            Toast.makeText(this, "再按一次返回鍵退出", Toast.LENGTH_SHORT).show()
+            backPressedTime = currentTime
+        } else {
+            moveTaskToBack(true)
+        }
+    }
+    override fun onBackPressed() {
+        moveTaskToBack(true)
+        Log.e("double","pick")
+        doubleCheckExit()
+    }
     private fun shareImage(result: String){
 //        Log.w("share result",result)
 
