@@ -40,6 +40,9 @@
             android:name=".activity.scan.TagActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.account.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.scan.ScannerTextWorkSpaceActivity"
             android:exported="false" />
         <activity

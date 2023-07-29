@@ -50,6 +50,7 @@ class OcrResultViewAdapter(
         val tagBankList:ArrayList<String> = ArrayList()
         val tagRelateList:ArrayList<String> = ArrayList()
         val tagRangeList:ArrayList<String> = ArrayList()
+
         val imageList : ArrayList<String> = ArrayList()
         val out = ByteArrayOutputStream()
         var optionsNum : Int = 4
@@ -91,6 +92,9 @@ class OcrResultViewAdapter(
                 var mTagContainerLayout1: TagContainerLayout? = null
                 var mTagContainerLayout2: TagContainerLayout? = null
                 var mTagContainerLayout3: TagContainerLayout? = null
+                var mChooseTagContainerLayout1: TagContainerLayout? = null
+                var mChooseTagContainerLayout2: TagContainerLayout? = null
+                var mChooseTagContainerLayout3: TagContainerLayout? = null
                 val list1 = ConstantsTag.getList1()
                 val list2 = ConstantsTag.getList2()
                 val list3 = ConstantsTag.getList3()
@@ -99,6 +103,9 @@ class OcrResultViewAdapter(
                 mTagContainerLayout1 = tagDialog.findViewById(R.id.tagcontainerLayout1)
                 mTagContainerLayout2 = tagDialog.findViewById(R.id.tagcontainerLayout2)
                 mTagContainerLayout3 = tagDialog.findViewById(R.id.tagcontainerLayout3)
+                mChooseTagContainerLayout1 = tagDialog.findViewById(R.id.chooseContainerLayout1)
+                mChooseTagContainerLayout2 = tagDialog.findViewById(R.id.chooseContainerLayout2)
+                mChooseTagContainerLayout3 = tagDialog.findViewById(R.id.chooseContainerLayout3)
                 mTagContainerLayout1!!.setTags(list1)
                 mTagContainerLayout2!!.setTags(list2)
                 mTagContainerLayout3!!.setTags(list3)
@@ -106,6 +113,7 @@ class OcrResultViewAdapter(
                 mTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
                         tagBankList.add(text)
+                        mChooseTagContainerLayout1.tags=tagBankList
                         ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
                         Toast.makeText(
                             activity, "click-position:$tag_position, text:$text",
@@ -142,6 +150,7 @@ class OcrResultViewAdapter(
                 mTagContainerLayout2.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
                         tagRelateList.add(text)
+                        mChooseTagContainerLayout2.tags=tagRelateList
                         ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
                         Toast.makeText(
                             activity, "click-position:$tag_position, text:$text",
@@ -177,6 +186,7 @@ class OcrResultViewAdapter(
                 mTagContainerLayout3.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
                         tagRangeList.add(text)
+                        mChooseTagContainerLayout3.tags=tagRangeList
                         ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
                         val selectedPositions = mTagContainerLayout3.getSelectedTagViewPositions()
                         //deselect all tags when click on an unselected tag. Otherwise show toast.
@@ -453,6 +463,8 @@ class OcrResultViewAdapter(
                 ConstantsOcrResults.questionList[position].description = scannerText.text.toString()
                 ConstantsOcrResults.questionList[position].title = title.text.toString()
                 ConstantsOcrResults.questionList[position].number = questionNum.text.toString()
+                val isNumber = questionNum.text.toString().matches(Regex("\\d*"))
+
                 ConstantsOcrResults.questionList[position].options = options
                 ConstantsOcrResults.questionList[position].questionType =ConstantsOcrResults.questionTypeList[questionTypeIndex]
 
@@ -475,6 +487,12 @@ class OcrResultViewAdapter(
                         .setTitle("確認題號")
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.show()
+                }else if(!isNumber){
+                    val builder =AlertDialog.Builder(context)
+                        .setMessage(" 您的題號需要為數字喔 ")
+                        .setTitle("錯誤題號")
+                        .setIcon(R.drawable.baseline_warning_amber_24)
+                    builder.show()
                 }else if((questionTypeIndex==1||questionTypeIndex==3||questionTypeIndex==4)&&ConstantsOcrResults.questionList[position].options?.size==0){
                     val builder =AlertDialog.Builder(context)
                         .setMessage(" 您的題目選項(options)不能為空喔 ")
@@ -492,13 +510,16 @@ class OcrResultViewAdapter(
                     builder.show()
                 }else{
                     ConstantsQuestionFunction.postQuestionPosition=position
+                    activity.showProgressDialog("新增中請稍等")
                     ConstantsQuestionFunction.postQuestion( ConstantsOcrResults.questionList[position],activity,
                         onSuccess = {
+                            activity.hideProgressDialog()
                             val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
                             activity.startActivity(intent)
                         },
                         onFailure = {
                             it -> Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
+                            activity.hideProgressDialog()
                         }
                         )
 
