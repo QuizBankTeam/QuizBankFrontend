@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
+import androidx.core.os.BuildCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,6 +59,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         nav_view.setNavigationItemSelectedListener(this)
 
         setupNavigationView()
+
+        doubleCheckExit()
     }
 
 
@@ -134,10 +138,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             toggleDrawer()
         }
     }
-    override fun onBackPressed() {
-        Log.e("double","pick")
-        doubleBackToExit()
-    }
+
+
     companion object {
         private const val GALLERY = 1
         private const val CAMERA = 2

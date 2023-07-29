@@ -56,10 +56,8 @@ class QuizPage: BaseActivity() {
         })
 
         setupNavigationView()
+        doubleCheckExit()
 
     }
-    override fun onBackPressed() {
-        Log.e("double","pick")
-        doubleBackToExit()
-    }
+
 }

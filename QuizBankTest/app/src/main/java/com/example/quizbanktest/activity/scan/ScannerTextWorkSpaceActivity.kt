@@ -70,6 +70,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             }
         }
 
+        doubleCheckExit()
 
     }
 
@@ -82,6 +83,5 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
         val placesAdapter = OcrResultViewAdapter(this@ScannerTextWorkSpaceActivity,this, ocrResultList)
         ocrList.adapter = placesAdapter
     }
-
 
 }

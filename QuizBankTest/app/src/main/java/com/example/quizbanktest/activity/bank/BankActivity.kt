@@ -55,6 +55,8 @@ class BankActivity : BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         setupNavigationView()
+        doubleCheckExit()
+
     }
 
     private fun setUpBankModels() {
@@ -145,4 +147,5 @@ class BankActivity : BaseActivity() {
         }
 
     }
+
 }
