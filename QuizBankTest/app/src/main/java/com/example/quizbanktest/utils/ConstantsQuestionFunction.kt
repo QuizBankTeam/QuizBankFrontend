@@ -35,7 +35,7 @@ object ConstantsQuestionFunction {
             val api = retrofit.create(QuestionService::class.java)
 //            data class PostQuestionBody(val title: String,val number: String,val description: String,val options: ArrayList<String>,val questionType:String,val bankType:String,val questionBank:String,val answerOptions:ArrayList<String>,val answerDescription:String,val provider:String,val originateFrom:String,val createdDate:String,val image : String,val tag:ArrayList<String>)
 
-            val body = QuestionService.PostQuestionBody(question.title!!,question.number!!,question.description,question.options!!,question.questionType!!,question.bankType!!,question.questionBank!!,question.answerOptions!!,question.answerDescription!!,ConstantsAccountServiceFunction.userAccount!!._id,question.orginateFrom!!,question.createdDate!!,question.image!!,question.tag!!)
+            val body = QuestionService.PostQuestionBody(question.title!!,question.number!!,question.description,question.options!!,question.questionType!!,question.bankType!!,question.questionBank!!,question.answerOptions!!,question.answerDescription!!,ConstantsAccountServiceFunction.userAccount!!._id,question.originateFrom!!,question.createdDate!!,question.image!!,question.tag!!)
 
             //TODO 拿到csrf token access token
             Log.e("access in scan ", Constants.accessToken)

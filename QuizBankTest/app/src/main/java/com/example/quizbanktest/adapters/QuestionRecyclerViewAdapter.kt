@@ -23,7 +23,7 @@ class QuestionRecyclerViewAdapter(var context: Context,
             val view = inflater.inflate(R.layout.item_questioncard, parent, false)
             return MyViewHolder(view, recyclerViewInterface)
         } catch (e: Exception) {
-            Log.e("BankRecyclerViewAdapter", "onCreateView", e)
+            Log.e("QuestionRecyclerViewAdapter", "onCreateView", e)
             throw e
         }
     }
@@ -35,7 +35,6 @@ class QuestionRecyclerViewAdapter(var context: Context,
         holder.tvQuestionTitle.text = questionModels[position].title
         holder.tvQuestionType.text = questionModels[position].questionType
         holder.tvQuestionCreatedDate.text = questionModels[position].createdDate
-        holder.tvQuestionCreator.append("none")
     }
 
     override fun getItemCount(): Int {
@@ -50,17 +49,12 @@ class QuestionRecyclerViewAdapter(var context: Context,
         var tvQuestionTitle: TextView
         var tvQuestionType: TextView
         var tvQuestionCreatedDate: TextView
-        var tvQuestionOriginateFrom: TextView
-        var tvQuestionCreator: TextView
 
         init {
-
 //          TODO: bankID
             tvQuestionTitle = itemView.findViewById(R.id.question_title)
             tvQuestionType = itemView.findViewById(R.id.question_type)
             tvQuestionCreatedDate = itemView.findViewById(R.id.question_createdDate)
-            tvQuestionOriginateFrom = itemView.findViewById(R.id.question_from)
-            tvQuestionCreator = itemView.findViewById(R.id.question_creator)
 
             itemView.setOnClickListener {
                 val position = adapterPosition

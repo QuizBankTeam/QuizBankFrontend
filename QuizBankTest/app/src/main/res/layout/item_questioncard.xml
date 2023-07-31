@@ -46,7 +46,7 @@
                 android:layout_below="@+id/question_title"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/question_image"
-                android:text="This is bank type"
+                android:text="This is question type"
                 android:textColor="#606060"
                 android:textSize="15sp" />
 
@@ -60,29 +60,6 @@
                 android:text="YYYY/MM/DD"
                 android:textColor="#606060"
                 android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/question_from"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/bank_members"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/question_image"
-                android:text="originate from: "
-                android:textColor="#606060"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/question_creator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/bank_members"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/question_from"
-                android:text="creator: "
-                android:textColor="#606060"
-                android:textSize="12sp"/>
-
 
         </RelativeLayout>
 

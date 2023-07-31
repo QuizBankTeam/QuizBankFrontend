@@ -36,7 +36,7 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
         setContentView(R.layout.activity_bank_question)
 
         val bankTitle = intent.getStringExtra("BankTitle").toString()
-        val bankID = intent.getStringExtra("BankID").toString()
+        val bankId = intent.getStringExtra("BankID").toString()
         tvTitle = findViewById(R.id.title)
         tvTitle.text = bankTitle
 
@@ -45,20 +45,26 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
         val recyclerView : RecyclerView = findViewById(R.id.questionRecyclerView)
 
         // TODO compare ID with Bank ID
-        ConstantsQuestionFunction.getQuestion(this, bankID,
+        ConstantsQuestionFunction.getQuestion(this, bankId,
             onSuccess = { questions ->
                 setupQuestionModel()
-                Log.d("BankQuestionActivity", "get question success!")
+                Log.d("BankQuestionActivity", "set question success!")
+                val adapter = QuestionRecyclerViewAdapter(this, questionModels, this)
+
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                Log.d("BankQuestionActivity", "RecyclerView setting finished")
             },
             onFailure = { errorMessage ->
                 Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
             }
         )
 
-        val adapter = QuestionRecyclerViewAdapter(this, questionModels, this)
-
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+//        val adapter = QuestionRecyclerViewAdapter(this, questionModels, this)
+//
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//        Log.d("BankQuestionActivity", "RecyclerView setting finished")
     }
 
     fun backToPreviousPage(view: View?) {
@@ -86,7 +92,7 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
         val questionImage = ArrayList<ArrayList<String>>()
         val tag = ArrayList<ArrayList<String>>()
 
-        Log.i("BankQuestionActivity", "set question model")
+        Log.i("BankQuestionActivity", "Set question model")
 
         for (item in ConstantsQuestionFunction.questionList) {
             questionId.add(item._id!!)
@@ -99,7 +105,8 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
             questionBankId.add(item.questionBank!!)
             answerOptions.add(item.answerOptions!!)
             answerDescription.add(item.answerDescription!!)
-            questionSource.add(item.orginateFrom)
+//            questionSource.add(item.originateFrom)
+            questionSource.add("test")
             questionCreatedDate.add(item.createdDate)
             questionImage.add(item.image!!)
             tag.add(item.tag!!)
