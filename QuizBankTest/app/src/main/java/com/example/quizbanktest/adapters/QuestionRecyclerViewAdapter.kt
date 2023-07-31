@@ -9,11 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.interfaces.RecyclerViewInterface
-import com.example.quizbanktest.models.QuestionBankModel
+import com.example.quizbanktest.models.QuestionModel
 
-class BankRecyclerViewAdapter(var context: Context,
-                              var questionBankModels: ArrayList<QuestionBankModel>, recyclerViewInterface: RecyclerViewInterface) :
-    RecyclerView.Adapter<BankRecyclerViewAdapter.MyViewHolder>() {
+class QuestionRecyclerViewAdapter(var context: Context,
+                                  var questionModel: ArrayList<QuestionModel>, recyclerViewInterface: RecyclerViewInterface):
+    RecyclerView.Adapter<QuestionRecyclerViewAdapter.MyViewHolder>() {
 
     var recyclerViewInterface = recyclerViewInterface
 
@@ -21,7 +21,7 @@ class BankRecyclerViewAdapter(var context: Context,
 //        This is where you inflate the layout (Giving a look to our rows)
         try {
             val inflater = LayoutInflater.from(context)
-            val view = inflater.inflate(R.layout.item_bankcard, parent, false)
+            val view = inflater.inflate(R.layout.item_questioncard, parent, false)
             return MyViewHolder(view, recyclerViewInterface)
         } catch (e: Exception) {
             Log.e("BankRecyclerViewAdapter", "onCreateView", e)
@@ -33,42 +33,38 @@ class BankRecyclerViewAdapter(var context: Context,
 //        Assigning values to the views we created in the recycler_view_row layout file
 //        Based on the position of the recycler view
 //        TODO: bankID
-        holder.tv_BankTitle.text = questionBankModels[position].title
-        holder.tv_BankType.text = questionBankModels[position].questionBankType
-        holder.tv_BankCreatedDate.text = questionBankModels[position].createdDate
-//        holder.tv_BankMembers.text = questionBankModels[position].members.joinToString(separator = ",")
-        holder.tv_BankMembers.append("3")
+        holder.tv_QuestionTitle.text = questionModel[position].title
+        holder.tv_QuestionType.text = questionModel[position].questionType
+        holder.tv_QuestionCreatedDate.text = questionModel[position].createdDate
 //        holder.tv_BankOriginateFrom.text = questionBankModels[position].originateFrom
-        holder.tv_BankOriginateFrom.append("none")
+        holder.tv_QuestionOriginateFrom.append("none")
 //        holder.tv_BankCreator.text = questionBankModels[position].creator
-        holder.tv_BankCreator.append("none")
+        holder.tv_QuestionCreator.append("none")
     }
 
     override fun getItemCount(): Int {
 //        The recycler view just wants to know the number of items you want displayed
-        return questionBankModels.size
+        return questionModel.size
     }
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
         //        Grabbing the views from our recycler_view_row layout file
         //        Kinda like in the onCreate method
 //        TODO: BankID
-        var tv_BankTitle: TextView
-        var tv_BankType: TextView
-        var tv_BankCreatedDate: TextView
-        var tv_BankMembers: TextView
-        var tv_BankOriginateFrom: TextView
-        var tv_BankCreator: TextView
+        var tv_QuestionTitle: TextView
+        var tv_QuestionType: TextView
+        var tv_QuestionCreatedDate: TextView
+        var tv_QuestionOriginateFrom: TextView
+        var tv_QuestionCreator: TextView
 
         init {
 
 //          TODO: bankID
-            tv_BankTitle = itemView.findViewById(R.id.bank_title)
-            tv_BankType = itemView.findViewById(R.id.bank_type)
-            tv_BankCreatedDate = itemView.findViewById(R.id.bank_createdDate)
-            tv_BankMembers = itemView.findViewById(R.id.bank_members)
-            tv_BankOriginateFrom = itemView.findViewById(R.id.bank_from)
-            tv_BankCreator = itemView.findViewById(R.id.bank_creator)
+            tv_QuestionTitle = itemView.findViewById(R.id.question_title)
+            tv_QuestionType = itemView.findViewById(R.id.question_type)
+            tv_QuestionCreatedDate = itemView.findViewById(R.id.question_createdDate)
+            tv_QuestionOriginateFrom = itemView.findViewById(R.id.question_from)
+            tv_QuestionCreator = itemView.findViewById(R.id.question_creator)
 
             itemView.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(view: View?) {

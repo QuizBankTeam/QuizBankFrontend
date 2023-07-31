@@ -27,7 +27,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".BankQuestion"
+            android:name=".activity.BankQuestionActivity"
             android:exported="false" />
         <activity
             android:name=".activity.SplashActivity"

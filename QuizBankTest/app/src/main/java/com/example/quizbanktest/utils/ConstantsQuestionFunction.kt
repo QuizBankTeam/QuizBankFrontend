@@ -91,7 +91,7 @@ object ConstantsQuestionFunction {
         }
     }
 
-    fun getAllQuestions(context: Context, ID: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    fun getQuestion(context: Context, ID: String, onSuccess: (ArrayList<QuestionModel>) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -110,16 +110,16 @@ object ConstantsQuestionFunction {
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
-                        //TODO
+                        // TODO
                         val gson = Gson()
                         val allQuestionsResponse = gson.fromJson(
                             response.body().charStream(),
-                            ConstantsQuestionFunction.AllQuestionsResponse::class.java
+                            AllQuestionsResponse::class.java
                         )
-                        ConstantsQuestionFunction.allQuestionsReturnResponse = allQuestionsResponse
-                        ConstantsQuestionFunction.questionList = allQuestionsResponse.questions
+                        allQuestionsReturnResponse = allQuestionsResponse
+                        questionList = allQuestionsResponse.questions
                         Log.e("Response Result", questionList.toString())
-                        onSuccess("123")
+                        onSuccess(allQuestionsResponse.questions)
                     } else {
                         val sc = response.code()
                         when (sc) {
@@ -143,7 +143,7 @@ object ConstantsQuestionFunction {
 
                 override fun onFailure(t: Throwable?) {
                     onFailure("Request failed with status code ")
-                    Log.e("in get all banks Errorrrrr", t?.message.toString())
+                    Log.e("in get all questions Error", t?.message.toString())
                 }
             })
         } else {

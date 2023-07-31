@@ -43,14 +43,14 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
 
-        ConstantsQuestionFunction.getAllQuestions(this, "123",
-            onSuccess = { questionBanks ->
-
-            },
-            onFailure = { errorMessage ->
-                Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
-            }
-        )
+//        ConstantsQuestionFunction.getQuestion(this, "123",
+//            onSuccess = { questionBanks ->
+//
+//            },
+//            onFailure = { errorMessage ->
+//                Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
+//            }
+//        )
 
         val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
         setSupportActionBar(toolBar)
@@ -78,7 +78,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         }
 
         val recyclerView : RecyclerView = findViewById(R.id.bankRecyclerView)
-        setBankModels()
+        setupBankModel()
         val adapter = BankRecyclerViewAdapter(this, questionBankModels, this)
 
         recyclerView.adapter = adapter
@@ -86,7 +86,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
     }
 
-    private fun setBankModels() {
+    private fun setupBankModel() {
         var bankID = ArrayList<String>()
         var bankTitle = ArrayList<String>()
         var bankType = ArrayList<String>()
@@ -120,7 +120,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    fun setPopupWindow(view: View?) {
+    fun setupPopupWindow(view: View?) {
 
         if (blurred) {
             blurred = false
@@ -192,11 +192,13 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {
-        val intent = Intent(this, BankQuestionActivity:: class.java)
+        val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
 
-        intent.putExtra("Title", questionBankModels[position].title)
+        bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
+        bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
+        Log.e("BankActivity", "start bankQuestion activity")
 
-        startActivity(intent)
+        startActivity(bankQuestionActivity)
         overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
     }
 }

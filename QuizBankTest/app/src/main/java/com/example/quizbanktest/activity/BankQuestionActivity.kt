@@ -1,6 +1,7 @@
 package com.example.quizbanktest.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
+import com.example.quizbanktest.adapters.QuestionRecyclerViewAdapter
+import com.example.quizbanktest.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
@@ -19,7 +22,7 @@ import com.example.quizbanktest.utils.ConstantsQuestionFunction
 import com.example.quizbanktest.utils.ConstantsRecommend
 import com.example.quizbanktest.utils.ConstantsWrong
 
-class BankQuestionActivity : AppCompatActivity() {
+class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
 
     private lateinit var tv_title: TextView
     private lateinit var backArrowBtn: ImageButton
@@ -32,27 +35,29 @@ class BankQuestionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank_question)
 
-        val name = intent.getStringExtra("NAME")
+        val bankTitle = intent.getStringExtra("BankTitle").toString()
+        val bankID = intent.getStringExtra("BankID").toString()
         tv_title = findViewById(R.id.title)
-        tv_title.text = name
+        tv_title.text = bankTitle
 
         backArrowBtn = findViewById(R.id.btn_back_arrow)
 
-//        val recyclerView : RecyclerView = findViewById(R.id.questionRecyclerView)
-//        setQuestionModels()
-//        val adapter = BankRecyclerViewAdapter(this, questionModels)
+        val recyclerView : RecyclerView = findViewById(R.id.questionRecyclerView)
 
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(this)
+        // TODO compare ID with Bank ID
+        ConstantsQuestionFunction.getQuestion(this, bankID,
+            onSuccess = { questions ->
+//                setupQuestionModel()
+            },
+            onFailure = { errorMessage ->
+                Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
+            }
+        )
 
-//        ConstantsQuestionFunction.getAllQuestions(this, "123",
-//            onSuccess = { questionBanks ->
-//
-//            },
-//            onFailure = { errorMessage ->
-//                Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
-//            }
-//        )
+        val adapter = QuestionRecyclerViewAdapter(this, questionModel, this)
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     fun backToPreviousPage(view: View?) {
@@ -64,7 +69,7 @@ class BankQuestionActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.question_to_bank_in, R.anim.question_to_bank_out)
     }
 
-    private fun setQuestionModels() {
+    private fun setupQuestionModel() {
 //        var bankID = ArrayList<String>()
 //        var bankTitle = ArrayList<String>()
 //        var bankType = ArrayList<String>()
@@ -73,9 +78,9 @@ class BankQuestionActivity : AppCompatActivity() {
 //        var bankOriginateFrom = ArrayList<String>()
 //        var bankCreators = ArrayList<String>()
 //
-//        Log.e("MainActivity", "ConstantsQuestionBankFunction.questionBankList")
+        Log.i("BankQuestionActivity", "set question model")
 //
-//        if (ConstantsQuestionBankFunction.questionBankList != null) {
+//        if (ConstantsQuestionBankFunction.questionList != null) {
 //            for (item in ConstantsQuestionBankFunction.questionBankList) {
 //                bankID.add(item._id)
 //                bankTitle.add(item.title)
@@ -95,5 +100,16 @@ class BankQuestionActivity : AppCompatActivity() {
 //            bank_warning = findViewById(R.id.bank_warning)
 //            bank_warning.text = "這裡還沒有任何資料喔~"
 //        }
+    }
+
+    override fun onItemClick(position: Int) {
+//        val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
+//
+//        bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
+//        bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
+//        Log.e("BankActivity", "start bankQuestion activity")
+//
+//        startActivity(bankQuestionActivity)
+//        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
     }
 }
