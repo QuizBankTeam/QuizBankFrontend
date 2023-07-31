@@ -96,10 +96,10 @@
         app:layout_constraintBottom_toTopOf="@id/group_action"
         >
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/bankRecyclerView"
+            android:id="@+id/groupListRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activity.BankActivity">
+            tools:context=".activity.group.GroupListActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
