@@ -1,26 +1,28 @@
 package com.example.quizbanktest.utils
 
+import QuestionAndBank
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
-import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
-import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.models.QuestionSetModel
 import com.example.quizbanktest.network.QuestionBankService
 import com.example.quizbanktest.network.QuestionService
-import com.example.quizbanktest.network.ScanImageService
 import com.google.gson.Gson
 import com.squareup.okhttp.ResponseBody
+import okio.Buffer
+import okio.BufferedSource
 import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
+import java.nio.charset.Charset
+
 
 object ConstantsQuestionFunction {
-    var allQuestionsReturnResponse : ConstantsQuestionFunction.AllQuestionsResponse?= null
+    var allQuestionsReturnResponse : bankInnerQuestion?= null
     var questionList : ArrayList<QuestionModel> = ArrayList()
     var postQuestionPosition : Int = 0
     fun postQuestion(question : QuestionModel, activity: AppCompatActivity,onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
@@ -99,8 +101,8 @@ object ConstantsQuestionFunction {
                 .build()
             val api = retrofit.create(QuestionBankService::class.java)
             //TODO 拿到csrf token access token
-            Log.e("access in scan ", Constants.accessToken)
-            Log.e("COOKIE in scan ", Constants.COOKIE)
+            Log.e("Question access in scan ", Constants.accessToken)
+            Log.e("Question Cookie in scan ", Constants.COOKIE)
             val call = api.getQuestionBankByID(
                 Constants.COOKIE,
                 Constants.csrfToken,
@@ -111,15 +113,22 @@ object ConstantsQuestionFunction {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
                         // TODO
+                        val source: BufferedSource = response.body().source()
+                        source.request(Long.MAX_VALUE) // Buffer the entire body.
+
+                        val buffer: Buffer = source.buffer()
+                        val UTF8: Charset = Charset.forName("UTF-8")
+                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
                         val gson = Gson()
                         val allQuestionsResponse = gson.fromJson(
                             response.body().charStream(),
-                            AllQuestionsResponse::class.java
+                            bankInnerQuestion::class.java
                         )
                         allQuestionsReturnResponse = allQuestionsResponse
-                        questionList = allQuestionsResponse.questions
+                        Log.d("All questions response", allQuestionsReturnResponse.toString())
+                        questionList = allQuestionsResponse.questionBank.questions
                         Log.e("Question Response Result", questionList.toString())
-                        onSuccess(allQuestionsResponse.questions)
+                        onSuccess(allQuestionsResponse.questionBank.questions)
                     } else {
                         val sc = response.code()
                         when (sc) {
@@ -155,6 +164,6 @@ object ConstantsQuestionFunction {
         }
     }
 
-    data class AllQuestionsResponse(val questions:ArrayList<QuestionModel>)
-
+    data class AllQuestionsResponse(val questionBank : ArrayList<QuestionModel>)
+    data class bankInnerQuestion(val questionBank:QuestionAndBank)
 }

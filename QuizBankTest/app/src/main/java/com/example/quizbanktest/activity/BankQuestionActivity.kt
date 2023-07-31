@@ -48,6 +48,7 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
         ConstantsQuestionFunction.getQuestion(this, bankID,
             onSuccess = { questions ->
 //                setupQuestionModel()
+                Log.d("BankQuestionActivity", "get question success!")
             },
             onFailure = { errorMessage ->
                 Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()

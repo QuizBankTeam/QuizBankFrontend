@@ -7,10 +7,13 @@ import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.QuestionBankService
 import com.google.gson.Gson
 import com.squareup.okhttp.ResponseBody
+import okio.Buffer
+import okio.BufferedSource
 import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
+import java.nio.charset.Charset
 
 object ConstantsQuestionBankFunction {
     var allBanksReturnResponse : AllQuestionBanksResponse?= null
@@ -37,6 +40,12 @@ object ConstantsQuestionBankFunction {
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
+                        val source: BufferedSource = response.body().source()
+                        source.request(Long.MAX_VALUE) // Buffer the entire body.
+
+                        val buffer: Buffer = source.buffer()
+                        val UTF8: Charset = Charset.forName("UTF-8")
+                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
                         val gson = Gson()
                         val allBanksResponse = gson.fromJson(
                             response.body().charStream(),
