@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.MainActivity">
+    android:background="@drawable/intro_background"
+    tools:context=".activity.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f7f3e7"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -45,9 +45,9 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginTop="60sp"
-            android:background="@color/white"
-            android:inputType="textEmailAddress"
-            android:hint="帳號" />
+            android:background="@color/colorPrimary"
+            android:hint="帳號"
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/password"
@@ -55,7 +55,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginTop="10sp"
-            android:background="@color/white"
+            android:background="@color/colorPrimary"
             android:inputType="textVisiblePassword"
             android:hint="密碼" />
 
