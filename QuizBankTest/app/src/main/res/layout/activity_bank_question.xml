@@ -20,6 +20,7 @@
             android:background="@color/colorRipple"
             android:gravity="center"
             android:text="Bank Title"
+            android:textStyle="bold"
             android:textSize="25sp"
             />
 
@@ -27,8 +28,8 @@
             android:id="@+id/btn_back_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
             android:background="@null"
             android:onClick="backToPreviousPage"
             android:src="@drawable/ic_black_color_back_24dp" />

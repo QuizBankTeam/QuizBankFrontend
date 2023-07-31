@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.MainActivity
+import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.BankRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
@@ -44,8 +45,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
-
-
         setupNavigationView()
         doubleCheckExit()
         val recyclerView : RecyclerView = findViewById(R.id.bankRecyclerView)
@@ -55,6 +54,12 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        val groupBtn : ImageButton = findViewById(R.id.bank_group)
+        groupBtn.setOnClickListener {
+            val intent = Intent(this,GroupListActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun setupBankModel() {
