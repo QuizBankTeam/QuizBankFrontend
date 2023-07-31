@@ -3,7 +3,7 @@
     <color name="colorPrimary">#8ecae6</color>
     <color name="colorPrimaryDark">#2a4d69</color>
     <color name="colorAccent">#adcbe3</color>
-
+<!--    <color name="bank_cardStroke">#4F4F4F</color>-->
     <color name="primary_text_color">#212121</color>
     <color name="secondary_text_color">#9AA2AF</color>
     <color name="white_color">#FFFFFF</color>
