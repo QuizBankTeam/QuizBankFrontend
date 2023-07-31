@@ -118,7 +118,7 @@ object ConstantsQuestionFunction {
                         )
                         allQuestionsReturnResponse = allQuestionsResponse
                         questionList = allQuestionsResponse.questions
-                        Log.e("Response Result", questionList.toString())
+                        Log.e("Question Response Result", questionList.toString())
                         onSuccess(allQuestionsResponse.questions)
                     } else {
                         val sc = response.code()

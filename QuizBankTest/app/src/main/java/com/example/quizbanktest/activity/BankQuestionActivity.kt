@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
 import com.example.quizbanktest.adapters.QuestionRecyclerViewAdapter
-import com.example.quizbanktest.interfaces.RecyclerViewInterface
+import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction

@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.interfaces.RecyclerViewInterface
+import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionBankModel
 
 class BankRecyclerViewAdapter(var context: Context,
-                              var questionBankModels: ArrayList<QuestionBankModel>, recyclerViewInterface: RecyclerViewInterface) :
+                              var questionBankModels: ArrayList<QuestionBankModel>, recyclerViewInterface: RecyclerViewInterface
+) :
     RecyclerView.Adapter<BankRecyclerViewAdapter.MyViewHolder>() {
 
     var recyclerViewInterface = recyclerViewInterface
