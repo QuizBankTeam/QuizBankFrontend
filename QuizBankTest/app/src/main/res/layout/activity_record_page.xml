@@ -25,14 +25,17 @@
                 android:orientation="horizontal"
                 android:background="@color/colorPrimary"
                 android:theme="@style/CustomToolbarStyle">
-
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:layout_gravity="center"
                     android:paddingLeft="13dp"
-                    android:text="考試紀錄📑"
+                    android:text="考試紀錄 📄"
                     android:textSize="25dp"
                     android:textStyle="bold"
                     android:textAppearance="@style/CustomToolbarStyle"

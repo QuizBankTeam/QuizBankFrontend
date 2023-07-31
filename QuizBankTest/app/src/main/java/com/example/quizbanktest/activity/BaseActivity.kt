@@ -273,7 +273,7 @@ open class BaseActivity : AppCompatActivity() {
                     .setTitle("OCR結果")
                     .setIcon(R.drawable.baseline_warning_amber_24)
                 builder.setPositiveButton("確認") { dialog, which ->
-                    val intent = Intent(this, BankActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
@@ -299,7 +299,7 @@ open class BaseActivity : AppCompatActivity() {
                     .setTitle("OCR結果")
                     .setIcon(R.drawable.baseline_warning_amber_24)
                 builder.setPositiveButton("確認") { dialog, which ->
-                    val intent = Intent(this, BankActivity::class.java)
+                    val intent = Intent(this, QuizPage::class.java)
                     startActivity(intent)
                     finish()
                 }
@@ -407,10 +407,17 @@ open class BaseActivity : AppCompatActivity() {
             moveTaskToBack(true)
         }
     }
-    override fun onBackPressed() {
-        moveTaskToBack(true)
-        Log.e("double","pick")
-        doubleCheckExit()
-    }
 
+    override fun onBackPressed() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - backPressedTime > BACK_PRESS_THRESHOLD) {
+            // If back is pressed beyond the threshold time (2 seconds), show a Toast
+            Toast.makeText(this, "再按一次返回鍵退出", Toast.LENGTH_SHORT).show()
+            backPressedTime = currentTime
+        } else {
+            moveTaskToBack(true)
+            // If back is pressed within the threshold time, finish the activity
+//            super.onBackPressed()
+        }
+    }
 }
