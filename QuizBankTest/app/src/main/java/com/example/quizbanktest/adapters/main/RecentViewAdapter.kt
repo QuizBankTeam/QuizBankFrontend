@@ -1,4 +1,4 @@
-package com.example.quizbanktest.adapters
+package com.example.quizbanktest.adapters.main
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.models.QuestionBankModel
 
-class WrongViewAdapter (private val context: Context,
-                        private var list: ArrayList<QuestionModel>
+open class RecentViewAdapter(
+    private val context: Context,
+    private var list: ArrayList<QuestionBankModel>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private var onClickListener: OnClickListener? = null
 
@@ -18,7 +19,7 @@ class WrongViewAdapter (private val context: Context,
 
         return MyViewHolder(
             LayoutInflater.from(context).inflate(
-                R.layout.item_wrong,
+                R.layout.item_quizbank,
                 parent,
                 false
             )
@@ -30,9 +31,9 @@ class WrongViewAdapter (private val context: Context,
 
         if (holder is MyViewHolder) {
 
-            holder.itemView.findViewById<TextView>(R.id.wrongTitle).text = model.title
-            holder.itemView.findViewById<TextView>(R.id.wrongType).text = "wrong tag"
-            holder.itemView.findViewById<TextView>(R.id.wrongDate).text = model.createdDate
+            holder.itemView.findViewById<TextView>(R.id.recentTitle).text = model.title
+            holder.itemView.findViewById<TextView>(R.id.recentType).text = model.questionBankType
+            holder.itemView.findViewById<TextView>(R.id.recentDate).text = model.createdDate
 
             holder.itemView.setOnClickListener {
 
@@ -49,14 +50,16 @@ class WrongViewAdapter (private val context: Context,
     }
 
 
+
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
     }
 
     interface OnClickListener {
-        fun onClick(position: Int, model: QuestionModel)
+        fun onClick(position: Int, model: QuestionBankModel)
     }
 
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
 
 }

@@ -1,11 +1,14 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.account
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.databinding.ActivityLoginBinding
 import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
+import java.io.File
+import java.io.FileOutputStream
+
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
@@ -44,10 +47,12 @@ class LoginActivity : AppCompatActivity() {
 
                 onSuccess = {   message->
                     Log.d("login success", message)
+                    writeToFile("loginSuccess.txt", message)
 
                     val intent = Intent()
                     intent.setClass(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 },
                 onFailure = { message->
                     Log.d("login fail", message)
@@ -57,5 +62,18 @@ class LoginActivity : AppCompatActivity() {
             onFailure = { it1 ->
                 Log.d("get csrf fail", it1)
             })
+    }
+
+    fun writeToFile(filename: String, data: String) {
+        val cacheDir = externalCacheDir?.absoluteFile.toString()
+        val file = File(cacheDir, filename)
+
+        try {
+            val fos = FileOutputStream(file)
+            fos.write(data.toByteArray())
+            fos.close()
+        } catch (e: Exception) {
+            Log.e("Error:", "Cannot write file: " + e.toString())
+        }
     }
 }

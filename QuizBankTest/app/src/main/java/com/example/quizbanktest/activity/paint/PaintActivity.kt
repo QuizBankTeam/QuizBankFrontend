@@ -1,4 +1,4 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.paint
 
 import android.Manifest
 import android.app.Activity
@@ -22,15 +22,18 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.*
+import android.window.OnBackInvokedDispatcher
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.os.BuildCompat
 import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.MainActivity
 
 import com.example.quizbanktest.view.DrawingView
 import com.karumi.dexter.Dexter
@@ -57,18 +60,18 @@ import java.io.IOException
 
 class PaintActivity : AppCompatActivity() {
     private val SAMPLE_CROPPED_IMG_NAME = "CroppedImage.jpg"
-    var sourceUriForUcrop : Uri ?=null
-    var saveTempPath:String ?=null
-    val rotateArray = arrayOf(0, 270, 180, 90)
-    var rotateFlag : Int = 0
-    var filterFlag : Boolean = false
-    var shareFlag : Int = 0
+    var sourceUriForUcrop : Uri ?=null //裁減圖片的存放uri
+    var saveTempPath:String ?=null //為了color picker設定的temp path 因為他需要圖片的水滴選擇器
+    val rotateArray = arrayOf(0, 270, 180, 90) //旋轉角度陣列
+    var rotateFlag : Int = 0 //旋轉幾度對應旋轉矩陣的index
+    var filterFlag : Boolean = false //是否要濾淨
+    var shareFlag : Int = 0 //是否要分享
     var colorTag : String = "#d62828" //預設紅色
     var penFlag: Int = 0 // 0 : brush 1: highlighter
-    private var mImageButtonCurrentPaint: ImageButton?=null
+    private var mImageButtonCurrentPaint: ImageButton?=null //畫筆
 
-    var idImage = System.currentTimeMillis()/1000
-    val filters = listOf(
+    var idImage = System.currentTimeMillis()/1000 //為了給image的path一個獨特的id ex: QuizBank_32142431.jpg
+    val filters = listOf( //目前所有的濾淨
         GPUImageRGBFilter(),
         GPUImageGrayscaleFilter(),
         GPUImageSepiaToneFilter(),
@@ -90,13 +93,14 @@ class PaintActivity : AppCompatActivity() {
         GPUImageColorInvertFilter(),
         GPUImageSmoothToonFilter()
     )
-    private var originBackImageView : Bitmap ?=null
-    private var drawingView: DrawingView?=null
+    private var originBackImageView : Bitmap ?=null //為了使裁減 濾鏡 是在原圖而非繪畫過的圖因此保存原狀態
+    private var drawingView: DrawingView?=null //繪畫的事放在上面
 
+    //取的圖片上某點的顏色
     val colorForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
-            val color = intent?.getStringExtra("colorHexCode")
+            val color = intent?.getStringExtra("colorHexCode") //因為顏色是用hex code給的所以要轉成對應的形式
             Log.e("color",color!!)
             drawingView?.setColor("#"+color!!)
             colorTag = "#"+color!!
@@ -115,6 +119,7 @@ class PaintActivity : AppCompatActivity() {
         }
     }
 
+    //裁減跟旋轉放大縮小的啟動器
     private val uCropActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -133,6 +138,7 @@ class PaintActivity : AppCompatActivity() {
         }
     }
 
+    //開啟相簿
     val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult() ){
             result->
@@ -169,6 +175,7 @@ class PaintActivity : AppCompatActivity() {
             Log.e("nav","toolbar")
         }
 
+        doubleCheckExit()
         toolBar.setNavigationOnClickListener{
             Log.e("nav","toolbar")
             var builder = androidx.appcompat.app.AlertDialog.Builder(this)
@@ -176,8 +183,9 @@ class PaintActivity : AppCompatActivity() {
                 .setTitle("圖片工作區")
                 .setIcon(R.drawable.baseline_warning_amber_24)
             builder.setPositiveButton("確認") { dialog, which ->
-                val intent = Intent(this,MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
             builder.setNegativeButton("取消") { dialog, which ->
@@ -191,6 +199,7 @@ class PaintActivity : AppCompatActivity() {
 
         Log.e("paint",R.id.ll_paint_colors.toString())
 
+        //下方預設顏色的選擇器偵測
         val linearLayoutPaintColors : LinearLayout = findViewById(R.id.ll_paint_colors)
         mImageButtonCurrentPaint = linearLayoutPaintColors[1] as ImageButton
         mImageButtonCurrentPaint!!.setImageDrawable(
@@ -198,9 +207,11 @@ class PaintActivity : AppCompatActivity() {
         )
 
         drawingView?.setSizeForBrush(20.toFloat())
-        val ib_highlighter : ImageButton = findViewById(R.id.ib_highlighter)
-        val ib_brush : ImageButton = findViewById(R.id.ib_brush)
-        val ib_eraser : ImageButton = findViewById(R.id.ib_eraser)
+        val ib_highlighter : ImageButton = findViewById(R.id.ib_highlighter) //螢光筆
+        val ib_brush : ImageButton = findViewById(R.id.ib_brush)//畫筆
+        val ib_eraser : ImageButton = findViewById(R.id.ib_eraser)//橡皮擦
+
+        //當畫筆按下時顯示按下的狀態
         ib_brush.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_brush_press)) //預設為筆
 
         ib_brush.setOnClickListener{
@@ -213,6 +224,7 @@ class PaintActivity : AppCompatActivity() {
             drawingView?.setColor(colorTag)
         }
 
+        //當橡皮擦按下時顯示按下的狀態
         ib_eraser.setOnClickListener{
             ib_brush.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_brush_24))
             ib_highlighter.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_border_color_24))
@@ -235,6 +247,7 @@ class PaintActivity : AppCompatActivity() {
                 .show()
         }
 
+        //當營光筆按下時顯示按下的狀態
         ib_highlighter.setOnClickListener{
             drawingView?.cancelEraser()
             penFlag = 1
@@ -269,9 +282,9 @@ class PaintActivity : AppCompatActivity() {
             if(sourceUriForUcrop!=null){
                 rotateFlag = rotateFlag+1
                 rotateFlag = rotateFlag%4
-                val mAngleRotate = (rotateArray[rotateFlag].toString() + "f").toFloat()
+                val mAngleRotate = (rotateArray[rotateFlag].toString() + "f").toFloat() //圖片旋轉角度
                 val imageBackground: ImageView = findViewById(R.id.iv_background)
-                imageBackground.rotation = mAngleRotate
+                imageBackground.rotation = mAngleRotate //設定旋轉角度
             }
         }
 
@@ -279,8 +292,8 @@ class PaintActivity : AppCompatActivity() {
         ib_crop.setOnClickListener{
             if(sourceUriForUcrop!=null){
                 // TODO
-                val destinationFileName = SAMPLE_CROPPED_IMG_NAME
-                val destinationUri = Uri.fromFile(File(externalCacheDir?.absoluteFile.toString()+File.separator+"QuizBank_"+SAMPLE_CROPPED_IMG_NAME))
+                val destinationFileName = SAMPLE_CROPPED_IMG_NAME //裁切後的目標名字
+                val destinationUri = Uri.fromFile(File(externalCacheDir?.absoluteFile.toString()+File.separator+"QuizBank_"+SAMPLE_CROPPED_IMG_NAME))//裁切後的uri之後會覆蓋掉所以不會重複耗費空間
                 val uCrop = UCrop.of(sourceUriForUcrop!!, destinationUri)
 
                 val uCropIntent = uCrop.getIntent(this)
@@ -289,16 +302,19 @@ class PaintActivity : AppCompatActivity() {
             }
         }
 
+        //返回上一次繪畫的狀態
         val ib_undo : ImageButton = findViewById(R.id.ib_undo)
         ib_undo.setOnClickListener{
             drawingView?.onClickUndo()
         }
 
+        //返回上次的復原狀太
         val ib_redo : ImageButton = findViewById(R.id.ib_redo)
         ib_redo.setOnClickListener{
             drawingView?.onClickRedo()
         }
 
+        //儲存繪畫後的圖片
         val ib_save : ImageButton = findViewById(R.id.ib_save)
         ib_save.setOnClickListener{
             if(true){
@@ -312,6 +328,7 @@ class PaintActivity : AppCompatActivity() {
             }
         }
 
+        //分享按鈕
         val ib_share : ImageButton = findViewById(R.id.ib_share)
         ib_share.setOnClickListener{
             shareFlag = 1
@@ -325,6 +342,7 @@ class PaintActivity : AppCompatActivity() {
             }
         }
 
+        //從圖片上取得顏色
         val ib_colorPicker : ImageButton = findViewById(R.id.ib_colorPicker)
         ib_colorPicker.setOnClickListener{
             penFlag = 0
@@ -350,6 +368,7 @@ class PaintActivity : AppCompatActivity() {
             )
         }
 
+        //從圖片選擇器上取得顏色
         val ibPlatte : ImageButton = findViewById(R.id.ib_Palette)
         ibPlatte.setOnClickListener {
             penFlag = 0
@@ -379,7 +398,7 @@ class PaintActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this,R.drawable.pallet_normal)
             )
         }
-
+        //套濾鏡
         val ibFilter : ImageButton = findViewById(R.id.ib_filter)
         ibFilter.setOnClickListener {
             if(sourceUriForUcrop!=null){
@@ -414,6 +433,7 @@ class PaintActivity : AppCompatActivity() {
         }
     }
 
+    //顯示畫筆可以選擇的大小
     private fun showBrushSizeChooserDialog(){
         val brushDialog = Dialog(this)
         brushDialog.setContentView(R.layout.dialog_brush_size)
@@ -588,7 +608,8 @@ class PaintActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
-
+    private var backPressedTime: Long = 0
+    private val BACK_PRESS_THRESHOLD = 2000  // 2000 milliseconds = 2 seconds
     private fun showRationalDialogForPermissions() {
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
@@ -608,7 +629,31 @@ class PaintActivity : AppCompatActivity() {
                 dialog.dismiss()
             }.show()
     }
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                doubleBackToExit()
+            }
+        }
+    }
 
+    private var doubleBackToExitPressedOnce = false
+    private fun doubleBackToExit() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - backPressedTime > BACK_PRESS_THRESHOLD) {
+            Toast.makeText(this, "再按一次返回鍵退出", Toast.LENGTH_SHORT).show()
+            backPressedTime = currentTime
+        } else {
+            moveTaskToBack(true)
+        }
+    }
+    override fun onBackPressed() {
+        moveTaskToBack(true)
+        Log.e("double","pick")
+        doubleCheckExit()
+    }
     private fun shareImage(result: String){
 //        Log.w("share result",result)
 

@@ -1,4 +1,4 @@
-package com.example.quizbanktest.adapters;
+package com.example.quizbanktest.adapters.bank;
 
 import android.content.Context;
 import android.view.LayoutInflater;

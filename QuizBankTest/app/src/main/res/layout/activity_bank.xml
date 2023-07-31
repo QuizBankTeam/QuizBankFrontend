@@ -6,36 +6,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.BankActivity">
+    tools:context=".activity.bank.BankActivity">
 
     <!--    <ImageView-->
     <!--        android:id="@+id/imageview"-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent" />-->
 
+
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_home_detail"
+        android:id="@+id/toolbar_bank_detail"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:background="@color/colorPrimary"
-        android:theme="@style/CustomToolbarStyle"
-        app:title="Bank Page 📑"
-        app:titleTextAppearance="@style/CustomToolbarStyle"
-        app:titleTextColor="@color/colorPrimaryDark" />
+        android:theme="@style/CustomToolbarStyle">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="題庫 📑"
+            android:textAppearance="@style/CustomToolbarStyle"
+            android:textColor="@color/colorPrimaryDark" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/layout_searchBar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/toolbar_home_detail">
+        android:layout_below="@id/toolbar_bank_detail">
 
         <android.widget.SearchView
             android:id="@+id/search_bar"
-            android:layout_width="330dp"
+            android:layout_width="0dp"
+            android:layout_weight="9"
             android:layout_height="35dp"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
@@ -45,7 +54,8 @@
 
         <ImageButton
             android:id="@+id/menu_button"
-            android:layout_width="35dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="35dp"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
@@ -74,69 +84,19 @@
             android:id="@+id/mRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activity.BankActivity">
+            tools:context=".activity.bank.BankActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_action_buttons"
+    <include
+        layout="@layout/action_lower_tool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorRipple"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"/>
 
-        <ImageButton
-            android:id="@+id/home"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-            android:src="@drawable/home_svgrepo_com__2_"/>
-
-        <ImageButton
-            android:id="@+id/test"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-            android:src="@drawable/notepad_and_pen_svgrepo_com"/>
-
-        <ImageButton
-            android:id="@+id/camera"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-            android:src="@drawable/camera_svgrepo_com__1_" />
-
-        <ImageButton
-            android:id="@+id/bank"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-            android:src="@drawable/book_and_person_winter_svgrepo_com" />
-
-        <ImageButton
-            android:id="@+id/setting"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-            android:src="@drawable/setting_setting_svgrepo_com__2_" />
-
-    </LinearLayout>
 
 </RelativeLayout>

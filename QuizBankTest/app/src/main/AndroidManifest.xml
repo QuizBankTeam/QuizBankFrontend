@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -37,22 +38,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.TagActivity"
+            android:name=".activity.scan.TagActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ScannerTextWorkSpaceActivity"
+            android:name=".activity.account.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.scan.ScannerTextWorkSpaceActivity"
             android:exported="false" />
         <activity
             android:name=".activity.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ColorPickerActivity1"
+            android:name=".activity.paint.ColorPickerActivity1"
             android:exported="false" />
         <activity
-            android:name=".activity.BankActivity"
+            android:name=".activity.bank.BankActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.PaintActivity"
+            android:name=".activity.paint.PaintActivity"
             android:exported="false"
             android:parentActivityName=".activity.MainActivity" />
         <activity
@@ -79,7 +83,6 @@
         <activity android:name=".activity.quiz.SPStartQuiz"/>
         <activity android:name=".activity.quiz.SPQuizFinish"/>
         <activity android:name=".activity.quiz.SPSingleRecord"/>
-        <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.quiz.MPStartQuiz"
                     android:theme="@style/StartQuiz"/>
 

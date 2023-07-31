@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_home_detail"
         android:layout_width="match_parent"
@@ -81,7 +82,7 @@
                                 android:id="@+id/join_code_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Enter a invitation               📝"
+                                android:hint="輸入邀請碼               📝"
                                 android:inputType="textCapWords"
                                 android:textColor="#363A43"
                                 android:textColorHint="#7A8089" />
@@ -104,12 +105,12 @@
                     android:id="@+id/recent_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" Recently Created : "
+                    android:text="  最近新增之題庫 : "
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/join_code"
                     app:layout_constraintBottom_toTopOf="@id/recent_list"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     />
                 <LinearLayout
@@ -138,12 +139,12 @@
                     android:id="@+id/recent_wrong"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" Recently Wrong Question : "
+                    android:text="  最近錯的題目 : "
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recent_list"
                     app:layout_constraintBottom_toTopOf="@id/wrong_list"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     />
                 <LinearLayout
@@ -172,8 +173,8 @@
                     android:id="@+id/recommend_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Recommend Question : "
-                    android:textSize="25sp"
+                    android:text="  推薦題目 : "
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/recommend_list"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -207,10 +208,8 @@
 
 
     </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/ll_action_buttons"
+    <include
+        layout="@layout/action_lower_tool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -219,61 +218,9 @@
         app:layout_constraintTop_toBottomOf="@id/fl_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <ImageButton
-            android:id="@+id/home"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/home_svgrepo_com__2_"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-            />
-        <ImageButton
-            android:id="@+id/test"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:src="@drawable/notepad_and_pen_svgrepo_com"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
 
-            />
-        <ImageButton
-            android:id="@+id/camera"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:background="@color/colorRipple"
-            android:src="@drawable/camera_svgrepo_com__1_"
-            android:scaleType="fitXY"
-
-            />
-        <ImageButton
-            android:id="@+id/bank"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:src="@drawable/book_and_person_winter_svgrepo_com"
-            android:foregroundTint="@color/white"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-
-            />
-        <ImageButton
-            android:id="@+id/setting"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:src="@drawable/setting_setting_svgrepo_com__2_"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-            />
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

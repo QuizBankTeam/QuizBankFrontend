@@ -18,13 +18,23 @@
             android:background="@color/colorPrimary"
             app:titleTextAppearance="@style/CustomToolbarStyle"
             app:titleTextColor="@color/colorPrimaryDark"
-            app:title="Quiz Bank📑"
             android:theme="@style/CustomToolbarStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Quiz Bank ✨"
+                android:textAppearance="@style/CustomToolbarStyle"
+                android:textColor="@color/colorPrimaryDark" />
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <include layout="@layout/content_main" />
 

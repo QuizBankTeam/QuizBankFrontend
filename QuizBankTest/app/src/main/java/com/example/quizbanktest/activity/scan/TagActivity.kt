@@ -1,4 +1,4 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.scan
 import android.app.AlertDialog
 import android.content.ClipData
 
