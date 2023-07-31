@@ -40,7 +40,7 @@ class BankActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
-        val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_bank_detail)
+
 
         val recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
 

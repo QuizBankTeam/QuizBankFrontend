@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
+import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.network.QuestionService
 import com.squareup.okhttp.ResponseBody
@@ -82,9 +83,5 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
-
-
-
-
 
 }
