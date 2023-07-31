@@ -93,7 +93,7 @@ object ConstantsQuestionFunction {
         }
     }
 
-    fun getQuestion(context: Context, ID: String, onSuccess: (ArrayList<QuestionModel>) -> Unit, onFailure: (String) -> Unit) {
+    fun getQuestion(context: Context, Id: String, onSuccess: (ArrayList<QuestionModel>) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -107,7 +107,7 @@ object ConstantsQuestionFunction {
                 Constants.COOKIE,
                 Constants.csrfToken,
                 Constants.session,
-                ID
+                Id
             )
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {

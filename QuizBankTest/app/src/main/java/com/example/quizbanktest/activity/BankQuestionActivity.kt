@@ -24,9 +24,9 @@ import com.example.quizbanktest.utils.ConstantsWrong
 
 class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
 
-    private lateinit var tv_title: TextView
+    private lateinit var tvTitle: TextView
     private lateinit var backArrowBtn: ImageButton
-    private var questionModel = ArrayList<QuestionModel>()
+    private var questionModels = ArrayList<QuestionModel>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +37,8 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
 
         val bankTitle = intent.getStringExtra("BankTitle").toString()
         val bankID = intent.getStringExtra("BankID").toString()
-        tv_title = findViewById(R.id.title)
-        tv_title.text = bankTitle
+        tvTitle = findViewById(R.id.title)
+        tvTitle.text = bankTitle
 
         backArrowBtn = findViewById(R.id.btn_back_arrow)
 
@@ -47,7 +47,7 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
         // TODO compare ID with Bank ID
         ConstantsQuestionFunction.getQuestion(this, bankID,
             onSuccess = { questions ->
-//                setupQuestionModel()
+                setupQuestionModel()
                 Log.d("BankQuestionActivity", "get question success!")
             },
             onFailure = { errorMessage ->
@@ -55,7 +55,7 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
             }
         )
 
-        val adapter = QuestionRecyclerViewAdapter(this, questionModel, this)
+        val adapter = QuestionRecyclerViewAdapter(this, questionModels, this)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -71,36 +71,47 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
     }
 
     private fun setupQuestionModel() {
-//        var bankID = ArrayList<String>()
-//        var bankTitle = ArrayList<String>()
-//        var bankType = ArrayList<String>()
-//        var bankCreatedDate = ArrayList<String>()
-//        var bankMembers = ArrayList<ArrayList<String>>()
-//        var bankOriginateFrom = ArrayList<String>()
-//        var bankCreators = ArrayList<String>()
-//
+        val questionId = ArrayList<String>()
+        val questionTitle = ArrayList<String>()
+        val questionNumber = ArrayList<String>()
+        val questionDescription = ArrayList<String>()
+        val questionOptions = ArrayList<ArrayList<String>>()
+        val questionType = ArrayList<String>()
+        val bankType = ArrayList<String>()
+        val questionBankId = ArrayList<String>()
+        val answerOptions = ArrayList<ArrayList<String>>()
+        val answerDescription = ArrayList<String>()
+        val questionSource = ArrayList<String>()
+        val questionCreatedDate = ArrayList<String>()
+        val questionImage = ArrayList<ArrayList<String>>()
+        val tag = ArrayList<ArrayList<String>>()
+
         Log.i("BankQuestionActivity", "set question model")
-//
-//        if (ConstantsQuestionBankFunction.questionList != null) {
-//            for (item in ConstantsQuestionBankFunction.questionBankList) {
-//                bankID.add(item._id)
-//                bankTitle.add(item.title)
-//                bankType.add(item.questionBankType)
-//                bankCreatedDate.add(item.createdDate)
-//                bankMembers.add(item.members)
-//                bankOriginateFrom.add(item.originateFrom)
-//                bankCreators.add(item.creator)
-//            }
-//            for (i in bankTitle.indices) {
-//                val questionBankModel = QuestionBankModel(bankID[i], bankTitle[i], bankType[i], bankCreatedDate[i],
-//                    bankMembers[i], bankOriginateFrom[i], bankCreators[i])
-//
-//                questionBankModels.add(questionBankModel)
-//            }
-//        } else {
-//            bank_warning = findViewById(R.id.bank_warning)
-//            bank_warning.text = "這裡還沒有任何資料喔~"
-//        }
+
+        for (item in ConstantsQuestionFunction.questionList) {
+            questionId.add(item._id!!)
+            questionTitle.add(item.title!!)
+            questionNumber.add(item.number!!)
+            questionDescription.add(item.description)
+            questionOptions.add(item.options!!)
+            questionType.add(item.bankType!!)
+            bankType.add(item.bankType!!)
+            questionBankId.add(item.questionBank!!)
+            answerOptions.add(item.answerOptions!!)
+            answerDescription.add(item.answerDescription!!)
+            questionSource.add(item.orginateFrom)
+            questionCreatedDate.add(item.createdDate)
+            questionImage.add(item.image!!)
+            tag.add(item.tag!!)
+        }
+        for (i in questionTitle.indices) {
+            val questionModel = QuestionModel(questionId[i], questionTitle[i], questionNumber[i],
+                questionDescription[i], questionOptions[i], questionType[i], bankType[i],
+                questionBankId[i], answerOptions[i], answerDescription[i], questionSource[i],
+                questionCreatedDate[i], questionImage[i], tag[i])
+
+            questionModels.add(questionModel)
+        }
     }
 
     override fun onItemClick(position: Int) {

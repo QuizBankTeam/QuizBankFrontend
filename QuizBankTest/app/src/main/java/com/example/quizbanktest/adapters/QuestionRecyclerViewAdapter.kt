@@ -12,11 +12,9 @@ import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 
 class QuestionRecyclerViewAdapter(var context: Context,
-                                  var questionModel: ArrayList<QuestionModel>, recyclerViewInterface: RecyclerViewInterface
-):
-    RecyclerView.Adapter<QuestionRecyclerViewAdapter.MyViewHolder>() {
-
-    var recyclerViewInterface = recyclerViewInterface
+                                  var questionModels: ArrayList<QuestionModel>,
+                                  var recyclerViewInterface: RecyclerViewInterface
+) : RecyclerView.Adapter<QuestionRecyclerViewAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 //        This is where you inflate the layout (Giving a look to our rows)
@@ -34,47 +32,42 @@ class QuestionRecyclerViewAdapter(var context: Context,
 //        Assigning values to the views we created in the recycler_view_row layout file
 //        Based on the position of the recycler view
 //        TODO: bankID
-        holder.tv_QuestionTitle.text = questionModel[position].title
-        holder.tv_QuestionType.text = questionModel[position].questionType
-        holder.tv_QuestionCreatedDate.text = questionModel[position].createdDate
-//        holder.tv_BankOriginateFrom.text = questionBankModels[position].originateFrom
-        holder.tv_QuestionOriginateFrom.append("none")
-//        holder.tv_BankCreator.text = questionBankModels[position].creator
-        holder.tv_QuestionCreator.append("none")
+        holder.tvQuestionTitle.text = questionModels[position].title
+        holder.tvQuestionType.text = questionModels[position].questionType
+        holder.tvQuestionCreatedDate.text = questionModels[position].createdDate
+        holder.tvQuestionCreator.append("none")
     }
 
     override fun getItemCount(): Int {
 //        The recycler view just wants to know the number of items you want displayed
-        return questionModel.size
+        return questionModels.size
     }
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
         //        Grabbing the views from our recycler_view_row layout file
         //        Kinda like in the onCreate method
 //        TODO: BankID
-        var tv_QuestionTitle: TextView
-        var tv_QuestionType: TextView
-        var tv_QuestionCreatedDate: TextView
-        var tv_QuestionOriginateFrom: TextView
-        var tv_QuestionCreator: TextView
+        var tvQuestionTitle: TextView
+        var tvQuestionType: TextView
+        var tvQuestionCreatedDate: TextView
+        var tvQuestionOriginateFrom: TextView
+        var tvQuestionCreator: TextView
 
         init {
 
 //          TODO: bankID
-            tv_QuestionTitle = itemView.findViewById(R.id.question_title)
-            tv_QuestionType = itemView.findViewById(R.id.question_type)
-            tv_QuestionCreatedDate = itemView.findViewById(R.id.question_createdDate)
-            tv_QuestionOriginateFrom = itemView.findViewById(R.id.question_from)
-            tv_QuestionCreator = itemView.findViewById(R.id.question_creator)
+            tvQuestionTitle = itemView.findViewById(R.id.question_title)
+            tvQuestionType = itemView.findViewById(R.id.question_type)
+            tvQuestionCreatedDate = itemView.findViewById(R.id.question_createdDate)
+            tvQuestionOriginateFrom = itemView.findViewById(R.id.question_from)
+            tvQuestionCreator = itemView.findViewById(R.id.question_creator)
 
-            itemView.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(view: View?) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        recyclerViewInterface.onItemClick(position)
-                    }
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    recyclerViewInterface.onItemClick(position)
                 }
-            })
+            }
         }
     }
 }
