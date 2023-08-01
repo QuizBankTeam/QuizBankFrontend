@@ -33,7 +33,7 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="題庫標籤"
+                android:text="主題標籤"
                 />
             <co.lujun.androidtagview.TagContainerLayout
                 android:id="@+id/tagcontainerLayout1"
@@ -72,7 +72,7 @@
                     android:textStyle="bold"
                     android:gravity="center"
                     android:background="@drawable/add_image"
-                    android:text="新增題庫選項" />
+                    android:text="新增主題選項" />
             </LinearLayout>
             <co.lujun.androidtagview.TagContainerLayout
                 android:id="@+id/chooseContainerLayout1"

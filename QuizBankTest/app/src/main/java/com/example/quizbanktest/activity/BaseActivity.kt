@@ -350,7 +350,8 @@ open class BaseActivity : AppCompatActivity() {
 
                 var base64String = ConstantsFunction.encodeImage(bitmap)
                 showProgressDialog("目前正在處理OCR之結果")
-                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->}, onFailure = { it1 ->})
+
+                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
                 var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
 //                Log.e("openGalleryLauncher size", size.toString()),1
             }else{
@@ -406,6 +407,27 @@ open class BaseActivity : AppCompatActivity() {
         } else {
             moveTaskToBack(true)
         }
+    }
+
+    fun splitQuestionOptions(text: String): Pair<String, List<String>> {
+        val pattern = "\\s*(?:[A-Za-z0-9一二三四五六七八九十]+\\)|[A-Za-z0-9一二三四五六七八九十]+\\.)".toRegex()
+        val optionIndices = pattern.findAll(text).map { it.range.first }.toList()
+
+        if (optionIndices.isEmpty()) {
+            return Pair(text, emptyList())
+        }
+
+
+        val question = text.substring(0, optionIndices[0]).trim()
+        val options = optionIndices.mapIndexed { index, start ->
+            val end = optionIndices.getOrNull(index + 1) ?: text.length
+            text.substring(start, end).trim()
+        }
+        for(i in options){
+            Log.e("list options",i)
+        }
+
+        return Pair(question, options)
     }
 
     override fun onBackPressed() {

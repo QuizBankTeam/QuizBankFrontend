@@ -39,7 +39,7 @@
                         android:layout_height="50dp"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:hint="題目標題"
+                        android:hint="題目標題 "
                         android:gravity="left"
                         android:inputType="textMultiLine"
                         android:scrollbars = "vertical"
@@ -79,7 +79,7 @@
                             android:layout_height="38dp"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:hint="題號."
+                            android:hint="題號.️"
                             android:gravity="left"
                             android:inputType="textMultiLine"
                             android:scrollbars = "vertical"
@@ -152,7 +152,7 @@
                             android:textColor="#363A43"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:text="題庫標籤"
+                            android:text="主題標籤"
                             />
                         <HorizontalScrollView
                             android:layout_width="match_parent"
@@ -382,6 +382,7 @@
                                         android:singleLine="false" />
                                 </LinearLayout>
 
+
                             <ImageButton
                                 android:id="@+id/add_options_button"
                                 android:layout_width="40dp"
@@ -392,6 +393,7 @@
                                 android:background="@color/white"
                                 android:scaleType="fitXY"
                                 />
+
                         </LinearLayout>
 
                         <LinearLayout

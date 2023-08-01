@@ -49,11 +49,18 @@ object ConstantsScanServiceFunction {
                            //不用換頁因為是答案ocr
                         }
                         else{
-                            ConstantsOcrResults.setOcrResult(ocrResponse.text)
-                            activity.hideProgressDialog()
-                            val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
-                            intent.putExtra("ocrText", ocrResponse.text)
-                            activity.startActivity(intent)
+                            if(!ocrResponse.text.equals("")){
+                                ConstantsOcrResults.setOcrResult(ocrResponse.text)
+                                activity.splitQuestionOptions(ocrResponse.text)
+                                activity.hideProgressDialog()
+                                val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
+                                intent.putExtra("ocrText", ocrResponse.text)
+                                activity.startActivity(intent)
+                            }else{
+                                Toast.makeText(activity,"辨識不出來目前的圖片請重新上傳",Toast.LENGTH_SHORT).show()
+                                activity.hideProgressDialog()
+                            }
+
                         }
                         onSuccess(ocrResponse.text)
 
