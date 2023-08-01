@@ -330,6 +330,33 @@ class OcrResultViewAdapter(
                                 val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
                                 ConstantsOcrResults.questionList[position].image?.add(selectPhotoBase64String)
                                 imageList.add(selectPhotoBase64String)
+                                val actionDialog = AlertDialog.Builder(context)
+                                actionDialog.setTitle("是否答案圖片要OCR")
+                                val actionDialogItems =
+                                    arrayOf("要", "不要")
+                                actionDialog.setItems(
+                                    actionDialogItems
+                                ) { dialog, which ->
+                                    when (which) {
+                                        // Here we have create the methods for image selection from GALLERY
+                                        0 -> {
+                                            activity.showProgressDialog("目前正在處理答案圖片OCR")
+                                            ConstantsScanServiceFunction.scanBase64ToOcrText(
+                                                selectPhotoBase64String!!,
+                                                activity,0,onSuccess = { it1 ->
+                                                    activity.hideProgressDialog()
+                                                    answerDescription.setText(it1)
+                                                }, onFailure = { it1 ->
+                                                    activity.hideProgressDialog()
+                                                    Toast.makeText(context,"掃描錯誤",Toast.LENGTH_SHORT).show()
+                                                }
+                                            )
+
+                                        }
+                                        1 -> Log.e("not answer image to ocr","true")
+                                    }
+                                }
+                                actionDialog.show()
 
                             }else{
                                 Toast.makeText(context," choosePhoto has error",Toast.LENGTH_SHORT).show()
@@ -587,8 +614,6 @@ class OcrResultViewAdapter(
 
 
     }
-
-
     override fun getItemCount(): Int {
         return list.size
     }

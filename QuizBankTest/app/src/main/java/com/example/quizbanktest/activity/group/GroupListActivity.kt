@@ -1,10 +1,14 @@
 package com.example.quizbanktest.activity.group
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import co.lujun.androidtagview.TagContainerLayout
+import com.example.introducemyself.utils.ConstantsTag
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.bank.BankActivity
@@ -28,7 +32,40 @@ class GroupListActivity : BaseActivity() {
             startActivity(intent)
             finish()
         }
+        val addGroupBtn:ImageButton = findViewById(R.id.group_add)
+
+        addGroupBtn.setOnClickListener {
+
+            val actionDialog = AlertDialog.Builder(this)
+            actionDialog.setTitle("群組功能選擇")
+            val actionDialogItems =
+                arrayOf("加入群組", "創建群組")
+            actionDialog.setItems(
+                actionDialogItems
+            ) { dialog, which ->
+                when (which) {
+                    // Here we have create the methods for image selection from GALLERY
+                    0 -> joinGroup()
+                    1 -> createGroup()
+                }
+            }
+            actionDialog.show()
+
+        }
+
         setupGroupListRecyclerView(ConstantsGroup.groupList)
+    }
+
+    fun createGroup(){
+        val groupDialog = Dialog(this)
+        groupDialog.setContentView(R.layout.dalog_create_group)
+
+        groupDialog.setTitle("群組")
+        groupDialog.show()
+    }
+
+    fun joinGroup(){
+
     }
 
     private fun setupGroupListRecyclerView(groupList: ArrayList<GroupModel>) {

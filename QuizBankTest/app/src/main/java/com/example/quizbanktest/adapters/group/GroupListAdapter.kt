@@ -32,8 +32,9 @@ open class GroupListAdapter(
 
         if (holder is MyViewHolder) {
 
+            val memberText = "群組成員 ("+model.members?.size.toString()+") "+": "+model.members?.joinToString(" ")
             holder.itemView.findViewById<TextView>(R.id.group_title).text = model.name
-            holder.itemView.findViewById<TextView>(R.id.group_members).text = model.members?.joinToString(" ")
+            holder.itemView.findViewById<TextView>(R.id.group_members).text = memberText
 
 
             holder.itemView.setOnClickListener {
