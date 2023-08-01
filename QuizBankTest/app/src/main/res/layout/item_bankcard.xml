@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/bank_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="1dp"
+                app:srcCompat="@drawable/book_square_svgrepo_com" />
+
+
+            <TextView
+                android:id="@+id/bank_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/bank_image"
+                android:text="This is title"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                />
+
+            <TextView
+                android:id="@+id/bank_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bank_title"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="-21dp"
+                android:layout_marginRight="8dp"
+                android:text="This is bank type"
+                android:textColor="#606060"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/bank_createdDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bank_type"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@id/bank_image"
+                android:text="YYYY/MM/DD"
+                android:textColor="#606060"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/bank_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bank_createdDate"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/bank_image"
+                android:text="Memebers: "
+                android:textColor="#606060"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/bank_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bank_members"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/bank_image"
+                android:text="originate from: "
+                android:textColor="#606060"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/bank_creator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bank_members"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/bank_from"
+                android:text="creator: "
+                android:textColor="#606060"
+                android:textSize="10sp"/>
+
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

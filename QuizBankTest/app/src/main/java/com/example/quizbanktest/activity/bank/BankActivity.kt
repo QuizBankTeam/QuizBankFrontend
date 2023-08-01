@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,53 +23,73 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.MainActivity
+import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.BankRecyclerViewAdapter
+import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
-import com.example.quizbanktest.models.BankModel
+import com.example.quizbanktest.models.QuestionBankModel
+import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
 
-class BankActivity : BaseActivity() {
+class BankActivity : BaseActivity(), RecyclerViewInterface {
     lateinit var searchView: SearchView
     lateinit var menuButton: ImageButton
+    lateinit var bank_warning: TextView
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
-    var bankModels = ArrayList<BankModel>()
+    private var questionBankModels = ArrayList<QuestionBankModel>()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
-        val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_bank_detail)
-
-        val recyclerView : RecyclerView = findViewById(R.id.mRecyclerView)
-
-        val adapter =
-            BankRecyclerViewAdapter(
-                this,
-                bankModels
-            )
-        setUpBankModels()
+        setupNavigationView()
+        doubleCheckExit()
+        val recyclerView : RecyclerView = findViewById(R.id.bankRecyclerView)
+        setupBankModel()
+        val adapter = BankRecyclerViewAdapter(this, questionBankModels, this)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        setupNavigationView()
-        doubleCheckExit()
-
-    }
-
-    private fun setUpBankModels() {
-        val bankNames : Array<String> = resources.getStringArray(R.array.bank_name_txt)
-        val bankDescriptions : Array<String> = resources.getStringArray(R.array.bank_description_txt)
-        val bankDates : Array<String> = resources.getStringArray(R.array.bank_date_txt)
-
-        for (i in 0 until bankNames.size) {
-            val bankModel = BankModel(bankNames[i], bankDescriptions[i], bankDates[i], i)
-            bankModels.add(bankModel)
+        val groupBtn : ImageButton = findViewById(R.id.bank_group)
+        groupBtn.setOnClickListener {
+            val intent = Intent(this,GroupListActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
+
+    private fun setupBankModel() {
+        val bankID = ArrayList<String>()
+        val bankTitle = ArrayList<String>()
+        val bankType = ArrayList<String>()
+        val bankCreatedDate = ArrayList<String>()
+        val bankMembers = ArrayList<ArrayList<String>>()
+        val bankSource = ArrayList<String>()
+        val bankCreators = ArrayList<String>()
+
+        Log.e("BankActivity", "ConstantsQuestionBankFunction.questionBankList")
+
+        for (item in ConstantsQuestionBankFunction.questionBankList) {
+            bankID.add(item._id)
+            bankTitle.add(item.title)
+            bankType.add(item.questionBankType)
+            bankCreatedDate.add(item.createdDate)
+            bankMembers.add(item.members)
+            bankSource.add(item.originateFrom)
+            bankCreators.add(item.creator)
+        }
+        for (i in bankTitle.indices) {
+            val questionBankModel = QuestionBankModel(bankID[i], bankTitle[i], bankType[i],
+                bankCreatedDate[i], bankMembers[i], bankSource[i], bankCreators[i])
+
+            questionBankModels.add(questionBankModel)
+        }
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     fun setPopupWindow(view: View?) {
@@ -92,7 +113,7 @@ class BankActivity : BaseActivity() {
 //        blurred = !blurred
 //        return true
 
-        val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupInflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val myContentView = popupInflater.inflate(R.layout.popup_window, null)
         myContentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
         val popupHeight = myContentView.measuredHeight
@@ -147,5 +168,14 @@ class BankActivity : BaseActivity() {
         }
 
     }
+    override fun onItemClick(position: Int) {
+        val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
 
+        bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
+        bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
+        Log.e("BankActivity", "start bankQuestion activity")
+
+        startActivity(bankQuestionActivity)
+//        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
+    }
 }

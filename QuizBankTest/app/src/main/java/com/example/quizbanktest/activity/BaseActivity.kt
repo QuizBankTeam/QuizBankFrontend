@@ -90,8 +90,8 @@ open class BaseActivity : AppCompatActivity() {
 
             }
             var base64String = ConstantsFunction.encodeImage(thumbnail!!)
-            showProgressDialog("目前正在處理ocr之結果")
-            ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!,this@BaseActivity)
+            showProgressDialog("目前正在處理OCR之結果")
+            ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!,this@BaseActivity,1,onSuccess = { it1 ->}, onFailure = { it1 ->})
 
             var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
 
@@ -190,7 +190,7 @@ open class BaseActivity : AppCompatActivity() {
         val pictureDialog = AlertDialog.Builder(this)
         pictureDialog.setTitle("Select Action")
         val pictureDialogItems =
-            arrayOf("Select photo from gallery", "Capture photo from camera")
+            arrayOf("從相簿選擇", "拍照新增題目")
         pictureDialog.setItems(
             pictureDialogItems
         ) { dialog, which ->
@@ -349,10 +349,10 @@ open class BaseActivity : AppCompatActivity() {
             if (bitmap != null) {
 
                 var base64String = ConstantsFunction.encodeImage(bitmap)
-                showProgressDialog("目前正在處理ocr之結果")
-                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity)
+                showProgressDialog("目前正在處理OCR之結果")
+                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->}, onFailure = { it1 ->})
                 var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
-//                Log.e("openGalleryLauncher size", size.toString())
+//                Log.e("openGalleryLauncher size", size.toString()),1
             }else{
                 Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
             }

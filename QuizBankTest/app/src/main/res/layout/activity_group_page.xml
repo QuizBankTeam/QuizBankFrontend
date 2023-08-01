@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/group_background"
+    android:orientation="vertical"
+    >
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_group_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
+        android:background="@null"
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_group_page"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@null"
+            app:titleTextAppearance="@style/CustomToolbarStyle"
+            app:titleTextColor="@color/colorPrimaryDark"
+            android:theme="@style/CustomToolbarStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:orientation="horizontal"
+                android:background="@null"
+                android:theme="@style/CustomToolbarStyle">
+
+                <ImageButton
+                    android:id="@+id/btn_group_page_back_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@null"
+                    android:onClick="backToPreviousPage"
+                    android:src="@drawable/ic_black_color_back_24dp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:layout_gravity="center"
+                    android:paddingLeft="13dp"
+                    android:text=" "
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/CustomToolbarStyle"
+                    android:textColor="@color/colorPrimaryDark"/>
+                <ImageButton
+                    android:id="@+id/group_page_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/baseline_settings_24_black"/>
+                <ImageButton
+                    android:id="@+id/group_page_leave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"
+                    android:background="@null"
+                    android:src="@drawable/baseline_exit_quiz"/>
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/group_action"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_user_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:gravity="center"
+            android:layout_marginTop="200dp"
+            android:contentDescription="@string/image_contentDescription"
+            android:src="@drawable/ic_user_place_holder"
+            app:civ_border_color="@color/gray"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:id="@+id/group_name"
+            android:paddingLeft="13dp"
+            android:text="群組名稱 "
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textAppearance="@style/CustomToolbarStyle"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ll_action_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:background="@null"
+            >
+            <!-- ImageButton elements here -->
+
+            <ImageButton
+                android:id="@+id/group_chatroom"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:src="@drawable/baseline_chat_24"
+                android:background="@null"
+                android:scaleType="fitXY"
+
+                />
+            <ImageButton
+                android:id="@+id/group_file"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:background="@null"
+                android:src="@drawable/baseline_folder_24"
+                android:scaleType="fitXY"
+
+                />
+
+            <ImageButton
+                android:id="@+id/group_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/baseline_image_30"
+                android:background="@null"
+                android:scaleType="fitXY"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        />
+
+</LinearLayout>

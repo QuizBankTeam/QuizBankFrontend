@@ -13,6 +13,7 @@ object ConstantsOcrResults {
     var questionTypeList = ArrayList<String>()
 
 
+
     fun setOcrResult(description : String){
 
         if(questionTypeList.size == 0){

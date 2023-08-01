@@ -13,6 +13,52 @@
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent" />-->
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_bank_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary"
+            android:theme="@style/CustomToolbarStyle">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:paddingLeft="13dp"
+                android:text="題庫 📑"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textAppearance="@style/CustomToolbarStyle"
+                android:textColor="@color/colorPrimaryDark"/>
+            <ImageButton
+                android:id="@+id/bank_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:src="@drawable/baseline_group_24"/>
+            <ImageButton
+                android:id="@+id/bank_add"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="@color/colorPrimary"
+                android:src="@drawable/baseline_add_black"/>
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_bank_detail"
@@ -23,16 +69,6 @@
         android:layout_alignParentRight="true"
         android:background="@color/colorPrimary"
         android:theme="@style/CustomToolbarStyle">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="題庫 📑"
-            android:textAppearance="@style/CustomToolbarStyle"
-            android:textColor="@color/colorPrimaryDark" />
-
-    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/layout_searchBar"
@@ -78,17 +114,27 @@
         android:layout_width="match_parent"
         android:layout_height="550dp"
         android:orientation="vertical"
-        android:layout_below="@+id/dividing_view">
+        android:layout_below="@+id/dividing_view"
+        android:layout_above="@+id/ll_action_buttons"
+        android:layout_marginBottom="10dp"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mRecyclerView"
+            android:id="@+id/bankRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activity.bank.BankActivity">
+            tools:context=".activity.BankActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/bank_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:textSize="30dp" />
     <include
         layout="@layout/action_lower_tool"
         android:layout_width="match_parent"

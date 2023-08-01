@@ -28,6 +28,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.group.GroupPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.bank.BankQuestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.group.GroupListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -67,25 +76,28 @@
             android:name=".activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".activity.quiz.SingleQuestion"/>
-        <activity android:name=".activity.quiz.SingleQuestionSetting"/>
-        <activity android:name=".activity.quiz.SingleQuiz"
-                    android:theme="@style/AppTheme"/>
-        <activity android:name=".activity.quiz.SingleQuizSetting"/>
-        <activity android:name=".activity.quiz.QuizPage"/>
-        <activity android:name=".activity.quiz.RecordPage"/>
-        <activity android:name=".activity.quiz.SPStartQuiz"/>
-        <activity android:name=".activity.quiz.SPQuizFinish"/>
-        <activity android:name=".activity.quiz.SPSingleRecord"/>
-        <activity android:name=".activity.quiz.MPStartQuiz"
-                    android:theme="@style/StartQuiz"/>
-
+        <activity android:name=".activity.quiz.SingleQuestion" />
+        <activity android:name=".activity.quiz.SingleQuestionSetting" />
+        <activity
+            android:name=".activity.quiz.SingleQuiz"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.quiz.SingleQuizSetting" />
+        <activity android:name=".activity.quiz.QuizPage" />
+        <activity android:name=".activity.quiz.RecordPage" />
+        <activity android:name=".activity.quiz.SPStartQuiz" />
+        <activity android:name=".activity.quiz.SPQuizFinish" />
+        <activity android:name=".activity.quiz.SPSingleRecord" />
+        <activity
+            android:name=".activity.quiz.MPStartQuiz"
+            android:theme="@style/StartQuiz" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
