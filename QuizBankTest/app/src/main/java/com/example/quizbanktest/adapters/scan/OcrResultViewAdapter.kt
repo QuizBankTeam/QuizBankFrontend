@@ -580,6 +580,7 @@ class OcrResultViewAdapter(
                             activity.hideProgressDialog()
                             val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
                             activity.startActivity(intent)
+                            activity.finish()
                         },
                         onFailure = {
                             it -> Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
@@ -603,6 +604,7 @@ class OcrResultViewAdapter(
 
                     val intent = Intent(context, ScannerTextWorkSpaceActivity::class.java)
                     context.startActivity(intent)
+                    activity.finish()
                 }
                 builder.setNegativeButton("取消") { dialog, which ->
                 }

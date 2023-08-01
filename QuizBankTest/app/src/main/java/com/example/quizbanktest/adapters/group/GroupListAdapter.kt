@@ -1,18 +1,22 @@
 package com.example.quizbanktest.adapters.group
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.group.GroupListActivity
+import com.example.quizbanktest.activity.group.GroupPageActivity
 import com.example.quizbanktest.models.GroupModel
 import com.example.quizbanktest.models.QuestionBankModel
 
 open class GroupListAdapter(
     private val context: Context,
-    private var list: ArrayList<GroupModel>
+    private var list: ArrayList<GroupModel>,
+
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private var onClickListener: OnClickListener? = null
 
@@ -42,6 +46,9 @@ open class GroupListAdapter(
                 if (onClickListener != null) {
                     onClickListener!!.onClick(position, model)
                 }
+                val intent = Intent(context,GroupPageActivity::class.java)
+                intent.putExtra("group_name",model.name)
+                context.startActivity(intent)
             }
         }
     }

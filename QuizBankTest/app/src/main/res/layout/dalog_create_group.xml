@@ -59,11 +59,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/iv_answer_image"
                         android:layout_width="0dp"
                         android:layout_marginTop="3dp"
                         android:layout_weight="1"
+                        android:background="@color/white"
                         android:layout_height="50dp"
                         android:contentDescription="image"
                         android:scaleType="fitCenter"
@@ -110,7 +111,6 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
                         android:gravity="center"
-                        android:onClick="onClick"
                         android:clickable="true"
                         android:background="@drawable/add_image"
                         android:text="產生邀請碼   🪄" />
@@ -128,8 +128,8 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:clickable="true"
+                            android:textIsSelectable="true"
                             android:text="目前為空" />
 
 
@@ -151,7 +151,6 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:clickable="true"
                             android:background="@drawable/add_image"
                             android:text="取消新增 ❌" />
@@ -165,7 +164,6 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:clickable="true"
                             android:background="@drawable/add_image"
                             android:text="新增群組 ✅" />

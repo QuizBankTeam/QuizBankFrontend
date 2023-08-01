@@ -27,6 +27,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.group.GroupPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.bank.BankQuestionActivity"
             android:exported="false" />
         <activity

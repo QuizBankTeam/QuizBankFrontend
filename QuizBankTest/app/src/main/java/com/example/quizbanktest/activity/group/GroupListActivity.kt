@@ -65,7 +65,10 @@ class GroupListActivity : BaseActivity() {
     }
 
     fun joinGroup(){
-
+        val groupDialog = Dialog(this)
+        groupDialog.setContentView(R.layout.dialog_join_group)
+        groupDialog.setTitle("輸入群組邀請碼")
+        groupDialog.show()
     }
 
     private fun setupGroupListRecyclerView(groupList: ArrayList<GroupModel>) {
