@@ -2,21 +2,16 @@ package com.example.quizbanktest.activity.group
 
 import android.app.Dialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import co.lujun.androidtagview.TagContainerLayout
-import com.example.introducemyself.utils.ConstantsTag
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.bank.BankActivity
 import com.example.quizbanktest.adapters.group.GroupListAdapter
-import com.example.quizbanktest.adapters.main.RecentViewAdapter
 import com.example.quizbanktest.models.GroupModel
-import com.example.quizbanktest.models.QuestionBankModel
-import com.example.quizbanktest.utils.ConstantsGroup
+import com.example.quizbanktest.utils.group.ConstantsGroup
 
 class GroupListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
