@@ -36,7 +36,7 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
         setContentView(R.layout.activity_bank_question)
 
         val bankTitle = intent.getStringExtra("BankTitle").toString()
-        val bankId = intent.getStringExtra("BankID").toString()
+        val bankId = intent.getStringExtra("BankId").toString()
         tvTitle = findViewById(R.id.title)
         tvTitle.text = bankTitle
 
@@ -60,11 +60,6 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
             }
         )
 
-//        val adapter = QuestionRecyclerViewAdapter(this, questionModels, this)
-//
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(this)
-//        Log.d("BankQuestionActivity", "RecyclerView setting finished")
     }
 
     fun backToPreviousPage(view: View?) {
@@ -122,13 +117,13 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {
-//        val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
-//
-//        bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
-//        bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
-//        Log.e("BankActivity", "start bankQuestion activity")
-//
-//        startActivity(bankQuestionActivity)
-//        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
+        val questionActivity = Intent(this, QuestionActivity:: class.java)
+
+        questionActivity.putExtra("QuestionTitle", questionModels[position].title)
+        questionActivity.putExtra("QuestionId", questionModels[position]._id)
+        Log.e("BankQuestionActivity", "start question activity")
+
+        startActivity(questionActivity)
+        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
     }
 }

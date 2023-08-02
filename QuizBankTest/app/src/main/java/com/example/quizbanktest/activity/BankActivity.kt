@@ -190,7 +190,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
 
         bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
-        bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
+        bankQuestionActivity.putExtra("BankId", questionBankModels[position]._id)
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
