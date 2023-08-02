@@ -12,15 +12,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.adapters.BankRecyclerViewAdapter
 import com.example.quizbanktest.adapters.QuestionRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
-import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
-import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
-import com.example.quizbanktest.utils.ConstantsRecommend
-import com.example.quizbanktest.utils.ConstantsWrong
 
 class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
 
@@ -31,12 +26,11 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank_question)
 
-        val bankTitle = intent.getStringExtra("BankTitle").toString()
-        val bankId = intent.getStringExtra("BankId").toString()
+        val bankTitle = intent.getStringExtra("bankTitle").toString()
+        val bankId = intent.getStringExtra("bankId").toString()
         tvTitle = findViewById(R.id.title)
         tvTitle.text = bankTitle
 
@@ -117,11 +111,22 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {
-        val questionActivity = Intent(this, QuestionActivity:: class.java)
+        val questionActivity = Intent(this, BankSingleAnswerQuestionActivity:: class.java)
 
-        questionActivity.putExtra("QuestionTitle", questionModels[position].title)
-        questionActivity.putExtra("QuestionId", questionModels[position]._id)
-        Log.e("BankQuestionActivity", "start question activity")
+        questionActivity.putExtra("id", questionModels[position]._id)
+        questionActivity.putExtra("title", questionModels[position].title)
+        questionActivity.putExtra("number", questionModels[position].number)
+        questionActivity.putExtra("description", questionModels[position].description)
+        questionActivity.putExtra("options", questionModels[position].options)
+        questionActivity.putExtra("type", questionModels[position].questionType)
+        questionActivity.putExtra("answerOptions", questionModels[position].answerOptions)
+        questionActivity.putExtra("answerDescription", questionModels[position].answerDescription)
+        questionActivity.putExtra("source", questionModels[position].originateFrom)
+        questionActivity.putExtra("createdDate", questionModels[position].createdDate)
+        questionActivity.putExtra("image", questionModels[position].image)
+        questionActivity.putExtra("tag", questionModels[position].tag)
+
+        Log.e("BankQuestionActivity", "start question detail activity")
 
         startActivity(questionActivity)
         overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);

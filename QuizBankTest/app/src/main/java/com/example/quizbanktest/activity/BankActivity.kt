@@ -189,8 +189,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     override fun onItemClick(position: Int) {
         val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
 
-        bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
-        bankQuestionActivity.putExtra("BankId", questionBankModels[position]._id)
+        bankQuestionActivity.putExtra("bankTitle", questionBankModels[position].title)
+        bankQuestionActivity.putExtra("bankId", questionBankModels[position]._id)
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
