@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.account.MyProfileActivity
 import com.example.quizbanktest.activity.paint.PaintActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.adapters.main.RecentViewAdapter
@@ -109,7 +110,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
-                Toast.makeText(this@MainActivity, "My Profile", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MyProfileActivity::class.java)
+                startActivity(intent)
             }
 
             R.id.nav_sign_out -> {
@@ -122,6 +124,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.ocrWorkSpace ->{
                 val intent = Intent(this, ScannerTextWorkSpaceActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.publicArea ->{
+                Toast.makeText(this@MainActivity,"公共區開發中",Toast.LENGTH_SHORT).show()
             }
         }
         val drawer_layout :DrawerLayout = findViewById(R.id.drawer_layout)

@@ -27,6 +27,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.account.AccountSettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.account.MyProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.group.GroupSettingActivity"
             android:exported="false" />
         <activity
