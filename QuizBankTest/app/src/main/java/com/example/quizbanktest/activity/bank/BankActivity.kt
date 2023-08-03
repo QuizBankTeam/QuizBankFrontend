@@ -145,14 +145,14 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         // automatically newline tags view
         wrapLayout = myContentView.findViewById(R.id.clip_layout)
         val strs = arrayOf(
-            "奔跑吧兄弟",
-            "running man",
-            "笑傲江湖",
-            "快樂大本營",
-            "維多利亞的秘密",
-            "非誠勿擾",
-            "康熙來了",
-            "123"
+            "作業系統",
+            "離散數學",
+            "線性代數",
+            "資料結構",
+            "演算法",
+            "計算機組織",
+            "python",
+            "java"
         )
         for (i in 0 until strs.size) {
             val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)

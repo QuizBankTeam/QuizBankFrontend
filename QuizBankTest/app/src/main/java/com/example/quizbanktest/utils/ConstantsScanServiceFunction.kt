@@ -57,7 +57,7 @@ object ConstantsScanServiceFunction {
                                 intent.putExtra("ocrText", ocrResponse.text)
                                 activity.startActivity(intent)
                             }else{
-                                Toast.makeText(activity,"辨識不出來目前的圖片請重新上傳",Toast.LENGTH_SHORT).show()
+                                activity.showErrorSnackBar("辨識不出來目前的圖片請重新上傳")
                                 activity.hideProgressDialog()
                             }
 
