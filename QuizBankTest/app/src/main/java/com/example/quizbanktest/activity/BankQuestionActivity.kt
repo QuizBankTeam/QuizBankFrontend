@@ -20,7 +20,7 @@ import com.example.quizbanktest.utils.ConstantsQuestionFunction
 class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
 
     private lateinit var tvTitle: TextView
-    private lateinit var backArrowBtn: ImageButton
+    private lateinit var btnBackArrow: ImageButton
     private var questionModels = ArrayList<QuestionModel>()
 
     @SuppressLint("MissingInflatedId")
@@ -34,7 +34,7 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
         tvTitle = findViewById(R.id.title)
         tvTitle.text = bankTitle
 
-        backArrowBtn = findViewById(R.id.btn_back_arrow)
+        btnBackArrow = findViewById(R.id.btn_back_arrow)
 
         val recyclerView : RecyclerView = findViewById(R.id.questionRecyclerView)
 

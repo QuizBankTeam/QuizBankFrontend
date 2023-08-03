@@ -31,7 +31,6 @@ class QuestionRecyclerViewAdapter(var context: Context,
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 //        Assigning values to the views we created in the recycler_view_row layout file
 //        Based on the position of the recycler view
-//        TODO: bankID
         holder.tvQuestionTitle.text = questionModels[position].title
         holder.tvQuestionType.text = questionModels[position].questionType
         holder.tvQuestionCreatedDate.text = questionModels[position].createdDate
@@ -45,13 +44,11 @@ class QuestionRecyclerViewAdapter(var context: Context,
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
         //        Grabbing the views from our recycler_view_row layout file
         //        Kinda like in the onCreate method
-//        TODO: BankID
         var tvQuestionTitle: TextView
         var tvQuestionType: TextView
         var tvQuestionCreatedDate: TextView
 
         init {
-//          TODO: bankID
             tvQuestionTitle = itemView.findViewById(R.id.question_title)
             tvQuestionType = itemView.findViewById(R.id.question_type)
             tvQuestionCreatedDate = itemView.findViewById(R.id.question_createdDate)
