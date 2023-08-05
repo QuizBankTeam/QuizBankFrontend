@@ -28,6 +28,7 @@ import androidx.core.os.BuildCompat
 import androidx.core.view.GravityCompat
 
 import androidx.lifecycle.lifecycleScope
+import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.bank.BankActivity
 import com.example.quizbanktest.activity.quiz.QuizPage
@@ -233,30 +234,49 @@ open class BaseActivity : AppCompatActivity() {
             .check()
     }
 
+    fun showAlertFromWorkSpace(goto : Int){
+        var flag = 1
+        if(ConstantsOcrResults.questionList.size!=0){
+            val builder =AlertDialog.Builder(this)
+                .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
+                .setTitle("OCR結果")
+                .setIcon(R.drawable.baseline_warning_amber_24)
+            builder.setPositiveButton("確認") { dialog, which ->
+                flag = 1
+            }
+            builder.setNegativeButton("取消") { dialog, which ->
+                flag = 0
+            }
+            builder.show()
+        }
+        if(goto == 0 && flag == 1){
+            val intent = Intent(this,MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }else if(goto == 1 && flag == 1){
+            val intent = Intent(this, QuizPage::class.java)
+            startActivity(intent)
+            finish()
+        }else if(goto == 2 && flag == 1){
+            val intent = Intent(this, BankActivity::class.java)
+            startActivity(intent)
+            finish()
+        }else if(goto == 3 && flag == 1){
+
+        }
+
+    }
     fun gotoBankActivity(){
         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
             onSuccess = { questionBanks ->
                 when (this) {
                     is ScannerTextWorkSpaceActivity -> {
-                        val builder =AlertDialog.Builder(this)
-                            .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
-                            .setTitle("OCR結果")
-                            .setIcon(R.drawable.baseline_warning_amber_24)
-                        builder.setPositiveButton("確認") { dialog, which ->
-                            val intent = Intent(this, BankActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
-
-                        builder.setNegativeButton("取消") { dialog, which ->
-
-                        }
-                        builder.show()
+                        showAlertFromWorkSpace(2)
                     }else ->{
-                    val intent = Intent(this, BankActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
+                        val intent = Intent(this, BankActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 }
             },
             onFailure = { errorMessage ->
@@ -268,20 +288,7 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoHomeActivity(){
         when (this) {
             is ScannerTextWorkSpaceActivity -> {
-                val builder =AlertDialog.Builder(this)
-                    .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
-                    .setTitle("OCR結果")
-                    .setIcon(R.drawable.baseline_warning_amber_24)
-                builder.setPositiveButton("確認") { dialog, which ->
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-
-                builder.setNegativeButton("取消") { dialog, which ->
-
-                }
-                builder.show()
+                showAlertFromWorkSpace(0)
             }else ->{
                 val intent = Intent(this,MainActivity::class.java)
                 startActivity(intent)
@@ -294,20 +301,7 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoQuizActivity(){
         when (this) {
             is ScannerTextWorkSpaceActivity -> {
-                val builder =AlertDialog.Builder(this)
-                    .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
-                    .setTitle("OCR結果")
-                    .setIcon(R.drawable.baseline_warning_amber_24)
-                builder.setPositiveButton("確認") { dialog, which ->
-                    val intent = Intent(this, QuizPage::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-
-                builder.setNegativeButton("取消") { dialog, which ->
-
-                }
-                builder.show()
+                showAlertFromWorkSpace(1)
             }else ->{
             val intent = Intent(this,QuizPage::class.java)
             startActivity(intent)
