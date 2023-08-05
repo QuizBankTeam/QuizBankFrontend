@@ -29,7 +29,7 @@ class GroupPageActivity : AppCompatActivity() {
         val backArrowBtn: ImageButton = findViewById(R.id.btn_group_page_back_arrow)
         val groupTitle = intent.getStringExtra("group_name").toString()
         val memberList = intent.getStringArrayListExtra("members")
-        val imageView = findViewById<CircleImageView>(R.id.iv_user_image)
+        val imageView = findViewById<CircleImageView>(R.id.iv_group_image)
         imageView.setOnClickListener {
             // 顯示目前群組的大頭貼
         }

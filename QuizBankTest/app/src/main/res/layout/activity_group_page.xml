@@ -88,7 +88,7 @@
         app:layout_constraintBottom_toTopOf="@id/group_action"
         >
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_user_image"
+            android:id="@+id/iv_group_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:gravity="center"

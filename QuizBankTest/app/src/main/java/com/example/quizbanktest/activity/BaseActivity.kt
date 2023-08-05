@@ -1,6 +1,7 @@
 package com.example.quizbanktest.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Intent
@@ -30,6 +31,7 @@ import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.account.AccountSettingActivity
 import com.example.quizbanktest.activity.bank.BankActivity
 import com.example.quizbanktest.activity.quiz.QuizPage
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
@@ -262,7 +264,9 @@ open class BaseActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }else if(goto == 3 && flag == 1){
-
+            val intent = Intent(this, AccountSettingActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
     }
@@ -307,6 +311,19 @@ open class BaseActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
             }
+        }
+
+    }
+
+    fun gotoSettingActivity(){
+        when (this) {
+            is ScannerTextWorkSpaceActivity -> {
+                showAlertFromWorkSpace(3)
+            }else ->{
+            val intent = Intent(this,AccountSettingActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
         }
 
     }
@@ -376,12 +393,14 @@ open class BaseActivity : AppCompatActivity() {
 
         val settingButton : ImageButton = findViewById(R.id.setting)
         settingButton.setOnClickListener{
-
+            gotoSettingActivity()
         }
+
     }
 
     private var backPressedTime: Long = 0
     private val BACK_PRESS_THRESHOLD = 2000  // 2000 milliseconds = 2 seconds
+    @SuppressLint("UnsafeOptInUsageError")
     fun doubleCheckExit(){
         if (BuildCompat.isAtLeastT()) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(

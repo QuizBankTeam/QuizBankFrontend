@@ -4,20 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/group_background"
     android:orientation="vertical"
     >
-
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/toolbar_group_setting_layout"
+        android:id="@+id/toolbar_group_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
+        android:background="@null"
+        >
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_group_setting"
+            android:id="@+id/toolbar_group_page"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
+            android:background="@null"
             app:titleTextAppearance="@style/CustomToolbarStyle"
             app:titleTextColor="@color/colorPrimaryDark"
             android:theme="@style/CustomToolbarStyle"
@@ -25,45 +27,202 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/toolbar_group_setting_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="群組設定頁面 ⚙️"
-                android:textAppearance="@style/CustomToolbarStyle"
-                android:textColor="@color/colorPrimaryDark" />
-
-            <ImageButton
-                android:id="@+id/btn_group_back_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:orientation="horizontal"
                 android:background="@null"
-                android:onClick="backToPreviousPage"
-                android:src="@drawable/ic_black_color_back_24dp" />
+                android:theme="@style/CustomToolbarStyle">
 
-
+                <ImageButton
+                    android:id="@+id/btn_group_setting_back_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@null"
+                    android:onClick="backToPreviousPage"
+                    android:src="@drawable/ic_black_color_back_24dp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"/>
+            </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
-
-
     </com.google.android.material.appbar.AppBarLayout>
 
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toTopOf="@id/group_action"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_group_setting_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/image_contentDescription"
+            android:gravity="center_horizontal"
+            android:src="@drawable/ic_user_place_holder"
+            android:clickable="true"
+            app:civ_border_color="@color/gray"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:id="@+id/group_name"
+            android:paddingLeft="13dp"
+            android:text="群組名稱 "
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textAppearance="@style/CustomToolbarStyle"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ll_action_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:background="@null"
+            >
+            <!-- ImageButton elements here -->
+
+
+            <ImageButton
+                android:id="@+id/group_file"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:background="@null"
+                android:src="@drawable/baseline_folder_24"
+                android:scaleType="fitXY"
+
+                />
+
+            <ImageButton
+                android:id="@+id/group_quiz_cord"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:src="@drawable/baseline_record"
+                android:background="@null"
+                android:scaleType="fitXY"
+                />
+            <ImageButton
+                android:id="@+id/group_add_person"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@null"
+                android:src="@drawable/baseline_group_add_brown"
+                android:scaleType="fitXY"
+
+                />
+
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/btn_see_members"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/my_profile_btn_update_marginTop"
+            android:background="@drawable/white_border_shape_button_rounded"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:clickable="true"
+            android:paddingTop="@dimen/btn_paddingTopBottom"
+            android:paddingBottom="@dimen/btn_paddingTopBottom"
+            android:text="查看群組成員 👥"
+            android:textColor="@color/colorPrimaryDark"
+
+            android:textSize="@dimen/btn_text_size" />
+
+        <TextView
+            android:id="@+id/btn_close_notify"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/white_border_shape_button_rounded"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:clickable="true"
+            android:paddingTop="@dimen/btn_paddingTopBottom"
+            android:paddingBottom="@dimen/btn_paddingTopBottom"
+            android:text="關閉聊天室通知 🔇"
+            android:textColor="@color/colorPrimaryDark"
+
+            android:textSize="@dimen/btn_text_size" />
+        <TextView
+            android:id="@+id/btn_search_msg"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/white_border_shape_button_rounded"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:clickable="true"
+            android:paddingTop="@dimen/btn_paddingTopBottom"
+            android:paddingBottom="@dimen/btn_paddingTopBottom"
+            android:text="搜尋對話內容 🔎"
+            android:textColor="@color/colorPrimaryDark"
+
+            android:textSize="@dimen/btn_text_size" />
+
+        <TextView
+            android:id="@+id/btn_block_member"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/white_border_shape_button_rounded"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:clickable="true"
+            android:paddingTop="@dimen/btn_paddingTopBottom"
+            android:paddingBottom="@dimen/btn_paddingTopBottom"
+            android:text="封鎖群組成員 ⛔"
+            android:textColor="@color/colorPrimaryDark"
+
+            android:textSize="@dimen/btn_text_size" />
+
+        <TextView
+            android:id="@+id/btn_leave_group"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/leave_group"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:clickable="true"
+            android:paddingTop="@dimen/btn_paddingTopBottom"
+            android:paddingBottom="@dimen/btn_paddingTopBottom"
+            android:text="退出群組 ⚠"
+            android:textColor="@color/red"
+
+            android:textSize="@dimen/btn_text_size" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         />
-    <include
-        android:id="@+id/group_action"
-        layout="@layout/action_lower_tool"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
-        android:background="@color/colorRipple"
-        android:gravity="center"
-        android:orientation="horizontal"/>
+
 </LinearLayout>
