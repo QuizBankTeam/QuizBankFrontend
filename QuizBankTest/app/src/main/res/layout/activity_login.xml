@@ -80,15 +80,26 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/loginbutton"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="120sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="50sp"
-            android:background="@color/colorPrimary"
-            android:text="登入"
-            android:textSize="28sp" />
+            app:cardCornerRadius="5dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorPrimary">
+
+            <android.widget.Button
+                android:id="@+id/loginbutton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="登入"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="28sp" />
+        </com.google.android.material.card.MaterialCardView>
+
 
     </LinearLayout>
 

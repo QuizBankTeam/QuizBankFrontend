@@ -55,8 +55,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                 hideProgressDialog()
             },
             onFailure = { errorMessage ->
-                Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
-                showErrorSnackBar("get questions error")
+                showErrorSnackBar("網路連線狀況不好")
                 hideProgressDialog()
             }
         )

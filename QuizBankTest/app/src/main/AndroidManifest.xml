@@ -21,11 +21,13 @@
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/qb_icon"
+
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizBankTest"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".activity.bank.BankSingleAnswerQuestionActivity"
             android:exported="false" />

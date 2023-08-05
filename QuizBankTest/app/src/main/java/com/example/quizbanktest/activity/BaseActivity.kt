@@ -235,47 +235,30 @@ open class BaseActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
-
-    fun showAlertFromWorkSpace(goto : Int){
-        var flag = 1
-        if(ConstantsOcrResults.questionList.size!=0){
-            val builder =AlertDialog.Builder(this)
+    fun showAlertFromWorkSpace(onConfirm : () -> Unit) {
+        if (ConstantsOcrResults.questionList.isNotEmpty()) {
+            val builder = AlertDialog.Builder(this)
                 .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
                 .setTitle("OCR結果")
                 .setIcon(R.drawable.baseline_warning_amber_24)
-            builder.setPositiveButton("確認") { dialog, which ->
-                flag = 1
-            }
-            builder.setNegativeButton("取消") { dialog, which ->
-                flag = 0
-            }
+            builder.setPositiveButton("確認") { _, _ -> onConfirm.invoke() }
+            builder.setNegativeButton("取消", null)
             builder.show()
+        } else {
+            onConfirm.invoke()
         }
-        if(goto == 0 && flag == 1){
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }else if(goto == 1 && flag == 1){
-            val intent = Intent(this, QuizPage::class.java)
-            startActivity(intent)
-            finish()
-        }else if(goto == 2 && flag == 1){
-            val intent = Intent(this, BankActivity::class.java)
-            startActivity(intent)
-            finish()
-        }else if(goto == 3 && flag == 1){
-            val intent = Intent(this, AccountSettingActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
     }
+
     fun gotoBankActivity(){
         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
             onSuccess = { questionBanks ->
                 when (this) {
                     is ScannerTextWorkSpaceActivity -> {
-                        showAlertFromWorkSpace(2)
+                        showAlertFromWorkSpace {
+                            val intent = Intent(this, BankActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                     }else ->{
                         val intent = Intent(this, BankActivity::class.java)
                         startActivity(intent)
@@ -292,7 +275,11 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoHomeActivity(){
         when (this) {
             is ScannerTextWorkSpaceActivity -> {
-                showAlertFromWorkSpace(0)
+                showAlertFromWorkSpace {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }else ->{
                 val intent = Intent(this,MainActivity::class.java)
                 startActivity(intent)
@@ -305,7 +292,11 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoQuizActivity(){
         when (this) {
             is ScannerTextWorkSpaceActivity -> {
-                showAlertFromWorkSpace(1)
+                showAlertFromWorkSpace {
+                    val intent = Intent(this, QuizPage::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }else ->{
             val intent = Intent(this,QuizPage::class.java)
             startActivity(intent)
@@ -318,7 +309,11 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoSettingActivity(){
         when (this) {
             is ScannerTextWorkSpaceActivity -> {
-                showAlertFromWorkSpace(3)
+                showAlertFromWorkSpace {
+                    val intent = Intent(this, AccountSettingActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }else ->{
             val intent = Intent(this,AccountSettingActivity::class.java)
             startActivity(intent)

@@ -1,25 +1,22 @@
 package com.example.quizbanktest.utils
 
+
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
-import com.example.introducemyself.utils.ConstantsOcrResults.questionList
-import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.models.QuestionSetModel
 import com.example.quizbanktest.network.QuestionBankService
 import com.example.quizbanktest.network.QuestionService
 import com.google.gson.Gson
+import com.squareup.okhttp.Request
 import com.squareup.okhttp.ResponseBody
-import okio.Buffer
-import okio.BufferedSource
 import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
-import java.nio.charset.Charset
 
 object ConstantsQuestionFunction {
     var allQuestionsReturnResponse : bankInnerQuestion?= null
@@ -152,6 +149,7 @@ object ConstantsQuestionFunction {
                 }
 
                 override fun onFailure(t: Throwable?) {
+
                     onFailure("Request failed with status code ")
                     Log.e("in get all questions Error", t?.message.toString())
                 }
