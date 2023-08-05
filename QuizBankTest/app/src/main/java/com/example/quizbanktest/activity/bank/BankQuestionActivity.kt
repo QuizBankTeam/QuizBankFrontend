@@ -1,6 +1,7 @@
 package com.example.quizbanktest.activity.bank
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,12 +12,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
 
-class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
+class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
     private lateinit var tvTitle: TextView
     private lateinit var backArrowBtn: ImageButton
@@ -38,6 +40,8 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
 
         val recyclerView : RecyclerView = findViewById(R.id.questionRecyclerView)
 
+        showProgressDialog("處理中")
+
         // TODO compare ID with Bank ID
         ConstantsQuestionFunction.getQuestion(this, bankId,
             onSuccess = { questions ->
@@ -48,17 +52,16 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 Log.d("BankQuestionActivity", "RecyclerView setting finished")
+                hideProgressDialog()
             },
             onFailure = { errorMessage ->
                 Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
+                showErrorSnackBar("get questions error")
+                hideProgressDialog()
             }
         )
 
-//        val adapter = QuestionRecyclerViewAdapter(this, questionModels, this)
-//
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(this)
-//        Log.d("BankQuestionActivity", "RecyclerView setting finished")
+
     }
 
     fun backToPreviousPage(view: View?) {
@@ -67,7 +70,7 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.question_to_bank_in, R.anim.question_to_bank_out)
+//        overridePendingTransition(R.anim.question_to_bank_in, R.anim.question_to_bank_out)
     }
 
     private fun setupQuestionModel() {
@@ -116,13 +119,25 @@ class BankQuestionActivity : AppCompatActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {
-//        val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
-//
-//        bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
-//        bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
-//        Log.e("BankActivity", "start bankQuestion activity")
-//
-//        startActivity(bankQuestionActivity)
+        val questionActivity = Intent(this, BankSingleAnswerQuestionActivity:: class.java)
+
+        questionActivity.putExtra("id", questionModels[position]._id)
+        questionActivity.putExtra("title", questionModels[position].title)
+        questionActivity.putExtra("number", questionModels[position].number)
+        questionActivity.putExtra("description", questionModels[position].description)
+        questionActivity.putExtra("options", questionModels[position].options)
+        questionActivity.putExtra("type", questionModels[position].questionType)
+        questionActivity.putExtra("answerOptions", questionModels[position].answerOptions)
+        questionActivity.putExtra("answerDescription", questionModels[position].answerDescription)
+        questionActivity.putExtra("source", questionModels[position].originateFrom)
+        questionActivity.putExtra("createdDate", questionModels[position].createdDate)
+        questionActivity.putExtra("image", questionModels[position].image)
+        questionActivity.putExtra("tag", questionModels[position].tag)
+
+        Log.e("BankQuestionActivity", "start question detail activity")
+
+        startActivity(questionActivity)
 //        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
     }
+
 }

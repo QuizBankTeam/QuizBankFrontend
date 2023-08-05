@@ -13,7 +13,7 @@ data class QuestionModel(
     var questionBank: String?=null, //questionBank id
     var answerOptions: ArrayList<String>  ? = null, //dialog create
     var answerDescription: String  ? = null, //dialog create
-    var orginateFrom: String, // user id
+    var originateFrom: String, // user id
     var createdDate: String,
     var image: ArrayList<String> ? = null, // base64 // dialog
     var tag: ArrayList<String> ? = null

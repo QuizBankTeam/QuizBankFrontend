@@ -35,7 +35,7 @@ object ConstantsQuestionFunction {
             val api = retrofit.create(QuestionService::class.java)
 //            data class PostQuestionBody(val title: String,val number: String,val description: String,val options: ArrayList<String>,val questionType:String,val bankType:String,val questionBank:String,val answerOptions:ArrayList<String>,val answerDescription:String,val provider:String,val originateFrom:String,val createdDate:String,val image : String,val tag:ArrayList<String>)
 
-            val body = QuestionService.PostQuestionBody(question.title!!,question.number!!,question.description,question.options!!,question.questionType!!,question.bankType!!,question.questionBank!!,question.answerOptions!!,question.answerDescription!!,ConstantsAccountServiceFunction.userAccount!!._id,question.orginateFrom!!,question.createdDate!!,question.image!!,question.tag!!)
+            val body = QuestionService.PostQuestionBody(question.title!!,question.number!!,question.description,question.options!!,question.questionType!!,question.bankType!!,question.questionBank!!,question.answerOptions!!,question.answerDescription!!,ConstantsAccountServiceFunction.userAccount!!._id,question.originateFrom!!,question.createdDate!!,question.image!!,question.tag!!)
 
             //TODO 拿到csrf token access token
             Log.e("access in scan ", Constants.accessToken)
@@ -112,13 +112,13 @@ object ConstantsQuestionFunction {
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
-                        // TODO
-                        val source: BufferedSource = response.body().source()
-                        source.request(Long.MAX_VALUE) // Buffer the entire body.
-
-                        val buffer: Buffer = source.buffer()
-                        val UTF8: Charset = Charset.forName("UTF-8")
-                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
+//                        // TODO
+//                        val source: BufferedSource = response.body().source()
+//                        source.request(Long.MAX_VALUE) // Buffer the entire body.
+//
+//                        val buffer: Buffer = source.buffer()
+//                        val UTF8: Charset = Charset.forName("UTF-8")
+//                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
                         val gson = Gson()
                         val allQuestionsResponse = gson.fromJson(
                             response.body().charStream(),
@@ -146,6 +146,7 @@ object ConstantsQuestionFunction {
                                 Log.e("Error", "in get all banks Generic Error")
                             }
                         }
+                        Log.e("get question error",sc.toString())
                         onFailure("Request failed with status code $sc")
                     }
                 }
