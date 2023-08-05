@@ -467,9 +467,17 @@ class OcrResultViewAdapter(
                     optionsNum += 1
                 }
                 when (optionsNum) {
+                    2 -> {
+                        option2.visibility = View.VISIBLE
+                    }
+                    3 -> {
+                        option3.visibility = View.VISIBLE
+                    }
+                    4-> {
+                        option4.visibility = View.VISIBLE
+                    }
                     5 -> {
                         option5.visibility = View.VISIBLE
-                        Log.e("options5","success")
                     }
                     6 -> {
                         option6.visibility = View.VISIBLE
@@ -489,7 +497,45 @@ class OcrResultViewAdapter(
                 }
 
             }
+            val removeOptionsButton : ImageButton = holder.itemView.findViewById(R.id.minus_options_button)
+            removeOptionsButton.setOnClickListener{
+                if(optionsNum == 1){ //不能超過十個
+                    Toast.makeText(context,"已達不能再少了喔",Toast.LENGTH_SHORT).show()
+                }else{
+                    optionsNum -= 1
+                }
+                when (optionsNum+1) {
+                    2 -> {
+                        option2.visibility = View.GONE
+                        removeOptionsButton.visibility = View.GONE
+                    }
+                    3 -> {
+                        option3.visibility = View.GONE
+                    }
+                    4-> {
+                        option4.visibility = View.GONE
+                    }
+                    5-> {
+                        option5.visibility = View.GONE
+                    }
+                    6 -> {
+                        option6.visibility = View.GONE
+                    }
+                    7-> {
+                        option7.visibility = View.GONE
+                    }
+                    8-> {
+                        option8.visibility = View.GONE
+                    }
+                    9-> {
+                        option9.visibility = View.GONE
+                    }
+                    10-> {
+                        option10.visibility = View.GONE
+                    }
+                }
 
+            }
             //掃描結果新增置資料庫
             val btnScanSubmit : TextView  = holder.itemView.findViewById(R.id.btn_scan_submit)
             btnScanSubmit.setOnClickListener {

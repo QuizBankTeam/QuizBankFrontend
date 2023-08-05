@@ -50,6 +50,7 @@
                     android:layout_marginTop="2dp"
                     android:background="@color/colorPrimary"
                     android:text="複製群組邀請碼 📋"
+                    android:foreground="?attr/selectableItemBackground"
                     android:textSize="18sp"
                     android:textColor="@color/white"/>
 

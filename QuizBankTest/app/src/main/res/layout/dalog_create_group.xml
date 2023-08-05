@@ -113,6 +113,7 @@
                         android:gravity="center"
                         android:clickable="true"
                         android:background="@drawable/add_image"
+                        android:foreground="?attr/selectableItemBackground"
                         android:text="產生邀請碼   🪄" />
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -162,6 +163,7 @@
                             android:gravity="center"
                             android:clickable="true"
                             android:background="@drawable/add_image"
+                            android:foreground="?attr/selectableItemBackground"
                             android:text="取消新增 ❌" />
                         <TextView
                             android:id="@+id/group_enter"
@@ -175,6 +177,7 @@
                             android:gravity="center"
                             android:clickable="true"
                             android:background="@drawable/add_image"
+                            android:foreground="?attr/selectableItemBackground"
                             android:text="新增群組 ✅" />
                     </LinearLayout>
 

@@ -40,7 +40,7 @@
                         android:id="@+id/join_group_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="輸入群組邀請碼               😗"
+                        android:hint="輸入群組邀請碼               👥"
                         android:inputType="textCapWords"
                         android:textColor="#363A43"
                         android:textColorHint="#7A8089" />
@@ -54,6 +54,7 @@
                     android:layout_marginTop="2dp"
                     android:background="@color/colorPrimary"
                     android:text="確認"
+                    android:foreground="?attr/selectableItemBackground"
                     android:textSize="18sp"
                     android:textColor="@color/white"/>
 

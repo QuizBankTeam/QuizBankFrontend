@@ -20,7 +20,7 @@
             android:layout_margin="8dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/baseline_west"
+            android:src="@drawable/ic_black_color_back_24dp"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"/>
         <com.google.android.material.imageview.ShapeableImageView

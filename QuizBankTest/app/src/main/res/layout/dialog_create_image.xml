@@ -69,6 +69,7 @@
                         android:gravity="center"
                         android:onClick="onClick"
                         android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         android:background="@drawable/add_image"
                         android:text="新增圖片 ( 上限三張 ) 📂" />
                     <ImageView
@@ -117,6 +118,7 @@
                             android:gravity="center"
                             android:onClick="onClick"
                             android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
                             android:background="@drawable/add_image"
                             android:text="取消新增 ❌" />
                         <TextView
@@ -131,6 +133,7 @@
                             android:gravity="center"
                             android:onClick="onClick"
                             android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
                             android:background="@drawable/add_image"
                             android:text="上傳圖片 ✅" />
                     </LinearLayout>

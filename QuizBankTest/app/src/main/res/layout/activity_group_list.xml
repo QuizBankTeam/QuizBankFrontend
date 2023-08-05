@@ -40,6 +40,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:background="?actionBarItemBackground"
+                android:foreground="?attr/selectableItemBackground"
                 android:onClick="backToPreviousPage"
                 android:src="@drawable/ic_black_color_back_24dp" />
 

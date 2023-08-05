@@ -69,6 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/baseline_add_24"
         android:background="?actionBarItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:scaleType="fitXY"
         />
     <androidx.appcompat.widget.AppCompatEditText
