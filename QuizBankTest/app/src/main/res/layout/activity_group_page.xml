@@ -43,7 +43,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:background="@null"
+                    android:background="?actionBarItemBackground"
                     android:onClick="backToPreviousPage"
                     android:src="@drawable/ic_black_color_back_24dp" />
                 <View
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@null"
+                    android:background="?actionBarItemBackground"
                     android:src="@drawable/baseline_settings_24_black"/>
 
 
@@ -119,7 +119,7 @@
             android:gravity="center"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
-            android:background="@null"
+            android:background="?actionBarItemBackground"
             >
             <!-- ImageButton elements here -->
 
@@ -129,7 +129,7 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="30dp"
                 android:src="@drawable/baseline_chat_24"
-                android:background="@null"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
 
                 />
@@ -138,7 +138,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="30dp"
-                android:background="@null"
+                android:background="?actionBarItemBackground"
                 android:src="@drawable/baseline_folder_24"
                 android:scaleType="fitXY"
 
@@ -150,7 +150,7 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="30dp"
                 android:src="@drawable/baseline_record"
-                android:background="@null"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
             <ImageButton
@@ -159,7 +159,7 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:background="@null"
+                android:background="?actionBarItemBackground"
                 android:src="@drawable/baseline_group_add_brown"
                 android:scaleType="fitXY"
 

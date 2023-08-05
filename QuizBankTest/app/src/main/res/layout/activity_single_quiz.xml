@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary"
+                    android:background="?actionBarItemBackground"
                     android:src="@drawable/baseline_save_alt" />
                 <TextView
                     android:id="@+id/quiz_title"
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:background="@color/colorPrimary"
+                    android:background="?actionBarItemBackground"
                     android:src="@drawable/baseline_settings"/>
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>

@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:background="@null"
+                android:background="?actionBarItemBackground"
                 android:onClick="backToPreviousPage"
                 android:src="@drawable/ic_black_color_back_24dp" />
 
@@ -73,7 +73,7 @@
             android:layout_height="35dp"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
-            android:background="@null"
+            android:background="?actionBarItemBackground"
             android:clickable="true"
             android:src="@drawable/baseline_group_add_24"/>
 

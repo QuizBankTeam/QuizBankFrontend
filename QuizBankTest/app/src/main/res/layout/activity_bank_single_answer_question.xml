@@ -29,7 +29,7 @@
             android:id="@+id/setting"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:background="@null"
+            android:background="?actionBarItemBackground"
             android:src="@drawable/baseline_more_selection"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:background="@null"
+            android:background="?actionBarItemBackground"
             android:onClick="backToPreviousPage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

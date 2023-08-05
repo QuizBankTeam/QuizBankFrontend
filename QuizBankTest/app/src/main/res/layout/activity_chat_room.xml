@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:background="@null"
+                android:background="?actionBarItemBackground"
                 android:onClick="backToPreviousPage"
                 android:src="@drawable/ic_black_color_back_24dp" />
 
@@ -68,7 +68,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/baseline_add_24"
-        android:background="@color/white"
+        android:background="?actionBarItemBackground"
         android:scaleType="fitXY"
         />
     <androidx.appcompat.widget.AppCompatEditText
@@ -90,7 +90,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginRight="6dp"
         android:src="@drawable/send_msg"
-        android:background="@color/white"
+        android:background="?actionBarItemBackground"
         android:scaleType="fitXY"
         />
 
