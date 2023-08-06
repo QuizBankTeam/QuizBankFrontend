@@ -21,6 +21,17 @@
         app:titleTextAppearance="@style/CustomToolbarStyle"
         app:titleTextColor="@color/colorPrimaryDark" />
 
+    <ImageButton
+        android:id="@+id/btn_add_bank"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:src="@drawable/plus_svgrepo_com"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:id="@+id/layout_searchBar"
         android:layout_width="wrap_content"

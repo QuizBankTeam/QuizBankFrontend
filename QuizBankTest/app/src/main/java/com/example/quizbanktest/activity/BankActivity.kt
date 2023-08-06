@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -31,9 +32,10 @@ import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
 
 class BankActivity : BaseActivity(), RecyclerViewInterface {
-    lateinit var searchView: SearchView
-    lateinit var menuButton: ImageButton
-    lateinit var bank_warning: TextView
+    private lateinit var searchView: SearchView
+    private lateinit var menuButton: ImageButton
+    private lateinit var bank_warning: TextView
+    private lateinit var btnAddBank : ImageButton
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
     private var questionBankModels = ArrayList<QuestionBankModel>()
@@ -42,15 +44,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
-
-//        ConstantsQuestionFunction.getQuestion(this, "123",
-//            onSuccess = { questionBanks ->
-//
-//            },
-//            onFailure = { errorMessage ->
-//                Toast.makeText(this,"get questions error", Toast.LENGTH_SHORT).show()
-//            }
-//        )
 
         val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_home_detail)
         setSupportActionBar(toolBar)
@@ -83,6 +76,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        btnAddBank = findViewById(R.id.btn_add_bank)
 
     }
 
