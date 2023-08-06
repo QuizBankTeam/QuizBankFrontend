@@ -16,7 +16,11 @@
             android:background="@color/teal_700"
             android:icon="@drawable/ic_photo_edit"
             android:title="圖片工作區" />
-
+        <item
+            android:id="@+id/publicArea"
+            android:background="@color/teal_700"
+            android:icon="@drawable/earth"
+            android:title="公共區" />
         <item
             android:id="@+id/nav_sign_out"
             android:background="@color/teal_700"

@@ -3,6 +3,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.databinding.ActivityLoginBinding
 import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
@@ -16,7 +17,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.backBtn.setOnClickListener { finish() }
+        binding.backBtn.setOnClickListener {
+            val intent = Intent(this,IntroActivity::class.java)
+            startActivity(intent)
+            finish() }
 
         binding.loginbutton.setOnClickListener{ buttonClick() }
 

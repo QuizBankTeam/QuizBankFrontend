@@ -1,6 +1,7 @@
 package com.example.quizbanktest.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Intent
@@ -28,10 +29,13 @@ import androidx.core.os.BuildCompat
 import androidx.core.view.GravityCompat
 
 import androidx.lifecycle.lifecycleScope
+import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.account.AccountSettingActivity
 import com.example.quizbanktest.activity.bank.BankActivity
 import com.example.quizbanktest.activity.quiz.QuizPage
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
+import com.example.quizbanktest.network.socket.SocketApplication
 
 import com.example.quizbanktest.utils.*
 import com.google.android.material.snackbar.Snackbar
@@ -41,13 +45,19 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import io.socket.client.Socket
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -55,6 +65,9 @@ open class BaseActivity : AppCompatActivity() {
     private var onImageSelected: ((Bitmap?) -> Unit)? = null
     private var cameraPhotoUri : Uri ?=null
     private lateinit var mProgressDialog: Dialog
+    private lateinit var heartbeatScheduler: ScheduledExecutorService
+    private var heartbeatFuture: ScheduledFuture<*>? = null
+
     val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult() ){
             result->
@@ -232,31 +245,35 @@ open class BaseActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
+    fun showAlertFromWorkSpace(onConfirm : () -> Unit) {
+        if (ConstantsOcrResults.questionList.isNotEmpty()) {
+            val builder = AlertDialog.Builder(this)
+                .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
+                .setTitle("OCR結果")
+                .setIcon(R.drawable.baseline_warning_amber_24)
+            builder.setPositiveButton("確認") { _, _ -> onConfirm.invoke() }
+            builder.setNegativeButton("取消", null)
+            builder.show()
+        } else {
+            onConfirm.invoke()
+        }
+    }
 
     fun gotoBankActivity(){
         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
             onSuccess = { questionBanks ->
                 when (this) {
                     is ScannerTextWorkSpaceActivity -> {
-                        val builder =AlertDialog.Builder(this)
-                            .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
-                            .setTitle("OCR結果")
-                            .setIcon(R.drawable.baseline_warning_amber_24)
-                        builder.setPositiveButton("確認") { dialog, which ->
+                        showAlertFromWorkSpace {
                             val intent = Intent(this, BankActivity::class.java)
                             startActivity(intent)
                             finish()
                         }
-
-                        builder.setNegativeButton("取消") { dialog, which ->
-
-                        }
-                        builder.show()
                     }else ->{
-                    val intent = Intent(this, BankActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
+                        val intent = Intent(this, BankActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 }
             },
             onFailure = { errorMessage ->
@@ -268,20 +285,11 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoHomeActivity(){
         when (this) {
             is ScannerTextWorkSpaceActivity -> {
-                val builder =AlertDialog.Builder(this)
-                    .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
-                    .setTitle("OCR結果")
-                    .setIcon(R.drawable.baseline_warning_amber_24)
-                builder.setPositiveButton("確認") { dialog, which ->
+                showAlertFromWorkSpace {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
-
-                builder.setNegativeButton("取消") { dialog, which ->
-
-                }
-                builder.show()
             }else ->{
                 val intent = Intent(this,MainActivity::class.java)
                 startActivity(intent)
@@ -294,25 +302,33 @@ open class BaseActivity : AppCompatActivity() {
     fun gotoQuizActivity(){
         when (this) {
             is ScannerTextWorkSpaceActivity -> {
-                val builder =AlertDialog.Builder(this)
-                    .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
-                    .setTitle("OCR結果")
-                    .setIcon(R.drawable.baseline_warning_amber_24)
-                builder.setPositiveButton("確認") { dialog, which ->
+                showAlertFromWorkSpace {
                     val intent = Intent(this, QuizPage::class.java)
                     startActivity(intent)
                     finish()
                 }
-
-                builder.setNegativeButton("取消") { dialog, which ->
-
-                }
-                builder.show()
             }else ->{
             val intent = Intent(this,QuizPage::class.java)
             startActivity(intent)
             finish()
             }
+        }
+
+    }
+
+    fun gotoSettingActivity(){
+        when (this) {
+            is ScannerTextWorkSpaceActivity -> {
+                showAlertFromWorkSpace {
+                    val intent = Intent(this, AccountSettingActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }else ->{
+            val intent = Intent(this,AccountSettingActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
         }
 
     }
@@ -350,7 +366,8 @@ open class BaseActivity : AppCompatActivity() {
 
                 var base64String = ConstantsFunction.encodeImage(bitmap)
                 showProgressDialog("目前正在處理OCR之結果")
-                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->}, onFailure = { it1 ->})
+
+                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
                 var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
 //                Log.e("openGalleryLauncher size", size.toString()),1
             }else{
@@ -381,12 +398,14 @@ open class BaseActivity : AppCompatActivity() {
 
         val settingButton : ImageButton = findViewById(R.id.setting)
         settingButton.setOnClickListener{
-
+            gotoSettingActivity()
         }
+
     }
 
     private var backPressedTime: Long = 0
     private val BACK_PRESS_THRESHOLD = 2000  // 2000 milliseconds = 2 seconds
+    @SuppressLint("UnsafeOptInUsageError")
     fun doubleCheckExit(){
         if (BuildCompat.isAtLeastT()) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(
@@ -408,6 +427,27 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
+    fun splitQuestionOptions(text: String): Pair<String, List<String>> {
+        val pattern = "\\s*(?:[A-Za-z0-9一二三四五六七八九十]+\\)|[A-Za-z0-9一二三四五六七八九十]+\\.)".toRegex()
+        val optionIndices = pattern.findAll(text).map { it.range.first }.toList()
+
+        if (optionIndices.isEmpty()) {
+            return Pair(text, emptyList())
+        }
+
+
+        val question = text.substring(0, optionIndices[0]).trim()
+        val options = optionIndices.mapIndexed { index, start ->
+            val end = optionIndices.getOrNull(index + 1) ?: text.length
+            text.substring(start, end).trim()
+        }
+        for(i in options){
+            Log.e("list options",i)
+        }
+
+        return Pair(question, options)
+    }
+
     override fun onBackPressed() {
         val currentTime = System.currentTimeMillis()
         if (currentTime - backPressedTime > BACK_PRESS_THRESHOLD) {
@@ -419,5 +459,23 @@ open class BaseActivity : AppCompatActivity() {
             // If back is pressed within the threshold time, finish the activity
 //            super.onBackPressed()
         }
+    }
+    fun startHeartbeatForCsrf() {
+        heartbeatScheduler = Executors.newSingleThreadScheduledExecutor()
+        heartbeatFuture = heartbeatScheduler.scheduleAtFixedRate({
+            ConstantsAccountServiceFunction.getCsrfToken(this,
+                onSuccess = { it1 ->
+                    Log.e("this is heart for csrf",it1)
+                },
+
+                onFailure = { it1 ->
+                    Log.d("get csrf fail", it1)
+                })
+        }, 0, 50, TimeUnit.SECONDS)
+    }
+
+    fun stopHeartbeatForCsrf() {
+        heartbeatFuture?.cancel(false)
+        heartbeatScheduler.shutdown()
     }
 }

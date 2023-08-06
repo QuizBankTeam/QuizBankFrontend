@@ -32,7 +32,7 @@ object ConstantsOcrResults {
         val tag : ArrayList<String> = ArrayList()
         tag.add("123")
         tag.add("cs design")
-        val ocrResult = QuestionModel(bankType = "single",options=options, answerOptions = answerOptions, image = images, tag = tag,description = description, createdDate = formattedDate.toString(), orginateFrom = ConstantsAccountServiceFunction.userAccount!!._id)
+        val ocrResult = QuestionModel(bankType = "single",options=options, answerOptions = answerOptions, image = images, tag = tag,description = description, createdDate = formattedDate.toString(), originateFrom = ConstantsAccountServiceFunction.userAccount!!._id)
         questionList.add(ocrResult)
     }
     fun getOcrResult():ArrayList<QuestionModel>{

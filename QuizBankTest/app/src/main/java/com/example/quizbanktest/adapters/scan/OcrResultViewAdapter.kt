@@ -19,6 +19,7 @@ import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.introducemyself.utils.ConstantsTag
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
+
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.*
@@ -132,13 +133,13 @@ class OcrResultViewAdapter(
                         mChooseTagContainerLayout1.tags=tagBankList
                         ConstantsOcrResults.getOcrResult()[position].tag?.add(text) //將此tag記錄到等等要放進資料庫的題目的標籤列
                         Toast.makeText(
-                            activity, "click-position:$tag_position, text:$text",
+                            context, "click-position:$tag_position, text:$text",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
 
                     override fun onTagLongClick(position: Int, text: String) {
-                        val dialog = android.app.AlertDialog.Builder(activity)
+                        val dialog = android.app.AlertDialog.Builder(context)
                             .setTitle("long click")
                             .setMessage("You will delete this tag!")
                             .setPositiveButton("Delete") { dialog, which ->
@@ -158,7 +159,7 @@ class OcrResultViewAdapter(
                         //移除目前的tag
                         mTagContainerLayout1.removeTag(position);
                         Toast.makeText(
-                            activity, "Click TagView cross! position = $position",
+                            context, "Click TagView cross! position = $position",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -171,13 +172,13 @@ class OcrResultViewAdapter(
                         mChooseTagContainerLayout2.tags=tagRelateList
                         ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
                         Toast.makeText(
-                            activity, "click-position:$tag_position, text:$text",
+                            context, "click-position:$tag_position, text:$text",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
 
                     override fun onTagLongClick(position: Int, text: String) {
-                        val dialog = android.app.AlertDialog.Builder(activity)
+                        val dialog = android.app.AlertDialog.Builder(context)
                             .setTitle("long click")
                             .setMessage("You will delete this tag!")
                             .setPositiveButton("Delete") { dialog, which ->
@@ -196,7 +197,7 @@ class OcrResultViewAdapter(
                     override fun onTagCrossClick(position: Int) {
                         mTagContainerLayout2.removeTag(position)
                         Toast.makeText(
-                            activity, "Click TagView cross! position = $position",
+                            context, "Click TagView cross! position = $position",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -212,7 +213,7 @@ class OcrResultViewAdapter(
                         //deselect all tags when click on an unselected tag. Otherwise show toast.
                         if (selectedPositions.isEmpty() || selectedPositions.contains(position)) {
                             Toast.makeText(
-                                activity, "click-position:$tag_position, text:$text",
+                                context, "click-position:$tag_position, text:$text",
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
@@ -227,7 +228,7 @@ class OcrResultViewAdapter(
                         mTagContainerLayout3.toggleSelectTagView(position)
                         val selectedPositions = mTagContainerLayout3.getSelectedTagViewPositions()
                         Toast.makeText(
-                            activity, "selected-positions:$selectedPositions",
+                            context, "selected-positions:$selectedPositions",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -278,7 +279,7 @@ class OcrResultViewAdapter(
                     holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags=tagRangeList
 
                     tagDialog.dismiss()
-                    Toast.makeText(activity,"successful upload tag",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"successful upload tag",Toast.LENGTH_SHORT).show()
                 }
 
                 cancelButton.setOnClickListener {
@@ -467,9 +468,17 @@ class OcrResultViewAdapter(
                     optionsNum += 1
                 }
                 when (optionsNum) {
+                    2 -> {
+                        option2.visibility = View.VISIBLE
+                    }
+                    3 -> {
+                        option3.visibility = View.VISIBLE
+                    }
+                    4-> {
+                        option4.visibility = View.VISIBLE
+                    }
                     5 -> {
                         option5.visibility = View.VISIBLE
-                        Log.e("options5","success")
                     }
                     6 -> {
                         option6.visibility = View.VISIBLE
@@ -489,7 +498,45 @@ class OcrResultViewAdapter(
                 }
 
             }
+            val removeOptionsButton : ImageButton = holder.itemView.findViewById(R.id.minus_options_button)
+            removeOptionsButton.setOnClickListener{
+                if(optionsNum == 1){ //不能超過十個
+                    Toast.makeText(context,"已達不能再少了喔",Toast.LENGTH_SHORT).show()
+                }else{
+                    optionsNum -= 1
+                }
+                when (optionsNum+1) {
+                    2 -> {
+                        option2.visibility = View.GONE
+                        removeOptionsButton.visibility = View.GONE
+                    }
+                    3 -> {
+                        option3.visibility = View.GONE
+                    }
+                    4-> {
+                        option4.visibility = View.GONE
+                    }
+                    5-> {
+                        option5.visibility = View.GONE
+                    }
+                    6 -> {
+                        option6.visibility = View.GONE
+                    }
+                    7-> {
+                        option7.visibility = View.GONE
+                    }
+                    8-> {
+                        option8.visibility = View.GONE
+                    }
+                    9-> {
+                        option9.visibility = View.GONE
+                    }
+                    10-> {
+                        option10.visibility = View.GONE
+                    }
+                }
 
+            }
             //掃描結果新增置資料庫
             val btnScanSubmit : TextView  = holder.itemView.findViewById(R.id.btn_scan_submit)
             btnScanSubmit.setOnClickListener {
@@ -578,12 +625,13 @@ class OcrResultViewAdapter(
                     ConstantsQuestionFunction.postQuestion( ConstantsOcrResults.questionList[position],activity,
                         onSuccess = {
                             activity.hideProgressDialog()
+                            notifyDataSetChanged()
                             val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
                             activity.startActivity(intent)
                             activity.finish()
                         },
                         onFailure = {
-                            it -> Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
+                            it -> Toast.makeText(context,it,Toast.LENGTH_SHORT).show()
                             activity.hideProgressDialog()
                         }
                         )
@@ -601,9 +649,9 @@ class OcrResultViewAdapter(
                     .setIcon(R.drawable.baseline_warning_amber_24)
                 builder.setPositiveButton("確認") { dialog, which ->
                     ConstantsOcrResults.questionList.removeAt(position)
-
-                    val intent = Intent(context, ScannerTextWorkSpaceActivity::class.java)
-                    context.startActivity(intent)
+                    notifyDataSetChanged()
+                    val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
+                    activity.startActivity(intent)
                     activity.finish()
                 }
                 builder.setNegativeButton("取消") { dialog, which ->

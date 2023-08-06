@@ -5,9 +5,9 @@ import android.net.NetworkCapabilities
 import android.os.Build
 
 object Constants {
-
-    const val BASE_URL: String = "http://10.0.2.2:5000/"
-    //const val BASE_URL: String = "http://10.0.0.108:5000/"
+//
+//    const val BASE_URL: String = "http://10.0.2.2:5000/"
+    const val BASE_URL: String = "https://quizbank.soselab.tw/"
 
     var username : String = "test"
     var password : String = "test"
@@ -40,3 +40,4 @@ object Constants {
         }
     }
 }
+

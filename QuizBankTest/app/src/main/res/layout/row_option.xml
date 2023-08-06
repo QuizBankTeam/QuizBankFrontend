@@ -10,6 +10,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="7dp"
         app:cardUseCompatPadding="true"
         app:cardElevation="3dp">

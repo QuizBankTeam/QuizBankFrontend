@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.account.MyProfileActivity
 import com.example.quizbanktest.activity.paint.PaintActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.adapters.main.RecentViewAdapter
@@ -29,30 +30,46 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ConstantsAccountServiceFunction.getCsrfToken(this,
-            onSuccess = { it1 ->
-                ConstantsAccountServiceFunction.login(this, " ", " ",
-                    onSuccess = {   message->
-                        Log.d("login success", message)
+        showProgressDialog("處理資料中請稍等")
+        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+            onSuccess = { questionBanks ->
+                hideProgressDialog()
+                setupRecentRecyclerView(questionBanks)
+                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
 
-                        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
-                            onSuccess = { questionBanks ->
-                                setupRecentRecyclerView(questionBanks)
-                                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
-                                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
-                            },
-                            onFailure = { errorMessage ->
-                                Toast.makeText(this,"get banklist error",Toast.LENGTH_SHORT).show()
-                            }
-                        )
-                    },
-                    onFailure = { message->
-                        Log.d("login fail", message)
-                    })
             },
-            onFailure = { it1 ->
-                Log.d("get csrf fail", it1)
-            })
+            onFailure = { errorMessage ->
+                hideProgressDialog()
+                showErrorSnackBar("題庫資料取得錯誤")
+            }
+        )
+//        ConstantsAccountServiceFunction.getCsrfToken(this,
+//            onSuccess = { it1 ->
+//                ConstantsAccountServiceFunction.login(this, " ", " ",
+//                    onSuccess = {   message->
+//                        Log.d("login success", message)
+//                        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+//                            onSuccess = { questionBanks ->
+//                                hideProgressDialog()
+//                                setupRecentRecyclerView(questionBanks)
+//                                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+//                                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
+//
+//                            },
+//                            onFailure = { errorMessage ->
+//                                hideProgressDialog()
+//                                showErrorSnackBar("題庫資料取得錯誤")
+//                            }
+//                        )
+//                    },
+//                    onFailure = { message->
+//                        showErrorSnackBar("自動登入錯誤") // login
+//                    })
+//            },
+//            onFailure = { it1 ->
+//                showErrorSnackBar("伺服器驗證錯誤") //csrf
+//            })
 
         setupActionBar()
         val nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)
@@ -109,7 +126,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
-                Toast.makeText(this@MainActivity, "My Profile", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MyProfileActivity::class.java)
+                startActivity(intent)
             }
 
             R.id.nav_sign_out -> {
@@ -122,6 +140,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.ocrWorkSpace ->{
                 val intent = Intent(this, ScannerTextWorkSpaceActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.publicArea ->{
+                Toast.makeText(this@MainActivity,"公共區開發中",Toast.LENGTH_SHORT).show()
             }
         }
         val drawer_layout :DrawerLayout = findViewById(R.id.drawer_layout)

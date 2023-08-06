@@ -96,6 +96,7 @@
                             android:onClick="onClick"
                             android:clickable="true"
                             android:background="@drawable/add_image"
+                            android:foreground="?attr/selectableItemBackground"
                             android:text="選擇答案圖片/OCR   📂" />
                         <ImageView
                             android:id="@+id/iv_answer_image"
@@ -123,6 +124,7 @@
                                 android:gravity="center"
                                 android:onClick="onClick"
                                 android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/add_image"
                                 android:text="取消新增 ❌" />
                             <TextView
@@ -137,6 +139,7 @@
                                 android:gravity="center"
                                 android:onClick="onClick"
                                 android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/add_image"
                                 android:text="新增答案 ✅" />
                         </LinearLayout>

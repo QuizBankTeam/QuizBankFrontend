@@ -48,6 +48,7 @@ open class GroupListAdapter(
                 }
                 val intent = Intent(context,GroupPageActivity::class.java)
                 intent.putExtra("group_name",model.name)
+                intent.putExtra("members:",model.members)
                 context.startActivity(intent)
             }
         }

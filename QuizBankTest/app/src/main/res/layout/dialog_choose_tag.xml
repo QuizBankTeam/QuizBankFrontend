@@ -33,7 +33,7 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="題庫標籤"
+                android:text="預選標籤"
                 />
             <co.lujun.androidtagview.TagContainerLayout
                 android:id="@+id/tagcontainerLayout1"
@@ -71,8 +71,9 @@
                     android:padding = "3dp"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:foreground="?attr/selectableItemBackground"
                     android:background="@drawable/add_image"
-                    android:text="新增題庫選項" />
+                    android:text="新增主題選項" />
             </LinearLayout>
             <co.lujun.androidtagview.TagContainerLayout
                 android:id="@+id/chooseContainerLayout1"
@@ -100,6 +101,7 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:foreground="?attr/selectableItemBackground"
                 app:container_background_color="#00000000"
                 app:container_border_color="#3300ff00"
                 app:container_border_radius="0dp"
@@ -214,6 +216,7 @@
                 android:layout_margin="0dp"
                 android:padding="10dp"
                 app:container_enable_drag="true"
+                android:foreground="?attr/selectableItemBackground"
                 app:horizontal_interval="10dp"
                 app:tag_clickable="true"
                 app:tag_enable_cross="true"
@@ -236,6 +239,7 @@
                 android:layout_marginRight="5dp"
                 android:gravity="center"
                 android:onClick="onClick"
+                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:background="@drawable/add_image"
                 android:text="取消新增 ❌" />
@@ -250,6 +254,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="center"
                     android:onClick="onClick"
+                    android:foreground="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:background="@drawable/add_image"
                     android:text="新增標籤 ✅" />

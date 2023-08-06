@@ -95,7 +95,7 @@
                         android:layout_height="40dp"
                         android:layout_marginRight="15dp"
                         android:src="@drawable/baseline_cloud_upload_24"
-                        android:background="@color/white"
+                        android:background="?actionBarItemBackground"
                         android:scaleType="fitXY"
                         />
                 </LinearLayout>

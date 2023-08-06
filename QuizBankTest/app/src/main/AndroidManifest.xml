@@ -21,11 +21,28 @@
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/qb_icon"
+
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizBankTest"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity
+            android:name=".activity.bank.BankSingleAnswerQuestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.account.AccountSettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.account.MyProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.group.GroupSettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.group.ChatRoomActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.group.GroupPageActivity"
             android:exported="false" />

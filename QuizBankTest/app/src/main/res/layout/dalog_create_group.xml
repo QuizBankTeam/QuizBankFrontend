@@ -113,14 +113,17 @@
                         android:gravity="center"
                         android:clickable="true"
                         android:background="@drawable/add_image"
+                        android:foreground="?attr/selectableItemBackground"
                         android:text="產生邀請碼   🪄" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
                         android:orientation="horizontal">
                         <TextView
                             android:id="@+id/invite_code"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_weight="5"
                             android:layout_height="38dp"
                             android:layout_marginTop="3dp"
                             android:textStyle="bold"
@@ -130,11 +133,18 @@
                             android:gravity="center"
                             android:clickable="true"
                             android:textIsSelectable="true"
-                            android:text="目前為空" />
-
+                            android:text="AB123CDE45FG" />
+                        <ImageButton
+                            android:id="@+id/invite_code_copy"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:visibility="gone"
+                            android:src="@drawable/baseline_content_copy_24"/>
 
                     </LinearLayout>
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -153,6 +163,7 @@
                             android:gravity="center"
                             android:clickable="true"
                             android:background="@drawable/add_image"
+                            android:foreground="?attr/selectableItemBackground"
                             android:text="取消新增 ❌" />
                         <TextView
                             android:id="@+id/group_enter"
@@ -166,6 +177,7 @@
                             android:gravity="center"
                             android:clickable="true"
                             android:background="@drawable/add_image"
+                            android:foreground="?attr/selectableItemBackground"
                             android:text="新增群組 ✅" />
                     </LinearLayout>
 
