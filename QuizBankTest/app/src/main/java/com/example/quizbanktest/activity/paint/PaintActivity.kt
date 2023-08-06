@@ -1,6 +1,7 @@
 package com.example.quizbanktest.activity.paint
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
@@ -92,6 +93,28 @@ class PaintActivity : AppCompatActivity() {
         GPUImageSketchFilter(),
         GPUImageColorInvertFilter(),
         GPUImageSmoothToonFilter()
+    )
+    val filterDescriptions = mapOf(
+        GPUImageRGBFilter::class.java.simpleName to "RGB調節濾鏡",
+        GPUImageGrayscaleFilter::class.java.simpleName to "灰階濾鏡",
+        GPUImageSepiaToneFilter::class.java.simpleName to "懷舊濾鏡",
+        GPUImageContrastFilter::class.java.simpleName to "對比度濾鏡",
+        GPUImageBrightnessFilter::class.java.simpleName to "亮度濾鏡",
+        GPUImageExposureFilter::class.java.simpleName to "高曝光度濾鏡",
+        GPUImageDilationFilter::class.java.simpleName to "膨脹濾鏡",
+        GPUImageCrosshatchFilter::class.java.simpleName to "交叉格線濾鏡",
+        GPUImageMonochromeFilter::class.java.simpleName to "單色濾鏡",
+        GPUImageGaussianBlurFilter::class.java.simpleName to "模糊濾鏡",
+        GPUImageSobelThresholdFilter::class.java.simpleName to "邊緣檢測濾鏡",
+        GPUImageHalftoneFilter::class.java.simpleName to "半調濾鏡",
+        GPUImageLaplacianFilter::class.java.simpleName to "拉普拉斯濾鏡",
+        GPUImageSubtractBlendFilter::class.java.simpleName to "混合減除濾鏡",
+        GPUImageLuminanceFilter::class.java.simpleName to "亮度濾鏡",
+        GPUImageSaturationBlendFilter::class.java.simpleName to "飽和濾鏡",
+        GPUImageAlphaBlendFilter::class.java.simpleName to "透明度混合濾鏡",
+        GPUImageSketchFilter::class.java.simpleName to "素描濾鏡",
+        GPUImageColorInvertFilter::class.java.simpleName to "負片濾鏡",
+        GPUImageSmoothToonFilter::class.java.simpleName to "卡通濾鏡"
     )
     private var originBackImageView : Bitmap ?=null //為了使裁減 濾鏡 是在原圖而非繪畫過的圖因此保存原狀態
     private var drawingView: DrawingView?=null //繪畫的事放在上面
@@ -285,6 +308,8 @@ class PaintActivity : AppCompatActivity() {
                 val mAngleRotate = (rotateArray[rotateFlag].toString() + "f").toFloat() //圖片旋轉角度
                 val imageBackground: ImageView = findViewById(R.id.iv_background)
                 imageBackground.rotation = mAngleRotate //設定旋轉角度
+            }else{
+                Toast.makeText(this,"需要先選擇圖片才能用此功能喔",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -299,6 +324,8 @@ class PaintActivity : AppCompatActivity() {
                 val uCropIntent = uCrop.getIntent(this)
                 uCropActivityResultLauncher.launch(uCropIntent)
                 sourceUriForUcrop = destinationUri
+            }else{
+                Toast.makeText(this,"需要先選擇圖片才能用此功能喔",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -409,9 +436,19 @@ class PaintActivity : AppCompatActivity() {
                 }
                 val imageBackground: ImageView = findViewById(R.id.iv_background)
                 // 創建一個選擇濾鏡的 AlertDialog
+//                AlertDialog.Builder(this@PaintActivity)
+//                    .setTitle("Choose a filter")
+//                    .setItems(filters.map { it.javaClass.simpleName }.toTypedArray()) { _, which ->
+//                        val gpuImage = GPUImage(this@PaintActivity)
+//                        gpuImage.setImage(originBackImageView!!)
+//                        gpuImage.setFilter(filters[which])
+//                        val bitmapWithFilterApplied: Bitmap = gpuImage.bitmapWithFilterApplied
+//                        imageBackground.setImageBitmap(bitmapWithFilterApplied)
+//                    }
+//                    .show()
                 AlertDialog.Builder(this@PaintActivity)
-                    .setTitle("Choose a filter")
-                    .setItems(filters.map { it.javaClass.simpleName }.toTypedArray()) { _, which ->
+                    .setTitle("選擇一個濾鏡")
+                    .setItems(filters.map { filterDescriptions[it.javaClass.simpleName] }.toTypedArray()) { _, which ->
                         val gpuImage = GPUImage(this@PaintActivity)
                         gpuImage.setImage(originBackImageView!!)
                         gpuImage.setFilter(filters[which])
@@ -419,6 +456,8 @@ class PaintActivity : AppCompatActivity() {
                         imageBackground.setImageBitmap(bitmapWithFilterApplied)
                     }
                     .show()
+            }else{
+                Toast.makeText(this,"需要先選擇圖片才能用此功能喔",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -629,6 +668,7 @@ class PaintActivity : AppCompatActivity() {
                 dialog.dismiss()
             }.show()
     }
+    @SuppressLint("UnsafeOptInUsageError")
     fun doubleCheckExit(){
         if (BuildCompat.isAtLeastT()) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(
