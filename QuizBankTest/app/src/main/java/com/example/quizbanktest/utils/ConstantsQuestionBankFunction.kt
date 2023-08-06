@@ -44,6 +44,7 @@ object ConstantsQuestionBankFunction {
                         )
                         Log.e("Response Result", allBanksResponse.questionBanks[0].toString())
                         allBanksReturnResponse = allBanksResponse
+                        questionBankList.clear()
                         questionBankList = allBanksResponse.questionBanks
                         onSuccess(allBanksResponse.questionBanks)
                     } else {
