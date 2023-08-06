@@ -34,9 +34,9 @@ import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
 
 class BankActivity : BaseActivity(), RecyclerViewInterface {
-    lateinit var searchView: SearchView
-    lateinit var menuButton: ImageButton
-    lateinit var bank_warning: TextView
+    private lateinit var searchView: SearchView
+    private lateinit var menuButton: ImageButton
+    private lateinit var bank_warning: TextView
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
     private var questionBankModels = ArrayList<QuestionBankModel>()
@@ -110,9 +110,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             Log.d(getString(R.string.app_name),
                 "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms")
         }
-
-//        blurred = !blurred
-//        return true
 
         val popupInflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val myContentView = popupInflater.inflate(R.layout.popup_window, null)

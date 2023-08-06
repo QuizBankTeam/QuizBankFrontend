@@ -8,11 +8,6 @@
     android:orientation="vertical"
     tools:context=".activity.bank.BankActivity">
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/imageview"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent" />-->
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar_bank_detail"
         android:layout_width="match_parent"
