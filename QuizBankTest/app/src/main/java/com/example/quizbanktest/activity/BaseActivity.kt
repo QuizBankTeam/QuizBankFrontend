@@ -35,6 +35,7 @@ import com.example.quizbanktest.activity.account.AccountSettingActivity
 import com.example.quizbanktest.activity.bank.BankActivity
 import com.example.quizbanktest.activity.quiz.QuizPage
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
+import com.example.quizbanktest.network.socket.SocketApplication
 
 import com.example.quizbanktest.utils.*
 import com.google.android.material.snackbar.Snackbar
@@ -44,13 +45,19 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import io.socket.client.Socket
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -58,6 +65,9 @@ open class BaseActivity : AppCompatActivity() {
     private var onImageSelected: ((Bitmap?) -> Unit)? = null
     private var cameraPhotoUri : Uri ?=null
     private lateinit var mProgressDialog: Dialog
+    private lateinit var heartbeatScheduler: ScheduledExecutorService
+    private var heartbeatFuture: ScheduledFuture<*>? = null
+
     val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult() ){
             result->
@@ -449,5 +459,23 @@ open class BaseActivity : AppCompatActivity() {
             // If back is pressed within the threshold time, finish the activity
 //            super.onBackPressed()
         }
+    }
+    fun startHeartbeatForCsrf() {
+        heartbeatScheduler = Executors.newSingleThreadScheduledExecutor()
+        heartbeatFuture = heartbeatScheduler.scheduleAtFixedRate({
+            ConstantsAccountServiceFunction.getCsrfToken(this,
+                onSuccess = { it1 ->
+                    Log.e("this is heart for csrf",it1)
+                },
+
+                onFailure = { it1 ->
+                    Log.d("get csrf fail", it1)
+                })
+        }, 0, 50, TimeUnit.SECONDS)
+    }
+
+    fun stopHeartbeatForCsrf() {
+        heartbeatFuture?.cancel(false)
+        heartbeatScheduler.shutdown()
     }
 }

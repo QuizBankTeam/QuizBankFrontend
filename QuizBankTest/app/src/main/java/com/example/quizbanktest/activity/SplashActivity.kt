@@ -7,6 +7,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.WindowManager
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.account.LoginActivity
 import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import java.io.File
@@ -31,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
 
             if (true) { //TODO 用於紀錄使用者是否登入過
                 // Start the Main Activity
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
 
             } else {
                 // Start the Intro Activity

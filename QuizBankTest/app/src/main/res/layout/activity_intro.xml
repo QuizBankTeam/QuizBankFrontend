@@ -62,7 +62,7 @@
         android:background="@drawable/shape_button_rounded"
         android:textSize="@dimen/btn_text_size"
         android:textColor="@android:color/white"
-        android:text="@string/sign_in"/>
+        android:text="登入"/>
 
     <TextView
         android:id="@+id/sign_up_intro"
@@ -79,7 +79,7 @@
         android:onClick="onClick"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:text="@string/sign_up"
+        android:text="註冊"
         android:textColor="#0080FF"
         android:textSize="@dimen/btn_text_size"
         android:textStyle="bold" />

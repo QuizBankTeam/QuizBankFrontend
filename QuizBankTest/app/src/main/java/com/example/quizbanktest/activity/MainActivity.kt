@@ -31,32 +31,45 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(R.layout.activity_main)
 
         showProgressDialog("處理資料中請稍等")
-        ConstantsAccountServiceFunction.getCsrfToken(this,
-            onSuccess = { it1 ->
-                ConstantsAccountServiceFunction.login(this, " ", " ",
-                    onSuccess = {   message->
-                        Log.d("login success", message)
-                        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
-                            onSuccess = { questionBanks ->
-                                hideProgressDialog()
-                                setupRecentRecyclerView(questionBanks)
-                                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
-                                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
+        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+            onSuccess = { questionBanks ->
+                hideProgressDialog()
+                setupRecentRecyclerView(questionBanks)
+                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
 
-                            },
-                            onFailure = { errorMessage ->
-                                hideProgressDialog()
-                                showErrorSnackBar("題庫資料取得錯誤")
-                            }
-                        )
-                    },
-                    onFailure = { message->
-                        showErrorSnackBar("自動登入錯誤") // login
-                    })
             },
-            onFailure = { it1 ->
-                showErrorSnackBar("伺服器驗證錯誤") //csrf
-            })
+            onFailure = { errorMessage ->
+                hideProgressDialog()
+                showErrorSnackBar("題庫資料取得錯誤")
+            }
+        )
+//        ConstantsAccountServiceFunction.getCsrfToken(this,
+//            onSuccess = { it1 ->
+//                ConstantsAccountServiceFunction.login(this, " ", " ",
+//                    onSuccess = {   message->
+//                        Log.d("login success", message)
+//                        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+//                            onSuccess = { questionBanks ->
+//                                hideProgressDialog()
+//                                setupRecentRecyclerView(questionBanks)
+//                                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+//                                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
+//
+//                            },
+//                            onFailure = { errorMessage ->
+//                                hideProgressDialog()
+//                                showErrorSnackBar("題庫資料取得錯誤")
+//                            }
+//                        )
+//                    },
+//                    onFailure = { message->
+//                        showErrorSnackBar("自動登入錯誤") // login
+//                    })
+//            },
+//            onFailure = { it1 ->
+//                showErrorSnackBar("伺服器驗證錯誤") //csrf
+//            })
 
         setupActionBar()
         val nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)
