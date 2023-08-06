@@ -466,12 +466,18 @@ open class BaseActivity : AppCompatActivity() {
             ConstantsAccountServiceFunction.getCsrfToken(this,
                 onSuccess = { it1 ->
                     Log.e("this is heart for csrf",it1)
+                    ConstantsAccountServiceFunction.login(this, " ", " ",
+                        onSuccess = {   message->
+                            Log.d("this is heart for login ", message)
+                        },
+                        onFailure = { message->
+                            Log.d("this is heart for login ", message)
+                        })
                 },
-
                 onFailure = { it1 ->
                     Log.d("get csrf fail", it1)
                 })
-        }, 0, 50, TimeUnit.SECONDS)
+        }, 0, 3300, TimeUnit.SECONDS)
     }
 
     fun stopHeartbeatForCsrf() {
