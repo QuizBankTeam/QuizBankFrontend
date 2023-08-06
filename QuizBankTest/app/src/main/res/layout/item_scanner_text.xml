@@ -39,7 +39,7 @@
                         android:layout_height="50dp"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:hint="題目標題"
+                        android:hint="題目標題 "
                         android:gravity="left"
                         android:inputType="textMultiLine"
                         android:scrollbars = "vertical"
@@ -79,7 +79,7 @@
                             android:layout_height="38dp"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:hint="題號."
+                            android:hint="題號.️"
                             android:gravity="left"
                             android:inputType="textMultiLine"
                             android:scrollbars = "vertical"
@@ -126,6 +126,7 @@
                                 android:textColor="#363A43"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:text="選擇標籤"
                                 />
                             <ImageButton
@@ -152,7 +153,7 @@
                             android:textColor="#363A43"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:text="題庫標籤"
+                            android:text="主題標籤"
                             />
                         <HorizontalScrollView
                             android:layout_width="match_parent"
@@ -382,16 +383,36 @@
                                         android:singleLine="false" />
                                 </LinearLayout>
 
-                            <ImageButton
-                                android:id="@+id/add_options_button"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="10dp"
-                                android:src="@drawable/baseline_add_circle_24"
-                                android:background="@color/white"
-                                android:scaleType="fitXY"
-                                />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <ImageButton
+                                    android:id="@+id/add_options_button"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="10dp"
+                                    android:src="@drawable/baseline_add_circle_24"
+                                    android:background="@color/white"
+                                    android:scaleType="fitXY"
+                                    />
+                                <ImageButton
+                                    android:id="@+id/minus_options_button"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="10dp"
+                                    android:src="@drawable/round_remove_circle_24"
+                                    android:background="@color/white"
+                                    android:scaleType="fitXY"
+                                    />
+
+                            </LinearLayout>
+
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -415,6 +436,7 @@
                                 android:gravity="center"
                                 android:onClick="onClick"
                                 android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/add_answer"
                                 android:text="新增答案   ⬆" />
 
@@ -429,6 +451,7 @@
                                 android:gravity="center"
                                 android:onClick="onClick"
                                 android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/add_image"
                                 android:text="選擇圖片   📂" />
                         </LinearLayout>
@@ -444,6 +467,7 @@
                             android:onClick="onClick"
                             android:textColor="#FFFFFF"
                             android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
                             android:background="@drawable/shape_button_rounded"
                             android:text="確認送出   ✔" />
                         <TextView
@@ -458,6 +482,7 @@
                             android:textColor="@color/secondary_text_color"
                             android:clickable="true"
                             android:layout_marginBottom="3dp"
+                            android:foreground="?attr/selectableItemBackground"
                             android:background="@drawable/white_border_shape_button_rounded"
                             android:text="刪除ocr結果   ❌" />
 

@@ -3,7 +3,7 @@
     <color name="colorPrimary">#8ecae6</color>
     <color name="colorPrimaryDark">#2a4d69</color>
     <color name="colorAccent">#adcbe3</color>
-
+<!--    <color name="bank_cardStroke">#4F4F4F</color>-->
     <color name="primary_text_color">#212121</color>
     <color name="secondary_text_color">#9AA2AF</color>
     <color name="white_color">#FFFFFF</color>
@@ -28,7 +28,6 @@
     <color name="red_200">#D16BA5</color>
     <color name="blue_200">#86A8E7</color>
     <color name="cyan_200">#5FFBF1</color>
-    <color name="bank_cardStroke">#4F4F4F</color>
 
     <color name="dark_blue3">#000814</color>
     <color name="dark_blue2">#001d3d</color>

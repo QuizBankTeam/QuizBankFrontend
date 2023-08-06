@@ -22,12 +22,12 @@ interface AccountService {
 
 
 
-    @GET("/profile")
+    @GET("/profile/{userId}")
     fun getUserProfile(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Query("userId") userId: String
+        @Path("userId") userId: String
     ): Call<ResponseBody>
 
     @POST("/register")

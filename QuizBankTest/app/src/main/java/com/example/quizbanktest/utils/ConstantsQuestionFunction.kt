@@ -1,6 +1,6 @@
 package com.example.quizbanktest.utils
 
-import QuestionAndBank
+
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
@@ -11,15 +11,12 @@ import com.example.quizbanktest.models.QuestionSetModel
 import com.example.quizbanktest.network.QuestionBankService
 import com.example.quizbanktest.network.QuestionService
 import com.google.gson.Gson
+import com.squareup.okhttp.Request
 import com.squareup.okhttp.ResponseBody
-import okio.Buffer
-import okio.BufferedSource
 import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
-import java.nio.charset.Charset
-
 
 object ConstantsQuestionFunction {
     var allQuestionsReturnResponse : bankInnerQuestion?= null
@@ -57,6 +54,7 @@ object ConstantsQuestionFunction {
 
                         onSuccess("upload ok")
                     } else {
+
                         val sc = response.code()
                         when (sc) {
                             400 -> {
@@ -92,7 +90,6 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
-
     fun getQuestion(context: Context, Id: String, onSuccess: (ArrayList<QuestionModel>) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -112,13 +109,13 @@ object ConstantsQuestionFunction {
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
-                        // TODO
-                        val source: BufferedSource = response.body().source()
-                        source.request(Long.MAX_VALUE) // Buffer the entire body.
-
-                        val buffer: Buffer = source.buffer()
-                        val UTF8: Charset = Charset.forName("UTF-8")
-                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
+//                        // TODO
+//                        val source: BufferedSource = response.body().source()
+//                        source.request(Long.MAX_VALUE) // Buffer the entire body.
+//
+//                        val buffer: Buffer = source.buffer()
+//                        val UTF8: Charset = Charset.forName("UTF-8")
+//                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
                         val gson = Gson()
                         val allQuestionsResponse = gson.fromJson(
                             response.body().charStream(),
@@ -146,11 +143,13 @@ object ConstantsQuestionFunction {
                                 Log.e("Error", "in get all banks Generic Error")
                             }
                         }
+                        Log.e("get question error",sc.toString())
                         onFailure("Request failed with status code $sc")
                     }
                 }
 
                 override fun onFailure(t: Throwable?) {
+
                     onFailure("Request failed with status code ")
                     Log.e("in get all questions Error", t?.message.toString())
                 }
@@ -163,7 +162,18 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
-
     data class AllQuestionsResponse(val questionBank : ArrayList<QuestionModel>)
     data class bankInnerQuestion(val questionBank:QuestionAndBank)
+
+    data class QuestionAndBank(
+        val _id: String,
+        val title: String,
+        val questionBankType: String,
+        val createdDate: String,
+        val members : ArrayList<String>,
+        val originateFrom : String,
+        val creator:String,
+        val questionSets:ArrayList<QuestionSetModel>,
+        val questions:ArrayList<QuestionModel>
+    )
 }

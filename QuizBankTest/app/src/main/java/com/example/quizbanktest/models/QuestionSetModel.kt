@@ -12,3 +12,4 @@ data class QuestionSetModel (
     val originateFrom : String,
     val provider:String
 ): Serializable
+

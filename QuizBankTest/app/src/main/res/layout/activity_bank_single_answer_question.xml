@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.BankSingleAnswerQuestionActivity">
+    tools:context=".activity.bank.BankSingleAnswerQuestionActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/title_bar"
@@ -17,8 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Question Title"
-            android:textSize="35sp"
+            android:textSize="25sp"
+            android:layout_marginTop="10dp"
             android:textStyle="bold"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +29,7 @@
             android:id="@+id/setting"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:background="@null"
+            android:background="?actionBarItemBackground"
             android:src="@drawable/baseline_more_selection"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,23 +40,28 @@
             android:layout_height="wrap_content"
             android:background="@color/light_yellow2"
             android:text="Type"
-            android:textSize="20sp"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="6dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/setting"
             app:layout_constraintStart_toEndOf="@+id/question_title"
             app:layout_constraintTop_toTopOf="parent" />
-
         <ImageButton
             android:id="@+id/btn_back_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@null"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:background="?actionBarItemBackground"
+            android:foreground="?attr/selectableItemBackground"
             android:onClick="backToPreviousPage"
-            android:src="@drawable/arrow_left_svgrepo_com"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_black_color_back_24dp" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -73,9 +80,11 @@
         android:layout_marginVertical="10dp"
         android:background="@drawable/question_description"
         android:layout_marginHorizontal="5dp"
+        android:gravity="center"
+        android:paddingVertical="5dp"
         android:text="Question Description"
-        android:textSize="25sp"
-        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         android:layout_height="wrap_content"/>
 
     <LinearLayout

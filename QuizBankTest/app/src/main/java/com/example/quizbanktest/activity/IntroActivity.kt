@@ -3,10 +3,8 @@ package com.example.quizbanktest.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.account.LoginActivity
 import com.example.quizbanktest.databinding.ActivityIntroBinding
-import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
 
 class IntroActivity : AppCompatActivity() {
     private lateinit var binding: ActivityIntroBinding

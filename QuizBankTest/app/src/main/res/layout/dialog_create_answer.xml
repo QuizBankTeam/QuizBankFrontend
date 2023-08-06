@@ -68,7 +68,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginTop="10dp"
-                        android:hint="答案描述"
+                        android:hint="答案描述 \n (可用下方選擇圖片掃描成文字)"
                         android:gravity="left"
                         android:inputType="textMultiLine"
                         android:scrollbars = "vertical"
@@ -96,7 +96,8 @@
                             android:onClick="onClick"
                             android:clickable="true"
                             android:background="@drawable/add_image"
-                            android:text="選擇圖片   📂" />
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="選擇答案圖片/OCR   📂" />
                         <ImageView
                             android:id="@+id/iv_answer_image"
                             android:layout_width="match_parent"
@@ -123,6 +124,7 @@
                                 android:gravity="center"
                                 android:onClick="onClick"
                                 android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/add_image"
                                 android:text="取消新增 ❌" />
                             <TextView
@@ -137,6 +139,7 @@
                                 android:gravity="center"
                                 android:onClick="onClick"
                                 android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/add_image"
                                 android:text="新增答案 ✅" />
                         </LinearLayout>

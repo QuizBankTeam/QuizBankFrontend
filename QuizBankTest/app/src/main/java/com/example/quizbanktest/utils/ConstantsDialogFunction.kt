@@ -9,6 +9,7 @@ import com.example.quizbanktest.activity.BaseActivity
 object ConstantsDialogFunction {
 
     fun dialogChoosePhotoFromGallery(activity: BaseActivity, onPhotoSelected: (Bitmap?) -> Unit) {
+        activity.showProgressDialog("開啟相簿中")
         activity.choosePhotoFromGallery { bitmap ->
             if (bitmap != null) {
                 onPhotoSelected(bitmap)
@@ -16,6 +17,7 @@ object ConstantsDialogFunction {
                 onPhotoSelected(null)
                 Toast.makeText(activity, "You didn't choose any photo", Toast.LENGTH_SHORT).show()
             }
+            activity.hideProgressDialog()
         }
     }
 

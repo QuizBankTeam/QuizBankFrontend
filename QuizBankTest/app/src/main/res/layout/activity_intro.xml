@@ -62,7 +62,7 @@
         android:background="@drawable/shape_button_rounded"
         android:textSize="@dimen/btn_text_size"
         android:textColor="@android:color/white"
-        android:text="@string/sign_in"/>
+        android:text="登入"/>
 
     <TextView
         android:id="@+id/sign_up_intro"
@@ -73,16 +73,16 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/white_border_shape_button_rounded"
+        android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
-        android:textStyle="bold"
         android:onClick="onClick"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:clickable="true"
-        android:textSize="@dimen/btn_text_size"
+        android:text="註冊"
         android:textColor="#0080FF"
-        android:text="@string/sign_up"/>
+        android:textSize="@dimen/btn_text_size"
+        android:textStyle="bold" />
 
 
 </LinearLayout>

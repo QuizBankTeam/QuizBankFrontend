@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_action_buttons"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:background="@color/colorRipple"
+   >
+    <!-- ImageButton elements here -->
+    <ImageButton
+        android:id="@+id/home"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/home_svgrepo_com__2_"
+        android:background="?actionBarItemBackground"
+        android:scaleType="fitXY"
+
+        />
+    <ImageButton
+        android:id="@+id/test"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:src="@drawable/notepad_and_pen_svgrepo_com"
+        android:background="?actionBarItemBackground"
+        android:scaleType="fitXY"
+
+        />
+    <ImageButton
+        android:id="@+id/camera"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:background="?actionBarItemBackground"
+        android:src="@drawable/camera_svgrepo_com__1_"
+        android:scaleType="fitXY"
+
+        />
+    <ImageButton
+        android:id="@+id/bank"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:src="@drawable/book_and_person_winter_svgrepo_com"
+        android:foregroundTint="@color/white"
+        android:background="?actionBarItemBackground"
+        android:scaleType="fitXY"
+
+        />
+    <ImageButton
+        android:id="@+id/setting"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:src="@drawable/setting_setting_svgrepo_com__2_"
+        android:background="?actionBarItemBackground"
+        android:scaleType="fitXY"
+        />
+</LinearLayout>
+
+

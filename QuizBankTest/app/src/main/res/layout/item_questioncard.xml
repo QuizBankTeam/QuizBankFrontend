@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
@@ -11,19 +12,19 @@
         android:layout_marginHorizontal="5dp"
         android:layout_marginBottom="10dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="5dp"
-        app:strokeColor="@color/bank_cardStroke"
-        app:strokeWidth="3dp">
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/question_image"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginEnd="5dp"
                 app:srcCompat="@drawable/book_square_svgrepo_com" />
@@ -35,9 +36,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@+id/question_image"
                 android:text="This is title"
-                android:textColor="#606060"
+                android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                 />
 
             <TextView
                 android:id="@+id/question_type"
@@ -48,7 +49,7 @@
                 android:layout_toEndOf="@id/question_image"
                 android:text="This is question type"
                 android:textColor="#606060"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/question_createdDate"

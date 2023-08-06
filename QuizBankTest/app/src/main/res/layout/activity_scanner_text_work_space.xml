@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/intro_background"
-    tools:context=".activity.ScannerTextWorkSpaceActivity">
+    tools:context=".activity.scan.ScannerTextWorkSpaceActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_ocr_detail"
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:background="@color/colorPrimary"
         app:titleTextAppearance="@style/CustomToolbarStyle"
         app:titleTextColor="@color/colorPrimaryDark"
-        app:title="Ocr WorkSpace 🛠️️"
+        app:title="掃描工作區 🛠️️"
         android:theme="@style/ToolbarTheme"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -59,7 +59,7 @@
                         android:layout_marginTop="80dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:layout_height="300dp"
+                        android:layout_height="200dp"
                         android:contentDescription="image"
                         android:scaleType="fitCenter"
                         android:src="@drawable/empty"/>
@@ -95,7 +95,7 @@
                         android:layout_height="40dp"
                         android:layout_marginRight="15dp"
                         android:src="@drawable/baseline_cloud_upload_24"
-                        android:background="@color/white"
+                        android:background="?actionBarItemBackground"
                         android:scaleType="fitXY"
                         />
                 </LinearLayout>
@@ -129,69 +129,16 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_action_buttons"
+    <include
+        layout="@layout/action_lower_tool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
         android:background="@color/colorRipple"
-
+        app:layout_constraintTop_toBottomOf="@id/fl_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <ImageButton
-            android:id="@+id/home"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/home_svgrepo_com__2_"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-            />
-        <ImageButton
-            android:id="@+id/test"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:src="@drawable/notepad_and_pen_svgrepo_com"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-
-            />
-        <ImageButton
-            android:id="@+id/camera"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:background="@color/colorRipple"
-            android:src="@drawable/camera_svgrepo_com__1_"
-            android:scaleType="fitXY"
-
-            />
-        <ImageButton
-            android:id="@+id/bank"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:src="@drawable/book_and_person_winter_svgrepo_com"
-            android:foregroundTint="@color/white"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-
-            />
-        <ImageButton
-            android:id="@+id/setting"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:src="@drawable/setting_setting_svgrepo_com__2_"
-            android:background="@color/colorRipple"
-            android:scaleType="fitXY"
-            />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

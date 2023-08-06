@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.BankQuestionActivity">
+    tools:context=".activity.bank.BankQuestionActivity">
 
 
     <RelativeLayout
@@ -20,18 +20,20 @@
             android:background="@color/colorRipple"
             android:gravity="center"
             android:text="Bank Title"
-            android:textSize="35sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="25sp"
+            />
 
         <ImageButton
             android:id="@+id/btn_back_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@null"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:background="?actionBarItemBackground"
+            android:foreground="?attr/selectableItemBackground"
             android:onClick="backToPreviousPage"
-            android:src="@drawable/arrow_left_svgrepo_com" />
+            android:src="@drawable/ic_black_color_back_24dp" />
 
     </RelativeLayout>
 
@@ -47,7 +49,7 @@
             android:id="@+id/questionRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activity.BankQuestionActivity">
+            tools:context=".activity.BankActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
 

@@ -1,4 +1,4 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.paint
 
 import android.app.Activity
 import android.content.Context

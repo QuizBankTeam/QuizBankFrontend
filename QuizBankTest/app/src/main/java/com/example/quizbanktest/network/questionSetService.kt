@@ -23,12 +23,12 @@ interface QuestionSetService {
         @Body body: PostQuestionSetBody
     ): Call<ResponseBody>
 
-    @GET("/questionSet")
+    @GET("/questionSet/{questionSetId}")
     fun getQuestionSetByID(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Query("questionSetId") questionSetId: String
+        @Path("questionSetId") questionSetId: String
     ): Call<ResponseBody>
 
     @PUT("/questionSet")
@@ -40,12 +40,12 @@ interface QuestionSetService {
         @Body body: PutQuestionSetBody
     ): Call<ResponseBody>
 
-    @DELETE("/questionSet")
+    @DELETE("/questionSet/{questionSetId}")
     fun deleteQuestionSetByID(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("Session-Token")session : String,
-        @Body body: DeleteQuestionSetBody
+        @Path("questionSetId") questionSetId: String
     ): Call<ResponseBody>
 
 }

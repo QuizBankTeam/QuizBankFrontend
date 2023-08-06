@@ -50,13 +50,14 @@
                 />
         </LinearLayout>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/chooseButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/baseline_check_24"
+            android:background="?actionBarItemBackground"
+            android:src="@drawable/baseline_check_24"
             />
 
     </LinearLayout>

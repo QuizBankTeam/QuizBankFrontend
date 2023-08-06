@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/tv_message_sender"
+        android:layout_width="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:layout_gravity="left"
+        >
+        <ImageView
+            android:id="@+id/menu_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:clickable="true"
+            android:src="@drawable/baseline_person_24" />
+        <TextView
+            android:id="@+id/tv_message_by_sender"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:text="@string/app_name"
+            android:textAlignment="textStart"/>
+
+    </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tv_message_receiver"
+        android:layout_width="match_parent"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/receiver_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="5dp"
+            android:background="@null"
+            android:clickable="true"
+            android:src="@drawable/baseline_manage_accounts_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_message_by_receiver"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginEnd="5dp"
+            android:textSize="18sp"
+            android:text="@string/app_name"
+            android:textAlignment="textEnd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/receiver_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ViewFlipper>

@@ -12,7 +12,7 @@
         android:background="@color/colorPrimary"
         app:titleTextAppearance="@style/CustomToolbarStyle"
         app:titleTextColor="@color/colorPrimaryDark"
-        app:title="Image Editor ⚙️"
+        app:title="圖片工作區 ⚙️"
         android:theme="@style/ToolbarTheme"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -174,7 +174,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
                 android:src="@drawable/baseline_image_search_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
 
                 />
@@ -184,7 +184,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_undo_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
 
                 />
@@ -194,7 +194,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_redo_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
 
                 />
@@ -204,7 +204,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_brush_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
             <ImageButton
@@ -213,7 +213,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_border_color_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
 
@@ -223,7 +223,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/ib_eraser"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
 
@@ -233,7 +233,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_colorize_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
 
                 />
@@ -243,7 +243,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_color_lens_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
 
@@ -254,7 +254,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_crop_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
             <ImageButton
@@ -263,7 +263,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_rotate_left_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
             <ImageButton
@@ -272,7 +272,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_filter_center_focus_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
             <ImageButton
@@ -281,7 +281,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_high_quality_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
             <ImageButton
@@ -290,7 +290,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_save_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
             <ImageButton
@@ -299,7 +299,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_share_24"
-                android:background="@color/colorRipple"
+                android:background="?actionBarItemBackground"
                 android:scaleType="fitXY"
                 />
         </LinearLayout>

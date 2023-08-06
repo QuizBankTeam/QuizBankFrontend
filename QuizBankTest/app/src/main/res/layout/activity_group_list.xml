@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_group_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_group_detail"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:titleTextAppearance="@style/CustomToolbarStyle"
+            app:titleTextColor="@color/colorPrimaryDark"
+            android:theme="@style/CustomToolbarStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="群組 🥂"
+                android:textAppearance="@style/CustomToolbarStyle"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <ImageButton
+                android:id="@+id/btn_group_back_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:background="?actionBarItemBackground"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="backToPreviousPage"
+                android:src="@drawable/ic_black_color_back_24dp" />
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/toolbar_group_layout">
+
+        <android.widget.SearchView
+            android:id="@+id/group_search_bar"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/search_bar"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/search_hint" />
+        <ImageButton
+            android:id="@+id/group_add"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:src="@drawable/baseline_group_add_24"/>
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dividing_view"
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:layout_marginVertical="10dp"
+        android:layout_below="@id/layout_searchBar"
+        android:background="@drawable/gradient_background"
+        android:paddingBottom="0dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/dividing_view"
+        android:layout_above="@+id/group_action"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/groupListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".activity.group.GroupListActivity">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        />
+    <include
+        android:id="@+id/group_action"
+        layout="@layout/action_lower_tool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorRipple"
+        android:gravity="center"
+        android:orientation="horizontal"/>
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.quizbanktest.activity
+package com.example.quizbanktest.activity.paint
 
 
 import android.annotation.SuppressLint

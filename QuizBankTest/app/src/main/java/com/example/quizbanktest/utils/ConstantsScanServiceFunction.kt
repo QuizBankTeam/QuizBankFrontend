@@ -3,9 +3,10 @@ package com.example.quizbanktest.utils
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
-import com.example.quizbanktest.activity.ScannerTextWorkSpaceActivity
+import com.example.quizbanktest.activity.BaseActivity
+import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
+import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.ScanImageService
 import com.google.gson.Gson
 import com.squareup.okhttp.ResponseBody
@@ -15,7 +16,7 @@ import retrofit.Response
 import retrofit.Retrofit
 
 object ConstantsScanServiceFunction {
-    fun scanBase64ToOcrText(base64String: String, activity:AppCompatActivity) {
+    fun scanBase64ToOcrText(base64String: String, activity:BaseActivity, flag:Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -44,43 +45,70 @@ object ConstantsScanServiceFunction {
                             OCRResponse::class.java
                         )
                         Log.e("Response Result", ocrResponse.text)
-                        ConstantsOcrResults.setOcrResult(ocrResponse.text)
-                        val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
-                        intent.putExtra("ocrText", ocrResponse.text)
-                        activity.startActivity(intent)
+                        if(flag==0){
+                           //不用換頁因為是答案ocr
+                        }
+                        else{
+                            if(!ocrResponse.text.equals("")){
+                                ConstantsOcrResults.setOcrResult(ocrResponse.text)
+                                activity.splitQuestionOptions(ocrResponse.text)
+                                activity.hideProgressDialog()
+                                val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
+                                intent.putExtra("ocrText", ocrResponse.text)
+                                activity.startActivity(intent)
+                            }else{
+                                activity.showErrorSnackBar("辨識不出來目前的圖片請重新上傳")
+                                activity.hideProgressDialog()
+                            }
+
+                        }
+                        onSuccess(ocrResponse.text)
 
                     } else {
 
                         val sc = response.code()
+                        activity.hideProgressDialog()
+
                         when (sc) {
                             400 -> {
+                                activity.showErrorSnackBar("發生了錯誤(BAD REQUEST)")
                                 Log.e(
                                     "Error 400", "Bad Re" +
                                             "" +
                                             "quest"
                                 )
+                                onFailure("Request failed with status code $sc")
                             }
                             404 -> {
+                                activity.showErrorSnackBar("系統找不到")
                                 Log.e("Error 404", "Not Found")
+                                onFailure("Request failed with status code $sc")
                             }
                             else -> {
                                 Log.e("Error", "in scan Generic Error")
+                                onFailure("Request failed with status code $sc")
                             }
+
                         }
                     }
                 }
 
                 override fun onFailure(t: Throwable?) {
+                    activity.showErrorSnackBar("掃描發生錯誤")
+                    activity.hideProgressDialog()
                     Log.e("in scan Errorrrrr", t?.message.toString())
+                    onFailure("Request failed with status code")
                 }
             })
         } else {
+
             Toast.makeText(
                 activity,
                 "No internet connection available.",
                 Toast.LENGTH_SHORT
             ).show()
         }
+
     }
     data class OCRResponse(val text: String)
 
