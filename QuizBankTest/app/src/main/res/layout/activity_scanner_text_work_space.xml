@@ -71,11 +71,16 @@
                         android:layout_marginRight="10dp"
                         android:textColor="#363A43"
                         android:textSize="18sp"
-                        android:background="@drawable/white_border_shape_button_rounded"
+                        android:background="?attr/selectableItemBackground"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:text="目前還未新增任何題目喔  ‼️"
+
                         />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/secondary_text_color" />
                 </LinearLayout>
 
                 <LinearLayout

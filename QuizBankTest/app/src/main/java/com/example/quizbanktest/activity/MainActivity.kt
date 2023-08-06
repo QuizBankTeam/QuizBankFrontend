@@ -33,10 +33,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         showProgressDialog("處理資料中請稍等")
         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
             onSuccess = { questionBanks ->
-                hideProgressDialog()
                 setupRecentRecyclerView(questionBanks)
                 setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
                 setupWrongListRecyclerView(ConstantsWrong.getQuestions())
+                hideProgressDialog()
 
             },
             onFailure = { errorMessage ->
