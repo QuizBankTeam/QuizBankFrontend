@@ -95,6 +95,7 @@ object ConstantsScanServiceFunction {
 
                 override fun onFailure(t: Throwable?) {
                     activity.showErrorSnackBar("掃描發生錯誤")
+                    activity.hideProgressDialog()
                     Log.e("in scan Errorrrrr", t?.message.toString())
                     onFailure("Request failed with status code")
                 }

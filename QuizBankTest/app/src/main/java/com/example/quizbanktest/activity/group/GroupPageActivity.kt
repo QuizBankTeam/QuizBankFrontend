@@ -77,7 +77,8 @@ class GroupPageActivity : AppCompatActivity() {
             val textView = inviteDialog.findViewById<TextView>(R.id.join_group_invite_code)
             val btnCopy = inviteDialog.findViewById<Button>(R.id.btn_copy)
             btnCopy.setOnClickListener {
-                val textToCopy = textView.text
+                val textToCopy = textView.hint
+                Log.e("textview",textView.text.toString())
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("Copied Text", textToCopy)
                 clipboard.setPrimaryClip(clip)

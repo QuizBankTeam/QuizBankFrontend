@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.bank.BankActivity
@@ -94,11 +95,13 @@ class GroupListActivity : BaseActivity() {
     }
 
     private fun setupGroupListRecyclerView(groupList: ArrayList<GroupModel>) {
-        val groupListView : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.groupListRecyclerView)
+        val groupListView : RecyclerView = findViewById(R.id.groupListRecyclerView)
+        val groupAdapter = GroupListAdapter(this, groupList)
+
+        groupListView.adapter = groupAdapter
         groupListView.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
-        val placesAdapter = GroupListAdapter(this, groupList)
-        groupListView.adapter = placesAdapter
+
 
     }
 }

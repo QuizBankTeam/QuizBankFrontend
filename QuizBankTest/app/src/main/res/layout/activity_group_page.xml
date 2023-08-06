@@ -66,6 +66,7 @@
                     android:id="@+id/group_page_setting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:background="?actionBarItemBackground"
@@ -79,95 +80,104 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/sv_group_page_main"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
-        android:orientation="vertical"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@id/group_action"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
         >
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_group_image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:gravity="center"
-            android:layout_marginTop="200dp"
-            android:contentDescription="@string/image_contentDescription"
-            android:src="@drawable/ic_user_place_holder"
-            app:civ_border_color="@color/gray"
-            app:civ_border_width="2dp" />
 
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:id="@+id/group_name"
-            android:paddingLeft="13dp"
-            android:text="群組名稱 "
-            android:textSize="25dp"
-            android:textStyle="bold"
-            android:textAppearance="@style/CustomToolbarStyle"
-            android:textColor="@color/colorPrimaryDark"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="550dp"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@id/group_action"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_group_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:gravity="center"
+                    android:layout_marginTop="150dp"
+                    android:contentDescription="@string/image_contentDescription"
+                    android:src="@drawable/ic_user_place_holder"
+                    app:civ_border_color="@color/gray"
+                    app:civ_border_width="2dp" />
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/ll_action_buttons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:background="?actionBarItemBackground"
-            >
-            <!-- ImageButton elements here -->
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:id="@+id/group_name"
+                    android:paddingLeft="13dp"
+                    android:text="群組名稱 "
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/CustomToolbarStyle"
+                    android:textColor="@color/colorPrimaryDark"/>
 
-            <ImageButton
-                android:id="@+id/group_chatroom"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:src="@drawable/baseline_chat_24"
-                android:background="?actionBarItemBackground"
-                android:scaleType="fitXY"
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/ll_action_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:background="?actionBarItemBackground"
+                    >
+                    <!-- ImageButton elements here -->
 
-                />
-            <ImageButton
-                android:id="@+id/group_file"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:background="?actionBarItemBackground"
-                android:src="@drawable/baseline_folder_24"
-                android:scaleType="fitXY"
+                    <ImageButton
+                        android:id="@+id/group_chatroom"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="30dp"
+                        android:src="@drawable/baseline_chat_24"
+                        android:background="?actionBarItemBackground"
+                        android:scaleType="fitXY"
 
-                />
+                        />
+                    <ImageButton
+                        android:id="@+id/group_file"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="30dp"
+                        android:background="?actionBarItemBackground"
+                        android:src="@drawable/baseline_folder_24"
+                        android:scaleType="fitXY"
 
-            <ImageButton
-                android:id="@+id/group_quiz_cord"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:src="@drawable/baseline_record"
-                android:background="?actionBarItemBackground"
-                android:scaleType="fitXY"
-                />
-            <ImageButton
-                android:id="@+id/group_add_person"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:background="?actionBarItemBackground"
-                android:src="@drawable/baseline_group_add_brown"
-                android:scaleType="fitXY"
+                        />
 
-                />
-        </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/group_quiz_cord"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="30dp"
+                        android:src="@drawable/baseline_record"
+                        android:background="?actionBarItemBackground"
+                        android:scaleType="fitXY"
+                        />
+                    <ImageButton
+                        android:id="@+id/group_add_person"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:background="?actionBarItemBackground"
+                        android:src="@drawable/baseline_group_add_brown"
+                        android:scaleType="fitXY"
 
-    </LinearLayout>
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+    </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
