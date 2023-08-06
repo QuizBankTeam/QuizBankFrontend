@@ -30,29 +30,32 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        showProgressDialog("處理資料中請稍等")
         ConstantsAccountServiceFunction.getCsrfToken(this,
             onSuccess = { it1 ->
                 ConstantsAccountServiceFunction.login(this, " ", " ",
                     onSuccess = {   message->
                         Log.d("login success", message)
-
                         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
                             onSuccess = { questionBanks ->
+                                hideProgressDialog()
                                 setupRecentRecyclerView(questionBanks)
                                 setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
                                 setupWrongListRecyclerView(ConstantsWrong.getQuestions())
+
                             },
                             onFailure = { errorMessage ->
-                                Toast.makeText(this,"get banklist error",Toast.LENGTH_SHORT).show()
+                                hideProgressDialog()
+                                showErrorSnackBar("題庫資料取得錯誤")
                             }
                         )
                     },
                     onFailure = { message->
-                        Log.d("login fail", message)
+                        showErrorSnackBar("自動登入錯誤") // login
                     })
             },
             onFailure = { it1 ->
-                Log.d("get csrf fail", it1)
+                showErrorSnackBar("伺服器驗證錯誤") //csrf
             })
 
         setupActionBar()
