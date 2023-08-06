@@ -85,7 +85,7 @@ object ConstantsQuestionBankFunction {
         }
     }
 
-    fun postQuestionBank(questionBank: QuestionBankModel, activity: AppCompatActivity, onSuccess: (ArrayList<QuestionBankModel>) -> Unit, onFailure: (String) -> Unit) {
+    fun postQuestionBank(questionBank: QuestionBankModel, activity: AppCompatActivity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -114,7 +114,7 @@ object ConstantsQuestionBankFunction {
                         Toast.makeText(activity,"upload successfully",Toast.LENGTH_SHORT).show()
 //                        ConstantsOcrResults.questionList.removeAt(ConstantsQuestionFunction.postQuestionPosition)
 
-                        onSuccess("upload success")
+                        onSuccess("upload successfully")
                     } else {
 
                         val sc = response.code()

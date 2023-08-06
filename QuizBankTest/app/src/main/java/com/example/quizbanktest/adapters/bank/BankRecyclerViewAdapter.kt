@@ -36,9 +36,9 @@ class BankRecyclerViewAdapter(var context: Context,
         holder.tvBankType.text = questionBankModels[position].questionBankType
         holder.tvBankCreatedDate.text = questionBankModels[position].createdDate
 //        holder.tv_BankMembers.text = questionBankModels[position].members.joinToString(separator = ",")
-        holder.tvBankMembers.append("3")
-        holder.tvBankOriginateFrom.append("none")
-        holder.tvBankCreator.append("none")
+        holder.tvBankMembers.text = "3"
+        holder.tvBankOriginateFrom.text = "none"
+        holder.tvBankCreator.text = "none"
     }
 
     override fun getItemCount(): Int {
