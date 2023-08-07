@@ -460,6 +460,7 @@ open class BaseActivity : AppCompatActivity() {
 //            super.onBackPressed()
         }
     }
+
     fun startHeartbeatForCsrf() {
         heartbeatScheduler = Executors.newSingleThreadScheduledExecutor()
         heartbeatFuture = heartbeatScheduler.scheduleAtFixedRate({

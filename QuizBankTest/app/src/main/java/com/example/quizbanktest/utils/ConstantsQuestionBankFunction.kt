@@ -56,12 +56,15 @@ object ConstantsQuestionBankFunction {
                                             "" +
                                             "quest"
                                 )
+                                onFailure("Request failed with status code $sc")
                             }
                             404 -> {
                                 Log.e("Error 404", "Not Found")
+                                onFailure("empty")
                             }
                             else -> {
                                 Log.e("Error", "in get all banks Generic Error")
+                                onFailure("Request failed with status code $sc")
                             }
                         }
                         onFailure("Request failed with status code $sc")

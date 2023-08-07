@@ -95,7 +95,7 @@
                 android:layout_toEndOf="@id/bank_from"
                 android:text="creator: "
                 android:textColor="#606060"
-                android:textSize="10sp"/>
+                android:textSize="12sp"/>
 
 
         </RelativeLayout>

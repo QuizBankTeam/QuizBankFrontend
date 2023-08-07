@@ -133,7 +133,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         questionActivity.putExtra("image", questionModels[position].image)
         questionActivity.putExtra("tag", questionModels[position].tag)
 
-        Log.e("BankQuestionActivity", "start question detail activity")
+        Log.e("BankQuestionActivity", questionModels[position]._id.toString())
 
         startActivity(questionActivity)
 //        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
