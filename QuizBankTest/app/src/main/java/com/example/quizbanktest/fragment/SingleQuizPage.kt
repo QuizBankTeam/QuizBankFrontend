@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import java.io.ByteArrayOutputStream
@@ -18,6 +19,7 @@ import com.example.quizbanktest.adapters.quiz.SPQuizAdapter
 import com.example.quizbanktest.databinding.ListSpQuizBinding
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.Quiz
+import com.example.quizbanktest.utils.ConstantsQuiz
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,29 +50,64 @@ class SingleQuizPage : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("on single Quiz page (fragment)", "on view created")
         init()
-        quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
-        quizBinding.QuizList.setHasFixedSize(true)
-        val quizAdapter = SPQuizAdapter(requireActivity(), QuizList)
-        quizBinding.QuizList.adapter = quizAdapter
-        quizBinding.QuizList.isClickable = true
-
-
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("in ", "singlePlayer Quiz Page!!")
+        Log.d("back in", "SP Quiz Page!!")
         Log.d("request code=", requestCode.toString())
         var tmpQuiz = QuizList[requestCode]
         if (data != null) {
             tmpQuiz.questions = data.getParcelableArrayListExtra<Question>("Key_questions") as ArrayList<Question>
             tmpQuiz.title = data.getStringExtra("Key_title").toString()
             tmpQuiz.duringTime = data.getIntExtra("Key_duringTime", 0)
+            tmpQuiz.status = data.getStringExtra("Key_status").toString()
+            tmpQuiz.startDateTime = data.getStringExtra("Key_startDateTime").toString()
+            tmpQuiz.endDateTime = data.getStringExtra("Key_endDateTime").toString()
             QuizList[requestCode] = tmpQuiz
         }
     }
     private fun init(){
+        val quizType = "single"
+        val batch = 0
+        val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )
+        val base64Image1 = bitmapToString(imageBitmap1)
+
+        ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
+            QuizList = quizList
+            for(quiz in quizList){
+                val imageArr2 = ArrayList< ArrayList<WeakReference<String>>>()
+                for(question in quiz.questions!!){
+                    val imageArr1 = ArrayList<WeakReference<String>>()
+                    for(image in question.questionImage!!){
+                        imageArr1.add(WeakReference(base64Image1))
+                    }
+                    imageArr2.add(imageArr1)
+                }
+                SingleQuizPage.Companion.quizListImages.add(imageArr2)
+            }
+
+            quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
+            quizBinding.QuizList.setHasFixedSize(true)
+            val quizAdapter = SPQuizAdapter(requireActivity(), QuizList)
+            quizBinding.QuizList.adapter = quizAdapter
+            quizBinding.QuizList.isClickable = true
+            Log.d("initing", "on view created")
+        }, onFailure = {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            initWithoutNetwork()
+        })
+    }
+    companion object {
+        var quizListImages =  ArrayList< ArrayList< ArrayList<WeakReference<String>> > >()
+    }
+    private fun bitmapToString(bm: Bitmap): String? {
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
+    }
+    private fun initWithoutNetwork(){
         val title = "第一次考試"
         val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )
         val imageBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.society9802 )
@@ -97,18 +134,18 @@ class SingleQuizPage : Fragment() {
         var tmpQuestion = Question("123", "題目1", "1", " 圖二為日本統治期間臺灣發電設施之設備容量\n" +
                 "變化圖。請問，使 1930 年代設備容量急遽增加\n" + "的設施為何？", optionText,
             "MultipleChoiceS", "", "bank one", optionAns, "an answer description1", "jacky","jacky",
-            null, tag, "2023/05/17")
+            null, null, tag, "2023/05/17")
 
         var tmpQuestion2 = Question("123", "題目2", "2", "簡介22", optionText2,
             "MultipleChoiceM", "", "bank two", optionAns2, "an answer description2", "jacky","jacky",
-            null, tag2, "2023/05/15")
+            null, null, tag2, "2023/05/15")
 
         var tmpQuestion3 = Question("123", "題目2", "3", "簡介2asdaffffffffffff2", optionText3,
             "TrueOrFalse", "", "bank two", optionAns3, "an answer description2", "jacky","jacky",
-            null, tag2, "2023/05/15")
+            null, null, tag2, "2023/05/15")
         var tmpQuestion4 = Question("123", "題目2", "3", "簡介2asdaffffffffffff2", null,
             "ShortAnswer", "", "bank two", null, "an answer description2", "jacky","jacky",
-            null, tag2, "2023/05/15")
+            null, null, tag2, "2023/05/15")
 
         QuestionList.add(tmpQuestion)
         QuestionList.add(tmpQuestion2)
@@ -138,14 +175,10 @@ class SingleQuizPage : Fragment() {
             }
             SingleQuizPage.Companion.quizListImages.add(tmpArr2)
         }
-    }
-    companion object {
-        var quizListImages =  ArrayList< ArrayList< ArrayList<WeakReference<String>> > >()
-    }
-    private fun bitmapToString(bm: Bitmap): String? {
-        val baos = ByteArrayOutputStream()
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val b = baos.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
+        quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
+        quizBinding.QuizList.setHasFixedSize(true)
+        val quizAdapter = SPQuizAdapter(requireActivity(), QuizList)
+        quizBinding.QuizList.adapter = quizAdapter
+        quizBinding.QuizList.isClickable = true
     }
 }

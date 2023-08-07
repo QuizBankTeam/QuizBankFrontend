@@ -21,6 +21,7 @@ import com.example.quizbanktest.models.Option
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.quiz.OptionAdapter
 import com.example.quizbanktest.fragment.SingleQuizPage
+import com.example.quizbanktest.utils.Constants
 
 class SingleQuestion : AppCompatActivity(){
     private lateinit var questionBinding: ActivitySingleQuestionBinding
@@ -120,9 +121,9 @@ class SingleQuestion : AppCompatActivity(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         //從single question setting傳回
-        if(resultCode == RESULT_CANCELED) {  //刪除題目
+        if(resultCode == Constants.RESULT_DELETE) {  //刪除題目
             val intent = Intent()
-            setResult(RESULT_CANCELED, intent)
+            setResult(Constants.RESULT_DELETE, intent)
             finish()
         }
         else if(resultCode == RESULT_OK) {   //修改題目設定
@@ -136,7 +137,7 @@ class SingleQuestion : AppCompatActivity(){
                 questionBinding.QuestionTitle.text = this.questionTitle
             }
         }
-        else{                               //啥都沒改
+        else{  //啥都沒改
             Toast.makeText(this, "modify nothing", Toast.LENGTH_SHORT).show()
         }
     }

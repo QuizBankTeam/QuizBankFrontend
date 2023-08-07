@@ -12,8 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.quiz.QuizPageAdapter
 import com.example.quizbanktest.databinding.ActivityQuizPageBinding
-
-
+import com.example.quizbanktest.models.Question
 
 
 class QuizPage: BaseActivity() {
@@ -57,7 +56,10 @@ class QuizPage: BaseActivity() {
 
         setupNavigationView()
         doubleCheckExit()
-
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("back in Quiz Page request code=", requestCode.toString())
     }
 
 }

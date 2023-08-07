@@ -90,18 +90,18 @@ class MultiQuizPage : Fragment() {
         var tmpQuestion = Question("123", "題目1", "1", " 圖二為日本統治期間臺灣發電設施之設備容量\n" +
                 "變化圖。請問，使 1930 年代設備容量急遽增加\n" + "的設施為何？", optionText,
             "MultipleChoiceS", "", "bank one", optionAns, "an answer description1", "jacky", "jacky",
-            ImageArr1, tag, "2023/05/17")
+            ImageArr1, ImageArr1, tag, "2023/05/17")
 
         var tmpQuestion2 = Question("123", "題目2", "2", "簡介22", optionText2,
             "MultipleChoiceM", "", "bank two", optionAns2, "an answer description2", "jacky","jacky",
-            ImageArr2, tag2, "2023/05/15")
+            ImageArr2, ImageArr2, tag2, "2023/05/15")
 
         var tmpQuestion3 = Question("123", "題目2", "3", "簡介2asdaffffffffffff2", optionText3,
             "TrueOrFalse", "", "bank two", optionAns3, "an answer description2", "jacky","jacky",
-            ImageArr1, tag2, "2023/05/15")
+            ImageArr1, ImageArr1, tag2, "2023/05/15")
         var tmpQuestion4 = Question("123", "題目2", "3", "簡介2asdaffffffffffff2", null,
             "ShortAnswer", "", "bank two", null, "an answer description2", "jacky","jacky",
-            ImageArr2, tag2, "2023/05/15")
+            ImageArr2, ImageArr2, tag2, "2023/05/15")
 
         QuestionList.add(tmpQuestion)
         QuestionList2.add(tmpQuestion)

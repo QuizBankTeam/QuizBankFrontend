@@ -45,7 +45,6 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import io.socket.client.Socket
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

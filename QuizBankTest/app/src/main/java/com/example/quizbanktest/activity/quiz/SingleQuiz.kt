@@ -13,7 +13,10 @@ import com.example.quizbanktest.adapters.quiz.QuestionAdapter
 import com.example.quizbanktest.databinding.ActivitySingleQuizBinding
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
+import com.example.quizbanktest.models.Quiz
 import com.example.quizbanktest.models.QuizRecord
+import com.example.quizbanktest.utils.Constants
+import com.example.quizbanktest.utils.ConstantsQuiz
 
 class SingleQuiz: AppCompatActivity() {
     private lateinit var quizBinding: ActivitySingleQuizBinding
@@ -23,8 +26,8 @@ class SingleQuiz: AppCompatActivity() {
     private lateinit var quizTitle: String
     private lateinit var quizType: String
     private lateinit var quizStatus: String
-    private lateinit var quizStartDate: String
-    private lateinit var quizEndDate: String
+    private lateinit var quizStartDateTime: String
+    private lateinit var quizEndDateTime: String
     private lateinit var quizMembers: ArrayList<String>
     private lateinit var quizAdapter: QuestionAdapter
     private  var duringTime: Int = -1
@@ -40,20 +43,23 @@ class SingleQuiz: AppCompatActivity() {
         quizAdapter.setQuizIndex(quizIndex)
         quizAdapter.setQuizType(quizType)
         quizBinding.QuestionList.adapter = quizAdapter
-        quizBinding.saveBtn.setOnClickListener {
-            val intent = Intent()
-            intent.putExtra("Key_title", quizTitle)
-            intent.putExtra("Key_startDate", quizStartDate)
-            intent.putExtra("Key_endDate", quizEndDate)
-            intent.putParcelableArrayListExtra("Key_questions", questionlist)
-            if(quizType=="casual"){
-                intent.putExtra("Key_casualDuringTime", casualDuringTime)
-                intent.putStringArrayListExtra("Key_members", quizMembers)
-            }else{
-                intent.putExtra("Key_duringTime", duringTime)
+        quizBinding.backBtn.setOnClickListener {
+            val intentBack = Intent()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("確定回到主頁?")
+            builder.setMessage("是否保存修改紀錄")
+            builder.setPositiveButton("確定") { dialog, which ->
+                saveQuiz()
+                backToQuizList()
             }
-            setResult(RESULT_OK, intent)
-            finish()
+            builder.setNegativeButton("取消"){ dialog, which ->
+                setResult(RESULT_CANCELED, intentBack)
+                finish()
+            }
+            builder.show()
+        }
+        quizBinding.saveBtn.setOnClickListener {
+            saveQuiz()
         }
         quizBinding.quizSetting.setOnClickListener { quizSetting() }
         quizBinding.startQuiz.setOnClickListener{
@@ -66,22 +72,26 @@ class SingleQuiz: AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("in ", "single Quiz")
         Log.d("request code=", requestCode.toString())
-
+        val a = "1"
+        val b = a.toInt()
         if(requestCode < 1000)  //從singleQuestion傳回single quiz的內容
         {
             resultFromQuestion(requestCode, resultCode, data)
         }
         else if(requestCode == 1000)    //從quiz setting傳回
         {
-            if(resultCode == RESULT_CANCELED)
-                Toast.makeText(this, "modify nothing", Toast.LENGTH_SHORT).show()
+            if(resultCode == Constants.RESULT_DELETE) {
+                deleteQuiz()
+                val intentBack = Intent()
+                setResult(Constants.RESULT_DELETE, intentBack)
+                finish()
+            }
             else if(resultCode == RESULT_OK)
             {
-                Toast.makeText(this, "modify something", Toast.LENGTH_SHORT).show()
                 if (data != null) {
                     title = data.getStringExtra("Key_title")
-                    quizStartDate = data.getStringExtra("Key_startDate").toString()
-                    quizEndDate = data.getStringExtra("Key_endDate").toString()
+                    quizStartDateTime = data.getStringExtra("Key_startDateTime").toString()
+                    quizEndDateTime = data.getStringExtra("Key_endDateTime").toString()
                     if(quizType=="casual"){
                         quizMembers = data.getStringArrayListExtra("Key_members") as ArrayList<String>
                     }else{
@@ -90,22 +100,22 @@ class SingleQuiz: AppCompatActivity() {
                     quizBinding.quizTitle.text = title
                 }
             }
+
         }
-        else if(requestCode == 2000)
+        else if(requestCode == 2000) //考完試後回傳
         {
-            if(resultCode == RESULT_OK) {
+            if(resultCode == RESULT_OK) { //保存考試紀錄
                 val intent = Intent()
                 intent.setClass(this, SPSingleRecord::class.java)
                 val questionRecordList = data?.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
                 val quizRecord = data?.getParcelableExtra<QuizRecord>("Key_quizRecord")
 
                 intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
-                intent.putParcelableArrayListExtra("Key_questions", questionlist)
                 intent.putExtra("Key_quizRecord", quizRecord)
                 intent.putExtra("quiz_index", this.quizIndex)
                 startActivity(intent)
             }
-            else if(resultCode == RESULT_CANCELED){
+            else if(resultCode == RESULT_CANCELED){ //不保存考試紀錄
                 finish()
             }
         }
@@ -113,7 +123,7 @@ class SingleQuiz: AppCompatActivity() {
 
     private fun startQuiz(questionList: ArrayList<Question>, status: String,  duringTime: Int, quizStatus: String,
                           quizMembers: ArrayList<String>, quizTitle: String, quizId: String){
-        if(status=="ready"){
+        if(status!="draft"){
             val intent = Intent()
             if(quizType=="casual") {
 //                intent.setClass(this, MPStartQuiz::class.java)
@@ -133,39 +143,73 @@ class SingleQuiz: AppCompatActivity() {
             AlertDialog.Builder(this).setTitle("考試尚未設定完成!").setPositiveButton("我懂", null).show()
         }
     }
+    private fun saveQuiz(){
+        quizStatus = "ready"
+        if(questionlist.isEmpty() || duringTime==0){
+            quizStatus = "draft"
+        }else{
+            for(question in questionlist){
+                if(question.answerOptions.isNullOrEmpty() || question.options.isNullOrEmpty() || question.description.isNullOrEmpty()){
+                    quizStatus = "draft"
+                    break
+                }
+            }
+        }
+
+        val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, questionlist)
+        ConstantsQuiz.putQuiz(this, putQuiz, onSuccess = {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }, onFailure = {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+    }
+    private fun backToQuizList(){
+        val intentBack = Intent()
+        intentBack.putExtra("Key_title", quizTitle)
+        intentBack.putExtra("Key_status", quizStatus)
+        intentBack.putExtra("Key_startDateTime", quizStartDateTime)
+        intentBack.putExtra("Key_endDateTime", quizEndDateTime)
+        intentBack.putParcelableArrayListExtra("Key_questions", questionlist)
+        if(quizType=="casual"){
+            intentBack.putExtra("Key_casualDuringTime", casualDuringTime)
+            intentBack.putStringArrayListExtra("Key_members", quizMembers)
+        }else{
+            intentBack.putExtra("Key_duringTime", duringTime)
+        }
+        setResult(RESULT_OK, intentBack)
+        finish()
+    }
+    private fun deleteQuiz(){
+        ConstantsQuiz.deleteQuiz(this, quizId, onSuccess = {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }, onFailure = {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+    }
+
     private fun init()
     {
         val id = intent.getStringExtra("Key_id")
         val title = intent.getStringExtra("Key_title")
         val type = intent.getStringExtra("Key_type")
         val status = intent.getStringExtra("Key_status")
-        val startDate = intent.getStringExtra("Key_startDate")
-        val endDate = intent.getStringExtra("Key_endDate")
+        val startDate = intent.getStringExtra("Key_startDateTime")
+        val endDate = intent.getStringExtra("Key_endDateTime")
         val quizIndex = intent.getIntExtra("quiz_index", 0)
 //      **需要api 33以上**
 //      val questions = intent.getParcelableArrayListExtra("Key_questions", Question::class.java)
         val questions = intent.getParcelableArrayListExtra<Question>("Key_questions")
-
-        if(type=="casual"){
-            val members = intent.getStringArrayListExtra("Key_members")
-            val tmpCasualDuringTime = intent.getIntegerArrayListExtra("Key_casualDuringTime")
-            if(tmpCasualDuringTime!= null)
-                this.casualDuringTime = tmpCasualDuringTime
-            if (members != null)
-                quizMembers = members
-        }
-        else{
-            val duringTime = intent.getIntExtra("Key_duringTime", 0)
-            this.duringTime = duringTime
-            this.casualDuringTime = ArrayList()
-            quizMembers = ArrayList()
-        }
+        val members = intent.getStringArrayListExtra("Key_members")
+        val tmpCasualDuringTime = intent.getIntegerArrayListExtra("Key_casualDuringTime")
+        val duringTime = intent.getIntExtra("Key_duringTime", 0)
 
 
         if (questions != null)
             questionlist = questions
-        else
-            Log.d("in single quiz", "question is null")
+        if(tmpCasualDuringTime!= null)
+            this.casualDuringTime = tmpCasualDuringTime
+        if (members != null)
+            quizMembers = members
         if (title != null)
             quizTitle = title
         if (id != null)
@@ -175,10 +219,11 @@ class SingleQuiz: AppCompatActivity() {
         if (status != null)
             quizStatus = status
         if (startDate != null)
-            quizStartDate = startDate
+            quizStartDateTime = startDate
         if (endDate != null)
-            quizEndDate = endDate
+            quizEndDateTime = endDate
         this.quizIndex = quizIndex
+        this.duringTime = duringTime
         quizBinding.quizTitle.text = title
     }
     private fun quizSetting(){
@@ -186,8 +231,8 @@ class SingleQuiz: AppCompatActivity() {
         intent.setClass(this@SingleQuiz, SingleQuizSetting::class.java)
         intent.putExtra("Key_title", quizTitle)
         intent.putExtra("Key_status", quizStatus)
-        intent.putExtra("Key_startDate", quizStartDate)
-        intent.putExtra("Key_endDate", quizEndDate)
+        intent.putExtra("Key_startDateTime", quizStartDateTime)
+        intent.putExtra("Key_endDateTime", quizEndDateTime)
         intent.putExtra("Key_type", quizType)
         if(quizTitle=="casual") {
             intent.putStringArrayListExtra("Key_members", quizMembers)
@@ -226,8 +271,7 @@ class SingleQuiz: AppCompatActivity() {
                 questionlist[requestCode] = tmpQuestion
                 quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
             }
-        }else if(resultCode== RESULT_CANCELED){
-            Toast.makeText(this, "成功刪除第"+questionlist[requestCode].number+"題" , Toast.LENGTH_SHORT).show()
+        }else if(resultCode== Constants.RESULT_DELETE){
             questionlist.removeAt(requestCode)
             quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
         }
