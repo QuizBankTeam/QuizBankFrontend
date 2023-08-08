@@ -51,7 +51,7 @@ class SingleQuizSetting: AppCompatActivity() {
                 builder.show()
             }
         }
-        else{
+        else if(quizType=="single"){
             spQuizSetAttrBinding.backBtn.setOnClickListener {
                 val intent = Intent()
                 setResult(RESULT_CANCELED, intent)
@@ -93,6 +93,9 @@ class SingleQuizSetting: AppCompatActivity() {
         val startDateTime = intent.getStringExtra("Key_startDateTime")
         val endDateTime = intent.getStringExtra("Key_endDateTime")
         val type = intent.getStringExtra("Key_type")
+        val duringTime = intent.getIntExtra("Key_duringTime", 0)
+        val members = intent.getStringArrayListExtra("Key_members")
+        var MembersStr = "無成員"
 
         if (title != null)
             this.quizTitle = title
@@ -104,36 +107,33 @@ class SingleQuizSetting: AppCompatActivity() {
             this.quizEndDateTime = endDateTime
         if (type != null)
             quizType = type
+        if (members != null) {
+            this.quizMembers = members
+            if(members.size>0) {
+                MembersStr = ""
+                for(item in members){
+                    MembersStr = "$MembersStr$item "
+                }
+            }
+        }
+        quizDuringTime = duringTime
 
         if(type=="casual") {
             mpQuizSetAttrBinding = ActivityMpSingleQuizSettingBinding.inflate(layoutInflater)
             setContentView(mpQuizSetAttrBinding.root)
-            val members = intent.getStringArrayListExtra("Key_members")
-            var MembersStr = "無成員"
-
-            if (members != null)
-                this.quizMembers = members
-            if (members != null) {
-                if(members.size>0) {
-                    MembersStr = ""
-                    for(item in members){
-                        MembersStr += item
-                        MembersStr += " "
-                    }
-                }
-            }
             mpQuizSetAttrBinding.QuizMembers.text = MembersStr
             mpQuizSetAttrBinding.QuizTitle.setText(title)
             mpQuizSetAttrBinding.QuizStatus.text = status
             mpQuizSetAttrBinding.QuizStartDate.text = startDateTime
             mpQuizSetAttrBinding.QuizEndDate.text = endDateTime
+            mpQuizSetAttrBinding.QuizDuringTimeMin.text = (duringTime/60).toString()
+            mpQuizSetAttrBinding.QuizDuringTimeSec.text = (duringTime%60).toString()
         }
-        else
+        else if(type=="single")
         {
             spQuizSetAttrBinding = ActivitySpSingleQuizSettingBinding.inflate(layoutInflater)
             setContentView(spQuizSetAttrBinding.root)
-            val duringTime = intent.getIntExtra("Key_duringTime", 0)
-            quizDuringTime = duringTime
+            spQuizSetAttrBinding.QuizMembers.text = MembersStr
             spQuizSetAttrBinding.QuizTitle.setText(title)
             spQuizSetAttrBinding.QuizStatus.text = status
             spQuizSetAttrBinding.QuizStartDate.text = startDateTime

@@ -79,13 +79,81 @@
 
             <EditText
                 android:id="@+id/Quiz_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="第一次考試"
                 android:textSize="18dp"
                 android:layout_gravity="center_vertical"/>
         </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="考試時長"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="10dp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="3dp">
+                <TextView
+                    android:id="@+id/Quiz_duringTime_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:digits="1234567890"
+                    android:textSize="18dp"
+                    android:hint="max limit: 200"
+                    android:layout_gravity="center_vertical"/>
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="15dp"
+                android:textSize="20dp"
+                android:text="分"
+                android:textStyle="bold"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="10dp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="3dp">
+                <TextView
+                    android:id="@+id/Quiz_duringTime_sec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:digits="1234567890"
+                    android:hint="lesser than 60"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_vertical"/>
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="15dp"
+                android:textSize="20dp"
+                android:text="秒"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
@@ -181,6 +249,27 @@
             android:textColor="#3C3C3C"
             android:textStyle="bold"
             android:textSize="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/add_members"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/background_round_primary"
+                android:src="@drawable/baseline_add_24" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_vertical"
+                android:text="邀請成員"
+                android:textSize="20dp"/>
+        </LinearLayout>
+
         <androidx.cardview.widget.CardView
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

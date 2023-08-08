@@ -34,8 +34,8 @@ object ConstantsQuiz {
                             response.body().charStream(),
                             quizService.AllQuizsResponse::class.java
                         )
-                        quizList = allQuizResponse.quizList
-                        onSuccess(allQuizResponse.quizList)
+                        quizList = allQuizResponse.quiz
+                        onSuccess(allQuizResponse.quiz)
                     }
                     else{
                         onFailure("Request failed with status code ${response.code()}")
@@ -51,6 +51,43 @@ object ConstantsQuiz {
             onFailure(onFailureStr)
         }
     }
+    fun postQuiz(context: Context, postQuiz: quizService.PostQuiz ,onSuccess: (Quiz) -> Unit, onFailure: (String) -> Unit){
+        val tmpMembers = ArrayList<String>()
+        tmpMembers.add(Constants.userId)
+        val qList = ArrayList<quizService.QuestionInPostQuiz>()
+        val tmpPostQuizQuestion = quizService.QuestionInPostQuiz("undefinied", "1", "asdf", ArrayList(), "MultipleChoiceS", "none", "none", ArrayList(), "asd", Constants.userId, "2023-6-29", ArrayList(), ArrayList(), ArrayList())
+        if (Constants.isNetworkAvailable(context)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(quizService::class.java)
+            val call = api.postQuiz(Constants.COOKIE, Constants.csrfToken, Constants.accessToken, Constants.refreshToken, Constants.session, postQuiz)
+
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+                        val gson = Gson()
+                        val postQuizResponse = gson.fromJson(
+                            response.body().charStream(),
+                            quizService.PostQuizResponse::class.java
+                        )
+                        onSuccess(postQuizResponse.quiz)
+                    }
+                    else{
+                        onFailure("Request failed with status code ${response.code()}")
+                    }
+                }
+                override fun onFailure(t: Throwable?) {
+                    onFailure("Request failed with message ${t?.message.toString()}")
+                }
+
+            })
+        }else{
+            onFailure(onFailureStr)
+        }
+    }
+
     fun putQuiz(context: Context, quiz: Quiz, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val putQuestionList = ArrayList<quizService.QuestionInPutQuiz>()

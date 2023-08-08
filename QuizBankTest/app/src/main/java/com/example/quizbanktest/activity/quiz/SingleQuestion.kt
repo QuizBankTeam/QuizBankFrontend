@@ -39,7 +39,7 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var questionBank: String
     private lateinit var questionProvider : String
     private lateinit var questionCreatedDate : String
-    private lateinit var answerOptionInt : ArrayList<Int>  //為正確答案的position
+    private var answerOptionInt = ArrayList<Int>()  //為正確答案的position
     private lateinit var quizType: String
     private lateinit var answerDescriptionView: TextView
     private lateinit var optionAdapter: OptionAdapter
@@ -202,12 +202,10 @@ class SingleQuestion : AppCompatActivity(){
                 val imageBytes: ByteArray = Base64.decode(tmpImageStr, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 imageArr.add(decodeImage)
-                Log.d("tmpImageStr", "is not null ")
             }
             Log.d("quiz index = $quizIndex", "question index = $questionIndex")
         }
         if(imageArr.isNotEmpty()) {
-            Log.d("setting image", "question index ")
             questionBinding.QuestionImage.setImageBitmap(imageArr[0])
         }
         questionBinding.questionDescription.text = description

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import java.io.ByteArrayOutputStream
 import java.lang.ref.WeakReference
 import com.example.quizbanktest.R
+import com.example.quizbanktest.adapters.quiz.LinearLayoutWrapper
 import com.example.quizbanktest.adapters.quiz.SPQuizAdapter
 import com.example.quizbanktest.databinding.ListSpQuizBinding
 import com.example.quizbanktest.models.Question
@@ -32,15 +33,15 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SingleQuizPage : Fragment() {
-    // TODO: Rename and change types of parameters
+    companion object {
+        var quizListImages =  ArrayList< ArrayList< ArrayList<WeakReference<String>> > >()
+    }
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var quizBinding: ListSpQuizBinding
     private var QuizList : ArrayList<Quiz> = ArrayList()
+    private lateinit var quizListAdapter: SPQuizAdapter
     private var imageArr = ArrayList<String>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -52,21 +53,7 @@ class SingleQuizPage : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d("back in", "SP Quiz Page!!")
-        Log.d("request code=", requestCode.toString())
-        var tmpQuiz = QuizList[requestCode]
-        if (data != null) {
-            tmpQuiz.questions = data.getParcelableArrayListExtra<Question>("Key_questions") as ArrayList<Question>
-            tmpQuiz.title = data.getStringExtra("Key_title").toString()
-            tmpQuiz.duringTime = data.getIntExtra("Key_duringTime", 0)
-            tmpQuiz.status = data.getStringExtra("Key_status").toString()
-            tmpQuiz.startDateTime = data.getStringExtra("Key_startDateTime").toString()
-            tmpQuiz.endDateTime = data.getStringExtra("Key_endDateTime").toString()
-            QuizList[requestCode] = tmpQuiz
-        }
-    }
+
     private fun init(){
         val quizType = "single"
         val batch = 0
@@ -87,10 +74,10 @@ class SingleQuizPage : Fragment() {
                 SingleQuizPage.Companion.quizListImages.add(imageArr2)
             }
 
-            quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
+            quizBinding.QuizList.layoutManager = LinearLayoutWrapper(requireContext())
             quizBinding.QuizList.setHasFixedSize(true)
-            val quizAdapter = SPQuizAdapter(requireActivity(), QuizList)
-            quizBinding.QuizList.adapter = quizAdapter
+            quizListAdapter = SPQuizAdapter(requireActivity(), QuizList)
+            quizBinding.QuizList.adapter = quizListAdapter
             quizBinding.QuizList.isClickable = true
             Log.d("initing", "on view created")
         }, onFailure = {
@@ -98,15 +85,41 @@ class SingleQuizPage : Fragment() {
             initWithoutNetwork()
         })
     }
-    companion object {
-        var quizListImages =  ArrayList< ArrayList< ArrayList<WeakReference<String>> > >()
-    }
+
     private fun bitmapToString(bm: Bitmap): String? {
         val baos = ByteArrayOutputStream()
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val b = baos.toByteArray()
         return Base64.encodeToString(b, Base64.DEFAULT)
     }
+    fun postQuiz(quiz: Quiz){
+        QuizList.add(0, quiz)//?????? notify的先後順序有差 會影響到app crushed掉 甚至連list顯示都會壞掉
+        quizListAdapter.notifyItemChanged(QuizList.size)
+        for(index in 0 until QuizList.size){
+            quizListAdapter.notifyItemChanged(index)
+        }
+
+    }
+    fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
+        QuizList[position].title = title
+        QuizList[position].questions = questions
+        QuizList[position].duringTime = duringTime
+        QuizList[position].status = status
+        QuizList[position].startDateTime = startDateTime
+        QuizList[position].endDateTime = endDateTime
+        quizListAdapter.notifyItemChanged(position)
+    }
+    fun deleteQuiz(position: Int){
+        QuizList.removeAt(position)
+        quizListImages.removeAt(position)
+        quizListAdapter.notifyItemChanged(position)
+        for(index in position until QuizList.size){
+            quizListAdapter.notifyItemChanged(index)
+        }
+
+    }
+
+
     private fun initWithoutNetwork(){
         val title = "第一次考試"
         val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )

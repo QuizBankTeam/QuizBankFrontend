@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.adapters.quiz.MPQuizAdapter
 import com.example.quizbanktest.databinding.ListMpQuizBinding
@@ -17,52 +18,97 @@ import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.Quiz
 import java.io.ByteArrayOutputStream
 import com.example.quizbanktest.R
+import com.example.quizbanktest.adapters.quiz.LinearLayoutWrapper
+import com.example.quizbanktest.adapters.quiz.SPQuizAdapter
+import com.example.quizbanktest.utils.ConstantsQuiz
+import java.lang.ref.WeakReference
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER//****
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class MultiQuizPage : Fragment() {
-    //Rename and change types of parameters//****
-    private lateinit var mpQuizBinding: ListMpQuizBinding
-    private var QuizList : ArrayList<Quiz> = ArrayList()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    companion object {
+        var quizListImages =  ArrayList< ArrayList< ArrayList<WeakReference<String>> > >()
     }
+    private lateinit var quizBinding: ListMpQuizBinding
+    private var QuizList : ArrayList<Quiz> = ArrayList()
+    private lateinit var quizListAdapter: MPQuizAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
-        mpQuizBinding = ListMpQuizBinding.inflate(inflater, container, false)
-        return mpQuizBinding.root
+        quizBinding = ListMpQuizBinding.inflate(inflater, container, false)
+        return quizBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-        mpQuizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
-        mpQuizBinding.QuizList.setHasFixedSize(true)
-        val quizAdapter = MPQuizAdapter(requireActivity(), QuizList)
-        mpQuizBinding.QuizList.adapter = quizAdapter
-        mpQuizBinding.QuizList.isClickable = true
-
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d("in ", "multiplayer Quiz Page!!")
-        Log.d("request code=", requestCode.toString())
-        var tmpQuiz = QuizList[requestCode]
-        if (data != null) {
-            tmpQuiz.questions = data.getParcelableArrayListExtra<Question>("Key_questions") as ArrayList<Question>
-            tmpQuiz.title = data.getStringExtra("Key_title").toString()
-            QuizList[requestCode].casualDuringTime = data.getIntegerArrayListExtra("Key_casualDuringTime")
-            QuizList[requestCode] = tmpQuiz
-        }
     }
 
     private fun init(){
+        val quizType = "casual"
+        val batch = 0
+        val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )
+        val base64Image1 = bitmapToString(imageBitmap1)
+
+        ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
+            QuizList = quizList
+            for(quiz in quizList){
+                val imageArr2 = ArrayList< ArrayList<WeakReference<String>>>()
+                for(question in quiz.questions!!){
+                    val imageArr1 = ArrayList<WeakReference<String>>()
+                    for(image in question.questionImage!!){
+                        imageArr1.add(WeakReference(base64Image1))
+                    }
+                    imageArr2.add(imageArr1)
+                }
+                SingleQuizPage.Companion.quizListImages.add(imageArr2)
+            }
+
+            quizBinding.QuizList.layoutManager = LinearLayoutWrapper(requireContext())
+            quizBinding.QuizList.setHasFixedSize(true)
+            quizListAdapter = MPQuizAdapter(requireActivity(), QuizList)
+            quizBinding.QuizList.adapter = quizListAdapter
+            quizBinding.QuizList.isClickable = true
+        }, onFailure = {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            initWithoutNetwork()
+        })
+    }
+
+    fun postQuiz(quiz: Quiz){
+        QuizList.add(0, quiz)
+        for(index in 0 until QuizList.size){
+            quizListAdapter.notifyItemChanged(index)
+        }
+    }
+    fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
+        QuizList[position].title = title
+        QuizList[position].questions = questions
+        QuizList[position].duringTime = duringTime
+        QuizList[position].status = status
+        QuizList[position].startDateTime = startDateTime
+        QuizList[position].endDateTime = endDateTime
+        quizListAdapter.notifyItemChanged(position)
+    }
+    fun deleteQuiz(position: Int){
+        QuizList.removeAt(position)
+        SingleQuizPage.quizListImages.removeAt(position)
+        quizListAdapter.notifyItemChanged(position)
+        for(index in position until QuizList.size){
+            quizListAdapter.notifyItemChanged(index)
+        }
+
+    }
+    private fun bitmapToString(bm: Bitmap): String? {
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
+    }
+
+    private fun initWithoutNetwork(){
         val title = "第一次考試"
         val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )
         val imageBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.society9802 )
@@ -114,14 +160,5 @@ class MultiQuizPage : Fragment() {
 
         QuizList.add(tmpQuiz)
         QuizList.add(tmpQuiz2)
-    }
-
-    companion object {
-    }
-    private fun bitmapToString(bm: Bitmap): String? {
-        val baos = ByteArrayOutputStream()
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val b = baos.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 }

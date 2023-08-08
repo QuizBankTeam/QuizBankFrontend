@@ -54,29 +54,18 @@ class MPQuizAdapter(private val context: Activity, private val questionList: Arr
             }else{
                 holder.quizStartDate.text = "今天"
             }
+        }else{
+            holder.quizStartDate.text = ""
         }
         holder.quizNum.text = currentItem.questions?.size.toString() + "題"
         holder.quizStatus.text = currentItem.status
         holder.quizTitle.text = currentItem.title
-        val tmpMember = currentItem.members
-        var member = "成員: "
-        if(tmpMember!=null){
-            if(tmpMember.size  > 0) {
-                for(i in tmpMember.indices){
-                    if(i>3) {
-                        member += "..."
-                        break
-                    }
-                    member += tmpMember[i]
-                    member += " "
-                }
-            }
-            else {
-                member = "無成員"
-            }
+        if(currentItem.members != null) {
+            holder.quizMembers.text = "成員: " + currentItem.members!!.size.toString()
+        }else{
+            holder.quizMembers.text = "成員: 0"
         }
-
-        holder.quizMembers.text = member
+        holder.quizDuringTime.text = "考試時長: " + (currentItem.duringTime?.div(60)).toString() + "分鐘"
 
         holder.itemView.setOnClickListener {
             val intent = Intent()
@@ -86,13 +75,12 @@ class MPQuizAdapter(private val context: Activity, private val questionList: Arr
             intent.putExtra("Key_type", currentItem.type)
             intent.putExtra("Key_status", currentItem.status)
             intent.putExtra("Key_duringTime", currentItem.duringTime)
-            intent.putExtra("Key_startDate", currentItem.startDateTime)
-            intent.putExtra("Key_endDate", currentItem.endDateTime)
+            intent.putExtra("Key_startDateTime", currentItem.startDateTime)
+            intent.putExtra("Key_endDateTime", currentItem.endDateTime)
             intent.putExtra("Key_members", currentItem.members)
             intent.putParcelableArrayListExtra("Key_questions", currentItem.questions)
             intent.putIntegerArrayListExtra("Key_casualDuringTime", currentItem.casualDuringTime)
             context.startActivityForResult(intent, position)
-            Log.d("in quizAdapter position=", position.toString())
         }
     }
 
@@ -112,6 +100,7 @@ class MPQuizAdapter(private val context: Activity, private val questionList: Arr
         val quizStartDate: TextView = itemView.findViewById(R.id.QuizStartDate)
         val quizTitle: TextView = itemView.findViewById(R.id.QuizTitle)
         val quizMembers: TextView = itemView.findViewById(R.id.QuizMembers)
+        val quizDuringTime: TextView = itemView.findViewById(R.id.Quiz_duringTime)
     }
 
 }
