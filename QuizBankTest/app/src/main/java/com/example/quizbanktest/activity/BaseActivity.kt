@@ -366,8 +366,13 @@ open class BaseActivity : AppCompatActivity() {
 
                 var base64String = ConstantsFunction.encodeImage(bitmap)
                 showProgressDialog("目前正在處理OCR之結果")
-
-                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+                ConstantsHoughAlgo.imageRotate(base64String!!,this@BaseActivity,
+                    onSuccess = { it1 ->
+                        ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+                }, onFailure = { it1 ->
+                        ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+                } )
+//                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
                 var size = ConstantsFunction.estimateBase64SizeFromBase64String(base64String!!)
 //                Log.e("openGalleryLauncher size", size.toString()),1
             }else{

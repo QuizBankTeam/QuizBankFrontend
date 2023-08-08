@@ -16,6 +16,7 @@ class IntroActivity : AppCompatActivity() {
         binding.signInIntro.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

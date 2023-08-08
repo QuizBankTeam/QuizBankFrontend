@@ -39,7 +39,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
                 setupWrongListRecyclerView(ConstantsWrong.getQuestions())
                 hideProgressDialog()
-                showEmptyBankImage.visibility = View.GONE
+//                showEmptyBankImage.visibility = View.GONE
             },
             onFailure = { errorMessage ->
                 hideProgressDialog()
