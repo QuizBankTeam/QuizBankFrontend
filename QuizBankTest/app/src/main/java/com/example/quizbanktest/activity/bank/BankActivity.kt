@@ -13,12 +13,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.PopupWindow
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 import androidx.appcompat.widget.SearchView
@@ -80,9 +75,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
             val etBankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title)
             val etBankType = addBankDialog.findViewById<EditText>(R.id.bank_type)
-            val etBankCreatedDate = addBankDialog.findViewById<EditText>(R.id.bank_createdDate)
             val etBankMembers = addBankDialog.findViewById<EditText>(R.id.bank_members)
-            val etBankSource = addBankDialog.findViewById<EditText>(R.id.bank_originatedFrom)
+//            val etBankSource = addBankDialog.findViewById<EditText>(R.id.bank_originatedFrom)
 
             val bankId = "52fde333-3eba-4140-a244-2b1aaf992a0e"
             val bankTitle = "test bank"
@@ -110,6 +104,17 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         addBankDialog.dismiss()
                     }
                 )
+            }
+
+            val btnAddBankMember = addBankDialog.findViewById<ImageButton>(R.id.btn_add_bank_member)
+            btnAddBankMember.setOnClickListener {
+                val ll = addBankDialog.findViewById<LinearLayout>(R.id.layout_bank_members)
+                val et = EditText(this)
+                val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                et.layoutParams = p
+                et.hint = "this is a new setup edittext"
+                ll.addView(et)
+//                et.requestFocus()
             }
         }
     }
@@ -163,7 +168,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms")
         }
 
-        val popupInflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val myContentView = popupInflater.inflate(R.layout.popup_window, null)
         myContentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
         val popupHeight = myContentView.measuredHeight
@@ -224,7 +229,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
-//        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
     }
 
 }
