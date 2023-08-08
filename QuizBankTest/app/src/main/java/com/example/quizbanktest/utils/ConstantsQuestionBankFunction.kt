@@ -73,7 +73,7 @@ object ConstantsQuestionBankFunction {
 
                 override fun onFailure(t: Throwable?) {
                     onFailure("Request failed with status code ")
-                    Log.e("in get all banks Errorrrrr", t?.message.toString())
+                    Log.e("in get all banks error", t?.message.toString())
                 }
             })
         } else {
@@ -92,8 +92,6 @@ object ConstantsQuestionBankFunction {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit.create(QuestionBankService::class.java)
-//            data class PostQuestionBody(val title: String,val number: String,val description: String,val options: ArrayList<String>,val questionType:String,val bankType:String,val questionBank:String,val answerOptions:ArrayList<String>,val answerDescription:String,val provider:String,val originateFrom:String,val createdDate:String,val image : String,val tag:ArrayList<String>)
-
             val body = QuestionBankService.PostQuestionBankBody(questionBank.title!!,questionBank.questionBankType!!,questionBank.createdDate,questionBank.members!!,questionBank.originateFrom!!)
 
             //TODO 拿到csrf token access token
@@ -110,20 +108,17 @@ object ConstantsQuestionBankFunction {
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
-                        Log.e("Response Result","success post question")
+                        Log.e("Response Result","success post bank")
                         Toast.makeText(activity,"upload successfully",Toast.LENGTH_SHORT).show()
-//                        ConstantsOcrResults.questionList.removeAt(ConstantsQuestionFunction.postQuestionPosition)
 
                         onSuccess("upload successfully")
                     } else {
-
-                        val sc = response.code()
-                        when (sc) {
+                        when (response.code()) {
                             400 -> {
                                 Log.e(
                                     "Error 400", "Bad Re" +
                                             "" +
-                                            "quest"+response.toString()
+                                            "quest"+ response.toString()
                                 )
                                 Toast.makeText(activity,"Error 400",Toast.LENGTH_SHORT).show()
                             }
@@ -141,7 +136,7 @@ object ConstantsQuestionBankFunction {
                 }
                 override fun onFailure(t: Throwable?) {
                     onFailure("bad request")
-                    Log.e("in post question Errorrrrr", t?.message.toString())
+                    Log.e("in post bank error", t?.message.toString())
                 }
             })
         } else {

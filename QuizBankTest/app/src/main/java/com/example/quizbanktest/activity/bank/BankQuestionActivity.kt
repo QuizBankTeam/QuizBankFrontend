@@ -9,10 +9,13 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
+import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
+import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
@@ -61,16 +64,12 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             }
         )
 
+        pullExit()
 
     }
 
     fun backToPreviousPage(view: View?) {
-        this.finish()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-//        overridePendingTransition(R.anim.question_to_bank_in, R.anim.question_to_bank_out)
+        finish()
     }
 
     private fun setupQuestionModel() {
@@ -138,6 +137,27 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         startActivity(singleAnswerQuestionActivity)
 //        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
+    }
+
+    @SuppressLint("UnsafeOptInUsageError")
+    fun pullExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                doubleBackToExit()
+            }
+        }
+    }
+
+    private var doubleBackToExitPressedOnce = false
+    private fun doubleBackToExit() {
+        finish()
+    }
+
+
+    override fun onBackPressed() {
+        finish()
     }
 
 }

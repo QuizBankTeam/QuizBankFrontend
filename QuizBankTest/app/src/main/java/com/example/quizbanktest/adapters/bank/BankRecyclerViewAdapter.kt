@@ -58,7 +58,6 @@ class BankRecyclerViewAdapter(var context: Context,
         var tvBankCreator: TextView
 
         init {
-
 //          TODO: bankID
             tvBankTitle = itemView.findViewById(R.id.bank_title)
             tvBankType = itemView.findViewById(R.id.bank_type)

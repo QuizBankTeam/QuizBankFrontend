@@ -1,5 +1,6 @@
 package com.example.quizbanktest.activity.group
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.ClipData
@@ -85,11 +86,12 @@ class GroupPageActivity : AppCompatActivity() {
                 Toast.makeText(this@GroupPageActivity, "邀請碼已复制", Toast.LENGTH_SHORT).show()
             }
         }
-        PullExit()
+        pullExit()
 
     }
 
-    fun PullExit(){
+    @SuppressLint("UnsafeOptInUsageError")
+    fun pullExit(){
         if (BuildCompat.isAtLeastT()) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT

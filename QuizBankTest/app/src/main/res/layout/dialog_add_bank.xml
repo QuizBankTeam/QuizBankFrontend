@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="新增題庫"
+        android:textColor="@color/black"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/bank_title"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:hint="請輸入題庫名稱"
+        android:layout_below="@+id/title"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/bank_type"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_below="@id/bank_title"
+        android:hint="請輸入類型"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:id="@+id/btn_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bank_type"
+        android:layout_marginBottom="10dp"
+        android:text="日期"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/bank_createdDate"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bank_type"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@+id/btn_date"
+        android:hint="YYYY/MM/DD" />
+
+    <EditText
+        android:id="@+id/bank_members"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bank_createdDate"
+        android:layout_marginBottom="10dp"
+        android:hint="請輸入成員" />
+
+    <EditText
+        android:id="@+id/bank_originatedFrom"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/bank_members"
+        android:layout_height="wrap_content"
+        android:hint="請輸入來源"/>
+
+    <ImageButton
+        android:id="@+id/btn_bank_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bank_originatedFrom"
+        android:src="@drawable/plus_svgrepo_com"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
