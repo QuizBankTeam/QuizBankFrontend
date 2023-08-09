@@ -383,6 +383,7 @@ class OcrResultViewAdapter(
 
             //超過四個選項因此點及新增選項
             val addOptionsButton : ImageButton = holder.itemView.findViewById(R.id.add_options_button)
+            val removeOptionsButton : ImageButton = holder.itemView.findViewById(R.id.minus_options_button)
             addOptionsButton.setOnClickListener{
                 if(optionsNum == 10){ //不能超過十個
                     Toast.makeText(context,"已達最多的選項限制了喔",Toast.LENGTH_SHORT).show()
@@ -391,6 +392,7 @@ class OcrResultViewAdapter(
                 }
                 when (optionsNum) {
                     2 -> {
+                        removeOptionsButton.visibility = View.VISIBLE
                         option2.visibility = View.VISIBLE
                     }
                     3 -> {
@@ -420,7 +422,7 @@ class OcrResultViewAdapter(
                 }
 
             }
-            val removeOptionsButton : ImageButton = holder.itemView.findViewById(R.id.minus_options_button)
+
             removeOptionsButton.setOnClickListener{
                 if(optionsNum == 1){ //不能超過十個
                     Toast.makeText(context,"已達不能再少了喔",Toast.LENGTH_SHORT).show()
