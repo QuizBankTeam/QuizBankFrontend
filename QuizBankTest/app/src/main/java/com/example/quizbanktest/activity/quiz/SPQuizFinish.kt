@@ -148,7 +148,7 @@ class SPQuizFinish : AppCompatActivity(){
             totalScore = if(isCorrect) totalScore+1 else totalScore
 
 //            Log.d(index.toString(), "is correct is"+isCorrect.toString())
-            val tmpQuestionRecord = QuestionRecord(tmpId, "jacky", userAnsOptions[index], userAnsDescription[index], isCorrect, questionRecordDate, questionlist[index]._id!!, quizRecordId)
+            val tmpQuestionRecord = QuestionRecord(tmpId, "jacky", userAnsOptions[index], userAnsDescription[index], isCorrect, questionRecordDate, questionlist[index], quizRecordId)
             questionRecordList.add(tmpQuestionRecord)
         }
         if(!hasShorAns){

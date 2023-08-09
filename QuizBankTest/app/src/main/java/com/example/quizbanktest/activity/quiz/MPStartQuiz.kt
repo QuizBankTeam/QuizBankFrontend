@@ -5,7 +5,7 @@ import com.example.quizbanktest.databinding.ActivityMpStartQuizBinding
 import com.example.quizbanktest.models.Question
 
 
-class MPStartQuiz: AppCompatActivity() {
+class  MPStartQuiz: AppCompatActivity() {
     private lateinit var startQuizBinding: ActivityMpStartQuizBinding
     private lateinit var quizId: String
     private lateinit var quizTitle: String

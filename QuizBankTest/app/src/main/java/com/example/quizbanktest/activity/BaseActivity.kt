@@ -45,7 +45,6 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import io.socket.client.Socket
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -466,18 +465,12 @@ open class BaseActivity : AppCompatActivity() {
             ConstantsAccountServiceFunction.getCsrfToken(this,
                 onSuccess = { it1 ->
                     Log.e("this is heart for csrf",it1)
-                    ConstantsAccountServiceFunction.login(this, " ", " ",
-                        onSuccess = {   message->
-                            Log.d("this is heart for login ", message)
-                        },
-                        onFailure = { message->
-                            Log.d("this is heart for login ", message)
-                        })
                 },
+
                 onFailure = { it1 ->
                     Log.d("get csrf fail", it1)
                 })
-        }, 0, 3300, TimeUnit.SECONDS)
+        }, 0, 50, TimeUnit.SECONDS)
     }
 
     fun stopHeartbeatForCsrf() {

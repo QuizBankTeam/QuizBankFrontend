@@ -8,6 +8,11 @@
     android:orientation="vertical"
     tools:context=".activity.bank.BankActivity">
 
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageview"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent" />-->
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar_bank_detail"
         android:layout_width="match_parent"
@@ -45,7 +50,7 @@
                 android:background="?actionBarItemBackground"
                 android:src="@drawable/baseline_group_24"/>
             <ImageButton
-                android:id="@+id/btn_addBank"
+                android:id="@+id/bank_add"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -54,6 +59,8 @@
                 android:src="@drawable/baseline_add_black"/>
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+
 
     <LinearLayout
         android:id="@+id/layout_searchBar"
