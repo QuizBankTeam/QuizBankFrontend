@@ -45,7 +45,7 @@
                 app:horizontal_interval="10dp"
                 app:tag_clickable="true"
                 app:tag_enable_cross="true"
-                app:tag_theme="pure_teal"
+                app:tag_theme="random"
                 app:vertical_interval="10dp" />
 
             <LinearLayout
@@ -85,7 +85,7 @@
                 app:horizontal_interval="10dp"
                 app:tag_clickable="true"
                 app:tag_enable_cross="true"
-                app:tag_theme="pure_teal"
+                app:tag_theme="random"
                 app:vertical_interval="10dp" />
 <!--            <TextView-->
 <!--                android:layout_width="match_parent"-->

@@ -34,6 +34,7 @@ import androidx.core.content.FileProvider
 import androidx.core.os.BuildCompat
 import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
+import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.utils.*
@@ -191,35 +192,30 @@ class PaintActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paint)
+        val backButton : ImageButton = findViewById(R.id.image_workspace_back)
 
-        var toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_paint_detail)
-        setSupportActionBar(toolBar)
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            Log.e("in action bar","not null")
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
-            Log.e("nav","toolbar")
-        }
+        backButton.setOnClickListener{
+            if(ConstantsOcrResults.getOcrResult().size!=0){
+                Log.e("nav","toolbar")
+                val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
+                    .setTitle("圖片工作區")
+                    .setIcon(R.drawable.baseline_warning_amber_24)
+                builder.setPositiveButton("確認") { dialog, which ->
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
 
-        doubleCheckExit()
-        toolBar.setNavigationOnClickListener{
-            Log.e("nav","toolbar")
-            var builder = androidx.appcompat.app.AlertDialog.Builder(this)
-                .setMessage(" 您確定要離開嗎系統不會保存這次圖片修改喔 ")
-                .setTitle("圖片工作區")
-                .setIcon(R.drawable.baseline_warning_amber_24)
-            builder.setPositiveButton("確認") { dialog, which ->
+                builder.setNegativeButton("取消") { dialog, which ->
+
+                }
+                builder.show()
+            }else{
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
-
-            builder.setNegativeButton("取消") { dialog, which ->
-
-            }
-            builder.show()
-
         }
 
         drawingView = findViewById(R.id.drawing_view)
