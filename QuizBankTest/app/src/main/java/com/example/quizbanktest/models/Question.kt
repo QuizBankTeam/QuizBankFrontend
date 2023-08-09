@@ -15,7 +15,8 @@ data class Question(
     var answerDescription: String?,
     var provider: String?, // user id
     val originateFrom: String?,
-    var image: ArrayList<String>?, // base64
+    var answerImage: ArrayList<String>?, // base64
+    var questionImage: ArrayList<String>?, // base64
     var tag: ArrayList<String>?,
     var createdDate: String?):Parcelable {
     constructor(parcel: Parcel) : this(
@@ -31,6 +32,7 @@ data class Question(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        null,
         null,
         parcel.createStringArrayList()?.toCollection(ArrayList()),
         parcel.readString()
@@ -50,6 +52,7 @@ data class Question(
         parcel.writeString(answerDescription)
         parcel.writeString(provider)
         parcel.writeString(originateFrom)
+        null
         null
         parcel.writeStringList(tag)
         parcel.writeString(createdDate)

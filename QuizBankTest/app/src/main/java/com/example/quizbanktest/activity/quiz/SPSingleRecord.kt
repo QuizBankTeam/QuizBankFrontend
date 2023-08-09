@@ -24,7 +24,7 @@ import com.example.quizbanktest.models.QuizRecord
 
 class SPSingleRecord: AppCompatActivity()  {
     private lateinit var singleRecordBinding: ActivitySpSingleRecordBinding
-    private lateinit var questionList: ArrayList<Question>
+    private var questionList = ArrayList<Question>()
     private lateinit var recordList: ArrayList<QuestionRecord>
     private lateinit var quizRecord: QuizRecord
     private lateinit var optionAdapter: OptionAdapter
@@ -52,21 +52,21 @@ class SPSingleRecord: AppCompatActivity()  {
 
     private fun init(){
         val spRecordList = intent.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
-        val questionList = intent.getParcelableArrayListExtra<Question>("Key_questions")
         val spQuizRecord = intent.getParcelableExtra<QuizRecord>("Key_quizRecord")
         val quizIndex = intent.getIntExtra("quiz_index", 0)
         this.quizIndex = quizIndex
-        if (questionList != null) {
-            this.questionList = questionList
-        }
+
         if (spRecordList != null) {
             this.recordList = spRecordList
         }
         if (spQuizRecord != null) {
             this.quizRecord = spQuizRecord
         }
-        if (questionList != null) {
-            singleRecordBinding.progressBar.max = questionList.size
+        if (spRecordList != null) {
+            singleRecordBinding.progressBar.max = spRecordList.size
+            for (record in spRecordList){
+                questionList.add(record.question)
+            }
         }
     }
 

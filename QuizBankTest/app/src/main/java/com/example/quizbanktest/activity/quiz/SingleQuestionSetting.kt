@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.quizbanktest.R
 import com.example.quizbanktest.databinding.ActivitySingleQuestionSettingBinding
+import com.example.quizbanktest.utils.Constants
 
 
 class SingleQuestionSetting: AppCompatActivity()  {
@@ -19,7 +20,6 @@ class SingleQuestionSetting: AppCompatActivity()  {
     private lateinit var questionType: String
     private lateinit var questionNumber: String
     private var questionAnswerDescription: String = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         questionSetAttr = ActivitySingleQuestionSettingBinding.inflate(layoutInflater)
@@ -32,7 +32,7 @@ class SingleQuestionSetting: AppCompatActivity()  {
         }
         questionSetAttr.backBtn.setOnClickListener {
             val intent = Intent()
-            setResult(RESULT_FIRST_USER, intent)
+            setResult(RESULT_CANCELED, intent)
             finish()
         }
         questionSetAttr.saveBtn.setOnClickListener {
@@ -50,7 +50,7 @@ class SingleQuestionSetting: AppCompatActivity()  {
         }
         questionSetAttr.QuestionDelete.setOnClickListener {
             val intent = Intent()
-            setResult(RESULT_CANCELED, intent)
+            setResult(Constants.RESULT_DELETE, intent)
             finish()
         }
     }

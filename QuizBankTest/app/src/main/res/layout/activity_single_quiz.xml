@@ -23,19 +23,26 @@
                 android:orientation="horizontal"
                 android:background="@color/colorPrimary"
                 android:theme="@style/CustomToolbarStyle">
-                <ImageButton
-                    android:id="@+id/save_btn"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="?actionBarItemBackground"
-                    android:src="@drawable/baseline_save_alt" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ImageButton
+                        android:id="@+id/back_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="1dp"
+                        android:background="?actionBarItemBackground"
+                        android:src="@drawable/baseline_back_black" />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/quiz_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="2"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="考試名稱"
@@ -43,14 +50,29 @@
                     android:textStyle="bold"
                     android:textAppearance="@style/CustomToolbarStyle"
                     android:textColor="@color/colorPrimaryDark"/>
-                <ImageButton
-                    android:id="@+id/quiz_setting"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:background="?actionBarItemBackground"
-                    android:src="@drawable/baseline_settings"/>
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ImageButton
+                        android:id="@+id/save_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="1dp"
+                        android:background="?actionBarItemBackground"
+                        android:src="@drawable/baseline_save_alt" />
+                    <ImageButton
+                        android:id="@+id/quiz_setting"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:background="?actionBarItemBackground"
+                        android:src="@drawable/baseline_settings"/>
+                </LinearLayout>
+
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
 

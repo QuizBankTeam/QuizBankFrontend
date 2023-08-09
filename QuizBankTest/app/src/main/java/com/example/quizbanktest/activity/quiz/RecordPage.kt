@@ -21,9 +21,8 @@ class RecordPage: AppCompatActivity() {
         recordBinding.selectRecordMode.addTab( recordBinding.selectRecordMode.newTab().setText("單人") )
         recordBinding.selectRecordMode.addTab( recordBinding.selectRecordMode.newTab().setText("多人") )
 
-        Log.d("before using record page adapter", "")
         recordBinding.recordPager.adapter = fragmentAdapter
-        Log.d("after using record page adapter", "")
+
 
         recordBinding.selectRecordMode.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
