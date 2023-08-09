@@ -1,5 +1,6 @@
 package com.example.quizbanktest.activity.group
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.ClipData
@@ -89,6 +90,7 @@ class GroupPageActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("UnsafeOptInUsageError")
     fun PullExit(){
         if (BuildCompat.isAtLeastT()) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(

@@ -5,7 +5,7 @@ import retrofit.Call
 import retrofit.http.*
 
 interface HoughRotateService {
-    data class PostBody(val base64String: String)
+    data class PostBody(val image: String)
 
     @POST("/imageRotate")
     fun imageRotate(

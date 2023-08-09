@@ -18,9 +18,9 @@ import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 object ConstantsHoughAlgo {
+
     fun imageRotate(base64String: String, activity: Activity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(activity)) {
-
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -42,21 +42,16 @@ object ConstantsHoughAlgo {
 
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-//                    val source: BufferedSource? = response?.body()?.source()
-//                    source?.request(Long.MAX_VALUE) // Buffer the entire body.
-//
-//                    val buffer: Buffer? = source?.buffer()
-//                    val UTF8: Charset = Charset.forName("UTF-8")
-//                    buffer?.clone()?.readString(UTF8)?.let { Log.d("REQUEST_JSON", it) }
+
                     if (response!!.isSuccess) {
                         val gson = Gson()
                         val houghResponse = gson.fromJson(
                             response.body().charStream(),
                             HoughResponse::class.java
                         )
-                        Log.e("Response Result", houghResponse.base64)
+                        Log.e("Response Result", houghResponse.image)
 
-                        onSuccess(houghResponse.base64)
+                        onSuccess(houghResponse.image)
 
                     } else {
 
@@ -79,7 +74,7 @@ object ConstantsHoughAlgo {
                                 onFailure("Request failed with status code $sc")
                             }
                             else -> {
-                                Log.e("Error", "in scan Generic Error")
+                                Log.e("Error", "in hough Generic Error")
                                 onFailure("Request failed with status code $sc")
                             }
 
@@ -103,5 +98,5 @@ object ConstantsHoughAlgo {
         }
 
     }
-    data class HoughResponse(val base64: String)
+    data class HoughResponse(val image: String)
 }

@@ -126,6 +126,10 @@ object ConstantsRealESRGAN {
         decodedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
         val compressedBytes = byteArrayOutputStream.toByteArray()
 
+        Log.e("esrgan image ",
+            ConstantsFunction.estimateBase64SizeFromBase64String( Base64.encodeToString(compressedBytes, Base64.DEFAULT))
+                .toString()
+        )
         // 重新編碼為Base64
         return Base64.encodeToString(compressedBytes, Base64.DEFAULT)
     }
