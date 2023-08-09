@@ -28,10 +28,10 @@ class SPQuizAdapter(private val context: Activity, private val questionList: Arr
         val currentItem = questionList[position]
         val datetime = LocalDateTime.now()
 
-        if(currentItem.startDate!=null) {
-            val yearDiff = datetime.year - currentItem.startDate!!.substring(0, 4).toInt()
-            val monthDiff = datetime.toString().substring(5, 7).toInt() - currentItem.startDate!!.substring(5, 7).toInt()
-            val dayDiff = datetime.dayOfMonth - currentItem.startDate!!.substring(8, 10).toInt()
+        if(currentItem.startDateTime!=null) {
+            val yearDiff = datetime.year - currentItem.startDateTime!!.substring(0, 4).toInt()
+            val monthDiff = datetime.toString().substring(5, 7).toInt() - currentItem.startDateTime!!.substring(5, 7).toInt()
+            val dayDiff = datetime.dayOfMonth - currentItem.startDateTime!!.substring(8, 10).toInt()
             if(yearDiff!=0){
                 if(yearDiff>0)
                     holder.quizStartDate.text = yearDiff.toString() + "年前"
@@ -66,8 +66,10 @@ class SPQuizAdapter(private val context: Activity, private val questionList: Arr
             intent.putExtra("Key_type", currentItem.type)
             intent.putExtra("Key_status", currentItem.status)
             intent.putExtra("Key_duringTime", currentItem.duringTime)
-            intent.putExtra("Key_startDate", currentItem.startDate)
-            intent.putExtra("Key_endDate", currentItem.endDate)
+            intent.putIntegerArrayListExtra("Key_casualDuringTime", currentItem.casualDuringTime)
+            intent.putExtra("Key_startDateTime", currentItem.startDateTime)
+            intent.putExtra("Key_endDateTime", currentItem.endDateTime)
+            intent.putExtra("Key_members", currentItem.members)
             intent.putExtra("quiz_index", position)
             intent.putParcelableArrayListExtra("Key_questions", currentItem.questions)
             context.startActivityForResult(intent, position)

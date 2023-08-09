@@ -100,8 +100,8 @@ object ConstantsAccountServiceFunction {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit.create(AccountService::class.java)
-            Constants.username = "test"
-            Constants.password = "test"
+            Constants.username = "test2"
+            Constants.password = "test2"
             val body = AccountService.PostBody(Constants.username, Constants.password)
 //            val body = accountService.PostBody(email, password)
             //TODO 用csrf token 拿access token
@@ -135,6 +135,7 @@ object ConstantsAccountServiceFunction {
                         )
                         userAccount = accountResponse.user
                         Log.e("account",accountResponse.toString())
+                        Constants.userId = userAccount!!._id
                         Constants.accessToken = accessToken!!
                         Constants.refreshToken = refreshToken!!
                         var cookie: String = Constants.cookie + ";"

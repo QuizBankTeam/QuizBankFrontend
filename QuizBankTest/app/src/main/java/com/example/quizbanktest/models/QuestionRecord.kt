@@ -9,7 +9,7 @@ data class QuestionRecord(val _id: String,
                           var userAnswerDescription: String,
                           var correct: Boolean?, //correct or incorrect
                           val date: String,
-                          val question: String, // question id
+                          val question: Question, // question id
                           val quizRecord: String): Parcelable // quizRecord id)
 {
     constructor(parcel: Parcel) : this(
@@ -19,8 +19,8 @@ data class QuestionRecord(val _id: String,
         parcel.readString()!!,
         parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
         parcel.readString()!!,
+        parcel.readParcelable(Question.CREATOR::class.java.classLoader)!!,
         parcel.readString()!!,
-        parcel.readString()!!
     ) {
     }
 
@@ -31,7 +31,7 @@ data class QuestionRecord(val _id: String,
         parcel.writeString(userAnswerDescription)
         parcel.writeValue(correct)
         parcel.writeString(date)
-        parcel.writeString(question)
+        parcel.writeParcelable(question, flags)
         parcel.writeString(quizRecord)
     }
 

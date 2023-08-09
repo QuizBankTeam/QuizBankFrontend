@@ -11,7 +11,7 @@ object Constants {
 
     var username : String = "test"
     var password : String = "test"
-
+    var userId: String = ""
     var csrfToken : String = ""
     var session:String = ""
     var cookie:String=""

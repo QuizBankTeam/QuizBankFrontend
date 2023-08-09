@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.quiz.SingleQuestion
+import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
+import org.w3c.dom.Text
 
 class QuestionAdapter(private val context: Activity, private val questionList: ArrayList<Question>, private val casualDuringTime: ArrayList<Int>):
     RecyclerView.Adapter<QuestionAdapter.MyViewHolder>()
@@ -37,40 +40,33 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = questionList[position]
-        holder.questionBank.text = "題庫: " + currentItem.questionBank
-        holder.questionProvider.text = "提供者: " + currentItem.provider
         holder.questionTitle.text = currentItem.title
+        holder.questionNumber.text = currentItem.number + "."
         holder.questionType.text = if(currentItem.questionType=="MultipleChoiceS") "單選"
                                 else if(currentItem.questionType=="MultipleChoiceM") "多選"
                                 else if(currentItem.questionType=="TrueOrFalse") "是非"
                                 else if(currentItem.questionType=="ShortAnswer") "簡答"
                                 else "填充"
-        if (currentItem.image != null) {
-            if(currentItem.image!!.isNotEmpty()){
-                val imageBytes: ByteArray = Base64.decode(currentItem.image!![0], Base64.DEFAULT)
+        holder.questionDescription.text = currentItem.description
+        for(item in SingleQuizPage.Companion.quizListImages[quizIndex][position]){
+            val tmpImageStr: String? = item.get()
+            if(tmpImageStr!=null){
+                val imageBytes: ByteArray = Base64.decode(tmpImageStr, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 holder.questionImage.setImageBitmap(decodeImage)
+                break
             }
         }
-        if(currentItem.tag!=null)
-        {
+        if(currentItem.tag!=null) {
             if(currentItem.tag!!.size==0) {
                 holder.questionContainer.removeAllViews()
             }
-            else if(currentItem.tag!!.size==1) {
-                holder.questionTag0.text = currentItem.tag!![0]
-                holder.questionContainer.removeView(holder.questionTag1)
-                holder.questionContainer.removeView(holder.questionTag2)
-            }
-            else if(currentItem.tag!!.size==2) {
-                holder.questionTag0.text = currentItem.tag!![0]
-                holder.questionTag1.text = currentItem.tag!![1]
-                holder.questionContainer.removeView(holder.questionTag2)
-            }
-            else if(currentItem.tag!!.size==3) {
-                holder.questionTag0.text = currentItem.tag!![0]
-                holder.questionTag1.text = currentItem.tag!![1]
-                holder.questionTag2.text = currentItem.tag!![2]
+            else{
+                var allTags= ""
+                for(tag in currentItem.tag!!){
+                    allTags = "$allTags$tag "
+                }
+                holder.questionTag.text = allTags
             }
         }
 
@@ -82,7 +78,6 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
             intent.putExtra("Key_type", currentItem.questionType)
             intent.putStringArrayListExtra("Key_tag", currentItem.tag)
             intent.putExtra("Key_description", currentItem.description)
-            intent.putStringArrayListExtra("Key_image", currentItem.image)
             intent.putExtra("Key_answerDescription", currentItem.answerDescription)
             intent.putExtra("Key_number", currentItem.number)
             intent.putExtra("Key_questionBank", currentItem.questionBank)
@@ -109,14 +104,12 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
 
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {
-        val questionBank: TextView = itemView.findViewById(R.id.question_bank)
         val questionImage: ImageView = itemView.findViewById(R.id.question_image)
-        val questionProvider: TextView = itemView.findViewById(R.id.question_provider)
         val questionTitle: TextView = itemView.findViewById(R.id.question_title)
+        val questionNumber: TextView = itemView.findViewById(R.id.question_number)
         val questionType: TextView = itemView.findViewById(R.id.question_type)
-        val questionTag0: TextView = itemView.findViewById(R.id.question_tag0)
-        val questionTag1: TextView = itemView.findViewById(R.id.question_tag1)
-        val questionTag2: TextView = itemView.findViewById(R.id.question_tag2)
+        val questionTag: TextView = itemView.findViewById(R.id.question_tag)
+        val questionDescription: TextView = itemView.findViewById(R.id.question_description)
         val questionContainer: LinearLayout = itemView.findViewById(R.id.question_tag_container)
     }
 }

@@ -79,7 +79,7 @@
 
             <EditText
                 android:id="@+id/Quiz_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="第一次考試"
@@ -239,5 +239,55 @@
                 android:textSize="18dp"
                 android:layout_gravity="center_vertical"/>
         </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="成員"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-5dp"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+
+        <androidx.cardview.widget.CardView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+
+            <TextView
+                android:id="@+id/Quiz_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="jacky1, jacky2, jacky3"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
+    <androidx.cardview.widget.CardView
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="170dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="15dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="3dp"
+        android:backgroundTint="@color/light_red2">
+
+        <Button
+            android:id="@+id/Quiz_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:text="刪除考試"
+            android:textSize="18dp"/>
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
