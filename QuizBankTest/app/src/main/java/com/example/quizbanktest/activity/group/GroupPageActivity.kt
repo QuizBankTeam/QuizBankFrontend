@@ -86,12 +86,14 @@ class GroupPageActivity : AppCompatActivity() {
                 Toast.makeText(this@GroupPageActivity, "邀請碼已复制", Toast.LENGTH_SHORT).show()
             }
         }
-        PullExit()
+        pullExit()
 
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    fun PullExit(){
+
+    fun pullExit(){
+
         if (BuildCompat.isAtLeastT()) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT

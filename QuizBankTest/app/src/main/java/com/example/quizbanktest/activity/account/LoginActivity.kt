@@ -55,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("get csrf success", it1)
                 ConstantsAccountServiceFunction.login(this, email, password,
                 onSuccess = {   message->
+                    hideProgressDialog()
                     Log.d("login success", message)
                     writeToFile("loginSuccess.txt", message)
                     val intent = Intent()

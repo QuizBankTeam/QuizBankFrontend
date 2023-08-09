@@ -1,9 +1,11 @@
 package com.example.quizbanktest.activity.bank
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -11,9 +13,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 import androidx.appcompat.widget.SearchView
@@ -28,18 +28,24 @@ import com.example.quizbanktest.adapters.bank.BankRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
 import com.example.quizbanktest.models.QuestionBankModel
+import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
 
 class BankActivity : BaseActivity(), RecyclerViewInterface {
-    lateinit var searchView: SearchView
-    lateinit var menuButton: ImageButton
-    lateinit var bank_warning: TextView
+    private lateinit var searchView: SearchView
+    private lateinit var menuButton: ImageButton
+    private lateinit var bank_warning: TextView
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
     private var questionBankModels = ArrayList<QuestionBankModel>()
+
+    private lateinit var viewDialog: View
+    private lateinit var etBankCreatedDate: EditText
+    private lateinit var etBankMembers: EditText
+    private lateinit var etBankSource: EditText
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +65,57 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             val intent = Intent(this,GroupListActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        val btnAddBank = findViewById<ImageButton>(R.id.bank_add)
+        btnAddBank.setOnClickListener {
+            val addBankDialog = Dialog(this)
+            addBankDialog.setContentView(R.layout.dialog_add_bank)
+            addBankDialog.show()
+
+            val etBankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title)
+            val etBankType = addBankDialog.findViewById<EditText>(R.id.bank_type)
+            val etBankMembers = addBankDialog.findViewById<EditText>(R.id.bank_members)
+//            val etBankSource = addBankDialog.findViewById<EditText>(R.id.bank_originatedFrom)
+
+            val bankId = "52fde333-3eba-4140-a244-2b1aaf992a0e"
+            val bankTitle = "test bank"
+            val bankType = "single"
+            // TODO Decide the type of variable below (EditText? TextView? ...)
+            val bankCreatedDate = "2023-6-18"
+            val bankMembers : ArrayList<String> = arrayListOf()
+            bankMembers.add("52fde333-3eba-4140-a244-2b1aaf992a0e")
+            bankMembers.add("52fde333-3eba-4140-a244-2b1aaf992a0e")
+            val bankSource = "52fde333-3eba-4140-a244-2b1aaf992a0e"
+            val bankCreator = "none"
+
+            val btnBankSubmit = addBankDialog.findViewById<ImageButton>(R.id.btn_bank_submit)
+            btnBankSubmit.setOnClickListener {
+                val tempQuestionBankModel = QuestionBankModel(bankId, bankTitle, bankType, bankCreatedDate, bankMembers, bankSource, bankCreator)
+                ConstantsQuestionBankFunction.postQuestionBank(tempQuestionBankModel, this,
+                    onSuccess = {
+                        Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
+                        Log.d("addBankDialog", "add bank success")
+                        addBankDialog.dismiss()
+                    },
+                    onFailure = {
+                        Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
+                        Log.e("addBankDialog", "add bank failed")
+                        addBankDialog.dismiss()
+                    }
+                )
+            }
+
+            val btnAddBankMember = addBankDialog.findViewById<ImageButton>(R.id.btn_add_bank_member)
+            btnAddBankMember.setOnClickListener {
+                val ll = addBankDialog.findViewById<LinearLayout>(R.id.layout_bank_members)
+                val et = EditText(this)
+                val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                et.layoutParams = p
+                et.hint = "this is a new setup edittext"
+                ll.addView(et)
+//                et.requestFocus()
+            }
         }
     }
 
@@ -111,10 +168,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms")
         }
 
-//        blurred = !blurred
-//        return true
-
-        val popupInflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val myContentView = popupInflater.inflate(R.layout.popup_window, null)
         myContentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
         val popupHeight = myContentView.measuredHeight
@@ -122,12 +176,10 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         // popup window set up
         val popupWindow = PopupWindow(this).apply {
             contentView = myContentView
-//            width = ViewGroup.LayoutParams.MATCH_PARENT
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             height = displayMetrics.heightPixels-200
             width = displayMetrics.widthPixels-200
-
             animationStyle = R.style.PopupAnimation
             isFocusable = true
             isOutsideTouchable = false
@@ -135,13 +187,12 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
 
-        popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
+        popupWindow.setOnDismissListener {
             if (blurred) {
                 blurred = false
                 Blurry.delete(findViewById(R.id.content))
             }
-
-        })
+        }
 
         // automatically newline tags view
         wrapLayout = myContentView.findViewById(R.id.clip_layout)
@@ -155,10 +206,10 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             "python",
             "java"
         )
-        for (i in 0 until strs.size) {
+        for (element in strs) {
             val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)
             val name = itemLayout.findViewById<View>(R.id.name) as TextView
-            name.text = strs[i]
+            name.text = element
             wrapLayout!!.addView(itemLayout)
         }
 
@@ -169,6 +220,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         }
 
     }
+
     override fun onItemClick(position: Int) {
         val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
 
@@ -177,6 +229,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
-//        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
     }
+
 }

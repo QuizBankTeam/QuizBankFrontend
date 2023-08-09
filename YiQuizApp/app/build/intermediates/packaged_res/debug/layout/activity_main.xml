@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/view_layout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical">-->
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_home_detail"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:background="@color/colorPrimary"
+        android:theme="@style/CustomToolbarStyle"
+        app:title="Quiz Ban123k📑"
+        app:titleTextAppearance="@style/CustomToolbarStyle"
+        app:titleTextColor="@color/colorPrimaryDark" />
+
+    <LinearLayout
+        android:id="@+id/layout_searchBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/toolbar_home_detail">
+
+        <android.widget.SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="330dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/search_bar"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/search_hint" />
+
+        <ImageButton
+            android:id="@+id/menu_button"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:onClick="setPopupWindow"
+            android:src="@drawable/burger_menu_right_svgrepo_com" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dividing_view"
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:layout_marginVertical="10dp"
+        android:layout_below="@+id/layout_searchBar"
+        android:background="@color/cream"
+        android:paddingBottom="0dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/dividing_view"
+        android:layout_above="@+id/ll_action_buttons"
+        android:layout_marginBottom="10dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/bank_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:textSize="30dp" />
+
+<!--    </LinearLayout>-->
+
+    <LinearLayout
+        android:id="@+id/ll_action_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorRipple"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/home_svgrepo_com_2"/>
+
+        <ImageButton
+            android:id="@+id/test"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/notepad_and_pen_svgrepo_com"/>
+
+        <ImageButton
+            android:id="@+id/camera"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/camera_svgrepo_com_1" />
+
+        <ImageButton
+            android:id="@+id/bank"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/book_and_person_winter_svgrepo_com" />
+
+        <ImageButton
+            android:id="@+id/setting"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/colorRipple"
+            android:scaleType="fitXY"
+            android:src="@drawable/setting_setting_svgrepo_com_2" />
+
+    </LinearLayout>
+
+</RelativeLayout>

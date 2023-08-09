@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">QuizBank</string>
+    <string name="search_hint">SEARCH FILES…</string>
+    <string name="test">testing</string>
+
+<!--    <string-array name="bank_name_txt">-->
+<!--        <item>計算機組織</item>-->
+<!--        <item>離散數學</item>-->
+<!--        <item>資料結構</item>-->
+<!--        <item>演算法</item>-->
+<!--        <item>線性代數</item>-->
+<!--        <item>微積分</item>-->
+<!--        <item>程式語言</item>-->
+<!--        <item>數位邏輯</item>-->
+<!--    </string-array>-->
+
+<!--    <string-array name="bank_description_txt">-->
+<!--        <item>computer organization</item>-->
+<!--        <item>discrete math</item>-->
+<!--        <item>data structure</item>-->
+<!--        <item>algorithm</item>-->
+<!--        <item>linear algebra</item>-->
+<!--        <item>calculus</item>-->
+<!--        <item>programming language</item>-->
+<!--        <item>digital logic</item>-->
+<!--    </string-array>-->
+
+<!--    <string-array name="bank_date_txt">-->
+<!--        <item>10/01</item>-->
+<!--        <item>10/02</item>-->
+<!--        <item>10/03</item>-->
+<!--        <item>10/04</item>-->
+<!--        <item>10/05</item>-->
+<!--        <item>10/06</item>-->
+<!--        <item>10/07</item>-->
+<!--        <item>10/08</item>-->
+<!--    </string-array>-->
+
+</resources>

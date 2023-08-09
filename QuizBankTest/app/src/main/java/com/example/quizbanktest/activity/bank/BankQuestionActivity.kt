@@ -9,14 +9,18 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
+import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
+import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
+import kotlin.math.sin
 
 class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
@@ -60,16 +64,12 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             }
         )
 
+        pullExit()
 
     }
 
     fun backToPreviousPage(view: View?) {
-        this.finish()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-//        overridePendingTransition(R.anim.question_to_bank_in, R.anim.question_to_bank_out)
+        finish()
     }
 
     private fun setupQuestionModel() {
@@ -118,25 +118,46 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {
-        val questionActivity = Intent(this, BankSingleAnswerQuestionActivity:: class.java)
+        val singleAnswerQuestionActivity = Intent(this, BankSingleAnswerQuestionActivity:: class.java)
 
-        questionActivity.putExtra("id", questionModels[position]._id)
-        questionActivity.putExtra("title", questionModels[position].title)
-        questionActivity.putExtra("number", questionModels[position].number)
-        questionActivity.putExtra("description", questionModels[position].description)
-        questionActivity.putExtra("options", questionModels[position].options)
-        questionActivity.putExtra("type", questionModels[position].questionType)
-        questionActivity.putExtra("answerOptions", questionModels[position].answerOptions)
-        questionActivity.putExtra("answerDescription", questionModels[position].answerDescription)
-        questionActivity.putExtra("source", questionModels[position].originateFrom)
-        questionActivity.putExtra("createdDate", questionModels[position].createdDate)
-        questionActivity.putExtra("image", questionModels[position].image)
-        questionActivity.putExtra("tag", questionModels[position].tag)
+        singleAnswerQuestionActivity.putExtra("id", questionModels[position]._id)
+        singleAnswerQuestionActivity.putExtra("title", questionModels[position].title)
+        singleAnswerQuestionActivity.putExtra("number", questionModels[position].number)
+        singleAnswerQuestionActivity.putExtra("description", questionModels[position].description)
+        singleAnswerQuestionActivity.putExtra("options", questionModels[position].options)
+        singleAnswerQuestionActivity.putExtra("type", questionModels[position].questionType)
+        singleAnswerQuestionActivity.putExtra("answerOptions", questionModels[position].answerOptions)
+        singleAnswerQuestionActivity.putExtra("answerDescription", questionModels[position].answerDescription)
+        singleAnswerQuestionActivity.putExtra("source", questionModels[position].originateFrom)
+        singleAnswerQuestionActivity.putExtra("createdDate", questionModels[position].createdDate)
+        singleAnswerQuestionActivity.putExtra("image", questionModels[position].image)
+        singleAnswerQuestionActivity.putExtra("tag", questionModels[position].tag)
 
         Log.e("BankQuestionActivity", questionModels[position]._id.toString())
 
-        startActivity(questionActivity)
+        startActivity(singleAnswerQuestionActivity)
 //        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
+    }
+
+    @SuppressLint("UnsafeOptInUsageError")
+    fun pullExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                doubleBackToExit()
+            }
+        }
+    }
+
+    private var doubleBackToExitPressedOnce = false
+    private fun doubleBackToExit() {
+        finish()
+    }
+
+
+    override fun onBackPressed() {
+        finish()
     }
 
 }

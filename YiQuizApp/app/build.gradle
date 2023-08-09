@@ -1,0 +1,76 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.example.yiquizapp'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.yiquizapp"
+        minSdk 26
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    //tag view
+    implementation 'co.lujun:androidtagview:1.1.7'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    //ucrop
+    implementation 'com.github.yalantis:ucrop:2.2.6'
+
+    implementation 'com.google.android.material:material:1.0.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+    //permission
+    implementation 'com.karumi:dexter:6.0.1'
+    //filter
+    implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
+    // https://square.github.io/retrofit/
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    // colorpicker
+    implementation "com.github.skydoves:colorpickerview:2.2.4"
+    // circle image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    // The Google Material Dependency
+    implementation 'com.google.android.material:material:1.1.0'
+    // To recognize Latin script
+    implementation 'com.google.mlkit:text-recognition:16.0.0'
+    // To recognize Chinese script
+    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0'
+    //chen yi
+    implementation 'jp.wasabeef:blurry:4.0.1'
+
+}
