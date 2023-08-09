@@ -57,6 +57,8 @@ object ConstantsScanServiceFunction {
                             }
 
                         }
+
+
                     } else {
 
                         val sc = response.code()
