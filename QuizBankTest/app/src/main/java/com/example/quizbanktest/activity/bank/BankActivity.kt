@@ -67,7 +67,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             finish()
         }
 
-        val btnAddBank = findViewById<ImageButton>(R.id.btn_addBank)
+        val btnAddBank = findViewById<ImageButton>(R.id.bank_add)
         btnAddBank.setOnClickListener {
             val addBankDialog = Dialog(this)
             addBankDialog.setContentView(R.layout.dialog_add_bank)
