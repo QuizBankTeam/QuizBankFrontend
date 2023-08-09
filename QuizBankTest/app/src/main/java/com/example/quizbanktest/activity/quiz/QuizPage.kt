@@ -30,21 +30,21 @@ class QuizPage: BaseActivity() {
         setContentView(quizPageBinding.root)
 
         quizPageBinding.quizAdd.setOnClickListener {
-            if(quizPageBinding.quizPager.currentItem==0){
-                val tmpMembers = ArrayList<String>()
-                tmpMembers.add(Constants.userId)
-                val qList = ArrayList<quizService.QuestionInPostQuiz>()
-                val tmpPostQuiz = quizService.PostQuiz("asd",  "single", "draft", 100, ArrayList(), "2023-07-13 13:04:10", "2023-07-13 13:04:10", tmpMembers, qList)
-                ConstantsQuiz.postQuiz(this, tmpPostQuiz, onSuccess = { postQuiz ->
-                    if(postQuiz.type == quizTypeSingle){
-                        fragmentAdapter.getSPFragment().postQuiz(postQuiz)
-                    }else if(postQuiz.type == quizTypeCasual){
-                        fragmentAdapter.getMPFragment().postQuiz(postQuiz)
-                    }
-                }, onFailure = {
-                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                })
-            }
+//            if(quizPageBinding.quizPager.currentItem==0){
+//                val tmpMembers = ArrayList<String>()
+//                tmpMembers.add(Constants.userId)
+//                val qList = ArrayList<quizService.QuestionInPostQuiz>()
+//                val tmpPostQuiz = quizService.PostQuiz("asd",  "single", "draft", 100, ArrayList(), "2023-07-13 13:04:10", "2023-07-13 13:04:10", tmpMembers, qList)
+//                ConstantsQuiz.postQuiz(this, tmpPostQuiz, onSuccess = { postQuiz ->
+//                    if(postQuiz.type == quizTypeSingle){
+//                        fragmentAdapter.getSPFragment().postQuiz(postQuiz)
+//                    }else if(postQuiz.type == quizTypeCasual){
+//                        fragmentAdapter.getMPFragment().postQuiz(postQuiz)
+//                    }
+//                }, onFailure = {
+//                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+//                })
+//            }
         }
         quizPageBinding.quizRecord.setOnClickListener {
             val intent = Intent()

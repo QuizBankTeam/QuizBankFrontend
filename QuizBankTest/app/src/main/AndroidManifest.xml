@@ -111,10 +111,10 @@
         <activity android:name=".activity.quiz.SPStartQuiz" />
         <activity android:name=".activity.quiz.SPQuizFinish" />
         <activity android:name=".activity.quiz.SPSingleRecord" />
+        <activity android:name=".activity.quiz.MPQuizFinish" />
         <activity
             android:name=".activity.quiz.MPStartQuiz"
             android:theme="@style/StartQuiz" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.quizbanktest.fileprovider"

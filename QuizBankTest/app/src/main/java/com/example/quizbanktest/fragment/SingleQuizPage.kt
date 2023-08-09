@@ -94,11 +94,11 @@ class SingleQuizPage : Fragment() {
     }
     fun postQuiz(quiz: Quiz){
         QuizList.add(0, quiz)//?????? notify的先後順序有差 會影響到app crushed掉 甚至連list顯示都會壞掉
-        quizListAdapter.notifyItemChanged(QuizList.size)
-        for(index in 0 until QuizList.size){
-            quizListAdapter.notifyItemChanged(index)
-        }
-
+//        quizListAdapter.notifyItemChanged(QuizList.size)
+//        for(index in 0 until QuizList.size){
+//            quizListAdapter.notifyItemChanged(index)
+//        }
+        quizListAdapter.notifyDataSetChanged()
     }
     fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
         QuizList[position].title = title
@@ -112,10 +112,11 @@ class SingleQuizPage : Fragment() {
     fun deleteQuiz(position: Int){
         QuizList.removeAt(position)
         quizListImages.removeAt(position)
-        quizListAdapter.notifyItemChanged(position)
-        for(index in position until QuizList.size){
-            quizListAdapter.notifyItemChanged(index)
-        }
+        quizListAdapter.notifyDataSetChanged()
+//        quizListAdapter.notifyItemChanged(position)
+//        for(index in position until QuizList.size){
+//            quizListAdapter.notifyItemChanged(index)
+//        }
 
     }
 

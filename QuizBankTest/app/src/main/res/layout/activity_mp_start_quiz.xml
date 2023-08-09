@@ -1,6 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <LinearLayout
+        android:id="@+id/start_quiz_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical"
+        android:background="@drawable/background_gradient">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:background="@color/white">
+
+            <ImageButton
+                android:id="@+id/check_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="?actionBarItemBackground"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/baseline_trophy"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Question_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="單選題"
+                    android:textSize="22dp"
+                    android:textColor="#000000"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:textColorHint="#7A8089"
+                        android:textSize="14sp"
+                        android:text="0/10" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/exit_quiz"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="?actionBarItemBackground"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/baseline_exit_quiz"/>
+        </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:max="10"
+            android:minHeight="20dp"
+            android:progress="2" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/Question_image"
+            android:layout_width="wrap_content"
+            android:layout_height="230dp"
+            android:layout_marginBottom="-10dp"
+            android:paddingHorizontal="15dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"
+            android:paddingTop="10dp"
+            android:background="@drawable/textview_border"
+            android:src="@drawable/society98_1"
+            app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
+
+
+
+        <TextView
+            android:id="@+id/question_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            android:clickable="true"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/textview_border"
+            android:padding="10dp"
+            android:text="圖一為 2008 年的推估結果，顯示臺灣人口從 1960-2060 年間出生率與死亡率
+的預測變化，依圖所示，在不考慮社會增加率的情況下，下列何者最為正確？"
+            android:textSize="14dp" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/QuestionOption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:overScrollMode="never"
+                android:textColor="@color/white"
+                android:textSize="30sp"/>
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
