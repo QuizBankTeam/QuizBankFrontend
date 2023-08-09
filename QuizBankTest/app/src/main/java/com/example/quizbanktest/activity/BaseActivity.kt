@@ -73,7 +73,7 @@ open class BaseActivity : AppCompatActivity() {
             } catch (e: IOException) {
                 onImageSelected?.invoke(null)
                 e.printStackTrace()
-                Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show()
+                showErrorSnackBar("開啟相簿錯誤")
             }
         }
     }
@@ -89,9 +89,9 @@ open class BaseActivity : AppCompatActivity() {
             }
             var base64String = ConstantsFunction.encodeImage(thumbnail!!)
             showProgressDialog("目前正在處理OCR之結果")
-            autoOcrAndRotate(base64String!!)
+            autoOcrAndRotate(base64String!!,0,onSuccess = { it1 -> }, onFailure = { it1 -> })
         }else if(result.resultCode == RESULT_CANCELED){
-            Log.e("camera result status result cancel",result.resultCode.toString())
+            Log.e("取消了相機的結果",result.resultCode.toString())
         }
 
     }
@@ -192,7 +192,7 @@ open class BaseActivity : AppCompatActivity() {
         ) { dialog, which ->
             when (which) {
                 // Here we have create the methods for image selection from GALLERY
-                0 -> choosePhotoToOcr()
+                0 -> choosePhotoToOcr(0, onSuccess = { it1 -> }, onFailure = { it1 -> })
                 1 -> takePhotoFromCamera()
             }
         }
@@ -341,18 +341,20 @@ open class BaseActivity : AppCompatActivity() {
             .check()
     }
 
-    fun  choosePhotoToOcr(){
+    fun  choosePhotoToOcr(flag : Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
         choosePhotoFromGallery {
             bitmap ->
             if (bitmap != null) {
                 var base64String = ConstantsFunction.encodeImage(bitmap)
-                autoOcrAndRotate(base64String!!)
+                autoOcrAndRotate(base64String!!,flag,onSuccess = { it1 -> onSuccess(it1) },onFailure = { it1 -> onFailure(it1) })
             }else{
+                onFailure("can't choose empty photo")
                 Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
             }
         }
-
     }
+
+
     fun setupNavigationView() {
         val quiz : ImageButton = findViewById(R.id.test)
         quiz.setOnClickListener {
@@ -487,10 +489,20 @@ open class BaseActivity : AppCompatActivity() {
                  base64String,this@BaseActivity,
                  onSuccess = { it1 ->
                      Log.e("hough","success")
-                     ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+                     ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
+                         Log.e("in rotate dialog","true")
+                         processScan(it1)
+                     }, onFailure = { it1 ->
+                         showErrorScan()
+                     })
                  }, onFailure = { it1 ->
                      Log.e("hough","fail")
-                     ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+                     ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
+                         Log.e("in rotate dialog","true2")
+                         processScan(it1)
+                     }, onFailure = { it1 ->
+                         showErrorScan()
+                     })
                  } )
 
          }
@@ -527,25 +539,70 @@ open class BaseActivity : AppCompatActivity() {
 
     }
 
-    fun autoOcrAndRotate(base64String : String){
-        if(getRotateOrNot() == -1){
-            showAutoRotateDialog(base64String)
-        }
-        else if(getRotateOrNot() == 1){
-            showProgressDialog("目前正在處理OCR之結果")
-            ConstantsHoughAlgo.imageRotate(
-                base64String,this@BaseActivity,
-                onSuccess = { it1 ->
-                    Log.e("hough","success")
-                    ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
-                }, onFailure = { it1 ->
-                    Log.e("hough","fail")
-                    ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
-                } )
+    fun autoOcrAndRotate(base64String : String,flag: Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit){
+        if(flag == 1){
+            Log.e("in rescan","true")
+            showProgressDialog("重新掃描中")
+            ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
+                ConstantsOcrResults.getOcrResult()[ConstantsOcrResults.rescanPosition].description = it1
+                hideProgressDialog()
+                onSuccess("success")
+            }, onFailure = { it1 ->
+                hideProgressDialog()
+                showErrorScan()
+                onFailure("error")
+            })
         }else{
-            showProgressDialog("目前正在處理OCR之結果")
-            ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+            Log.e("in rescan","false")
+            if(getRotateOrNot() == -1){
+                showAutoRotateDialog(base64String)
+                onSuccess("success")
+            }
+            else if(getRotateOrNot() == 1){
+                Log.e("in hough scan","doing")
+                showProgressDialog("目前正在處理OCR之結果")
+                ConstantsHoughAlgo.imageRotate(
+                    base64String,this@BaseActivity,
+                    onSuccess = { it1 ->
+                        ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
+                            Log.e("in hough scan","true")
+                            processScan(it1)
+                            onSuccess("success")
+                        }, onFailure = { it1 ->
+                            showErrorScan()
+                            onFailure("error")
+                        })
+                    }, onFailure = { it1 ->
+
+                        ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
+                            Log.e("in scan","true")
+                            processScan(it1)
+                            onSuccess("success")
+                        }, onFailure = { it1 ->
+                            onFailure("error")
+                        })
+                    } )
+            }else{
+                showProgressDialog("目前正在處理OCR之結果")
+                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+            }
         }
+
+    }
+
+    fun processScan(it1 : String){
+        ConstantsOcrResults.setOcrResult(it1)
+        splitQuestionOptions(it1)
+        hideProgressDialog()
+        val intent = Intent(this, ScannerTextWorkSpaceActivity::class.java)
+        intent.putExtra("ocrText", it1)
+        startActivity(intent)
+        finish()
+    }
+
+    fun showErrorScan(){
+        showErrorSnackBar("辨識不出來目前的圖片請重新上傳")
+        hideProgressDialog()
     }
 
 }

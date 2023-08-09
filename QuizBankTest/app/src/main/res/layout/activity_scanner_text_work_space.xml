@@ -7,17 +7,72 @@
     android:orientation="vertical"
     android:background="@drawable/intro_background"
     tools:context=".activity.scan.ScannerTextWorkSpaceActivity">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_ocr_detail"
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar_ocr_detail"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        app:titleTextAppearance="@style/CustomToolbarStyle"-->
+<!--        app:titleTextColor="@color/colorPrimaryDark"-->
+<!--        app:title="掃描工作區 🛠️️"-->
+<!--        android:theme="@style/ToolbarTheme"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        />-->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:titleTextAppearance="@style/CustomToolbarStyle"
-        app:titleTextColor="@color/colorPrimaryDark"
-        app:title="掃描工作區 🛠️️"
-        android:theme="@style/ToolbarTheme"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        android:id="@+id/toolbar_ocr_detail"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary"
+            android:theme="@style/CustomToolbarStyle">
+            <ImageButton
+                android:id="@+id/scan_back"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/ic_black_color_back_24dp"/>
+<!--            <View-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="2"/>-->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:layout_gravity="center"
+                android:paddingLeft="13dp"
+                android:text="      掃描工作區 🛠️"
+                android:textSize="25dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textAppearance="@style/CustomToolbarStyle"
+                android:textColor="@color/colorPrimaryDark"/>
+            <ImageButton
+                android:id="@+id/delete_all_scan_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/baseline_delete_24"/>
+            <ImageButton
+                android:id="@+id/add_empty_scan_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/baseline_add_black"/>
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
     <LinearLayout
         android:id="@+id/fl_home"
         android:layout_width="0dp"

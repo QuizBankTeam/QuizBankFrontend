@@ -38,26 +38,21 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             enterToTal.visibility = View.GONE
         }
 
-        val toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_ocr_detail)
-        setSupportActionBar(toolBar)
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
-        }
+       val backButton : ImageButton = findViewById(R.id.scan_back)
 
        setupNavigationView()
 
-        toolBar.setNavigationOnClickListener{
+        backButton.setOnClickListener{
             if(ConstantsOcrResults.getOcrResult().size!=0){
                 Log.e("nav","toolbar")
                 val builder =AlertDialog.Builder(this)
                     .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
-                    .setTitle("OCR結果")
+                    .setTitle("掃描修改")
                     .setIcon(R.drawable.baseline_warning_amber_24)
                 builder.setPositiveButton("確認") { dialog, which ->
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
 
                 builder.setNegativeButton("取消") { dialog, which ->
@@ -67,7 +62,43 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             }else{
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
+        }
+
+        val addEmptyButton : ImageButton = findViewById(R.id.add_empty_scan_result)
+
+        addEmptyButton.setOnClickListener {
+            ConstantsOcrResults.addEmptyScanResult()
+            if(ConstantsOcrResults.getOcrResult().size ==1){
+                val intent = Intent(this, ScannerTextWorkSpaceActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
+                val ocrList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.ocr_list)
+                ocrList.adapter?.notifyDataSetChanged()
+            }
+
+        }
+
+        val deleteButton : ImageButton = findViewById(R.id.delete_all_scan_result)
+
+        deleteButton.setOnClickListener {
+            val builder =AlertDialog.Builder(this)
+                .setMessage(" 您確定要刪除所有的暫存掃描結果嗎 ")
+                .setTitle("掃描結果")
+                .setIcon(R.drawable.baseline_warning_amber_24)
+            builder.setPositiveButton("確認") { dialog, which ->
+                ConstantsOcrResults.questionList.clear()
+                val intent = Intent(this, ScannerTextWorkSpaceActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            builder.setNegativeButton("取消") { dialog, which ->
+
+            }
+            builder.show()
         }
 
         doubleCheckExit()

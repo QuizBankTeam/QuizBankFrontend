@@ -50,15 +50,9 @@ object ConstantsScanServiceFunction {
                         }
                         else{
                             if(!ocrResponse.text.equals("")){
-                                ConstantsOcrResults.setOcrResult(ocrResponse.text)
-                                activity.splitQuestionOptions(ocrResponse.text)
-                                activity.hideProgressDialog()
-                                val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
-                                intent.putExtra("ocrText", ocrResponse.text)
-                                activity.startActivity(intent)
+                                onSuccess(ocrResponse.text)
                             }else{
-                                activity.showErrorSnackBar("辨識不出來目前的圖片請重新上傳")
-                                activity.hideProgressDialog()
+                                onFailure("辨識不出來目前的圖片請重新上傳")
                             }
 
                         }

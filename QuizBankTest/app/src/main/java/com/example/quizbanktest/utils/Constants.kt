@@ -6,9 +6,9 @@ import android.os.Build
 
 object Constants {
 //
-    const val BASE_URL: String = "http://10.0.2.2:5000/"
-//    const val BASE_URL: String = "https://quizbank.soselab.tw/"
-
+//    const val BASE_URL: String = "http://10.0.2.2:5000/"
+    const val BASE_URL: String = "https://quizbank.soselab.tw/"
+    const val RESULT_DELETE = 1500
     var username : String = "test"
     var password : String = "test"
     var userId: String = ""

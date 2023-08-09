@@ -35,17 +35,38 @@
                     android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:padding="5dp">
-                    <EditText
-                        android:id="@+id/iv_ocr_question_title"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:hint="題目標題 "
-                        android:gravity="left"
-                        android:inputType="textMultiLine"
-                        android:scrollbars = "vertical"
-                        android:singleLine="false" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:id="@+id/iv_ocr_question_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="18"
+                            android:layout_height="50dp"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:hint="題目標題 "
+                            android:gravity="left"
+                            android:inputType="textMultiLine"
+                            android:scrollbars = "vertical"
+                            android:singleLine="false" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/rescan_button"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="2"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:clickable="true"-->
+<!--                            android:textColor="#363A43"-->
+<!--                            android:textSize="25sp"-->
+<!--                            android:layout_marginTop="2dp"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:foreground="?attr/selectableItemBackground"-->
+<!--                            android:text="📷"-->
+<!--                            />-->
+
+                    </LinearLayout>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -123,23 +144,26 @@
                             >
                             <TextView
                                 android:id="@+id/tagText"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="5"
                                 android:textColor="#363A43"
                                 android:textSize="14sp"
+                                android:layout_marginTop="2dp"
                                 android:textStyle="bold"
                                 android:foreground="?attr/selectableItemBackground"
                                 android:text="選擇標籤"
                                 />
+
                             <ImageButton
                                 android:id="@+id/ib_chooseTag"
-                                android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                android:layout_marginLeft="130dp"
-                                android:layout_marginTop="5dp"
-                                android:src="@drawable/baseline_keyboard_arrow_down_24"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="2"
                                 android:background="@color/white"
-                                />
+                                android:src="@drawable/baseline_keyboard_arrow_down_24" />
 
                         </LinearLayout>
                         <View
@@ -148,38 +172,38 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/black"
                             />
-                        <TextView
-                            android:layout_marginTop="5dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="#363A43"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:text="主題標籤"
-                            />
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            >
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                                <co.lujun.androidtagview.TagContainerLayout
-                                    android:id="@+id/scannerTagForBank"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    app:container_background_color="#00000000"
-                                    app:tag_enable_cross="true"
-                                    app:container_enable_drag="true"
-                                    app:horizontal_interval="3dp"
-                                    app:tag_clickable="true"
-                                    app:tag_theme="random"
-                                    app:tag_text_size="10sp"
-                                    app:vertical_interval="3dp" />
-                            </LinearLayout>
-                        </HorizontalScrollView>
+<!--                        <TextView-->
+<!--                            android:layout_marginTop="5dp"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textColor="#363A43"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:text="主題標籤"-->
+<!--                            />-->
+<!--                        <HorizontalScrollView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            >-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content">-->
+<!--                                <co.lujun.androidtagview.TagContainerLayout-->
+<!--                                    android:id="@+id/scannerTagForBank"-->
+<!--                                    android:layout_marginTop="5dp"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:padding="5dp"-->
+<!--                                    app:container_background_color="#00000000"-->
+<!--                                    app:tag_enable_cross="true"-->
+<!--                                    app:container_enable_drag="true"-->
+<!--                                    app:horizontal_interval="3dp"-->
+<!--                                    app:tag_clickable="true"-->
+<!--                                    app:tag_theme="random"-->
+<!--                                    app:tag_text_size="10sp"-->
+<!--                                    app:vertical_interval="3dp" />-->
+<!--                            </LinearLayout>-->
+<!--                        </HorizontalScrollView>-->
 
                         <TextView
                             android:layout_marginTop="5dp"
@@ -213,38 +237,38 @@
                                     app:vertical_interval="3dp" />
                             </LinearLayout>
                         </HorizontalScrollView>
-                        <TextView
-                            android:layout_marginTop="5dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="#363A43"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:text="範圍標籤"
-                            />
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            >
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                                <co.lujun.androidtagview.TagContainerLayout
-                                    android:id="@+id/scannerTagForRange"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    app:container_background_color="#00000000"
-                                    app:tag_enable_cross="true"
-                                    app:container_enable_drag="true"
-                                    app:horizontal_interval="3dp"
-                                    app:tag_clickable="true"
-                                    app:tag_theme="random"
-                                    app:tag_text_size="10sp"
-                                    app:vertical_interval="3dp" />
-                            </LinearLayout>
-                        </HorizontalScrollView>
+<!--                        <TextView-->
+<!--                            android:layout_marginTop="5dp"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textColor="#363A43"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:text="範圍標籤"-->
+<!--                            />-->
+<!--                        <HorizontalScrollView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            >-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content">-->
+<!--                                <co.lujun.androidtagview.TagContainerLayout-->
+<!--                                    android:id="@+id/scannerTagForRange"-->
+<!--                                    android:layout_marginTop="5dp"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:padding="5dp"-->
+<!--                                    app:container_background_color="#00000000"-->
+<!--                                    app:tag_enable_cross="true"-->
+<!--                                    app:container_enable_drag="true"-->
+<!--                                    app:horizontal_interval="3dp"-->
+<!--                                    app:tag_clickable="true"-->
+<!--                                    app:tag_theme="random"-->
+<!--                                    app:tag_text_size="10sp"-->
+<!--                                    app:vertical_interval="3dp" />-->
+<!--                            </LinearLayout>-->
+<!--                        </HorizontalScrollView>-->
                         <LinearLayout
                             android:id="@+id/options_list"
                             android:layout_width="match_parent"
@@ -472,6 +496,20 @@
                             android:foreground="?attr/selectableItemBackground"
                             android:background="@drawable/shape_button_rounded"
                             android:text="確認送出   ✔" />
+                        <TextView
+                            android:id="@+id/btn_rescan"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:textColor="@color/secondary_text_color"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:background="@drawable/rescan_border"
+                            android:text="重新掃描   📷" />
                         <TextView
                             android:id="@+id/btn_scan_cancel"
                             android:layout_width="match_parent"
