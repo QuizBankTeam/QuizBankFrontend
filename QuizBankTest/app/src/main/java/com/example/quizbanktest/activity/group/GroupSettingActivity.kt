@@ -1,10 +1,18 @@
 package com.example.quizbanktest.activity.group
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
 import com.example.quizbanktest.R
@@ -23,7 +31,22 @@ class GroupSettingActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
+        val addPersonButton = findViewById<ImageButton>(R.id.group_add_person)
+        addPersonButton.setOnClickListener {
+            val inviteDialog = Dialog(this)
+            inviteDialog.setContentView(R.layout.dialog_give_group_invite_code)
+            inviteDialog.show()
+            val textView = inviteDialog.findViewById<TextView>(R.id.join_group_invite_code)
+            val btnCopy = inviteDialog.findViewById<Button>(R.id.btn_copy)
+            btnCopy.setOnClickListener {
+                val textToCopy = textView.hint
+                Log.e("textview",textView.text.toString())
+                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("Copied Text", textToCopy)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(this@GroupSettingActivity, "邀請碼已复制", Toast.LENGTH_SHORT).show()
+            }
+        }
 
 
         PullExit()

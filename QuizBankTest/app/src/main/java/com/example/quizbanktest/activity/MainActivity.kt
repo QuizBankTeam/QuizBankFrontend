@@ -3,7 +3,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
@@ -29,47 +31,27 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val showEmptyBankImage : ImageView = findViewById(R.id.show_empty_bank_list)
         showProgressDialog("處理資料中請稍等")
         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
             onSuccess = { questionBanks ->
-                hideProgressDialog()
                 setupRecentRecyclerView(questionBanks)
                 setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
                 setupWrongListRecyclerView(ConstantsWrong.getQuestions())
-
+                hideProgressDialog()
+//                showEmptyBankImage.visibility = View.GONE
             },
             onFailure = { errorMessage ->
                 hideProgressDialog()
-                showErrorSnackBar("題庫資料取得錯誤")
+                if(errorMessage.equals("empty")){
+                    showEmptyBankImage.visibility = View.VISIBLE
+                }else{
+                    showErrorSnackBar("題庫資料取得錯誤")
+                }
+
             }
         )
-//        ConstantsAccountServiceFunction.getCsrfToken(this,
-//            onSuccess = { it1 ->
-//                ConstantsAccountServiceFunction.login(this, " ", " ",
-//                    onSuccess = {   message->
-//                        Log.d("login success", message)
-//                        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
-//                            onSuccess = { questionBanks ->
-//                                hideProgressDialog()
-//                                setupRecentRecyclerView(questionBanks)
-//                                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
-//                                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
-//
-//                            },
-//                            onFailure = { errorMessage ->
-//                                hideProgressDialog()
-//                                showErrorSnackBar("題庫資料取得錯誤")
-//                            }
-//                        )
-//                    },
-//                    onFailure = { message->
-//                        showErrorSnackBar("自動登入錯誤") // login
-//                    })
-//            },
-//            onFailure = { it1 ->
-//                showErrorSnackBar("伺服器驗證錯誤") //csrf
-//            })
+
 
         setupActionBar()
         val nav_view : com.google.android.material.navigation.NavigationView = findViewById(R.id.nav_view)

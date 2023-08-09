@@ -61,6 +61,7 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent()
                     intent.setClass(this, MainActivity::class.java)
                     startActivity(intent)
+                    hideProgressDialog()
                     finish()
                 },
                 onFailure = { message->

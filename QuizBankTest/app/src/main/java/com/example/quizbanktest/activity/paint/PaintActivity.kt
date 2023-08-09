@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -35,8 +36,10 @@ import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.MainActivity
+import com.example.quizbanktest.utils.*
 
 import com.example.quizbanktest.view.DrawingView
+import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -69,6 +72,7 @@ class PaintActivity : AppCompatActivity() {
     var shareFlag : Int = 0 //是否要分享
     var colorTag : String = "#d62828" //預設紅色
     var penFlag: Int = 0 // 0 : brush 1: highlighter
+    private lateinit var mProgressDialog: Dialog
     private var mImageButtonCurrentPaint: ImageButton?=null //畫筆
 
     var idImage = System.currentTimeMillis()/1000 //為了給image的path一個獨特的id ex: QuizBank_32142431.jpg
@@ -341,6 +345,25 @@ class PaintActivity : AppCompatActivity() {
             drawingView?.onClickRedo()
         }
 
+        val ib_highQuality : ImageButton = findViewById(R.id.ib_highQuality)
+        ib_highQuality.setOnClickListener {
+            showProgressDialog("提升畫質會需要較長的處理時間請耐心等候")
+            val imageBackground: ImageView = findViewById(R.id.iv_background)
+            val backgroundBitmap = getBitmapFromView(imageBackground)
+            ConstantsRealESRGAN.realEsrgan(ConstantsFunction.encodeImage(backgroundBitmap)!! , this@PaintActivity,
+                onSuccess = { it1 ->
+                    val resultBitmap = base64ToBitmap(it1)
+                    imageBackground.setImageBitmap(resultBitmap)
+                    hideProgressDialog()
+                },
+                onFailure = { it1 ->
+                    showErrorSnackBar("伺服器目前出現了點問題請稍後在試")
+                    hideProgressDialog()
+                }
+            )
+
+        }
+
         //儲存繪畫後的圖片
         val ib_save : ImageButton = findViewById(R.id.ib_save)
         ib_save.setOnClickListener{
@@ -466,10 +489,6 @@ class PaintActivity : AppCompatActivity() {
             choosePhotoFromGallery()
         }
 
-        val ibQuality : ImageButton = findViewById(R.id.ib_highQuality)
-        ibQuality.setOnClickListener{
-            //TODO
-        }
     }
 
     //顯示畫筆可以選擇的大小
@@ -623,7 +642,10 @@ class PaintActivity : AppCompatActivity() {
         }
         return result
     }
-
+    fun base64ToBitmap(base64Data: String?): Bitmap? {
+        val bytes: ByteArray = Base64.decode(base64Data, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
     private fun choosePhotoFromGallery() {
         Dexter.withActivity(this)
             .withPermissions(
@@ -716,5 +738,33 @@ class PaintActivity : AppCompatActivity() {
 //            e.printStackTrace()
         }
 
+    }
+    fun showProgressDialog(text: String) {
+        mProgressDialog = Dialog(this)
+
+        /*Set the screen content from a layout resource.
+        The resource will be inflated, adding all top-level views to the screen.*/
+        mProgressDialog.setContentView(R.layout.dialog_progress)
+
+        mProgressDialog.findViewById<TextView>(R.id.tv_progressbar_text).text=text
+
+        //Start the dialog and display it on screen.
+        mProgressDialog.show()
+    }
+
+    fun showErrorSnackBar(message: String) {
+        val snackBar =
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+        val snackBarView = snackBar.view
+        snackBarView.setBackgroundColor(
+            ContextCompat.getColor(
+                this@PaintActivity,
+                R.color.red
+            )
+        )
+        snackBar.show()
+    }
+    fun hideProgressDialog() {
+        mProgressDialog.dismiss()
     }
 }
