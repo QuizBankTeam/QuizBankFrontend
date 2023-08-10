@@ -64,7 +64,7 @@ class BankSingleAnswerQuestionActivity : AppCompatActivity() {
             Log.e("BankSingleAnswerQuestionActivity", "questionOptions is empty")
         }
 
-        recyclerView = findViewById(R.id.questionOptionsRecyclerView)
+        recyclerView = findViewById(R.id.questionTagsRecyclerView)
         val adapter = QuestionOptionsRecyclerViewAdapter(this, tmpArrayList)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
