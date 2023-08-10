@@ -44,7 +44,7 @@ object ConstantsScanServiceFunction {
                             response.body().charStream(),
                             OCRResponse::class.java
                         )
-                        Log.e("Response Result", ocrResponse.text)
+//                        Log.e("Response Result", ocrResponse.text)
                         if(flag==0){
                            //不用換頁因為是答案ocr
                             onSuccess(ocrResponse.text)

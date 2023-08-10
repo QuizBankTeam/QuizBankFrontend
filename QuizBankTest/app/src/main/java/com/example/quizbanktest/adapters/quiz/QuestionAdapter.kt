@@ -48,6 +48,7 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
                                 else if(currentItem.questionType=="ShortAnswer") "簡答"
                                 else "填充"
         holder.questionDescription.text = currentItem.description
+
         for(item in SingleQuizPage.Companion.quizListImages[quizIndex][position]){
             val tmpImageStr: String? = item.get()
             if(tmpImageStr!=null){
@@ -68,6 +69,9 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
                 }
                 holder.questionTag.text = allTags
             }
+        }
+        if(currentItem.description.isNullOrEmpty()||currentItem.options.isNullOrEmpty()||currentItem.answerOptions.isNullOrEmpty()){
+            holder.questionTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_warning_red, 0)
         }
 
         holder.itemView.setOnClickListener {

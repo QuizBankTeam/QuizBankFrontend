@@ -55,7 +55,6 @@ object ConstantsQuiz {
         val tmpMembers = ArrayList<String>()
         tmpMembers.add(Constants.userId)
         val qList = ArrayList<quizService.QuestionInPostQuiz>()
-        val tmpPostQuizQuestion = quizService.QuestionInPostQuiz("undefinied", "1", "asdf", ArrayList(), "MultipleChoiceS", "none", "none", ArrayList(), "asd", Constants.userId, "2023-6-29", ArrayList(), ArrayList(), ArrayList())
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

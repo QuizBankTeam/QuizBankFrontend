@@ -1,4 +1,5 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -9,8 +10,10 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.R
@@ -46,7 +49,9 @@ class SPSingleRecord: AppCompatActivity()  {
         singleRecordBinding.gotoPreviousQuestion.setOnClickListener {
             gotoPreviousQ()
         }
-        singleRecordBinding.backBtn.setOnClickListener { finish() }
+        singleRecordBinding.backBtn.setOnClickListener {
+            backBtn()
+        }
         singleRecordBinding.gotoPreviousQuestion.isEnabled = false
     }
 
@@ -249,5 +254,21 @@ class SPSingleRecord: AppCompatActivity()  {
 
         currentAtQuestion--
         setQuestion()
+    }
+    private fun backBtn(){
+        finish()
+    }
+    override fun onBackPressed() {
+        backBtn()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                backBtn()
+            }
+        }
     }
 }

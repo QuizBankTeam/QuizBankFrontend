@@ -102,7 +102,7 @@ object ConstantsAccountServiceFunction {
             val api = retrofit.create(AccountService::class.java)
             Constants.username = "test"
             Constants.password = "test"
-            val body = AccountService.PostBody(Constants.username, Constants.password)
+            val body = AccountService.PostBody(email, password)
 //            val body = accountService.PostBody(email, password)
             //TODO 用csrf token 拿access token
 

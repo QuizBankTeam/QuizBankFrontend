@@ -1,8 +1,11 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BuildCompat
 import com.example.quizbanktest.databinding.ActivityMpSingleQuizSettingBinding
 import com.example.quizbanktest.databinding.ActivitySpSingleQuizSettingBinding
 import com.example.quizbanktest.R
@@ -25,19 +28,10 @@ class SingleQuizSetting: AppCompatActivity() {
 
         if(quizType=="casual"){
             mpQuizSetAttrBinding.backBtn.setOnClickListener {
-                val intent = Intent()
-                setResult(RESULT_CANCELED, intent)
-                finish()
+                backBtn()
             }
             mpQuizSetAttrBinding.saveBtn.setOnClickListener {
-                val intentBack = Intent()
-                val titleText = mpQuizSetAttrBinding.QuizTitle.text.toString()
-                intentBack.putExtra("Key_title", titleText)
-                intentBack.putExtra("Key_startDateTime", quizStartDateTime)
-                intentBack.putExtra("Key_endDateTime", quizEndDateTime)
-                intentBack.putStringArrayListExtra("Key_members", quizMembers)
-                setResult(RESULT_OK, intentBack)
-                finish()
+                saveBtn()
             }
             mpQuizSetAttrBinding.QuizDelete.setOnClickListener {
                 val builder = AlertDialog.Builder(this)
@@ -53,26 +47,10 @@ class SingleQuizSetting: AppCompatActivity() {
         }
         else if(quizType=="single"){
             spQuizSetAttrBinding.backBtn.setOnClickListener {
-                val intent = Intent()
-                setResult(RESULT_CANCELED, intent)
-                finish()
+                backBtn()
             }
             spQuizSetAttrBinding.saveBtn.setOnClickListener {
-                val intentBack = Intent()
-                val titleText = spQuizSetAttrBinding.QuizTitle.text.toString()
-                val duringTimeMinStr : String = spQuizSetAttrBinding.QuizDuringTimeMin.text.toString()
-                val duringTimeSecStr : String = spQuizSetAttrBinding.QuizDuringTimeSec.text.toString()
-                val duringTimeMin = duringTimeMinStr.toInt()
-                val duringTimeSec = duringTimeSecStr.toInt()
-                if(duringTimeMin>200 || duringTimeMin == 0 || duringTimeSec>59){
-                    AlertDialog.Builder(this).setTitle("考試時長設定有誤!").setPositiveButton("我懂", null).show()
-                }
-                intentBack.putExtra("Key_title", titleText)
-                intentBack.putExtra("Key_startDateTime", quizStartDateTime)
-                intentBack.putExtra("Key_endDateTime", quizEndDateTime)
-                intentBack.putExtra("Key_duringTime", duringTimeMin*60 + duringTimeSec )
-                setResult(RESULT_OK, intentBack)
-                finish()
+                saveBtn()
             }
             spQuizSetAttrBinding.QuizDelete.setOnClickListener {
                 val builder = AlertDialog.Builder(this)
@@ -140,6 +118,50 @@ class SingleQuizSetting: AppCompatActivity() {
             spQuizSetAttrBinding.QuizEndDate.text = endDateTime
             spQuizSetAttrBinding.QuizDuringTimeMin.setText((duringTime/60).toString())
             spQuizSetAttrBinding.QuizDuringTimeSec.setText((duringTime%60).toString())
+        }
+    }
+    private fun saveBtn(){
+        val intentBack = Intent()
+        if(quizType==Constants.quizTypeSingle){
+            val titleText = spQuizSetAttrBinding.QuizTitle.text.toString()
+            val duringTimeMinStr : String = spQuizSetAttrBinding.QuizDuringTimeMin.text.toString()
+            val duringTimeSecStr : String = spQuizSetAttrBinding.QuizDuringTimeSec.text.toString()
+            val duringTimeMin = duringTimeMinStr.toInt()
+            val duringTimeSec = duringTimeSecStr.toInt()
+            if(duringTimeMin>200 || duringTimeMin == 0 || duringTimeSec>59){
+                AlertDialog.Builder(this).setTitle("考試時長設定有誤!").setPositiveButton("我懂", null).show()
+            }
+            intentBack.putExtra("Key_title", titleText)
+            intentBack.putExtra("Key_startDateTime", quizStartDateTime)
+            intentBack.putExtra("Key_endDateTime", quizEndDateTime)
+            intentBack.putExtra("Key_duringTime", duringTimeMin*60 + duringTimeSec )
+            setResult(RESULT_OK, intentBack)
+            finish()
+        }else if(quizType==Constants.quizTypeCasual){
+            val titleText = mpQuizSetAttrBinding.QuizTitle.text.toString()
+            intentBack.putExtra("Key_title", titleText)
+            intentBack.putExtra("Key_startDateTime", quizStartDateTime)
+            intentBack.putExtra("Key_endDateTime", quizEndDateTime)
+            intentBack.putStringArrayListExtra("Key_members", quizMembers)
+        }
+        setResult(RESULT_OK, intentBack)
+        finish()
+    }
+    private fun backBtn(){
+        setResult(RESULT_CANCELED)
+        finish()
+    }
+    override fun onBackPressed() {
+        backBtn()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                backBtn()
+            }
         }
     }
 }

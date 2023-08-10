@@ -58,7 +58,7 @@ open class BaseActivity : AppCompatActivity() {
     val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult() ){
             result->
-        Log.e("gallery result status",result.resultCode.toString())
+
         Toast.makeText(this, "gallery!", Toast.LENGTH_SHORT).show()
 
         if(result.resultCode == RESULT_OK &&result.data!=null){
@@ -84,14 +84,14 @@ open class BaseActivity : AppCompatActivity() {
             val thumbnail: Bitmap? = BitmapFactory.decodeStream(getContentResolver().openInputStream(cameraPhotoUri!!))
             lifecycleScope.launch{
                 var returnString = saveBitmapFileForPicturesDir(thumbnail!!)
-                Log.e("save pic dir",returnString)
+
 
             }
             var base64String = ConstantsFunction.encodeImage(thumbnail!!)
             showProgressDialog("目前正在處理OCR之結果")
-            autoOcrAndRotate(base64String!!,0,onSuccess = { it1 -> }, onFailure = { it1 -> })
+            autoOcrAndRotate(base64String!!,0,onSuccess1 = { it1 -> }, onFailure1 = { it1 -> })
         }else if(result.resultCode == RESULT_CANCELED){
-            Log.e("取消了相機的結果",result.resultCode.toString())
+
         }
 
     }
@@ -128,7 +128,7 @@ open class BaseActivity : AppCompatActivity() {
 
     suspend fun saveBitmapFileForPicturesDir(mBitmap: Bitmap?): String {
         showProgressDialog("目前正在儲存圖片請稍等")
-        Log.e("in sava", "save")
+
         var result = ""
         if (mBitmap != null) {
             var base64URL = ConstantsFunction.encodeImage(mBitmap)
@@ -183,6 +183,7 @@ open class BaseActivity : AppCompatActivity() {
     var idImage = System.currentTimeMillis()/1000
 
     fun cameraPick(){
+
         val pictureDialog = AlertDialog.Builder(this)
         pictureDialog.setTitle("Select Action")
         val pictureDialogItems =
@@ -192,7 +193,7 @@ open class BaseActivity : AppCompatActivity() {
         ) { dialog, which ->
             when (which) {
                 // Here we have create the methods for image selection from GALLERY
-                0 -> choosePhotoToOcr(0, onSuccess = { it1 -> }, onFailure = { it1 -> })
+                0 -> choosePhotoToOcr(0, onSuccess = { it1 ->  }, onFailure = { it1 -> })
                 1 -> takePhotoFromCamera()
             }
         }
@@ -346,7 +347,15 @@ open class BaseActivity : AppCompatActivity() {
             bitmap ->
             if (bitmap != null) {
                 var base64String = ConstantsFunction.encodeImage(bitmap)
-                autoOcrAndRotate(base64String!!,flag,onSuccess = { it1 -> onSuccess(it1) },onFailure = { it1 -> onFailure(it1) })
+                autoOcrAndRotate(base64String!!,flag,
+                    onSuccess1 = { it1 ->
+                    onSuccess(it1)
+                   }
+                    ,onFailure1 = { it1 ->
+
+                        onFailure(it1)
+                        }
+                )
             }else{
                 onFailure("can't choose empty photo")
                 Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
@@ -421,7 +430,7 @@ open class BaseActivity : AppCompatActivity() {
             text.substring(start, end).trim()
         }
         for(i in options){
-            Log.e("list options",i)
+//            Log.e("list options",i)
         }
 
         return Pair(question, options)
@@ -445,13 +454,13 @@ open class BaseActivity : AppCompatActivity() {
         heartbeatFuture = heartbeatScheduler.scheduleAtFixedRate({
             ConstantsAccountServiceFunction.getCsrfToken(this,
                 onSuccess = { it1 ->
-                    Log.e("this is heart for csrf",it1)
+
                     ConstantsAccountServiceFunction.login(this, " ", " ",
                         onSuccess = {   message->
-                            Log.d("this is heart for login ", message)
+
                         },
                         onFailure = { message->
-                            Log.d("this is heart for login ", message)
+
                         })
                 },
                 onFailure = { it1 ->
@@ -488,17 +497,17 @@ open class BaseActivity : AppCompatActivity() {
              ConstantsHoughAlgo.imageRotate(
                  base64String,this@BaseActivity,
                  onSuccess = { it1 ->
-                     Log.e("hough","success")
+
                      ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
-                         Log.e("in rotate dialog","true")
+
                          processScan(it1)
                      }, onFailure = { it1 ->
                          showErrorScan()
                      })
                  }, onFailure = { it1 ->
-                     Log.e("hough","fail")
+
                      ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
-                         Log.e("in rotate dialog","true2")
+
                          processScan(it1)
                      }, onFailure = { it1 ->
                          showErrorScan()
@@ -539,47 +548,49 @@ open class BaseActivity : AppCompatActivity() {
 
     }
 
-    fun autoOcrAndRotate(base64String : String,flag: Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit){
+    fun autoOcrAndRotate(base64String : String,flag: Int,onSuccess1: (String) -> Unit, onFailure1: (String) -> Unit){
+
         if(flag == 1){
-            Log.e("in rescan","true")
+
             showProgressDialog("重新掃描中")
             ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
                 ConstantsOcrResults.getOcrResult()[ConstantsOcrResults.rescanPosition].description = it1
                 hideProgressDialog()
-                onSuccess("success")
+                onSuccess1("success")
             }, onFailure = { it1 ->
                 hideProgressDialog()
                 showErrorScan()
-                onFailure("error")
+                onFailure1("error")
             })
         }else{
-            Log.e("in rescan","false")
+
             if(getRotateOrNot() == -1){
+
                 showAutoRotateDialog(base64String)
-                onSuccess("success")
+                onSuccess1("success")
             }
             else if(getRotateOrNot() == 1){
-                Log.e("in hough scan","doing")
+
                 showProgressDialog("目前正在處理OCR之結果")
                 ConstantsHoughAlgo.imageRotate(
                     base64String,this@BaseActivity,
                     onSuccess = { it1 ->
+
                         ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
-                            Log.e("in hough scan","true")
+
                             processScan(it1)
-                            onSuccess("success")
+                            onSuccess1("success")
                         }, onFailure = { it1 ->
                             showErrorScan()
-                            onFailure("error")
+                            onFailure1("error")
                         })
                     }, onFailure = { it1 ->
-
                         ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
-                            Log.e("in scan","true")
+
                             processScan(it1)
-                            onSuccess("success")
+                            onSuccess1("success")
                         }, onFailure = { it1 ->
-                            onFailure("error")
+                            onFailure1("error")
                         })
                     } )
             }else{
@@ -592,7 +603,7 @@ open class BaseActivity : AppCompatActivity() {
 
     fun processScan(it1 : String){
         ConstantsOcrResults.setOcrResult(it1)
-        splitQuestionOptions(it1)
+//        splitQuestionOptions(it1)
         hideProgressDialog()
         val intent = Intent(this, ScannerTextWorkSpaceActivity::class.java)
         intent.putExtra("ocrText", it1)

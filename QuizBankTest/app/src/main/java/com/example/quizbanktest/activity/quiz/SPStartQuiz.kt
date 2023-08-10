@@ -1,4 +1,5 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -15,8 +16,10 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import java.time.LocalDateTime
@@ -50,6 +53,7 @@ class SPStartQuiz: AppCompatActivity() {
     private var trueOrFalseSelected = false
     private var quizIndex = 0
     private var imageArr = ArrayList<Bitmap>()
+    private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = ActivitySpStartQuizBinding.inflate(layoutInflater)
@@ -64,13 +68,7 @@ class SPStartQuiz: AppCompatActivity() {
         }
 
         startQuizBinding.exitQuiz.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("確定退出考試?")
-            builder.setPositiveButton("確定") { dialog, which ->
-                finish()
-            }
-            builder.setNegativeButton("取消", null)
-            builder.show()
+            exitQuiz()
         }
 
     }
@@ -278,7 +276,7 @@ class SPStartQuiz: AppCompatActivity() {
             }
         }
 
-        if(currentAtQuestion == questionlist.size-1) {
+        if(currentAtQuestion == questionlist.size-1 && gotoNext) {
             quizEnd()
         }
         else if(gotoNext){
@@ -302,6 +300,9 @@ class SPStartQuiz: AppCompatActivity() {
 //            questionlist1.add(item)
 //            item.number?.let { Log.d("question", it) }
 //        }
+        if (::countDownTimer.isInitialized) {
+            countDownTimer.cancel()
+        }
         val intent = Intent()
         val endDate = LocalDateTime.now()
         val duringTime = java.time.Duration.between(startDate, endDate).toMinutes().toInt()*60
@@ -327,7 +328,7 @@ class SPStartQuiz: AppCompatActivity() {
     }
 
     private fun setTimer(currentContext: Context){
-        object : CountDownTimer((duringTime*1000).toLong(), 1000) {
+         countDownTimer = object : CountDownTimer((duringTime*1000).toLong(), 1000) {
             override fun onFinish() {
                 val builder = AlertDialog.Builder(currentContext)
                 builder.setTitle("考試已結束")
@@ -411,6 +412,32 @@ class SPStartQuiz: AppCompatActivity() {
             }
             startQuizBinding.startQuizContainer.addView(v, 4)
             this.trueOrFalseView = v
+        }
+    }
+
+    private fun exitQuiz(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("確定退出考試?")
+        builder.setPositiveButton("確定") { dialog, which ->
+            if (::countDownTimer.isInitialized) {
+                countDownTimer.cancel()
+            }
+            finish()
+        }
+        builder.setNegativeButton("取消", null)
+        builder.show()
+    }
+    override fun onBackPressed() {
+        exitQuiz()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                exitQuiz()
+            }
         }
     }
 }

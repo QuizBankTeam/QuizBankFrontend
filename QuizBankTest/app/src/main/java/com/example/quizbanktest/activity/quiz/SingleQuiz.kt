@@ -1,10 +1,14 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BuildCompat
+import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.quiz.LinearLayoutWrapper
 import com.example.quizbanktest.adapters.quiz.QuestionAdapter
 import com.example.quizbanktest.databinding.ActivitySingleQuizBinding
@@ -42,30 +46,14 @@ class SingleQuiz: AppCompatActivity() {
         quizAdapter.setQuizType(quizType)
         quizBinding.QuestionList.adapter = quizAdapter
         quizBinding.backBtn.setOnClickListener {
-            if(!isModified){
-                setResult(RESULT_CANCELED)
-                finish()
-            }else{
-                val intentBack = Intent()
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("是否保存修改紀錄?")
-                builder.setPositiveButton("確定") { dialog, which ->
-                    saveQuiz()
-                    backToQuizList()
-                }
-                builder.setNegativeButton("取消"){ dialog, which ->
-                    setResult(RESULT_CANCELED, intentBack)
-                    finish()
-                }
-                builder.show()
-            }
+            backBtn()
         }
         quizBinding.saveBtn.setOnClickListener {
             saveQuiz()
         }
         quizBinding.quizSetting.setOnClickListener { quizSetting() }
         quizBinding.startQuiz.setOnClickListener{
-            startQuiz(questionlist, quizStatus, duringTime, quizStatus,  quizMembers, quizTitle, quizId)
+            startQuiz(questionlist, quizId)
         }
     }
 
@@ -137,38 +125,56 @@ class SingleQuiz: AppCompatActivity() {
         }
     }
 
-    private fun startQuiz(questionList: ArrayList<Question>, status: String,  duringTime: Int, quizStatus: String,
-                          quizMembers: ArrayList<String>, quizTitle: String, quizId: String){
-        if(status!="draft"){
+    private fun startQuiz(questionList: ArrayList<Question>, quizId: String){
+        determineStatus()
+        if(quizStatus!="draft"){
             val intent = Intent()
-            if(quizType=="casual") {
+            intent.putExtra("Key_id", quizId)
+            intent.putExtra("Key_quizTitle", quizTitle)
+            intent.putExtra("Key_type", quizType)
+            intent.putExtra("quiz_index", quizIndex)
+            intent.putParcelableArrayListExtra("Key_questions", questionList)
+            if(quizType==Constants.quizTypeCasual) {
                 intent.setClass(this, MPStartQuiz::class.java)
-            }else{
+                intent.putIntegerArrayListExtra("Key_casualDuringTime", casualDuringTime)
+                intent.putStringArrayListExtra("Key_members", quizMembers)
+                intent.putExtra("Key_startDateTime", quizStartDateTime)
+                intent.putExtra("Key_endDateTime", quizEndDateTime)
+            }else if(quizType==Constants.quizTypeSingle){
                 intent.setClass(this, SPStartQuiz::class.java)
-                intent.putExtra("Key_id", quizId)
-                intent.putExtra("Key_quizTitle", quizTitle)
                 intent.putExtra("Key_duringTime", duringTime)
-                intent.putExtra("Key_type", quizType)
-                intent.putExtra("quiz_index", quizIndex)
-                intent.putParcelableArrayListExtra("Key_questions", questionList)
             }
-            startActivityForResult(intent, 2000)
+
+            if(isModified){  //有改過 儲存後再考。 之所以寫成這麼複雜 是因為害怕異步執行
+                val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, questionlist)
+
+                ConstantsQuiz.putQuiz(this, putQuiz, onSuccess = {
+                    isModified = false
+
+                    startActivityForResult(intent, 2000)
+                }, onFailure = {
+                    if(quizType==Constants.quizTypeCasual){ //多人考試使用資料庫的資料來考試 不使用目前user的本地端資料
+                        Toast.makeText(this, "考試儲存錯誤 請重新儲存", Toast.LENGTH_SHORT).show()
+                    }else if(quizType==Constants.quizTypeSingle){ //單人考試就算了 使用修改後的版本考
+                        startActivityForResult(intent, 2000)
+                    }
+                })
+            } else{
+                startActivityForResult(intent, 2000)
+            }
         }
         else{
             AlertDialog.Builder(this).setTitle("考試尚未設定完成!").setPositiveButton("我懂", null).show()
         }
     }
     private fun saveQuiz(){
-        quizStatus = "ready"
-        if(questionlist.isEmpty() || duringTime==0){
-            quizStatus = "draft"
-        }else{
-            for(question in questionlist){
-                if(question.answerOptions.isNullOrEmpty() || question.options.isNullOrEmpty() || question.description.isNullOrEmpty()){
-                    quizStatus = "draft"
-                    break
-                }
+        determineStatus()
+        if(quizType==Constants.quizTypeCasual){
+            var duringTime = 0
+            for(time in casualDuringTime){
+                duringTime+=time
             }
+            this.duringTime = duringTime
         }
 
         val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, questionlist)
@@ -201,6 +207,27 @@ class SingleQuiz: AppCompatActivity() {
         }, onFailure = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
+    }
+
+    private fun determineStatus(){
+        var status = Constants.quizStatusReady
+        if(questionlist.isEmpty() || duringTime==0){
+            status = Constants.quizStatusDraft
+        }
+        else{
+            for(question in questionlist){
+                if(question.answerOptions.isNullOrEmpty() || question.options.isNullOrEmpty() || question.description.isNullOrEmpty()){
+                    status = Constants.quizStatusDraft
+                    break
+                }
+                if(quizType==Constants.quizTypeCasual&&question.questionType=="ShortAnswer"){
+                    Toast.makeText(this, "多人考試不能有簡答題!", Toast.LENGTH_LONG).show()
+                    status = Constants.quizStatusDraft
+                    break
+                }
+            }
+        }
+        quizStatus = status
     }
 
     private fun init()
@@ -245,6 +272,7 @@ class SingleQuiz: AppCompatActivity() {
                 casualDuringTime.add(20)
             }
         }
+        isModified = false
         this.quizIndex = quizIndex
         this.duringTime = duringTime
         quizBinding.quizTitle.text = title
@@ -307,14 +335,47 @@ class SingleQuiz: AppCompatActivity() {
                 }
 
                 questionlist[requestCode] = tmpQuestion
-                quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
+//                quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
+                quizBinding.QuestionList.adapter?.notifyDataSetChanged()
             }
         }else if(resultCode== Constants.RESULT_DELETE){
             isModified = true
             questionlist.removeAt(requestCode)
-            quizAdapter.notifyItemChanged(requestCode)
-            for(index in requestCode until questionlist.size){
-                quizAdapter.notifyItemChanged(index)
+            quizBinding.QuestionList.adapter?.notifyDataSetChanged()
+//            quizAdapter.notifyItemChanged(requestCode)
+//            for(index in requestCode until questionlist.size){
+//                quizAdapter.notifyItemChanged(index)
+//            }
+        }
+    }
+    private fun backBtn(){
+        if(!isModified){
+            setResult(RESULT_CANCELED)
+            finish()
+        }else{
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("是否保存修改紀錄?")
+            builder.setPositiveButton("確定") { dialog, which ->
+                saveQuiz()
+                backToQuizList()
+            }
+            builder.setNegativeButton("取消"){ dialog, which ->
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+            builder.show()
+        }
+    }
+    override fun onBackPressed() {
+        backBtn()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                backBtn()
             }
         }
     }
