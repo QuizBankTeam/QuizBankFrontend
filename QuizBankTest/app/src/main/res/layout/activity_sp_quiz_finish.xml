@@ -18,10 +18,10 @@
             android:theme="@style/CustomToolbarStyle">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:paddingLeft="13dp"
                 android:text="考試結果📑"
                 android:textSize="25dp"
