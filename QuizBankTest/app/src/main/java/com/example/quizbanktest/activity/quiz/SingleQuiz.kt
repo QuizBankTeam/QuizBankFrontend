@@ -1,10 +1,13 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BuildCompat
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.quiz.LinearLayoutWrapper
 import com.example.quizbanktest.adapters.quiz.QuestionAdapter
@@ -43,23 +46,7 @@ class SingleQuiz: AppCompatActivity() {
         quizAdapter.setQuizType(quizType)
         quizBinding.QuestionList.adapter = quizAdapter
         quizBinding.backBtn.setOnClickListener {
-            if(!isModified){
-                setResult(RESULT_CANCELED)
-                finish()
-            }else{
-                val intentBack = Intent()
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("是否保存修改紀錄?")
-                builder.setPositiveButton("確定") { dialog, which ->
-                    saveQuiz()
-                    backToQuizList()
-                }
-                builder.setNegativeButton("取消"){ dialog, which ->
-                    setResult(RESULT_CANCELED, intentBack)
-                    finish()
-                }
-                builder.show()
-            }
+            backBtn()
         }
         quizBinding.saveBtn.setOnClickListener {
             saveQuiz()
@@ -163,6 +150,7 @@ class SingleQuiz: AppCompatActivity() {
 
                 ConstantsQuiz.putQuiz(this, putQuiz, onSuccess = {
                     isModified = false
+
                     startActivityForResult(intent, 2000)
                 }, onFailure = {
                     if(quizType==Constants.quizTypeCasual){ //多人考試使用資料庫的資料來考試 不使用目前user的本地端資料
@@ -358,6 +346,37 @@ class SingleQuiz: AppCompatActivity() {
 //            for(index in requestCode until questionlist.size){
 //                quizAdapter.notifyItemChanged(index)
 //            }
+        }
+    }
+    private fun backBtn(){
+        if(!isModified){
+            setResult(RESULT_CANCELED)
+            finish()
+        }else{
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("是否保存修改紀錄?")
+            builder.setPositiveButton("確定") { dialog, which ->
+                saveQuiz()
+                backToQuizList()
+            }
+            builder.setNegativeButton("取消"){ dialog, which ->
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+            builder.show()
+        }
+    }
+    override fun onBackPressed() {
+        backBtn()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                backBtn()
+            }
         }
     }
 

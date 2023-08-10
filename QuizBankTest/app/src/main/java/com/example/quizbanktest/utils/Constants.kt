@@ -11,7 +11,7 @@ object Constants {
     const val RESULT_DELETE = 1500
     var username : String = "test"
     var password : String = "test"
-    var userId: String = ""
+    var userId: String = "791f34e7-9a6b-4406-85c4-68df9af7c182"
     var csrfToken : String = ""
     var session:String = ""
     var cookie:String=""

@@ -1,13 +1,16 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import java.util.UUID
 import com.example.quizbanktest.R
 import com.example.quizbanktest.databinding.ActivitySpQuizFinishBinding
@@ -44,15 +47,7 @@ class SPQuizFinish : AppCompatActivity(){
 
 
         finishQuizBinding.gotoHome.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("確定回到主頁?")
-            builder.setMessage("將不會保存考試紀錄")
-            builder.setPositiveButton("確定") { dialog, which ->
-                setResult(RESULT_CANCELED)
-                finish()
-            }
-            builder.setNegativeButton("取消", null)
-            builder.show()
+            backBtn()
         }
 
         //傳送questionRecordList quizRecord
@@ -187,5 +182,30 @@ class SPQuizFinish : AppCompatActivity(){
             }
         }
         finishQuizBinding.questionContainer.addView(v)
+    }
+    private fun backBtn(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("確定回到主頁?")
+        builder.setMessage("將不會保存考試紀錄")
+        builder.setPositiveButton("確定") { dialog, which ->
+            setResult(RESULT_CANCELED)
+            finish()
+        }
+        builder.setNegativeButton("取消", null)
+        builder.show()
+    }
+
+    override fun onBackPressed() {
+        backBtn()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                backBtn()
+            }
+        }
     }
 }

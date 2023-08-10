@@ -141,6 +141,7 @@
                     android:layout_below="@id/QuestionOption"
                     android:orientation="horizontal"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="30dp"
                     android:layout_marginHorizontal="23dp">
 
                     <Button
