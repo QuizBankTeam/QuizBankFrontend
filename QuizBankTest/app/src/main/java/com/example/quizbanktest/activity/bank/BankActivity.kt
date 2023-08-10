@@ -35,6 +35,7 @@ import com.example.quizbanktest.utils.ConstantsWrong
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
+import java.time.LocalDate
 
 class BankActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var searchView: SearchView
@@ -56,16 +57,16 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         setContentView(R.layout.activity_bank)
         setupNavigationView()
         doubleCheckExit()
-         val recyclerView : RecyclerView = findViewById(R.id.bankRecyclerView)
+        val recyclerView: RecyclerView = findViewById(R.id.bankRecyclerView)
         setupBankModel()
         val adapter = BankRecyclerViewAdapter(this, questionBankModels, this)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val groupBtn : ImageButton = findViewById(R.id.bank_group)
+        val groupBtn: ImageButton = findViewById(R.id.bank_group)
         groupBtn.setOnClickListener {
-            val intent = Intent(this,GroupListActivity::class.java)
+            val intent = Intent(this, GroupListActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -78,23 +79,41 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
             val etBankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title)
             val etBankType = addBankDialog.findViewById<EditText>(R.id.bank_type)
-            val etBankMembers = addBankDialog.findViewById<EditText>(R.id.bank_members)
-//            val etBankSource = addBankDialog.findViewById<EditText>(R.id.bank_originatedFrom)
 
-            val bankId = "52fde333-3eba-4140-a244-2b1aaf992a0e"
-            val bankTitle = "test bank"
-            val bankType = "single"
-            // TODO Decide the type of variable below (EditText? TextView? ...)
-            val bankCreatedDate = "2023-6-18"
-            val bankMembers : ArrayList<String> = arrayListOf()
-            bankMembers.add("52fde333-3eba-4140-a244-2b1aaf992a0e")
-            bankMembers.add("52fde333-3eba-4140-a244-2b1aaf992a0e")
-            val bankSource = "52fde333-3eba-4140-a244-2b1aaf992a0e"
-            val bankCreator = "none"
+            val current = LocalDate.now().toString()
+            Log.e("BankActivity", "the time now is $current")
+            if (etBankTitle == null) {
+                Log.e("BankActivity", "the title is null")
+            } else {
+                Log.e("BankActivity", "the title is " + etBankTitle.text.toString())
+            }
+            if (etBankTitle == null) {
+                Log.e("BankActivity", "the type is null")
+            } else {
+                Log.e("BankActivity", "the type is " + etBankType.text.toString())
+            }
 
             val btnBankSubmit = addBankDialog.findViewById<ImageButton>(R.id.btn_bank_submit)
             btnBankSubmit.setOnClickListener {
-                val tempQuestionBankModel = QuestionBankModel(bankId, bankTitle, bankType, bankCreatedDate, bankMembers, bankSource, bankCreator)
+                // TODO id setting needs to be flexible
+                val bankId = "52fde333-3eba-4140-a244-2b1aaf992a0e"
+                val bankTitle = etBankTitle.text.toString()
+                val bankType = "single"
+                val bankCreatedDate = LocalDate.now().toString()
+                val bankMembers: ArrayList<String> = arrayListOf()
+                bankMembers.add("52fde333-3eba-4140-a244-2b1aaf992a0e")
+                bankMembers.add("52fde333-3eba-4140-a244-2b1aaf992a0e")
+                val bankSource = "52fde333-3eba-4140-a244-2b1aaf992a0e"
+                val bankCreator = "none"
+                val tempQuestionBankModel = QuestionBankModel(
+                    bankId,
+                    bankTitle,
+                    bankType,
+                    bankCreatedDate,
+                    bankMembers,
+                    bankSource,
+                    bankCreator
+                )
                 showProgressDialog("新增中")
                 ConstantsQuestionBankFunction.postQuestionBank(tempQuestionBankModel, this,
                     onSuccess = {
@@ -103,7 +122,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         addBankDialog.dismiss()
                         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
                             onSuccess = { questionBanks ->
-                                val intent = Intent(this@BankActivity,BankActivity::class.java)
+                                val intent = Intent(this@BankActivity, BankActivity::class.java)
                                 startActivity(intent)
                                 hideProgressDialog()
                                 finish()
@@ -120,17 +139,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                     }
                 )
             }
-
-//            val btnAddBankMember = addBankDialog.findViewById<ImageButton>(R.id.btn_add_bank_member)
-//            btnAddBankMember.setOnClickListener {
-//                val ll = addBankDialog.findViewById<LinearLayout>(R.id.layout_bank_members)
-//                val et = EditText(this)
-//                val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-//                et.layoutParams = p
-//                et.hint = "enter members"
-//                ll.addView(et)
-////                et.requestFocus()
-//            }
         }
     }
 
@@ -156,9 +164,11 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
         }
         for (i in bankTitle.indices) {
-            val questionBankModel = QuestionBankModel(bankID[i], bankTitle[i], bankType[i],
-                bankCreatedDate[i], bankMembers[i], bankSource[i], bankCreators[i])
-            Log.e("creators of banks",bankCreators[i])
+            val questionBankModel = QuestionBankModel(
+                bankID[i], bankTitle[i], bankType[i],
+                bankCreatedDate[i], bankMembers[i], bankSource[i], bankCreators[i]
+            )
+            Log.e("creators of banks", bankCreators[i])
             questionBankModels.add(questionBankModel)
         }
     }
@@ -179,8 +189,10 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 .async()
                 .animate(200)
                 .onto(findViewById<View>(R.id.content) as ViewGroup)
-            Log.d(getString(R.string.app_name),
-                "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms")
+            Log.d(
+                getString(R.string.app_name),
+                "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms"
+            )
         }
 
         val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -193,8 +205,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             contentView = myContentView
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
-            height = displayMetrics.heightPixels-200
-            width = displayMetrics.widthPixels-200
+            height = displayMetrics.heightPixels - 200
+            width = displayMetrics.widthPixels - 200
             animationStyle = R.style.PopupAnimation
             isFocusable = true
             isOutsideTouchable = false
@@ -228,7 +240,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             wrapLayout!!.addView(itemLayout)
         }
 
-        popupWindow.showAtLocation(view, Gravity.CENTER,     0, 0)
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         myContentView.setOnTouchListener { _, _ ->
             popupWindow.dismiss()     /* It will dismiss the popup window when tapped in it */
             return@setOnTouchListener true
@@ -237,7 +249,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {
-        val bankQuestionActivity = Intent(this, BankQuestionActivity:: class.java)
+        val bankQuestionActivity = Intent(this, BankQuestionActivity::class.java)
 
         bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
         bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
