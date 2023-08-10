@@ -6,8 +6,8 @@ import android.os.Build
 
 object Constants {
 //
-//    const val BASE_URL: String = "http://10.0.2.2:5000/"
-    const val BASE_URL: String = "https://quizbank.soselab.tw/"
+    const val BASE_URL: String = "http://10.0.2.2:5000/"
+//    const val BASE_URL: String = "https://quizbank.soselab.tw/"
     const val RESULT_DELETE = 1500
     var username : String = "test"
     var password : String = "test"
@@ -24,9 +24,13 @@ object Constants {
     const val quizStatusDoing = "doing"
     const val quizTypeSingle = "single"
     const val quizTypeCasual = "casual"
+    const val questionTypeFilling = "Filling"
+    const val questionTypeMultipleChoiceS = "MultipleChoiceS"
+    const val questionTypeShortAnswer = "ShortAnswer"
+    const val questionTypeMultipleChoiceM = "MultipleChoiceM"
+    const val questionTypeTrueOrFalse = "TrueOrFalse"
 
     fun isNetworkAvailable(context: Context): Boolean {
-
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //比較新的系統
             val network      = connectivityManager.activeNetwork ?: return false

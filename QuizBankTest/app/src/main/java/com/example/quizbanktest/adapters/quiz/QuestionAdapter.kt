@@ -16,6 +16,7 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.quiz.SingleQuestion
 import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
+import com.example.quizbanktest.utils.Constants
 import org.w3c.dom.Text
 
 class QuestionAdapter(private val context: Activity, private val questionList: ArrayList<Question>, private val casualDuringTime: ArrayList<Int>):
@@ -70,9 +71,16 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
                 holder.questionTag.text = allTags
             }
         }
-        if(currentItem.description.isNullOrEmpty()||currentItem.options.isNullOrEmpty()||currentItem.answerOptions.isNullOrEmpty()){
-            holder.questionTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_warning_red, 0)
+        if(currentItem.questionType==Constants.questionTypeShortAnswer){
+            if(currentItem.description.isNullOrEmpty()){
+                holder.questionTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_warning_red, 0)
+            }
+        }else{
+            if(currentItem.description.isNullOrEmpty()||currentItem.options.isNullOrEmpty()||currentItem.answerOptions.isNullOrEmpty()){
+                holder.questionTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_warning_red, 0)
+            }
         }
+
 
         holder.itemView.setOnClickListener {
             val intent = Intent()
