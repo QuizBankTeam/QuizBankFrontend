@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.quiz.QuizPageAdapter
 import com.example.quizbanktest.databinding.ActivityQuizPageBinding
+import com.example.quizbanktest.fragment.MultiQuizPage
+import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.network.quizService
 import com.example.quizbanktest.utils.Constants
@@ -22,6 +24,8 @@ import com.example.quizbanktest.utils.ConstantsQuiz
 class QuizPage: BaseActivity() {
     private lateinit var quizPageBinding: ActivityQuizPageBinding
     private lateinit var fragmentAdapter: QuizPageAdapter
+    private lateinit var SPFragment: SingleQuizPage
+    private lateinit var MPFragment: MultiQuizPage
     private val quizTypeSingle = "single"
     private val quizTypeCasual = "casual"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,28 +34,17 @@ class QuizPage: BaseActivity() {
         setContentView(quizPageBinding.root)
 
         quizPageBinding.quizAdd.setOnClickListener {
-            if(quizPageBinding.quizPager.currentItem==0){
-                val tmpMembers = ArrayList<String>()
-                tmpMembers.add(Constants.userId)
-                val qList = ArrayList<quizService.QuestionInPostQuiz>()
-                val tmpPostQuiz = quizService.PostQuiz("asd",  "single", "draft", 100, ArrayList(), "2023-07-13 13:04:10", "2023-07-13 13:04:10", tmpMembers, qList)
-                ConstantsQuiz.postQuiz(this, tmpPostQuiz, onSuccess = { postQuiz ->
-                    if(postQuiz.type == quizTypeSingle){
-                        fragmentAdapter.getSPFragment().postQuiz(postQuiz)
-                    }else if(postQuiz.type == quizTypeCasual){
-                        fragmentAdapter.getMPFragment().postQuiz(postQuiz)
-                    }
-                }, onFailure = {
-                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                })
-            }
+            addQuiz()
         }
         quizPageBinding.quizRecord.setOnClickListener {
             val intent = Intent()
             intent.setClass(this, RecordPage::class.java)
             startActivity(intent)
         }
-        fragmentAdapter = QuizPageAdapter(supportFragmentManager, lifecycle)
+
+        SPFragment = SingleQuizPage()
+        MPFragment = MultiQuizPage()
+        fragmentAdapter = QuizPageAdapter(supportFragmentManager, lifecycle, SPFragment, MPFragment)
         quizPageBinding.selectQuizMode.addTab(quizPageBinding.selectQuizMode.newTab().setText("單人"))
         quizPageBinding.selectQuizMode.addTab(quizPageBinding.selectQuizMode.newTab().setText("多人"))
 
@@ -108,10 +101,54 @@ class QuizPage: BaseActivity() {
                 }else if(quizType == quizTypeCasual){
                     fragmentAdapter.getMPFragment()
                 }
-
             }
         }
+    }
 
+    private fun addQuiz(){
+        if(quizPageBinding.quizPager.currentItem==0){
+            val tmpMembers = ArrayList<String>()
+            tmpMembers.add(Constants.userId)
+            val tmpTag = ArrayList<String>()
+            val tmpOptionsM = arrayListOf<String>("test1", "test2", "test3", "test4", "test5")
+            val tmpOptionsS = arrayListOf<String>("test1", "test2", "test3", "test4")
+            val tmpOptionsTf = arrayListOf<String>("true", "false")
+            val tmpOptionsSa = ArrayList<String>()
+            val tmpAnswerOptionsS = arrayListOf<String>("test1")
+            val tmpAnswerOptionsM = arrayListOf<String>("test1", "test2")
+            val tmpAnswerOptionsTf = arrayListOf<String>("true")
+            tmpTag.add("資料結構")
+
+            val qList = ArrayList<quizService.QuestionInPostQuiz>()
+            val tmpPostQuizQuestionS = quizService.QuestionInPostQuiz("單選測試", "1", "test MultipleChoiceS", tmpOptionsS, "MultipleChoiceS", "none", "none", tmpAnswerOptionsS, "this is an answerDescription S", Constants.userId, "2023-6-29", ArrayList(), ArrayList(), tmpTag)
+            val tmpPostQuizQuestionM = quizService.QuestionInPostQuiz("多選測試", "2", "test MultipleChoiceM", tmpOptionsM, "MultipleChoiceM", "none", "none", tmpAnswerOptionsM, "this is an answerDescription M", Constants.userId, "2023-6-29", ArrayList(), ArrayList(), tmpTag)
+            val tmpPostQuizQuestionTF = quizService.QuestionInPostQuiz("是非測試", "3", "test True or False", tmpOptionsTf, "TrueOrFalse", "none", "none", tmpAnswerOptionsTf, "this is an true or false description", Constants.userId, "2023-6-29", ArrayList(), ArrayList(), tmpTag)
+            val tmpPostQuizQuestionSA = quizService.QuestionInPostQuiz("簡答測試", "4", "test short answer", tmpOptionsSa, "ShortAnswer", "none", "none", tmpOptionsSa, "this is an short answer description", Constants.userId, "2023-6-29", ArrayList(), ArrayList(), tmpTag)
+
+            qList.add(tmpPostQuizQuestionS)
+            qList.add(tmpPostQuizQuestionM)
+            qList.add(tmpPostQuizQuestionTF)
+            qList.add(tmpPostQuizQuestionSA)
+            val tmpPostQuiz = quizService.PostQuiz("test quiz",  "single", "ready", 100, ArrayList(), "2023-07-13 13:04:10", "2023-07-13 13:04:10", tmpMembers, qList)
+            ConstantsQuiz.postQuiz(this, tmpPostQuiz, onSuccess = { postQuiz ->
+                if(postQuiz.type == quizTypeSingle){
+                    fragmentAdapter.getSPFragment().postQuiz(postQuiz)
+                }else if(postQuiz.type == quizTypeCasual){
+                    fragmentAdapter.getMPFragment().postQuiz(postQuiz)
+                }
+            }, onFailure = {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            })
+        }
+    }
+
+    fun quizModified(quizIndex: Int, tmpQuestions: ArrayList<Question>, tmpTitle: String, tmpDuringTime: Int, tmpCasualDuringTime: ArrayList<Int>, tmpMembers: ArrayList<String>, tmpStatus: String, tmpStartDateTime: String, tmpEndDateTime: String, quizType: String){
+        fragmentAdapter.getSPFragment().putQuiz(quizIndex, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
+        if(quizType == quizTypeSingle){
+            fragmentAdapter.getSPFragment().putQuiz(quizIndex, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
+        }else if(quizType == quizTypeCasual){
+            fragmentAdapter.getMPFragment().putQuizFromSave(quizIndex, tmpQuestions, tmpTitle, tmpCasualDuringTime, tmpMembers,  tmpStatus, tmpStartDateTime, tmpEndDateTime)
+        }
     }
 
 }

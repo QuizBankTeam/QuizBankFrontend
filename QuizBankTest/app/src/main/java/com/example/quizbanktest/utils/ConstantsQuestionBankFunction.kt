@@ -45,11 +45,16 @@ object ConstantsQuestionBankFunction {
                             response.body().charStream(),
                             AllQuestionBanksResponse::class.java
                         )
-                        Log.e("Response Result", allBanksResponse.questionBanks[0].toString())
+//                        Log.e("Response Result", allBanksResponse.questionBanks[0].toString())
                         allBanksReturnResponse = allBanksResponse
                         questionBankList.clear()
                         questionBankList = allBanksResponse.questionBanks
-                        onSuccess(allBanksResponse.questionBanks)
+                        if(allBanksResponse.questionBanks.size == 0){
+                            onFailure("Request failed with status code ")
+                        }else{
+                            onSuccess(allBanksResponse.questionBanks)
+                        }
+
                     } else {
                         val sc = response.code()
                         when (sc) {
@@ -59,12 +64,15 @@ object ConstantsQuestionBankFunction {
                                             "" +
                                             "quest"
                                 )
+                                onFailure("Request failed with status code $sc")
                             }
                             404 -> {
                                 Log.e("Error 404", "Not Found")
+                                onFailure("empty")
                             }
                             else -> {
                                 Log.e("Error", "in get all banks Generic Error")
+                                onFailure("Request failed with status code $sc")
                             }
                         }
                         onFailure("Request failed with status code $sc")

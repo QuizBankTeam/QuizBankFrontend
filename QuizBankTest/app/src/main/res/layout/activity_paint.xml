@@ -5,18 +5,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_paint_detail"
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar_paint_detail"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        app:titleTextAppearance="@style/CustomToolbarStyle"-->
+<!--        app:titleTextColor="@color/colorPrimaryDark"-->
+<!--        app:title="圖片工作區 ⚙️"-->
+<!--        android:theme="@style/ToolbarTheme"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        />-->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:titleTextAppearance="@style/CustomToolbarStyle"
-        app:titleTextColor="@color/colorPrimaryDark"
-        app:title="圖片工作區 ⚙️"
-        android:theme="@style/ToolbarTheme"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        android:id="@+id/toolbar_paint_detail"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary"
+            android:theme="@style/CustomToolbarStyle">
+            <ImageButton
+                android:id="@+id/image_workspace_back"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/ic_black_color_back_24dp"/>
+            <!--            <View-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="2"/>-->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:layout_gravity="center"
+                android:paddingLeft="13dp"
+                android:text=" 圖片工作區 ️ "
+                android:textSize="25dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textAppearance="@style/CustomToolbarStyle"
+                android:textColor="@color/colorPrimaryDark"/>
+            <ImageButton
+                android:id="@+id/delete_all_scan_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0"
+                android:background="?actionBarItemBackground"
+                android:src="@null"/>
+            <ImageButton
+                android:id="@+id/add_empty_scan_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="?actionBarItemBackground"
+                android:src="@null"/>
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
     <FrameLayout
         android:id="@+id/fl_drawing_view_container"
         android:layout_width="0dp"
@@ -36,11 +90,11 @@
             android:contentDescription="image"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_image_24"/>
+
         <com.example.quizbanktest.view.DrawingView
             android:id="@+id/drawing_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           />
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

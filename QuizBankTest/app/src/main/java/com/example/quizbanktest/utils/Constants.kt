@@ -11,7 +11,7 @@ object Constants {
     const val RESULT_DELETE = 1500
     var username : String = "test"
     var password : String = "test"
-    var userId: String = ""
+    var userId: String = "791f34e7-9a6b-4406-85c4-68df9af7c182"
     var csrfToken : String = ""
     var session:String = ""
     var cookie:String=""
@@ -19,10 +19,18 @@ object Constants {
     var accessToken : String = ""
     var COOKIE: String = ""
     var EXPIRE: Int = 0 //用於在每次login 後 去判斷server token是否過期
-
+    const val quizStatusReady = "ready"
+    const val quizStatusDraft = "draft"
+    const val quizStatusDoing = "doing"
+    const val quizTypeSingle = "single"
+    const val quizTypeCasual = "casual"
+    const val questionTypeFilling = "Filling"
+    const val questionTypeMultipleChoiceS = "MultipleChoiceS"
+    const val questionTypeShortAnswer = "ShortAnswer"
+    const val questionTypeMultipleChoiceM = "MultipleChoiceM"
+    const val questionTypeTrueOrFalse = "TrueOrFalse"
 
     fun isNetworkAvailable(context: Context): Boolean {
-
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //比較新的系統
             val network      = connectivityManager.activeNetwork ?: return false

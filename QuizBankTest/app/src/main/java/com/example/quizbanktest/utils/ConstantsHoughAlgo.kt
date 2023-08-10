@@ -1,34 +1,38 @@
 package com.example.quizbanktest.utils
 
-import android.content.Intent
+import android.app.Activity
 import android.util.Log
 import android.widget.Toast
-import com.example.introducemyself.utils.ConstantsOcrResults
-import com.example.quizbanktest.activity.BaseActivity
-import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
-import com.example.quizbanktest.models.QuestionBankModel
-import com.example.quizbanktest.network.ScanImageService
+import com.example.quizbanktest.network.HoughRotateService
+import com.example.quizbanktest.network.RealEsrganService
 import com.google.gson.Gson
+import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.ResponseBody
+import okio.Buffer
+import okio.BufferedSource
 import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
+import java.nio.charset.Charset
+import java.util.concurrent.TimeUnit
 
-object ConstantsScanServiceFunction {
-    fun scanBase64ToOcrText(base64String: String, activity:BaseActivity, flag:Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+object ConstantsHoughAlgo {
+
+    fun imageRotate(base64String: String, activity: Activity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-            val api = retrofit.create(ScanImageService::class.java)
-            val body = ScanImageService.PostBody(base64String)
+            val api = retrofit.create(HoughRotateService::class.java)
+
+            val body = HoughRotateService.PostBody(base64String)
 
             //TODO 拿到csrf token access token
             Log.e("access in scan ", Constants.accessToken)
             Log.e("COOKIE in scan ", Constants.COOKIE)
-            val call = api.scanBase64(
+            val call = api.imageRotate(
                 Constants.COOKIE,
                 Constants.csrfToken,
                 Constants.accessToken,
@@ -38,35 +42,25 @@ object ConstantsScanServiceFunction {
 
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+
                     if (response!!.isSuccess) {
                         val gson = Gson()
-                        val ocrResponse = gson.fromJson(
+                        val houghResponse = gson.fromJson(
                             response.body().charStream(),
-                            OCRResponse::class.java
+                            HoughResponse::class.java
                         )
-//                        Log.e("Response Result", ocrResponse.text)
-                        if(flag==0){
-                           //不用換頁因為是答案ocr
-                            onSuccess(ocrResponse.text)
-                        }
-                        else{
-                            if(!ocrResponse.text.equals("")){
-                                onSuccess(ocrResponse.text)
-                            }else{
-                                onFailure("辨識不出來目前的圖片請重新上傳")
-                            }
+                        Log.e("Response Result", houghResponse.image)
 
-                        }
-
+                        onSuccess(houghResponse.image)
 
                     } else {
 
                         val sc = response.code()
-                        activity.hideProgressDialog()
+
 
                         when (sc) {
                             400 -> {
-                                activity.showErrorSnackBar("發生了錯誤(BAD REQUEST)")
+
                                 Log.e(
                                     "Error 400", "Bad Re" +
                                             "" +
@@ -75,12 +69,12 @@ object ConstantsScanServiceFunction {
                                 onFailure("Request failed with status code $sc")
                             }
                             404 -> {
-                                activity.showErrorSnackBar("系統找不到")
+
                                 Log.e("Error 404", "Not Found")
                                 onFailure("Request failed with status code $sc")
                             }
                             else -> {
-                                Log.e("Error", "in scan Generic Error")
+                                Log.e("Error", "in hough Generic Error")
                                 onFailure("Request failed with status code $sc")
                             }
 
@@ -89,9 +83,8 @@ object ConstantsScanServiceFunction {
                 }
 
                 override fun onFailure(t: Throwable?) {
-                    activity.showErrorSnackBar("掃描發生錯誤")
-                    activity.hideProgressDialog()
-                    Log.e("in scan Errorrrrr", t?.message.toString())
+
+                    Log.e("in hough Errorrrrr", t?.message.toString())
                     onFailure("Request failed with status code")
                 }
             })
@@ -105,6 +98,5 @@ object ConstantsScanServiceFunction {
         }
 
     }
-    data class OCRResponse(val text: String)
-
+    data class HoughResponse(val image: String)
 }

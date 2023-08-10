@@ -30,6 +30,8 @@ import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
+import com.example.quizbanktest.utils.ConstantsRecommend
+import com.example.quizbanktest.utils.ConstantsWrong
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
@@ -47,13 +49,14 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var etBankMembers: EditText
     private lateinit var etBankSource: EditText
 
-    @SuppressLint("MissingInflatedId")
+
+    @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank)
         setupNavigationView()
         doubleCheckExit()
-        val recyclerView : RecyclerView = findViewById(R.id.bankRecyclerView)
+         val recyclerView : RecyclerView = findViewById(R.id.bankRecyclerView)
         setupBankModel()
         val adapter = BankRecyclerViewAdapter(this, questionBankModels, this)
 
@@ -92,12 +95,23 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             val btnBankSubmit = addBankDialog.findViewById<ImageButton>(R.id.btn_bank_submit)
             btnBankSubmit.setOnClickListener {
                 val tempQuestionBankModel = QuestionBankModel(bankId, bankTitle, bankType, bankCreatedDate, bankMembers, bankSource, bankCreator)
+                showProgressDialog("新增中")
                 ConstantsQuestionBankFunction.postQuestionBank(tempQuestionBankModel, this,
                     onSuccess = {
                         Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
                         Log.d("addBankDialog", "add bank success")
                         addBankDialog.dismiss()
-                        setupBankModel()
+                        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+                            onSuccess = { questionBanks ->
+                                val intent = Intent(this@BankActivity,BankActivity::class.java)
+                                startActivity(intent)
+                                hideProgressDialog()
+                                finish()
+                            },
+                            onFailure = { errorMessage ->
+                                hideProgressDialog()
+                            }
+                        )
                     },
                     onFailure = {
                         Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
@@ -107,18 +121,16 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 )
             }
 
-            var count : Int = 1
-            val btnAddBankMember = addBankDialog.findViewById<ImageButton>(R.id.btn_add_bank_member)
-            btnAddBankMember.setOnClickListener {
-                val ll = addBankDialog.findViewById<LinearLayout>(R.id.layout_bank_members)
-                val et = EditText(this)
-                val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                et.layoutParams = p
-                et.hint = "new$count"
-                count++
-                ll.addView(et)
-//                et.requestFocus()
-            }
+//            val btnAddBankMember = addBankDialog.findViewById<ImageButton>(R.id.btn_add_bank_member)
+//            btnAddBankMember.setOnClickListener {
+//                val ll = addBankDialog.findViewById<LinearLayout>(R.id.layout_bank_members)
+//                val et = EditText(this)
+//                val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//                et.layoutParams = p
+//                et.hint = "enter members"
+//                ll.addView(et)
+////                et.requestFocus()
+//            }
         }
     }
 

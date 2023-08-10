@@ -8,27 +8,26 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.fragment.MultiQuizPage
 import com.example.quizbanktest.fragment.SingleQuizPage
 
-class QuizPageAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+class QuizPageAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, SPFragment: SingleQuizPage, MPFragment: MultiQuizPage) :
     FragmentStateAdapter(fragmentManager, lifecycle){
-    private lateinit var SPFragment: SingleQuizPage
-    private lateinit var MPFragment: MultiQuizPage
+    private val Spf = SPFragment
+    private val Mpf = MPFragment
+
     override fun getItemCount(): Int {
         return 2
     }
 
     override fun createFragment(position: Int): Fragment {
-        SPFragment = SingleQuizPage()
-        MPFragment = MultiQuizPage()
         return if(position==0) {
-            SPFragment
+            Spf
         } else {
-            MPFragment
+            Mpf
         }
     }
     fun getSPFragment(): SingleQuizPage {
-        return SPFragment
+        return Spf
     }
     fun getMPFragment(): MultiQuizPage {
-        return MPFragment
+        return Mpf
     }
 }

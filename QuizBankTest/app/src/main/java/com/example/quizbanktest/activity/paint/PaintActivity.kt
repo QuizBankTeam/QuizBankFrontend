@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -33,10 +34,13 @@ import androidx.core.content.FileProvider
 import androidx.core.os.BuildCompat
 import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
+import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.MainActivity
+import com.example.quizbanktest.utils.*
 
 import com.example.quizbanktest.view.DrawingView
+import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -69,6 +73,7 @@ class PaintActivity : AppCompatActivity() {
     var shareFlag : Int = 0 //是否要分享
     var colorTag : String = "#d62828" //預設紅色
     var penFlag: Int = 0 // 0 : brush 1: highlighter
+    private lateinit var mProgressDialog: Dialog
     private var mImageButtonCurrentPaint: ImageButton?=null //畫筆
 
     var idImage = System.currentTimeMillis()/1000 //為了給image的path一個獨特的id ex: QuizBank_32142431.jpg
@@ -187,35 +192,30 @@ class PaintActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paint)
+        val backButton : ImageButton = findViewById(R.id.image_workspace_back)
 
-        var toolBar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_paint_detail)
-        setSupportActionBar(toolBar)
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            Log.e("in action bar","not null")
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
-            Log.e("nav","toolbar")
-        }
+        backButton.setOnClickListener{
+            if(ConstantsOcrResults.getOcrResult().size!=0){
+                Log.e("nav","toolbar")
+                val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
+                    .setTitle("圖片工作區")
+                    .setIcon(R.drawable.baseline_warning_amber_24)
+                builder.setPositiveButton("確認") { dialog, which ->
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
 
-        doubleCheckExit()
-        toolBar.setNavigationOnClickListener{
-            Log.e("nav","toolbar")
-            var builder = androidx.appcompat.app.AlertDialog.Builder(this)
-                .setMessage(" 您確定要離開嗎系統不會保存這次圖片修改喔 ")
-                .setTitle("圖片工作區")
-                .setIcon(R.drawable.baseline_warning_amber_24)
-            builder.setPositiveButton("確認") { dialog, which ->
+                builder.setNegativeButton("取消") { dialog, which ->
+
+                }
+                builder.show()
+            }else{
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
-
-            builder.setNegativeButton("取消") { dialog, which ->
-
-            }
-            builder.show()
-
         }
 
         drawingView = findViewById(R.id.drawing_view)
@@ -339,6 +339,25 @@ class PaintActivity : AppCompatActivity() {
         val ib_redo : ImageButton = findViewById(R.id.ib_redo)
         ib_redo.setOnClickListener{
             drawingView?.onClickRedo()
+        }
+
+        val ib_highQuality : ImageButton = findViewById(R.id.ib_highQuality)
+        ib_highQuality.setOnClickListener {
+            showProgressDialog("提升畫質中請耐心等候")
+            val imageBackground: ImageView = findViewById(R.id.iv_background)
+            val backgroundBitmap = getBitmapFromView(imageBackground)
+            ConstantsRealESRGAN.realEsrgan(ConstantsFunction.encodeImage(backgroundBitmap)!! , this@PaintActivity,
+                onSuccess = { it1 ->
+                    val resultBitmap = base64ToBitmap(it1)
+                    imageBackground.setImageBitmap(resultBitmap)
+                    hideProgressDialog()
+                },
+                onFailure = { it1 ->
+                    showErrorSnackBar("伺服器目前出現了點問題請稍後在試")
+                    hideProgressDialog()
+                }
+            )
+
         }
 
         //儲存繪畫後的圖片
@@ -466,10 +485,6 @@ class PaintActivity : AppCompatActivity() {
             choosePhotoFromGallery()
         }
 
-        val ibQuality : ImageButton = findViewById(R.id.ib_highQuality)
-        ibQuality.setOnClickListener{
-            //TODO
-        }
     }
 
     //顯示畫筆可以選擇的大小
@@ -623,7 +638,10 @@ class PaintActivity : AppCompatActivity() {
         }
         return result
     }
-
+    fun base64ToBitmap(base64Data: String?): Bitmap? {
+        val bytes: ByteArray = Base64.decode(base64Data, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
     private fun choosePhotoFromGallery() {
         Dexter.withActivity(this)
             .withPermissions(
@@ -716,5 +734,33 @@ class PaintActivity : AppCompatActivity() {
 //            e.printStackTrace()
         }
 
+    }
+    fun showProgressDialog(text: String) {
+        mProgressDialog = Dialog(this)
+
+        /*Set the screen content from a layout resource.
+        The resource will be inflated, adding all top-level views to the screen.*/
+        mProgressDialog.setContentView(R.layout.dialog_progress)
+
+        mProgressDialog.findViewById<TextView>(R.id.tv_progressbar_text).text=text
+
+        //Start the dialog and display it on screen.
+        mProgressDialog.show()
+    }
+
+    fun showErrorSnackBar(message: String) {
+        val snackBar =
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+        val snackBarView = snackBar.view
+        snackBarView.setBackgroundColor(
+            ContextCompat.getColor(
+                this@PaintActivity,
+                R.color.red
+            )
+        )
+        snackBar.show()
+    }
+    fun hideProgressDialog() {
+        mProgressDialog.dismiss()
     }
 }

@@ -38,7 +38,7 @@
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="-5dp"
-        android:text="你答對了 8 / 10 題 !"
+        android:text="歡樂考試已結束"
         android:textSize="23dp"/>
 
     <androidx.cardview.widget.CardView
@@ -78,37 +78,8 @@
                     android:text="回到主頁"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/goto_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_margin="8dp"
-                    android:src="@drawable/baseline_record"
-                    android:background="@drawable/background_round_green"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="保存考試紀錄"/>
-            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/decide_short_ans"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginBottom="10dp"
-        android:text="決定簡答題是否正確:"
-        android:textSize="20dp"/>
 
     <LinearLayout
         android:id="@+id/question_container"

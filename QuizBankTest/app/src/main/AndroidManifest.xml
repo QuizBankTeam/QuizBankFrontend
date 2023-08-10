@@ -21,36 +21,47 @@
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/qb_icon"
-
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizBankTest"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activity.public_area.PublicAreaPageActivity"
+            android:screenOrientation="portrait"
 
+            android:exported="false" />
         <activity
             android:name=".activity.bank.BankSingleAnswerQuestionActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.account.AccountSettingActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.account.MyProfileActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.group.GroupSettingActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.group.ChatRoomActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.group.GroupPageActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.bank.BankQuestionActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.group.GroupListActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.SplashActivity"
@@ -64,25 +75,32 @@
         </activity>
         <activity
             android:name=".activity.scan.TagActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.account.LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.scan.ScannerTextWorkSpaceActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.IntroActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.paint.ColorPickerActivity1"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.bank.BankActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".activity.paint.PaintActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
@@ -111,10 +129,10 @@
         <activity android:name=".activity.quiz.SPStartQuiz" />
         <activity android:name=".activity.quiz.SPQuizFinish" />
         <activity android:name=".activity.quiz.SPSingleRecord" />
+        <activity android:name=".activity.quiz.MPQuizFinish" />
         <activity
             android:name=".activity.quiz.MPStartQuiz"
             android:theme="@style/StartQuiz" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.quizbanktest.fileprovider"

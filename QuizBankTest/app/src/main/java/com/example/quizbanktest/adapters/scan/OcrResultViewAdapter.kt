@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import co.lujun.androidtagview.TagContainerLayout
 import co.lujun.androidtagview.TagView
 import com.example.introducemyself.utils.ConstantsOcrResults
+import com.example.introducemyself.utils.ConstantsOcrResults.rescanPosition
 import com.example.introducemyself.utils.ConstantsTag
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
@@ -47,20 +48,13 @@ class OcrResultViewAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, @SuppressLint("RecyclerView") position: Int) {
-
-        val tagBankList:ArrayList<String> = ArrayList()//顯示有哪些題庫標籤
-        val tagRelateList:ArrayList<String> = ArrayList()//顯示有哪些相關標籤
-        val tagRangeList:ArrayList<String> = ArrayList()//顯示有哪些範圍標籤
-
+        val tagQuestionList:ArrayList<String> = ArrayList()//顯示有哪些題目標籤
         val imageList : ArrayList<String> = ArrayList() //目前選擇了那些圖片(包括 題目描述跟答案之圖片)
         val out = ByteArrayOutputStream()
         var optionsNum : Int = 4 //預設選項為四個
         val model = list[position] //知道目前是哪個東西被選擇
-
         //去給他初始化
-        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForBank).tags = ConstantsTag.getEmptyList()
         holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags = ConstantsTag.getEmptyList()
-        holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags = ConstantsTag.getEmptyList()
 
         //題目的標題
         val title : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_title)
@@ -92,6 +86,24 @@ class OcrResultViewAdapter(
             scannerText.setText(ConstantsOcrResults.getOcrResult()[position].description,TextView.BufferType.EDITABLE)
 
 
+            val reScanBtn : TextView = holder.itemView.findViewById(R.id.btn_rescan)
+            reScanBtn.setOnClickListener {
+                val builder =AlertDialog.Builder(activity)
+                    .setMessage(" 您確定要重新掃描嗎 ")
+                    .setTitle("掃描結果")
+                    .setIcon(R.drawable.baseline_warning_amber_24)
+                builder.setPositiveButton("確認") { dialog, which ->
+                    rescanPosition = position
+                    activity.choosePhotoToOcr(1, onSuccess = { it1 ->
+                        notifyDataSetChanged()
+                    }, onFailure = { it1 ->
+                    })
+                }
+
+                builder.setNegativeButton("取消") { dialog, which ->
+                }
+                builder.show()
+            }
             //選擇標籤
             val chooseTagButton = holder.itemView.findViewById<LinearLayout>(R.id.chooseTag)
             chooseTagButton.setOnClickListener{
@@ -100,42 +112,27 @@ class OcrResultViewAdapter(
                 tagDialog.setContentView(R.layout.dialog_choose_tag)
                 //初始化所有的tag展示區域
                 var mTagContainerLayout1: TagContainerLayout? = null
-                var mTagContainerLayout2: TagContainerLayout? = null
-                var mTagContainerLayout3: TagContainerLayout? = null
                 var mChooseTagContainerLayout1: TagContainerLayout? = null
-                var mChooseTagContainerLayout2: TagContainerLayout? = null
-                var mChooseTagContainerLayout3: TagContainerLayout? = null
-
                 //這邊之後要放使用者常用的tags
                 val list1 = ConstantsTag.getList1()
-                val list2 = ConstantsTag.getList2()
-                val list3 = ConstantsTag.getList3()
 
+                mTagContainerLayout1 = tagDialog.findViewById(R.id.tagcontainerLayout1)
+                mChooseTagContainerLayout1 = tagDialog.findViewById(R.id.chooseContainerLayout1)
+                mTagContainerLayout1!!.setTags(list1)
+                mChooseTagContainerLayout1.tags=tagQuestionList
                 tagDialog.setTitle("選擇標籤")
                 tagDialog.show()
 
                 //給定對應的初始化物件
-                mTagContainerLayout1 = tagDialog.findViewById(R.id.tagcontainerLayout1)
-                mTagContainerLayout2 = tagDialog.findViewById(R.id.tagcontainerLayout2)
-                mTagContainerLayout3 = tagDialog.findViewById(R.id.tagcontainerLayout3)
-                mChooseTagContainerLayout1 = tagDialog.findViewById(R.id.chooseContainerLayout1)
-                mChooseTagContainerLayout2 = tagDialog.findViewById(R.id.chooseContainerLayout2)
-                mChooseTagContainerLayout3 = tagDialog.findViewById(R.id.chooseContainerLayout3)
-                //將使用者常用的tag放上去
-                mTagContainerLayout1!!.setTags(list1)
-                mTagContainerLayout2!!.setTags(list2)
-                mTagContainerLayout3!!.setTags(list3)
 
                 mTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
-                        tagBankList.add(text)
+//                        tagBankList.add(text)
+                        tagQuestionList.add(text)
                         //當使用者選擇某個tag擇要顯示
-                        mChooseTagContainerLayout1.tags=tagBankList
+//                        mChooseTagContainerLayout1.tags=tagBankList
+                        mChooseTagContainerLayout1.tags=tagQuestionList
                         ConstantsOcrResults.getOcrResult()[position].tag?.add(text) //將此tag記錄到等等要放進資料庫的題目的標籤列
-                        Toast.makeText(
-                            context, "click-position:$tag_position, text:$text",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
 
                     override fun onTagLongClick(position: Int, text: String) {
@@ -158,126 +155,35 @@ class OcrResultViewAdapter(
                     override fun onTagCrossClick(position: Int) {
                         //移除目前的tag
                         mTagContainerLayout1.removeTag(position);
-                        Toast.makeText(
-                            context, "Click TagView cross! position = $position",
-                            Toast.LENGTH_SHORT
-                        ).show()
+
                     }
                 })
 
-                //以此類推
-                mTagContainerLayout2.setOnTagClickListener(object : TagView.OnTagClickListener {
+                mChooseTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
-                        tagRelateList.add(text)
-                        mChooseTagContainerLayout2.tags=tagRelateList
-                        ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
-                        Toast.makeText(
-                            context, "click-position:$tag_position, text:$text",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
-
                     override fun onTagLongClick(position: Int, text: String) {
-                        val dialog = android.app.AlertDialog.Builder(context)
-                            .setTitle("long click")
-                            .setMessage("You will delete this tag!")
-                            .setPositiveButton("Delete") { dialog, which ->
-                                if (position < mTagContainerLayout2.getChildCount()) {
-                                    mTagContainerLayout2.removeTag(position)
-                                }
-                            }
-                            .setNegativeButton(
-                                "Cancel"
-                            ) { dialog, which -> dialog.dismiss() }
-                            .create()
-                        dialog.show()
                     }
-
                     override fun onSelectedTagDrag(position: Int, text: String) {}
-                    override fun onTagCrossClick(position: Int) {
-                        mTagContainerLayout2.removeTag(position)
-                        Toast.makeText(
-                            context, "Click TagView cross! position = $position",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    override fun onTagCrossClick(tag_position: Int) {
+                        tagQuestionList.remove(mChooseTagContainerLayout1.getTagText(tag_position))
+                        ConstantsOcrResults.getOcrResult()[position].tag?.remove(mChooseTagContainerLayout1.getTagText(tag_position))
+                        mChooseTagContainerLayout1.removeTag(tag_position)
                     }
                 })
-
-                //以此類推
-                mTagContainerLayout3.setOnTagClickListener(object : TagView.OnTagClickListener {
-                    override fun onTagClick(tag_position: Int, text: String) {
-                        tagRangeList.add(text)
-                        mChooseTagContainerLayout3.tags=tagRangeList
-                        ConstantsOcrResults.getOcrResult()[position].tag?.add(text)
-                        val selectedPositions = mTagContainerLayout3.getSelectedTagViewPositions()
-                        //deselect all tags when click on an unselected tag. Otherwise show toast.
-                        if (selectedPositions.isEmpty() || selectedPositions.contains(position)) {
-                            Toast.makeText(
-                                context, "click-position:$tag_position, text:$text",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            //deselect all tags
-                            for (i in selectedPositions) {
-                                mTagContainerLayout3.deselectTagView(i)
-                            }
-                        }
-                    }
-
-                    override fun onTagLongClick(position: Int, text: String) {
-                        mTagContainerLayout3.toggleSelectTagView(position)
-                        val selectedPositions = mTagContainerLayout3.getSelectedTagViewPositions()
-                        Toast.makeText(
-                            context, "selected-positions:$selectedPositions",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    override fun onSelectedTagDrag(position: Int, text: String) {
-                        val clip = ClipData.newPlainText("Text", text)
-                        val view: View = mTagContainerLayout3.getTagView(position)
-                        val shadow = View.DragShadowBuilder(view)
-                        view.startDrag(clip, shadow, Boolean.TRUE, 0)
-                    }
-
-                    override fun onTagCrossClick(position: Int) {
-                        mTagContainerLayout3.removeTag(position)
-                    }
-                })
-
                 val text = tagDialog.findViewById<View>(R.id.text_tag) as EditText
                 val btnAddTag = tagDialog.findViewById<View>(R.id.btn_add_tag) as TextView
                 btnAddTag.setOnClickListener {
                     //新增置常用的標籤列
                     mTagContainerLayout1.addTag(text.text.toString())
-
                 }
-
-                val text_relate = tagDialog.findViewById<View>(R.id.text_tag_relate) as EditText
-                val btnAddTag_relate = tagDialog.findViewById<View>(R.id.btn_add_tag_relate) as TextView
-                btnAddTag_relate.setOnClickListener {
-                    //新增置常用的標籤列
-                    mTagContainerLayout2.addTag(text_relate.text.toString())
-
-                }
-
-                val text_range = tagDialog.findViewById<View>(R.id.text_tag_range) as EditText
-                val btnAddTag_range = tagDialog.findViewById<View>(R.id.btn_add_tag_range) as TextView
-                btnAddTag_range.setOnClickListener {
-                    //新增置常用的標籤列
-                    mTagContainerLayout3.addTag(text_range.text.toString())
-
-                }
-
                 val enterButton : TextView = tagDialog.findViewById(R.id.enter_tag)
                 val cancelButton : TextView = tagDialog.findViewById(R.id.cancel_tag)
 
                 //按下確認新增結束tag
                 enterButton.setOnClickListener {
-                    holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForBank).tags=tagBankList
-                    holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags=tagRelateList
-                    holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForRange).tags=tagRangeList
 
+                    holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags=tagQuestionList
                     tagDialog.dismiss()
                     Toast.makeText(context,"successful upload tag",Toast.LENGTH_SHORT).show()
                 }
@@ -291,6 +197,23 @@ class OcrResultViewAdapter(
             //question bank type
             val questionBankType : Spinner = holder.itemView.findViewById(R.id.spinner_question_bank)
 
+            val  chooseTagOnAdapter = holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion)
+            chooseTagOnAdapter.setOnTagClickListener(object : TagView.OnTagClickListener {
+                override fun onTagClick(tag_position: Int, text: String) {
+                }
+                override fun onTagLongClick(tag_position: Int, text: String) {
+                }
+                override fun onSelectedTagDrag(tag_position: Int, text: String) {}
+                override fun onTagCrossClick(tag_position: Int) {
+                    tagQuestionList.remove(chooseTagOnAdapter.getTagText(tag_position))
+                    ConstantsOcrResults.getOcrResult()[position].tag?.remove(chooseTagOnAdapter.getTagText(tag_position))
+                    chooseTagOnAdapter.removeTag(tag_position)
+                    if(ConstantsOcrResults.getOcrResult()[position].tag?.size == 0){
+                        ConstantsOcrResults.getOcrResult()[position].tag?.add("目前為空喔")
+                    }
+                    if(chooseTagOnAdapter.tags.size == 0) chooseTagOnAdapter.tags = ConstantsTag.getEmptyList()
+                }
+            })
             //題庫列表的下拉式選單
             val bankTypeList : ArrayList<String> = ArrayList()
             val hintType : String = "請選擇將題目新增至下列題庫"
@@ -325,7 +248,6 @@ class OcrResultViewAdapter(
                             if(bitmap!=null){
                                 selectBitmap = bitmap
                                 selectBitmap?.compress(Bitmap.CompressFormat.JPEG, 70, out)
-                                Toast.makeText(context," success choose photo",Toast.LENGTH_SHORT).show()
                                 val showImage : ImageView = answerDialog.findViewById(R.id.iv_answer_image)
                                 showImage.setImageBitmap(selectBitmap)
                                 val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
@@ -349,7 +271,7 @@ class OcrResultViewAdapter(
                                                     answerDescription.setText(it1)
                                                 }, onFailure = { it1 ->
                                                     activity.hideProgressDialog()
-                                                    Toast.makeText(context,"掃描錯誤",Toast.LENGTH_SHORT).show()
+                                                    activity.showErrorSnackBar("掃描錯誤")
                                                 }
                                             )
 
@@ -461,6 +383,7 @@ class OcrResultViewAdapter(
 
             //超過四個選項因此點及新增選項
             val addOptionsButton : ImageButton = holder.itemView.findViewById(R.id.add_options_button)
+            val removeOptionsButton : ImageButton = holder.itemView.findViewById(R.id.minus_options_button)
             addOptionsButton.setOnClickListener{
                 if(optionsNum == 10){ //不能超過十個
                     Toast.makeText(context,"已達最多的選項限制了喔",Toast.LENGTH_SHORT).show()
@@ -469,6 +392,7 @@ class OcrResultViewAdapter(
                 }
                 when (optionsNum) {
                     2 -> {
+                        removeOptionsButton.visibility = View.VISIBLE
                         option2.visibility = View.VISIBLE
                     }
                     3 -> {
@@ -498,7 +422,7 @@ class OcrResultViewAdapter(
                 }
 
             }
-            val removeOptionsButton : ImageButton = holder.itemView.findViewById(R.id.minus_options_button)
+
             removeOptionsButton.setOnClickListener{
                 if(optionsNum == 1){ //不能超過十個
                     Toast.makeText(context,"已達不能再少了喔",Toast.LENGTH_SHORT).show()

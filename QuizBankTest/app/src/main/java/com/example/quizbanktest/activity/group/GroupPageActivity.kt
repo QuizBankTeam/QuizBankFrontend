@@ -91,7 +91,9 @@ class GroupPageActivity : AppCompatActivity() {
     }
 
     @SuppressLint("UnsafeOptInUsageError")
+
     fun pullExit(){
+
         if (BuildCompat.isAtLeastT()) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
