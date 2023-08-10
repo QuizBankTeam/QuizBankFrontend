@@ -138,6 +138,7 @@ class SingleQuestion : AppCompatActivity(){
                 this.questionType = if(questionType=="MultipleChoiceS" || questionType=="MultipleChoiceM")
                                         data.getStringExtra("Key_type").toString() else this.questionType
                 questionBinding.QuestionTitle.text = this.questionTitle
+                questionBinding.QuestionType.text = this.questionType
             }
         }
         else{  //啥都沒改
@@ -304,17 +305,18 @@ class SingleQuestion : AppCompatActivity(){
     private fun backBtn(){
         val intent = Intent()
         var answerOptionListStr: ArrayList<String> = ArrayList()
-        if (this.questionType=="MultipleChoiceS" || this.questionType=="MultipleChoiceM"){
+        getOptions() //要先get option底下的answer options才不會出錯...
+        if (questionType==Constants.questionTypeMultipleChoiceS || questionType==Constants.questionTypeMultipleChoiceM){
             for (i in answerOptionInt)
                 answerOptionListStr.add(optionListStr[i])
-        }else if(this.questionType!="ShortAnswer"){
+        }else if(questionType!=Constants.questionTypeShortAnswer){
             answerOptionListStr = answerOptions
         }
 
-        if(this.questionType=="MultipleChoiceS" && answerOptionInt.size>1){
+        if(questionType==Constants.questionTypeMultipleChoiceS && answerOptionInt.size>1){
             AlertDialog.Builder(this).setTitle("單選題只能有一個正確選項!").setPositiveButton("我懂", null).show()
         }else {
-            getOptions()
+
             intent.putStringArrayListExtra("Key_options", optionListStr)
             intent.putExtra("Key_description", questionBinding.questionDescription.text)
             intent.putExtra("Key_title", questionTitle)
@@ -341,48 +343,45 @@ class SingleQuestion : AppCompatActivity(){
         val builder = AlertDialog.Builder(this)
         val v:View =  layoutInflater.inflate(R.layout.dialog_edit_option, null)
         val needToChange = ArrayList<Int>()
-        var status = false
-        var answerOptionIndices = -1
-        for(i in answerOptionInt.indices){
-            if(answerOptionInt[i] == position) {
-                status = true
-                answerOptionIndices = i
-            }
+        var originStatus = false
+        if(answerOptionInt.contains(position)){  //正確答案中有這個被選取的選項
+            originStatus = true
         }
+
         builder.setTitle(currentOption.optionNum)
         builder.setView(v)
         val dialog: AlertDialog = builder.create()
         dialog.show()
-
+        var newStatus = originStatus
         val editOption:TextView = v.findViewById(R.id.optionContent)
         val ansSwitch: SwitchCompat = v.findViewById(R.id.answer_switch)
         editOption.text = currentOption.optionContent
-        ansSwitch.isChecked = status
+        ansSwitch.isChecked = newStatus
         ansSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            status = isChecked
+            newStatus = isChecked
         }
 
         dialog.setOnDismissListener {
             val tmpText =  editOption.text
-            currentOption.optionContent = tmpText.toString()
-            if(status) {
-                if(answerOptionIndices==-1) { //原先不是正確答案 後來是
+            optionlist[position].optionContent = tmpText.toString() //選項內的文字修改
+            if(originStatus!=newStatus) {
+                if(newStatus){ //原先不是正確答案 後來是
                     if (this.questionType == "MultipleChoiceS") {
-                        needToChange.add(answerOptionInt[0])
-                        answerOptionInt.clear()
+                        if(answerOptionInt.isNotEmpty()){
+                            needToChange.add(answerOptionInt[0])
+                            answerOptionInt.clear()
+                        }
                     }
                     answerOptionInt.add(position)
-                }
-            }
-            else{
-                if(answerOptionIndices!=-1) {  //原先是正確答案 後來不是
+                }else{  //原先是正確答案 後來不是
                     if(answerOptionInt.size > 1)
-                        answerOptionInt.removeAt(answerOptionIndices)
+                        answerOptionInt.remove(position)
                     else {
                         AlertDialog.Builder(this).setTitle("至少要有一個正確選項!")
                             .setPositiveButton("我懂", null).show()
                     }
                 }
+
             }
             optionAdapter.setAnswerOptions(answerOptionInt)
             needToChange.add(position)

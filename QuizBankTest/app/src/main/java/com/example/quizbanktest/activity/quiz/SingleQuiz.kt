@@ -31,8 +31,10 @@ class SingleQuiz: AppCompatActivity() {
     private lateinit var quizEndDateTime: String
     private lateinit var quizMembers: ArrayList<String>
     private lateinit var quizAdapter: QuestionAdapter
+    private var differentFromQuizList = false
+    private var hadPutQuiz = false
     private var isModified = false
-    private  var duringTime: Int = -1
+    private var duringTime: Int = -1
     private var quizIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -169,6 +171,9 @@ class SingleQuiz: AppCompatActivity() {
     }
     private fun saveQuiz(){
         determineStatus()
+        if(isModified){
+            differentFromQuizList = true
+        }
         if(quizType==Constants.quizTypeCasual){
             var duringTime = 0
             for(time in casualDuringTime){
@@ -180,11 +185,12 @@ class SingleQuiz: AppCompatActivity() {
         val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, questionlist)
         ConstantsQuiz.putQuiz(this, putQuiz, onSuccess = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            isModified = false
         }, onFailure = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
     }
-    private fun backToQuizList(){
+    private fun backAndUpdateQuizInQuizList(){ //返回並更新quizList中的此Quiz
         val intentBack = Intent()
         intentBack.putExtra("Key_title", quizTitle)
         intentBack.putExtra("Key_type", quizType)
@@ -216,15 +222,26 @@ class SingleQuiz: AppCompatActivity() {
         }
         else{
             for(question in questionlist){
-                if(question.answerOptions.isNullOrEmpty() || question.options.isNullOrEmpty() || question.description.isNullOrEmpty()){
-                    status = Constants.quizStatusDraft
-                    break
+                if(question.questionType==Constants.questionTypeShortAnswer)
+                {
+                    if(quizType==Constants.quizTypeCasual){
+                        Toast.makeText(this, "多人考試不能有簡答題!", Toast.LENGTH_LONG).show()
+                        status = Constants.quizStatusDraft
+                        break
+                    }else if(quizType==Constants.quizTypeSingle){
+                        if(question.description.isNullOrEmpty()){
+                            status = Constants.quizStatusDraft
+                            break
+                        }
+                    }
                 }
-                if(quizType==Constants.quizTypeCasual&&question.questionType=="ShortAnswer"){
-                    Toast.makeText(this, "多人考試不能有簡答題!", Toast.LENGTH_LONG).show()
-                    status = Constants.quizStatusDraft
-                    break
+                else {
+                    if(question.answerOptions.isNullOrEmpty() || question.options.isNullOrEmpty() || question.description.isNullOrEmpty()){
+                        status = Constants.quizStatusDraft
+                        break
+                    }
                 }
+
             }
         }
         quizStatus = status
@@ -273,6 +290,7 @@ class SingleQuiz: AppCompatActivity() {
             }
         }
         isModified = false
+        differentFromQuizList = false
         this.quizIndex = quizIndex
         this.duringTime = duringTime
         quizBinding.quizTitle.text = title
@@ -324,7 +342,12 @@ class SingleQuiz: AppCompatActivity() {
                 tmpQuestion.answerDescription = tmpAnswerDescription
                 tmpQuestion.number = tmpNumber
                 tmpQuestion.questionType = tmpQuestionType
-
+                for(option in tmpQuestion.options!!){
+                    Log.d("option is ", option)
+                }
+                for(answerOption in tmpQuestion.answerOptions!!){
+                    Log.d("answer option is ", answerOption)
+                }
                 if (quizType == "casual") {
                     val tmpTimeLimit = data.getIntExtra("Key_timeLimit", 0)
                     if(tmpTimeLimit != casualDuringTime[requestCode]){
@@ -349,7 +372,10 @@ class SingleQuiz: AppCompatActivity() {
         }
     }
     private fun backBtn(){
-        if(!isModified){
+        if(differentFromQuizList && !isModified){ //使用者按下儲存考試 再按返回
+            backAndUpdateQuizInQuizList()
+        }
+        else if(!isModified){ //使用者沒改過東西
             setResult(RESULT_CANCELED)
             finish()
         }else{
@@ -357,7 +383,7 @@ class SingleQuiz: AppCompatActivity() {
             builder.setTitle("是否保存修改紀錄?")
             builder.setPositiveButton("確定") { dialog, which ->
                 saveQuiz()
-                backToQuizList()
+                backAndUpdateQuizInQuizList()
             }
             builder.setNegativeButton("取消"){ dialog, which ->
                 setResult(RESULT_CANCELED)
