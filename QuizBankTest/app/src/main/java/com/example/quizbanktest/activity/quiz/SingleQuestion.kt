@@ -1,4 +1,5 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,9 +12,11 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.*
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.core.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.databinding.ActivitySingleQuestionBinding
@@ -440,7 +443,7 @@ class SingleQuestion : AppCompatActivity(){
         dialog.show()
         dialog.setOnDismissListener {
             if(editTag.text.toString().length>5){
-                AlertDialog.Builder(this).setTitle("標籤過長5!").setPositiveButton("我懂", null).show()
+                AlertDialog.Builder(this).setTitle("標籤過長!").setPositiveButton("確定", null).show()
             }else{
                 this.questionTag[position] = editTag.text.toString()
                 this.questionTagTextView[position].text = this.questionTag[position]
@@ -545,6 +548,19 @@ class SingleQuestion : AppCompatActivity(){
                 }
             }
             answerOptionInt = tmpAnswerOptionInt
+        }
+    }
+    override fun onBackPressed() {
+        backBtn()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                backBtn()
+            }
         }
     }
 }

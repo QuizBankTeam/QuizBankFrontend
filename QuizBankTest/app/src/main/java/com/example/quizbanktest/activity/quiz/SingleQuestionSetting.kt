@@ -1,5 +1,6 @@
 package com.example.quizbanktest.activity.quiz
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +9,9 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.*
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BuildCompat
 import com.example.quizbanktest.R
 import com.example.quizbanktest.databinding.ActivitySingleQuestionSettingBinding
 import com.example.quizbanktest.utils.Constants
@@ -31,22 +34,10 @@ class SingleQuestionSetting: AppCompatActivity()  {
             answerDescriptionChange()
         }
         questionSetAttr.backBtn.setOnClickListener {
-            val intent = Intent()
-            setResult(RESULT_CANCELED, intent)
-            finish()
+            backBtn()
         }
         questionSetAttr.saveBtn.setOnClickListener {
-            val intent = Intent()
-            val tmpTitleText = questionSetAttr.QuestionTitle.text
-            val tmpAnsText = questionSetAttr.QuestionAnswerDescription.text
-            val titleText = tmpTitleText.toString()
-            val ansDesc = tmpAnsText.toString()
-            intent.putExtra("Key_title", titleText)
-            intent.putExtra("Key_answerDescription", ansDesc)
-            intent.putExtra("Key_number", questionNumber)
-            intent.putExtra("Key_type", questionType)
-            setResult(RESULT_OK, intent)
-            finish()
+            saveBtn()
         }
         questionSetAttr.QuestionDelete.setOnClickListener {
             val intent = Intent()
@@ -134,6 +125,37 @@ class SingleQuestionSetting: AppCompatActivity()  {
         dialog.setOnDismissListener {
             this.questionAnswerDescription = editDescription.text.toString()
             questionSetAttr.QuestionAnswerDescription.text = this.questionAnswerDescription
+        }
+    }
+    private fun backBtn(){
+        val intent = Intent()
+        setResult(RESULT_CANCELED, intent)
+        finish()
+    }
+    private fun saveBtn(){
+        val intent = Intent()
+        val tmpTitleText = questionSetAttr.QuestionTitle.text
+        val tmpAnsText = questionSetAttr.QuestionAnswerDescription.text
+        val titleText = tmpTitleText.toString()
+        val ansDesc = tmpAnsText.toString()
+        intent.putExtra("Key_title", titleText)
+        intent.putExtra("Key_answerDescription", ansDesc)
+        intent.putExtra("Key_number", questionNumber)
+        intent.putExtra("Key_type", questionType)
+        setResult(RESULT_OK, intent)
+        finish()
+    }
+    override fun onBackPressed() {
+        backBtn()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                backBtn()
+            }
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BuildCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.quizbanktest.adapters.quiz.RecordPageAdapter
 import com.example.quizbanktest.databinding.ActivityRecordPageBinding
@@ -16,6 +19,10 @@ class RecordPage: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         recordBinding = ActivityRecordPageBinding.inflate(layoutInflater)
         setContentView(recordBinding.root)
+
+        recordBinding.backBtn.setOnClickListener {
+            finish()
+        }
 
         fragmentAdapter = RecordPageAdapter(supportFragmentManager, lifecycle)
         recordBinding.selectRecordMode.addTab( recordBinding.selectRecordMode.newTab().setText("單人") )
@@ -48,5 +55,18 @@ class RecordPage: AppCompatActivity() {
 
     private fun init(){
 
+    }
+    override fun onBackPressed() {
+        finish()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                finish()
+            }
+        }
     }
 }

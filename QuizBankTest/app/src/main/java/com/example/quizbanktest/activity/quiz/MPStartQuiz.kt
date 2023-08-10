@@ -1,4 +1,5 @@
 package com.example.quizbanktest.activity.quiz
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -15,8 +16,10 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.R
@@ -51,6 +54,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private var trueOrFalseView: View? = null
     private var trueOrFalseSelected = false
     private var currentAnswer : String = ""
+    private lateinit var countDownTimer: CountDownTimer
     private val roomNumber:Int = (100000 until 999999).random()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,13 +65,7 @@ class  MPStartQuiz: AppCompatActivity() {
         setQuestion()
 
         startQuizBinding.exitQuiz.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("確定退出考試?")
-            builder.setPositiveButton("確定") { dialog, which ->
-                finish()
-            }
-            builder.setNegativeButton("取消", null)
-            builder.show()
+            exitQuiz()
         }
 
     }
@@ -180,7 +178,7 @@ class  MPStartQuiz: AppCompatActivity() {
         startQuizBinding.progressBar.max = casualDuringTime[currentAtQuestion]
         startQuizBinding.progressBar.progress = casualDuringTime[currentAtQuestion]
         startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + "/" + questionList.size.toString()
-        object : CountDownTimer((casualDuringTime[currentAtQuestion]*1000).toLong(), 1000) {
+        countDownTimer = object : CountDownTimer((casualDuringTime[currentAtQuestion]*1000).toLong(), 1000) {
             override fun onFinish() {
                 questionSubmit()
                 if(currentAtQuestion == questionList.size-1) {
@@ -313,6 +311,31 @@ class  MPStartQuiz: AppCompatActivity() {
             }
             startQuizBinding.startQuizContainer.addView(v, 4)
             this.trueOrFalseView = v
+        }
+    }
+    private fun exitQuiz(){
+        if (::countDownTimer.isInitialized) {
+            countDownTimer.cancel()
+        }
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("確定退出考試?")
+        builder.setPositiveButton("確定") { dialog, which ->
+            finish()
+        }
+        builder.setNegativeButton("取消", null)
+        builder.show()
+    }
+    override fun onBackPressed() {
+        exitQuiz()
+    }
+    @SuppressLint("UnsafeOptInUsageError")
+    fun doubleCheckExit(){
+        if (BuildCompat.isAtLeastT()) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                exitQuiz()
+            }
         }
     }
 }
