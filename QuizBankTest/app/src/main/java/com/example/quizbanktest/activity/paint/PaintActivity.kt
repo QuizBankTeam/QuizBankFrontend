@@ -343,7 +343,7 @@ class PaintActivity : AppCompatActivity() {
 
         val ib_highQuality : ImageButton = findViewById(R.id.ib_highQuality)
         ib_highQuality.setOnClickListener {
-            showProgressDialog("提升畫質會需要較長的處理時間請耐心等候")
+            showProgressDialog("提升畫質中請耐心等候")
             val imageBackground: ImageView = findViewById(R.id.iv_background)
             val backgroundBitmap = getBitmapFromView(imageBackground)
             ConstantsRealESRGAN.realEsrgan(ConstantsFunction.encodeImage(backgroundBitmap)!! , this@PaintActivity,
