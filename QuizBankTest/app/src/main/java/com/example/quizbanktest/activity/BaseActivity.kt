@@ -8,8 +8,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings.Global.putString
 import android.util.Log
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
@@ -609,10 +611,17 @@ open class BaseActivity : AppCompatActivity() {
 
     fun processScan(it1 : String){
         ConstantsOcrResults.setOcrResult(it1)
-//        splitQuestionOptions(it1)
+        val result_auto_cut_choice = splitQuestionOptions(it1)
+        Log.e("choice", result_auto_cut_choice.toString())
         hideProgressDialog()
         val intent = Intent(this, ScannerTextWorkSpaceActivity::class.java)
         intent.putExtra("ocrText", it1)
+        val bundle = Bundle().apply {
+            putString("first", result_auto_cut_choice?.first)
+            putStringArrayList("second", ArrayList(result_auto_cut_choice?.second))
+        }
+        intent.putExtra("ocrText", it1)
+        intent.putExtra("options", bundle)
         startActivity(intent)
         finish()
     }

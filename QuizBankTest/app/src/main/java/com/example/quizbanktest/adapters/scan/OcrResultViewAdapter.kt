@@ -31,7 +31,8 @@ import java.lang.Boolean
 class OcrResultViewAdapter(
     private val activity: BaseActivity,
     private val context: Context,
-    private var list: ArrayList<QuestionModel>
+    private var list: ArrayList<QuestionModel>,
+    private var optionList :  Pair<String, List<String>>?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private var onClickListener: OnClickListener? = null
 
@@ -73,6 +74,27 @@ class OcrResultViewAdapter(
             val option8 : EditText = holder.itemView.findViewById(R.id.question_option8)
             val option9 : EditText = holder.itemView.findViewById(R.id.question_option9)
             val option10 : EditText = holder.itemView.findViewById(R.id.question_option10)
+            val option1_text  = optionList?.second?.get(1)
+            val option2_text = optionList?.second?.get(2)
+            val option3_text = optionList?.second?.get(3)
+            val option4_text = optionList?.second?.get(4)
+
+
+            if(option1_text!=null ){
+                option1.setText(option1_text)
+            }
+            if(option2_text!=null ){
+                option2.setText(option2_text)
+            }
+            if(option3_text!=null ){
+                option3.setText(option3_text)
+            }
+            if(option4_text!=null ){
+                option4.setText(option4_text)
+            }
+
+
+
 
             //答案描述預設要有因此使用者沒填用預設
             ConstantsOcrResults.getOcrResult()[position].answerDescription = "目前為空"

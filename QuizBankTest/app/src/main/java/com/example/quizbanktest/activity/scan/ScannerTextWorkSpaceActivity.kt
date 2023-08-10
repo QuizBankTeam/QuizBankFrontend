@@ -20,8 +20,19 @@ import com.example.quizbanktest.models.QuestionModel
 class ScannerTextWorkSpaceActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_scanner_text_work_space)
-        setupOcrRecyclerView(ConstantsOcrResults.getOcrResult())
+
+        val intent = intent
+        val optionsBundle = intent.getBundleExtra("options")
+        val first = optionsBundle?.getString("first")
+        val second = optionsBundle?.getStringArrayList("second")
+        val optionsPair: Pair<String, List<String>>? = if (first != null && second != null) {
+            Pair(first, second)
+        } else {
+            null
+        }
+        setupOcrRecyclerView(ConstantsOcrResults.getOcrResult(),optionsPair)
         val emptyShow : LinearLayout = findViewById(R.id.empty_show)
         emptyShow.visibility = View.GONE
 
@@ -105,13 +116,13 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
 
     }
 
-    private fun setupOcrRecyclerView(ocrResultList: ArrayList<QuestionModel>) {
+    private fun setupOcrRecyclerView(ocrResultList: ArrayList<QuestionModel>, optionList :  Pair<String, List<String>>?) {
         val ocrList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.ocr_list)
         ocrList.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL,false)
         ocrList.setHasFixedSize(true)
 
-        val placesAdapter = OcrResultViewAdapter(this@ScannerTextWorkSpaceActivity,this, ocrResultList)
+        val placesAdapter = OcrResultViewAdapter(this@ScannerTextWorkSpaceActivity,this, ocrResultList,optionList)
         ocrList.adapter = placesAdapter
     }
 
