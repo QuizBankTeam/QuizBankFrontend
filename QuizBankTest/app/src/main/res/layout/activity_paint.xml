@@ -47,7 +47,7 @@
                 android:layout_weight="4"
                 android:layout_gravity="center"
                 android:paddingLeft="13dp"
-                android:text="      圖片工作區 ️ "
+                android:text=" 圖片工作區 ️ "
                 android:textSize="25dp"
                 android:gravity="center"
                 android:textStyle="bold"
@@ -90,11 +90,11 @@
             android:contentDescription="image"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_image_24"/>
+
         <com.example.quizbanktest.view.DrawingView
             android:id="@+id/drawing_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           />
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
                 },
                 onFailure = { message->
                     hideProgressDialog()
-                    showErrorSnackBar("登入失敗")
+//                    showErrorSnackBar("登入失敗")
                     Log.d("login fail", message)
                 })
             },

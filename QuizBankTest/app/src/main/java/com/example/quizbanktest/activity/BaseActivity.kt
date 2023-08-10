@@ -499,17 +499,19 @@ open class BaseActivity : AppCompatActivity() {
                  onSuccess = { it1 ->
 
                      ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
-
+                         hideProgressDialog()
                          processScan(it1)
                      }, onFailure = { it1 ->
+                         hideProgressDialog()
                          showErrorScan()
                      })
                  }, onFailure = { it1 ->
 
                      ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
-
+                         hideProgressDialog()
                          processScan(it1)
                      }, onFailure = { it1 ->
+                         hideProgressDialog()
                          showErrorScan()
                      })
                  } )
@@ -522,7 +524,7 @@ open class BaseActivity : AppCompatActivity() {
              showRotateDialog.dismiss()
 
              showProgressDialog("目前正在處理OCR之結果")
-             ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+             ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 -> hideProgressDialog() }, onFailure = { it1 -> hideProgressDialog()})
          }
          showRotateDialog.show()
          showRotateDialog.setOnDismissListener{
@@ -580,22 +582,26 @@ open class BaseActivity : AppCompatActivity() {
 
                             processScan(it1)
                             onSuccess1("success")
+                            hideProgressDialog()
                         }, onFailure = { it1 ->
                             showErrorScan()
                             onFailure1("error")
+                            hideProgressDialog()
                         })
                     }, onFailure = { it1 ->
                         ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
 
                             processScan(it1)
                             onSuccess1("success")
+                            hideProgressDialog()
                         }, onFailure = { it1 ->
                             onFailure1("error")
+                            hideProgressDialog()
                         })
                     } )
             }else{
                 showProgressDialog("目前正在處理OCR之結果")
-                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->  }, onFailure = { it1 ->})
+                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 -> hideProgressDialog() }, onFailure = { it1 -> hideProgressDialog()})
             }
         }
 
