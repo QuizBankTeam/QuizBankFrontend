@@ -49,7 +49,7 @@
                 android:layout_weight="4"
                 android:layout_gravity="center"
                 android:paddingLeft="13dp"
-                android:text="      掃描工作區 🛠️"
+                android:text="      掃描工作區 "
                 android:textSize="25dp"
                 android:gravity="center"
                 android:textStyle="bold"

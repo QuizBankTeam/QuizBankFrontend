@@ -89,16 +89,14 @@ class BankSingleAnswerQuestionActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
     private fun doubleBackToExit() {
-        val intent = Intent(this, GroupListActivity::class.java)
-        startActivity(intent)
+
         finish()
     }
 
 
 
     override fun onBackPressed() {
-        val intent = Intent(this, GroupListActivity::class.java)
-        startActivity(intent)
+       
         finish()
     }
 }

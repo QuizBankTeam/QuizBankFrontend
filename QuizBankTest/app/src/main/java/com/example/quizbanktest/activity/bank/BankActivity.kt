@@ -106,16 +106,16 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 )
             }
 
-            val btnAddBankMember = addBankDialog.findViewById<ImageButton>(R.id.btn_add_bank_member)
-            btnAddBankMember.setOnClickListener {
-                val ll = addBankDialog.findViewById<LinearLayout>(R.id.layout_bank_members)
-                val et = EditText(this)
-                val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                et.layoutParams = p
-                et.hint = "this is a new setup edittext"
-                ll.addView(et)
-//                et.requestFocus()
-            }
+//            val btnAddBankMember = addBankDialog.findViewById<ImageButton>(R.id.btn_add_bank_member)
+//            btnAddBankMember.setOnClickListener {
+//                val ll = addBankDialog.findViewById<LinearLayout>(R.id.layout_bank_members)
+//                val et = EditText(this)
+//                val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//                et.layoutParams = p
+//                et.hint = "enter members"
+//                ll.addView(et)
+////                et.requestFocus()
+//            }
         }
     }
 
