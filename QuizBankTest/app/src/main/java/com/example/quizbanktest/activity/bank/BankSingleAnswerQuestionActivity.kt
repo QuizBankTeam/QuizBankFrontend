@@ -55,21 +55,41 @@ class BankSingleAnswerQuestionActivity : AppCompatActivity() {
         tvType.text = questionType
         tvDescription.text = questionDescription
 
-        val tmpArrayList = ArrayList<String>()
+        val tmpQuestionOptionsArrayList = ArrayList<String>()
         if (questionOptions != null) {
             for (item in questionOptions) {
-                tmpArrayList.add(item)
+                tmpQuestionOptionsArrayList.add(item)
             }
         } else {
             Log.e("BankSingleAnswerQuestionActivity", "questionOptions is empty")
         }
 
-        recyclerView = findViewById(R.id.questionOptionsRecyclerView)
-        val adapter = QuestionOptionsRecyclerViewAdapter(this, tmpArrayList)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val tmpAnswerOptionsArrayList = ArrayList<String>()
+        if (answerOptions != null) {
+            for (item in answerOptions) {
+                tmpAnswerOptionsArrayList.add(item)
+            }
+        } else {
+            Log.e("BankSingleAnswerQuestionActivity", "answerOptions is empty")
+        }
+
+//        recyclerView = findViewById(R.id.questionOptionsRecyclerView)
+//        val adapter = QuestionOptionsRecyclerViewAdapter(this, tmpArrayList)
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        setupOptions(tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList)
+
+        val btnSetting = findViewById<ImageButton>(R.id.setting)
+        btnSetting.setOnClickListener {
+//            val singleAnswerQuestionActivitySetting = Intent(this, BankSingleAnswerQuestionSettingActivity:: class.java)
+        }
 
         pullExit()
+    }
+
+    private fun setupOptions(tmpQuestionOptionsArrayList: ArrayList<String>, tmpAnswerOptionsArrayList: ArrayList<String>) {
+        
     }
 
     fun backToPreviousPage(view: View?) {

@@ -97,6 +97,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
                         Log.d("addBankDialog", "add bank success")
                         addBankDialog.dismiss()
+                        setupBankModel()
                     },
                     onFailure = {
                         Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
@@ -106,13 +107,15 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 )
             }
 
+            var count : Int = 1
             val btnAddBankMember = addBankDialog.findViewById<ImageButton>(R.id.btn_add_bank_member)
             btnAddBankMember.setOnClickListener {
                 val ll = addBankDialog.findViewById<LinearLayout>(R.id.layout_bank_members)
                 val et = EditText(this)
                 val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 et.layoutParams = p
-                et.hint = "this is a new setup edittext"
+                et.hint = "new$count"
+                count++
                 ll.addView(et)
 //                et.requestFocus()
             }
