@@ -276,7 +276,7 @@ class SPStartQuiz: AppCompatActivity() {
             }
         }
 
-        if(currentAtQuestion == questionlist.size-1) {
+        if(currentAtQuestion == questionlist.size-1 && gotoNext) {
             quizEnd()
         }
         else if(gotoNext){

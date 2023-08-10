@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.IntroActivity
@@ -33,10 +34,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun buttonClick(){
         startLogin(" ", " ")
-//        val email : String = binding.account.text.toString()
-//        val password : String = binding.password.text.toString()
-//        val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]+){1,6}$")
-//        val passwordRegex = Regex("[A-Za-z0-9._%+-]+")
+        val email : String = binding.account.text.toString()
+        val password : String = binding.password.text.toString()
+        val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]+){1,6}$")
+        val passwordRegex = Regex("[A-Za-z0-9._%+-]+")
+        if(email.isEmpty()||password.isEmpty()){
+//            Toast.makeText(this, "Login type is wrong", Toast.LENGTH_LONG).show()
+        } else{
+            startLogin(email, password)
+        }
 //        if(email.matches(emailRegex) && password.matches(passwordRegex)){
 //            startLogin(email, password)
 //        } else{

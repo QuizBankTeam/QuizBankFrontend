@@ -79,9 +79,7 @@ class MultiQuizPage : Fragment() {
 
     fun postQuiz(quiz: Quiz){
         QuizList.add(0, quiz)
-        for(index in 0 until QuizList.size){
-            quizListAdapter.notifyItemChanged(index)
-        }
+        quizListAdapter.notifyDataSetChanged()
     }
     fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
         QuizList[position].title = title
@@ -92,14 +90,24 @@ class MultiQuizPage : Fragment() {
         QuizList[position].endDateTime = endDateTime
         quizListAdapter.notifyItemChanged(position)
     }
+    fun putQuizFromSave(quizIndex: Int, tmpQuestions: ArrayList<Question>, tmpTitle: String,  tmpCasualDuringTime: ArrayList<Int>, tmpMembers: ArrayList<String>, tmpStatus: String, tmpStartDateTime: String, tmpEndDateTime: String){
+        QuizList[quizIndex].questions = tmpQuestions
+        QuizList[quizIndex].title = tmpTitle
+        QuizList[quizIndex].casualDuringTime = tmpCasualDuringTime
+        QuizList[quizIndex].members = tmpMembers
+        QuizList[quizIndex].status = tmpStatus
+        QuizList[quizIndex].startDateTime = tmpStartDateTime
+        QuizList[quizIndex].endDateTime = tmpEndDateTime
+        quizListAdapter.notifyItemChanged(quizIndex)
+    }
     fun deleteQuiz(position: Int){
         QuizList.removeAt(position)
         SingleQuizPage.quizListImages.removeAt(position)
-        quizListAdapter.notifyItemChanged(position)
-        for(index in position until QuizList.size){
-            quizListAdapter.notifyItemChanged(index)
-        }
-
+        quizListAdapter.notifyDataSetChanged()
+//        quizListAdapter.notifyItemChanged(position)
+//        for(index in position until QuizList.size){
+//            quizListAdapter.notifyItemChanged(index)
+//        }
     }
     private fun bitmapToString(bm: Bitmap): String? {
         val baos = ByteArrayOutputStream()

@@ -67,7 +67,7 @@ class SingleQuizPage : Fragment() {
                 for(question in quiz.questions!!){
                     val imageArr1 = ArrayList<WeakReference<String>>()
                     for(image in question.questionImage!!){
-                        imageArr1.add(WeakReference(base64Image1))
+                        imageArr1.add(WeakReference(image))
                     }
                     imageArr2.add(imageArr1)
                 }
@@ -99,6 +99,16 @@ class SingleQuizPage : Fragment() {
 //            quizListAdapter.notifyItemChanged(index)
 //        }
         quizListAdapter.notifyDataSetChanged()
+        val imageArr2 = ArrayList< ArrayList<WeakReference<String>>>()
+        for(question in quiz.questions!!){
+            val imageArr1 = ArrayList<WeakReference<String>>()
+            for(image in question.questionImage!!){
+                imageArr1.add(WeakReference(image))
+            }
+            imageArr2.add(imageArr1)
+        }
+        SingleQuizPage.Companion.quizListImages.add(0, imageArr2)
+
     }
     fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
         QuizList[position].title = title
@@ -109,6 +119,7 @@ class SingleQuizPage : Fragment() {
         QuizList[position].endDateTime = endDateTime
         quizListAdapter.notifyItemChanged(position)
     }
+
     fun deleteQuiz(position: Int){
         QuizList.removeAt(position)
         quizListImages.removeAt(position)
@@ -117,9 +128,7 @@ class SingleQuizPage : Fragment() {
 //        for(index in position until QuizList.size){
 //            quizListAdapter.notifyItemChanged(index)
 //        }
-
     }
-
 
     private fun initWithoutNetwork(){
         val title = "第一次考試"
