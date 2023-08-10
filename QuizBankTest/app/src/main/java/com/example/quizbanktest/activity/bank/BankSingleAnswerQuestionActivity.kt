@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Adapter
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -89,7 +87,10 @@ class BankSingleAnswerQuestionActivity : AppCompatActivity() {
     }
 
     private fun setupOptions(tmpQuestionOptionsArrayList: ArrayList<String>, tmpAnswerOptionsArrayList: ArrayList<String>) {
-        
+        val ll = findViewById<LinearLayout>(R.id.linearLayout_options)
+        val tv = TextView(this)
+        val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//        tv.id = ""
     }
 
     fun backToPreviousPage(view: View?) {
