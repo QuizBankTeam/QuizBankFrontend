@@ -6,10 +6,11 @@ import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Rect
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -48,11 +49,12 @@ class OcrResultViewAdapter(
         )
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val tagQuestionList:ArrayList<String> = ArrayList()//顯示有哪些題目標籤
         val imageList : ArrayList<String> = ArrayList() //目前選擇了那些圖片(包括 題目描述跟答案之圖片)
         val out = ByteArrayOutputStream()
-        var optionsNum : Int = 4 //預設選項為四個
+        var optionsNum : Int = 1 //預設選項為四個
         val model = list[position] //知道目前是哪個東西被選擇
         //去給他初始化
         holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags = ConstantsTag.getEmptyList()
@@ -127,8 +129,8 @@ class OcrResultViewAdapter(
                 builder.show()
             }
             //選擇標籤
-            val chooseTagButton = holder.itemView.findViewById<LinearLayout>(R.id.chooseTag)
-            chooseTagButton.setOnClickListener{
+            val chooseTagButton = holder.itemView.findViewById<FrameLayout>(R.id.chooseTag)
+            chooseTagButton.setOnLongClickListener{
                 //用dialog去跳出標籤選單
                 val tagDialog = Dialog(context)
                 tagDialog.setContentView(R.layout.dialog_choose_tag)
@@ -214,12 +216,35 @@ class OcrResultViewAdapter(
                     ConstantsOcrResults.getOcrResult()[position].tag?.clear()
                     tagDialog.dismiss()
                 }
+                true
             }
 
             //question bank type
             val questionBankType : Spinner = holder.itemView.findViewById(R.id.spinner_question_bank)
-
+            val handler = Handler(Looper.getMainLooper())
+            val longPressRunnable = Runnable {
+                chooseTagButton.performLongClick()
+            }
             val  chooseTagOnAdapter = holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion)
+            chooseTagOnAdapter.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    // 檢查觸摸點是否在任何標籤上
+                    for (i in 0 until chooseTagOnAdapter.childCount) {
+                        val tagView = chooseTagOnAdapter.getChildAt(i)
+                        val outRect = Rect()
+                        tagView.getGlobalVisibleRect(outRect)
+                        if (outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                            // 觸摸點在標籤上，不觸發FrameLayout的點擊事件
+                            return@setOnTouchListener false
+                        }
+                    }
+                    // 觸摸點在空白區域，將事件交給FrameLayout處理
+                    handler.postDelayed(longPressRunnable, ViewConfiguration.getLongPressTimeout().toLong())
+                } else if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
+                    handler.removeCallbacks(longPressRunnable)
+                }
+                false
+            }
             chooseTagOnAdapter.setOnTagClickListener(object : TagView.OnTagClickListener {
                 override fun onTagClick(tag_position: Int, text: String) {
                 }

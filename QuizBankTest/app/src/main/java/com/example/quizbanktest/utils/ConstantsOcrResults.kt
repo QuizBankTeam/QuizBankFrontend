@@ -31,8 +31,7 @@ object ConstantsOcrResults {
         val answerOptions : ArrayList<String> = ArrayList()
         val images : ArrayList<String> = ArrayList()
         val tag : ArrayList<String> = ArrayList()
-        tag.add("123")
-        tag.add("cs design")
+
         val ocrResult = QuestionModel(bankType = "single",options=options, answerOptions = answerOptions, image = images, tag = tag,description = description, createdDate = formattedDate.toString(), originateFrom = ConstantsAccountServiceFunction.userAccount!!._id)
         questionList.add(ocrResult)
     }
@@ -52,8 +51,7 @@ object ConstantsOcrResults {
         val answerOptions : ArrayList<String> = ArrayList()
         val images : ArrayList<String> = ArrayList()
         val tag : ArrayList<String> = ArrayList()
-        tag.add("123")
-        tag.add("cs design")
+
         val ocrResult = QuestionModel(bankType = "single",options=options, answerOptions = answerOptions, image = images, tag = tag,description = "請新增題目描述", createdDate = formattedDate.toString(), originateFrom = ConstantsAccountServiceFunction.userAccount!!._id)
         questionList.add(ocrResult)
     }

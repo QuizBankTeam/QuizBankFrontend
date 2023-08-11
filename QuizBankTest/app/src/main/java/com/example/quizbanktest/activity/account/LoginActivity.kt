@@ -23,6 +23,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mProgressDialog = Dialog(this)
+
+        mProgressDialog.setContentView(R.layout.dialog_progress)
         binding.backBtn.setOnClickListener {
             val intent = Intent(this,IntroActivity::class.java)
             startActivity(intent)
@@ -33,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun buttonClick(){
-        startLogin(" ", " ")
+//        startLogin(" ", " ")
         val email : String = binding.account.text.toString()
         val password : String = binding.password.text.toString()
         val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]+){1,6}$")
@@ -41,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         if(email.isEmpty()||password.isEmpty()){
 //            Toast.makeText(this, "Login type is wrong", Toast.LENGTH_LONG).show()
         } else{
+            showProgressDialog("登入中請稍等")
             startLogin(email, password)
         }
 //        if(email.matches(emailRegex) && password.matches(passwordRegex)){
@@ -55,24 +59,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun startLogin(email: String, password: String){
-        showProgressDialog("登入中請稍等")
+//        showProgressDialog("登入中請稍等")
         ConstantsAccountServiceFunction.getCsrfToken(this,
             onSuccess = { it1 ->
                 Log.d("get csrf success", it1)
                 ConstantsAccountServiceFunction.login(this, email, password,
                 onSuccess = {   message->
-                    hideProgressDialog()
                     Log.d("login success", message)
                     writeToFile("loginSuccess.txt", message)
                     val intent = Intent()
                     intent.setClass(this, MainActivity::class.java)
-                    startActivity(intent)
                     hideProgressDialog()
+                    startActivity(intent)
                     finish()
                 },
                 onFailure = { message->
                     hideProgressDialog()
-//                    showErrorSnackBar("登入失敗")
+                    showErrorSnackBar("登入失敗")
                     Log.d("login fail", message)
                 })
             },

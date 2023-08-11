@@ -84,6 +84,7 @@ class GroupPageActivity : AppCompatActivity() {
                 val clip = ClipData.newPlainText("Copied Text", textToCopy)
                 clipboard.setPrimaryClip(clip)
                 Toast.makeText(this@GroupPageActivity, "邀請碼已复制", Toast.LENGTH_SHORT).show()
+                inviteDialog.dismiss()
             }
         }
         pullExit()

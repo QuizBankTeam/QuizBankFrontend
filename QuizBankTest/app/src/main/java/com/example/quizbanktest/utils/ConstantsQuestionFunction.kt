@@ -48,7 +48,7 @@ object ConstantsQuestionFunction {
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
-                        Log.e("Response Result","success post question")
+//                        Log.e("Response Result","success post question")
                         Toast.makeText(activity,"upload successfully",Toast.LENGTH_SHORT).show()
                         ConstantsOcrResults.questionList.removeAt(postQuestionPosition)
 
@@ -98,8 +98,8 @@ object ConstantsQuestionFunction {
                 .build()
             val api = retrofit.create(QuestionBankService::class.java)
             //TODO 拿到csrf token access token
-            Log.e("Question access in scan ", Constants.accessToken)
-            Log.e("Question Cookie in scan ", Constants.COOKIE)
+//            Log.e("Question access in scan ", Constants.accessToken)
+//            Log.e("Question Cookie in scan ", Constants.COOKIE)
             val call = api.getQuestionBankByID(
                 Constants.COOKIE,
                 Constants.csrfToken,
@@ -122,9 +122,9 @@ object ConstantsQuestionFunction {
                             bankInnerQuestion::class.java
                         )
                         allQuestionsReturnResponse = allQuestionsResponse
-                        Log.d("All questions response", allQuestionsReturnResponse.toString())
+//                        Log.d("All questions response", allQuestionsReturnResponse.toString())
                         questionList = allQuestionsResponse.questionBank.questions
-                        Log.e("Question Response Result", questionList.toString())
+//                        Log.e("Question Response Result", questionList.toString())
                         onSuccess(allQuestionsResponse.questionBank.questions)
                     } else {
                         val sc = response.code()

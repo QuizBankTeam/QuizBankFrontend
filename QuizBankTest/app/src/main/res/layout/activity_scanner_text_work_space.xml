@@ -7,17 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/intro_background"
     tools:context=".activity.scan.ScannerTextWorkSpaceActivity">
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar_ocr_detail"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:background="@color/colorPrimary"-->
-<!--        app:titleTextAppearance="@style/CustomToolbarStyle"-->
-<!--        app:titleTextColor="@color/colorPrimaryDark"-->
-<!--        app:title="掃描工作區 🛠️️"-->
-<!--        android:theme="@style/ToolbarTheme"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        />-->
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

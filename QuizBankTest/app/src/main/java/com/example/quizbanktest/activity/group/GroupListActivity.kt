@@ -6,11 +6,9 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,21 +63,25 @@ class GroupListActivity : BaseActivity() {
         groupDialog.setContentView(R.layout.dalog_create_group)
         groupDialog.setTitle("群組")
         groupDialog.show()
-        val generate_code_textView = groupDialog.findViewById<TextView>(R.id.group_create_invite_code)
-        generate_code_textView.setOnClickListener {
+        val groupCreateBtn = groupDialog.findViewById<TextView>(R.id.group_enter)
+        groupCreateBtn.setOnClickListener {
             val create_group_name =  groupDialog.findViewById<EditText>(R.id.iv_create_group_name)
             if (create_group_name.text.toString().trim().isNotEmpty()) {
-                val invite_code_textView = groupDialog.findViewById<TextView>(R.id.invite_code)
-                invite_code_textView.visibility = View.VISIBLE
-                val invite_code_copy = groupDialog.findViewById<ImageButton>(R.id.invite_code_copy)
-                invite_code_copy.visibility = View.VISIBLE
-                invite_code_copy.setOnClickListener {
-                    val textToCopy = invite_code_textView.text
+                val inviteDialog = Dialog(this)
+                inviteDialog.setContentView(R.layout.dialog_give_group_invite_code)
+                inviteDialog.show()
+                val textView = inviteDialog.findViewById<TextView>(R.id.join_group_invite_code)
+                val btnCopy = inviteDialog.findViewById<Button>(R.id.btn_copy)
+                btnCopy.setOnClickListener {
+                    val textToCopy = textView.hint
+                    Log.e("textview",textView.text.toString())
                     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val clip = ClipData.newPlainText("Copied Text", textToCopy)
                     clipboard.setPrimaryClip(clip)
                     Toast.makeText(this@GroupListActivity, "邀請碼已复制", Toast.LENGTH_SHORT).show()
+                    inviteDialog.dismiss()
                 }
+                groupDialog.dismiss()
             } else {
                 // 如果 create_group_name 是空的，則彈出一個提示
                 Toast.makeText(this@GroupListActivity, "請先輸入群組名稱", Toast.LENGTH_SHORT).show()

@@ -28,8 +28,8 @@ object ConstantsQuestionBankFunction {
                 .build()
             val api = retrofit.create(QuestionBankService::class.java)
             //TODO 拿到csrf token access token
-            Log.e("access in scan ", Constants.accessToken)
-            Log.e("COOKIE in scan ", Constants.COOKIE)
+//            Log.e("access in scan ", Constants.accessToken)
+//            Log.e("COOKIE in scan ", Constants.COOKIE)
             val call = api.getAllQuestionBanks(
                 Constants.COOKIE,
                 Constants.csrfToken,
@@ -103,8 +103,8 @@ object ConstantsQuestionBankFunction {
             val body = QuestionBankService.PostQuestionBankBody(questionBank.title!!,questionBank.questionBankType!!,questionBank.createdDate,questionBank.members!!,questionBank.originateFrom!!)
 
             //TODO 拿到csrf token access token
-            Log.e("access in scan ", Constants.accessToken)
-            Log.e("COOKIE in scan ", Constants.COOKIE)
+//            Log.e("access in scan ", Constants.accessToken)
+//            Log.e("COOKIE in scan ", Constants.COOKIE)
             val call = api.postQuestionBank(
                 Constants.COOKIE,
                 Constants.csrfToken,

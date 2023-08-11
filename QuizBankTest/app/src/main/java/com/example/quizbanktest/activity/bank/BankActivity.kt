@@ -244,6 +244,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
+
     }
 
 }

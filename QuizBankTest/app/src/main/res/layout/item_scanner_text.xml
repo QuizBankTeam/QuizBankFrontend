@@ -111,12 +111,12 @@
                             android:id="@+id/spinner_question_type"
                             android:layout_width="0dp"
                             android:entries="@array/question_type"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:layout_height="38dp" />
                         <Spinner
                             android:id="@+id/spinner_question_bank"
                             android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:layout_height="38dp" />
                     </LinearLayout>
                     <View
@@ -132,78 +132,9 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginEnd="2dp"
                         android:orientation="vertical">
-                        <LinearLayout
-                            android:id="@+id/chooseTag"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginEnd="2dp"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:orientation="horizontal"
-                            >
-                            <TextView
-                                android:id="@+id/tagText"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="5"
-                                android:textColor="#363A43"
-                                android:textSize="14sp"
-                                android:layout_marginTop="2dp"
-                                android:textStyle="bold"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:text="選擇標籤"
-                                />
 
-                            <ImageButton
-                                android:id="@+id/ib_chooseTag"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="2dp"
-                                android:layout_weight="2"
-                                android:background="@color/white"
-                                android:src="@drawable/baseline_keyboard_arrow_down_24" />
 
-                        </LinearLayout>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/black"
-                            />
-<!--                        <TextView-->
-<!--                            android:layout_marginTop="5dp"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:textColor="#363A43"-->
-<!--                            android:textSize="14sp"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:text="主題標籤"-->
-<!--                            />-->
-<!--                        <HorizontalScrollView-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            >-->
-<!--                            <LinearLayout-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content">-->
-<!--                                <co.lujun.androidtagview.TagContainerLayout-->
-<!--                                    android:id="@+id/scannerTagForBank"-->
-<!--                                    android:layout_marginTop="5dp"-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:padding="5dp"-->
-<!--                                    app:container_background_color="#00000000"-->
-<!--                                    app:tag_enable_cross="true"-->
-<!--                                    app:container_enable_drag="true"-->
-<!--                                    app:horizontal_interval="3dp"-->
-<!--                                    app:tag_clickable="true"-->
-<!--                                    app:tag_theme="random"-->
-<!--                                    app:tag_text_size="10sp"-->
-<!--                                    app:vertical_interval="3dp" />-->
-<!--                            </LinearLayout>-->
-<!--                        </HorizontalScrollView>-->
+
 
                         <TextView
                             android:layout_marginTop="5dp"
@@ -218,8 +149,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             >
-                            <LinearLayout
+                            <FrameLayout
                                 android:layout_width="match_parent"
+                                android:id="@+id/chooseTag"
                                 android:layout_height="wrap_content">
                                 <co.lujun.androidtagview.TagContainerLayout
                                     android:id="@+id/scannerTagForQuestion"
@@ -235,40 +167,15 @@
                                     app:tag_theme="random"
                                     app:tag_text_size="10sp"
                                     app:vertical_interval="3dp" />
-                            </LinearLayout>
+                            </FrameLayout>
                         </HorizontalScrollView>
-<!--                        <TextView-->
-<!--                            android:layout_marginTop="5dp"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:textColor="#363A43"-->
-<!--                            android:textSize="14sp"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:text="範圍標籤"-->
-<!--                            />-->
-<!--                        <HorizontalScrollView-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            >-->
-<!--                            <LinearLayout-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content">-->
-<!--                                <co.lujun.androidtagview.TagContainerLayout-->
-<!--                                    android:id="@+id/scannerTagForRange"-->
-<!--                                    android:layout_marginTop="5dp"-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:padding="5dp"-->
-<!--                                    app:container_background_color="#00000000"-->
-<!--                                    app:tag_enable_cross="true"-->
-<!--                                    app:container_enable_drag="true"-->
-<!--                                    app:horizontal_interval="3dp"-->
-<!--                                    app:tag_clickable="true"-->
-<!--                                    app:tag_theme="random"-->
-<!--                                    app:tag_text_size="10sp"-->
-<!--                                    app:vertical_interval="3dp" />-->
-<!--                            </LinearLayout>-->
-<!--                        </HorizontalScrollView>-->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/black"
+                            />
+
                         <LinearLayout
                             android:id="@+id/options_list"
                             android:layout_width="match_parent"
@@ -308,6 +215,7 @@
                                         android:textStyle="bold"
                                         android:hint="題目選項 2 (填充以及簡答可略過)"
                                         android:gravity="left"
+                                        android:visibility="gone"
                                         android:inputType="textMultiLine"
                                         android:scrollbars = "vertical"
                                         android:singleLine="false" />
@@ -321,6 +229,7 @@
                                         android:inputType="textMultiLine"
                                         android:scrollbars="vertical"
                                         android:singleLine="false"
+                                        android:visibility="gone"
                                         android:textSize="14sp"
                                         android:textStyle="bold" />
 
@@ -333,6 +242,7 @@
                                         android:hint="題目選項 4 (填充以及簡答可略過)"
                                         android:gravity="left"
                                         android:inputType="textMultiLine"
+                                        android:visibility="gone"
                                         android:scrollbars = "vertical"
                                         android:singleLine="false" />
                                     <EditText
@@ -431,6 +341,7 @@
                                     android:layout_height="40dp"
                                     android:layout_weight="1"
                                     android:layout_marginStart="10dp"
+                                    android:visibility="gone"
                                     android:src="@drawable/round_remove_circle_24"
                                     android:background="@color/white"
                                     android:scaleType="fitXY"
