@@ -24,9 +24,13 @@ object Constants {
     const val quizStatusDoing = "doing"
     const val quizTypeSingle = "single"
     const val quizTypeCasual = "casual"
+    const val questionTypeFilling = "Filling"
+    const val questionTypeMultipleChoiceS = "MultipleChoiceS"
+    const val questionTypeShortAnswer = "ShortAnswer"
+    const val questionTypeMultipleChoiceM = "MultipleChoiceM"
+    const val questionTypeTrueOrFalse = "TrueOrFalse"
 
     fun isNetworkAvailable(context: Context): Boolean {
-
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //比較新的系統
             val network      = connectivityManager.activeNetwork ?: return false
