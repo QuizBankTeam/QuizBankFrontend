@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Adapter
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,21 +53,44 @@ class BankSingleAnswerQuestionActivity : AppCompatActivity() {
         tvType.text = questionType
         tvDescription.text = questionDescription
 
-        val tmpArrayList = ArrayList<String>()
+        val tmpQuestionOptionsArrayList = ArrayList<String>()
         if (questionOptions != null) {
             for (item in questionOptions) {
-                tmpArrayList.add(item)
+                tmpQuestionOptionsArrayList.add(item)
             }
         } else {
             Log.e("BankSingleAnswerQuestionActivity", "questionOptions is empty")
         }
 
-        recyclerView = findViewById(R.id.questionTagsRecyclerView)
-        val adapter = QuestionOptionsRecyclerViewAdapter(this, tmpArrayList)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val tmpAnswerOptionsArrayList = ArrayList<String>()
+        if (answerOptions != null) {
+            for (item in answerOptions) {
+                tmpAnswerOptionsArrayList.add(item)
+            }
+        } else {
+            Log.e("BankSingleAnswerQuestionActivity", "answerOptions is empty")
+        }
+
+//        recyclerView = findViewById(R.id.questionOptionsRecyclerView)
+//        val adapter = QuestionOptionsRecyclerViewAdapter(this, tmpArrayList)
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        setupOptions(tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList)
+
+        val btnSetting = findViewById<ImageButton>(R.id.setting)
+        btnSetting.setOnClickListener {
+//            val singleAnswerQuestionActivitySetting = Intent(this, BankSingleAnswerQuestionSettingActivity:: class.java)
+        }
 
         pullExit()
+    }
+
+    private fun setupOptions(tmpQuestionOptionsArrayList: ArrayList<String>, tmpAnswerOptionsArrayList: ArrayList<String>) {
+        val ll = findViewById<LinearLayout>(R.id.linearLayout_options)
+        val tv = TextView(this)
+        val p = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//        tv.id = ""
     }
 
     fun backToPreviousPage(view: View?) {
@@ -89,14 +110,16 @@ class BankSingleAnswerQuestionActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
     private fun doubleBackToExit() {
-
+        val intent = Intent(this, GroupListActivity::class.java)
+        startActivity(intent)
         finish()
     }
 
 
 
     override fun onBackPressed() {
-       
+        val intent = Intent(this, GroupListActivity::class.java)
+        startActivity(intent)
         finish()
     }
 }
