@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.provider.SyncStateContract.Constants
 import android.util.Base64
 import android.util.Log
 import android.util.TypedValue
@@ -18,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.setPadding
@@ -32,6 +34,7 @@ import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.QuizRecord
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
 
 class  MPStartQuiz: AppCompatActivity() {
@@ -55,14 +58,34 @@ class  MPStartQuiz: AppCompatActivity() {
     private var trueOrFalseSelected = false
     private var currentAnswer : String = ""
     private lateinit var countDownTimer: CountDownTimer
-    private val roomNumber:Int = (100000 until 999999).random()
-
+    private val roomNumber:Int = (100000 .. 999999).random()
+    private val randomList = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10).shuffled()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = ActivityMpStartQuizBinding.inflate(layoutInflater)
         setContentView(startQuizBinding.root)
         init()
-        setQuestion()
+
+
+        val builder = AlertDialog.Builder(this, R.style.myFullscreenAlertDialogStyle)
+        val v:View =  layoutInflater.inflate(R.layout.dialog_mp_quiz_start_lobby, null)
+
+//        builder.setTitle("")
+        builder.setView(v)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        val quizStart:TextView = v.findViewById(R.id.Quiz_start)
+        val roomNumberTextView:TextView  = v.findViewById(R.id.room_number)
+        val quizMembers: TextView = v.findViewById(R.id.Quiz_members)
+
+
+        quizMembers.text = com.example.quizbanktest.utils.Constants.userId + "(你)"
+
+        roomNumberTextView.text = roomNumber.toString()
+        quizStart.setOnClickListener {
+            dialog.dismiss()
+            setQuestion()
+        }
 
         startQuizBinding.exitQuiz.setOnClickListener {
             exitQuiz()
@@ -175,10 +198,10 @@ class  MPStartQuiz: AppCompatActivity() {
         }
     }
     private fun setQuestionProgress(){
-        startQuizBinding.progressBar.max = casualDuringTime[currentAtQuestion]
+        startQuizBinding.progressBar.max = casualDuringTime[currentAtQuestion]*100
         startQuizBinding.progressBar.progress = casualDuringTime[currentAtQuestion]
         startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + "/" + questionList.size.toString()
-        countDownTimer = object : CountDownTimer((casualDuringTime[currentAtQuestion]*1000).toLong(), 1000) {
+        countDownTimer = object : CountDownTimer((casualDuringTime[currentAtQuestion]*1000).toLong(), 50) {
             override fun onFinish() {
                 questionSubmit()
                 if(currentAtQuestion == questionList.size-1) {
@@ -189,12 +212,8 @@ class  MPStartQuiz: AppCompatActivity() {
                 }
             }
             override fun onTick(millisUntilFinished: Long) {
-                val totalRemain = millisUntilFinished/1000
-                val remainMin = totalRemain/60
-                val remainSec = (totalRemain%60).toInt()
-                val remainSecStr = remainSec.toString()
-
-                startQuizBinding.progressBar.progress = remainSec
+                val totalRemain = millisUntilFinished/10
+                startQuizBinding.progressBar.progress = totalRemain.toInt()
             }
         }.start()
     }

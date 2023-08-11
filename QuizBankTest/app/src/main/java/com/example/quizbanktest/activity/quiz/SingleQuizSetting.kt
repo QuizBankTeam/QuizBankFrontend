@@ -3,6 +3,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BuildCompat
@@ -20,7 +21,7 @@ class SingleQuizSetting: AppCompatActivity() {
     private lateinit var quizStatus: String
     private lateinit var quizStartDateTime: String
     private lateinit var quizEndDateTime: String
-    private lateinit var quizMembers: ArrayList<String>
+    private var quizMembers = ArrayList<String>()
     private var quizDuringTime : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,6 +140,7 @@ class SingleQuizSetting: AppCompatActivity() {
             finish()
         }else if(quizType==Constants.quizTypeCasual){
             val titleText = mpQuizSetAttrBinding.QuizTitle.text.toString()
+//            Log.d("title text is ", titleText)
             intentBack.putExtra("Key_title", titleText)
             intentBack.putExtra("Key_startDateTime", quizStartDateTime)
             intentBack.putExtra("Key_endDateTime", quizEndDateTime)

@@ -138,7 +138,12 @@ class SingleQuestion : AppCompatActivity(){
                 this.questionType = if(questionType=="MultipleChoiceS" || questionType=="MultipleChoiceM")
                                         data.getStringExtra("Key_type").toString() else this.questionType
                 questionBinding.QuestionTitle.text = this.questionTitle
-                questionBinding.QuestionType.text = this.questionType
+
+                questionBinding.QuestionType.text = if(questionType==Constants.questionTypeMultipleChoiceS) "單選"
+                else if(questionType==Constants.questionTypeMultipleChoiceM) "多選"
+                else if(questionType==Constants.questionTypeTrueOrFalse) "是非"
+                else if(questionType==Constants.questionTypeShortAnswer) "簡答"
+                else "填充"
             }
         }
         else{  //啥都沒改
@@ -305,8 +310,9 @@ class SingleQuestion : AppCompatActivity(){
     private fun backBtn(){
         val intent = Intent()
         var answerOptionListStr: ArrayList<String> = ArrayList()
-        getOptions() //要先get option底下的answer options才不會出錯...
+
         if (questionType==Constants.questionTypeMultipleChoiceS || questionType==Constants.questionTypeMultipleChoiceM){
+            getOptions() //要先get option底下的answer options才不會出錯...
             for (i in answerOptionInt)
                 answerOptionListStr.add(optionListStr[i])
         }else if(questionType!=Constants.questionTypeShortAnswer){
