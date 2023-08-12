@@ -98,8 +98,9 @@ object ConstantsQuiz {
                 quiz.title = "none"
             if(quiz.casualDuringTime==null)
                 quiz.casualDuringTime = ArrayList()
-            if(quiz.members==null) {
+            if(quiz.members.isNullOrEmpty()) {
                 quiz.members = ArrayList()
+                quiz.members!!.add(Constants.userId)
             }
 //            quiz.members!!.add(Constants.userId)
 
