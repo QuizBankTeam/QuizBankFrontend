@@ -56,7 +56,7 @@ open class BaseActivity : AppCompatActivity() {
     private lateinit var heartbeatScheduler: ScheduledExecutorService
     private var heartbeatFuture: ScheduledFuture<*>? = null
     private lateinit var showRotateDialog : Dialog
-
+    private lateinit var showAutoCutOptionsDialog : Dialog
     val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult() ){
             result->
@@ -535,6 +535,37 @@ open class BaseActivity : AppCompatActivity() {
 
      }
 
+
+    @SuppressLint("CommitPrefEdits")
+    fun showAutoCutOptionsDialog() {
+        showAutoCutOptionsDialog = Dialog(this)
+        showAutoCutOptionsDialog.setContentView(R.layout.dialog_auto_cut_options)
+
+        val cutOptionsEnter = showAutoCutOptionsDialog.findViewById<TextView>(R.id.auto_cut_options_enter)
+        val cutOptionsCancel =showAutoCutOptionsDialog.findViewById<TextView>(R.id.auto_cut_options_cancel)
+        val checkBox = showAutoCutOptionsDialog.findViewById<CheckBox>(R.id.cut_options_check)
+        val preferences = getSharedPreferences("settings", MODE_PRIVATE)
+        val editor = preferences.edit()
+        checkBox.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+            editor.putBoolean("doNotShowAgainForCutOptions", isChecked)
+            editor.apply()
+        }
+
+        cutOptionsEnter.setOnClickListener {
+            editor.putBoolean("cut_options", true)
+            editor.apply()
+            showAutoCutOptionsDialog.dismiss()
+            Toast.makeText(this,"dialog to do cut options",Toast.LENGTH_SHORT).show()
+        }
+
+        cutOptionsCancel.setOnClickListener {
+            editor.putBoolean("cut_options", false)
+            editor.apply()
+            showAutoCutOptionsDialog.dismiss()
+            Toast.makeText(this,"dialog not to do cut options",Toast.LENGTH_SHORT).show()
+        }
+        showAutoCutOptionsDialog.show()
+    }
     fun getRotateOrNot() : Int {
         val preferences = getSharedPreferences("settings", MODE_PRIVATE)
         val doNotShowAgain = preferences.getBoolean("doNotShowAgain", false)
@@ -551,7 +582,22 @@ open class BaseActivity : AppCompatActivity() {
         }
 
     }
+    fun getCutOptionsOrNot() : Int {
+        val preferences = getSharedPreferences("settings", MODE_PRIVATE)
+        val doNotShowAgainForCutOptions = preferences.getBoolean("doNotShowAgainForCutOptions", false)
+        val rotate = preferences.getBoolean("cut_options", false)
+        if (!doNotShowAgainForCutOptions) {
+            // 沒有讀到設定或使用者未選擇「不再顯示」，所以顯示對話框
+            return -1
+        } else {
+            if (rotate) {
+                return 1
+            } else {
+                return 0
+            }
+        }
 
+    }
     fun autoOcrAndRotate(base64String : String,flag: Int,onSuccess1: (String) -> Unit, onFailure1: (String) -> Unit){
 
         if(flag == 1){
@@ -607,6 +653,20 @@ open class BaseActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun autoCutOptions():ArrayList<String>{
+        var cut_options : ArrayList<String> = ArrayList()
+        if(getCutOptionsOrNot() == -1){
+            showAutoCutOptionsDialog()
+        }
+        else if(getCutOptionsOrNot() == 1){
+            Toast.makeText(this,"setting to do cut options",Toast.LENGTH_SHORT).show()
+
+        }else{
+            Toast.makeText(this,"setting not to do cut options",Toast.LENGTH_SHORT).show()
+        }
+        return cut_options
     }
 
     fun processScan(it1 : String){

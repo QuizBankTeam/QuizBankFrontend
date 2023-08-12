@@ -29,43 +29,52 @@
         <activity
             android:name=".activity.public_area.PublicAreaPageActivity"
             android:screenOrientation="portrait"
-
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.bank.BankSingleAnswerQuestionActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.account.AccountSettingActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.account.MyProfileActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.group.GroupSettingActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.group.ChatRoomActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.group.GroupPageActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.bank.BankQuestionActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.group.GroupListActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.SplashActivity"
             android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -76,31 +85,38 @@
         <activity
             android:name=".activity.scan.TagActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.account.LoginActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.scan.ScannerTextWorkSpaceActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.IntroActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.paint.ColorPickerActivity1"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.bank.BankActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.paint.PaintActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
@@ -109,6 +125,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
 
             <!-- <intent-filter> -->
@@ -118,18 +135,36 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".activity.quiz.SingleQuestion" />
-        <activity android:name=".activity.quiz.SingleQuestionSetting" />
+        <activity android:name=".activity.quiz.SingleQuestion"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".activity.quiz.SingleQuestionSetting"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".activity.quiz.SingleQuiz"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".activity.quiz.SingleQuizSetting" />
-        <activity android:name=".activity.quiz.QuizPage" />
-        <activity android:name=".activity.quiz.RecordPage" />
-        <activity android:name=".activity.quiz.SPStartQuiz" />
-        <activity android:name=".activity.quiz.SPQuizFinish" />
-        <activity android:name=".activity.quiz.SPSingleRecord" />
-        <activity android:name=".activity.quiz.MPQuizFinish" />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.quiz.SingleQuizSetting"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".activity.quiz.QuizPage"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".activity.quiz.RecordPage"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".activity.quiz.SPStartQuiz"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".activity.quiz.SPQuizFinish"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".activity.quiz.SPSingleRecord"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".activity.quiz.MPQuizFinish"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".activity.quiz.MPStartQuiz"
             android:theme="@style/StartQuiz" />

@@ -25,6 +25,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
 
         val intent = intent
         val optionsBundle = intent.getBundleExtra("options")
+        autoCutOptions()
         val first = optionsBundle?.getString("first")
         val second = optionsBundle?.getStringArrayList("second")
         val optionsPair: Pair<String, List<String>>? = if (first != null && second != null) {
