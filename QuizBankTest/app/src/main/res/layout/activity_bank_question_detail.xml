@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.bank.BankSingleAnswerQuestionActivity">
+    tools:context=".activity.bank.BankQuestionDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/title_bar"
@@ -71,74 +71,39 @@
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:layout_below="@+id/title_bar"
-        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/society98_1" />
 
-    <ScrollView
-        android:id="@+id/view_question_description"
+    <TextView
+        android:id="@+id/question_description"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:layout_below="@id/question_image"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:fillViewport="true"
-        android:layout_height="150dp">
+        android:background="@drawable/question_description"
+        android:gravity="center"
+        android:hint="Question Description"
+        android:paddingVertical="5dp"
+        android:scrollbars="vertical"
+        android:singleLine="false"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <!--    <ScrollView-->
+    <!--        android:id="@+id/scrollView_options"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_below="@+id/question_tags">-->
 
-            <TextView
-                android:id="@+id/question_description"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/question_description"
-                android:gravity="center"
-                android:paddingVertical="5dp"
-                android:text="Question Description"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/linearLayout_options"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:orientation="vertical">-->
 
-        </LinearLayout>
+    <!--        </LinearLayout>-->
 
-    </ScrollView>
-
-
-    <LinearLayout
-        android:id="@+id/question_tags"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/view_question_description"
-        android:layout_marginBottom="10dp"
-        android:background="@color/yellow"
-        android:orientation="horizontal">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/questionTagsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".activity.BankSingleAnswerQuestionActivity">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/scrollView_options"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/question_tags">
-
-        <LinearLayout
-            android:id="@+id/linearLayout_options"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        </LinearLayout>
-
-    </ScrollView>
+    <!--    </ScrollView>-->
 
     <!--    <LinearLayout-->
     <!--        android:id="@+id/question_options"-->
