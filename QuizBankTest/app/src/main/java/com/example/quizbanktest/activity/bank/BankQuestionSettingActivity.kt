@@ -34,7 +34,7 @@ class BankQuestionSettingActivity : AppCompatActivity() {
                 unmodifiedText = s.toString()
                 cardQuestionTitle.strokeColor = getColor(R.color.light_blue1)
             }
-            
+
             override fun afterTextChanged(s: Editable?) {
                 if (unmodifiedText != s.toString()) { // text changed
                     cardQuestionTitle.strokeColor = getColor(R.color.green)
