@@ -87,6 +87,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.scan.ScanActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name=".activity.scan.TagActivity"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -131,10 +135,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-            <activity
-                android:name=".activity.scan.ScanActivity"
-                android:screenOrientation="portrait"
-                android:exported="false" />
+
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
 
