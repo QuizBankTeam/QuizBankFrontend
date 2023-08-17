@@ -89,17 +89,20 @@ class QuizPage: BaseActivity() {
         else if(requestCode<1000){
             if(resultCode==RESULT_OK && data!=null){
                 val quizType = data.getStringExtra("Key_type").toString()
+                val tmpStatus = data.getStringExtra("Key_status")
+                val tmpStartDateTime = data.getStringExtra("Key_startDateTime")
+                val tmpEndDateTime = data.getStringExtra("Key_endDateTime")
+                val tmpQuestions = data.getParcelableArrayListExtra<Question>("Key_questions")
+                val tmpTitle = data.getStringExtra("Key_title")
+
                 if(quizType == quizTypeSingle){
-                    val tmpQuestions = data.getParcelableArrayListExtra<Question>("Key_questions")
-                    val tmpTitle = data.getStringExtra("Key_title")
                     val tmpDuringTime = data.getIntExtra("Key_duringTime", 0)
-                    val tmpStatus = data.getStringExtra("Key_status")
-                    val tmpStartDateTime = data.getStringExtra("Key_startDateTime")
-                    val tmpEndDateTime = data.getStringExtra("Key_endDateTime")
                     fragmentAdapter.getSPFragment().putQuiz(requestCode, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
 
                 }else if(quizType == quizTypeCasual){
-                    fragmentAdapter.getMPFragment()
+                    val tmpMembers = data.getStringArrayListExtra("Key_members")
+                    val tmpCasualDuringTime = data.getIntegerArrayListExtra("Key_casualDuringTime")
+                    fragmentAdapter.getMPFragment().putQuiz(requestCode, tmpQuestions, tmpTitle, tmpCasualDuringTime, tmpMembers, tmpStatus!!, tmpStartDateTime, tmpEndDateTime)
                 }
             }
         }
@@ -142,13 +145,13 @@ class QuizPage: BaseActivity() {
         }
     }
 
-    fun quizModified(quizIndex: Int, tmpQuestions: ArrayList<Question>, tmpTitle: String, tmpDuringTime: Int, tmpCasualDuringTime: ArrayList<Int>, tmpMembers: ArrayList<String>, tmpStatus: String, tmpStartDateTime: String, tmpEndDateTime: String, quizType: String){
-        fragmentAdapter.getSPFragment().putQuiz(quizIndex, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
-        if(quizType == quizTypeSingle){
-            fragmentAdapter.getSPFragment().putQuiz(quizIndex, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
-        }else if(quizType == quizTypeCasual){
-            fragmentAdapter.getMPFragment().putQuizFromSave(quizIndex, tmpQuestions, tmpTitle, tmpCasualDuringTime, tmpMembers,  tmpStatus, tmpStartDateTime, tmpEndDateTime)
-        }
-    }
+//    fun quizModified(quizIndex: Int, tmpQuestions: ArrayList<Question>, tmpTitle: String, tmpDuringTime: Int, tmpCasualDuringTime: ArrayList<Int>, tmpMembers: ArrayList<String>, tmpStatus: String, tmpStartDateTime: String, tmpEndDateTime: String, quizType: String){
+//        fragmentAdapter.getSPFragment().putQuiz(quizIndex, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
+//        if(quizType == quizTypeSingle){
+//            fragmentAdapter.getSPFragment().putQuiz(quizIndex, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
+//        }else if(quizType == quizTypeCasual){
+//            fragmentAdapter.getMPFragment().putQuizFromSave(quizIndex, tmpQuestions, tmpTitle, tmpCasualDuringTime, tmpMembers,  tmpStatus, tmpStartDateTime, tmpEndDateTime)
+//        }
+//    }
 
 }

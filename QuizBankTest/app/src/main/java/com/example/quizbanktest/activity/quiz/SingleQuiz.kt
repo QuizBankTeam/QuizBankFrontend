@@ -103,7 +103,7 @@ class SingleQuiz: AppCompatActivity() {
                     }
                     duringTime = tmpDuringTime
 
-                    quizBinding.quizTitle.text = title
+                    quizBinding.quizTitle.text = quizTitle
                 }
             }
 

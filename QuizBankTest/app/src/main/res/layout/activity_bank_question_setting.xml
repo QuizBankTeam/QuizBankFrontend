@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorRipple">
+
+        <TextView
+            android:id="@+id/question_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="設定"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:background="?actionBarItemBackground"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="backToPreviousPage"
+            android:src="@drawable/ic_black_color_back_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_question_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_bar"
+        android:layout_marginStart="5dp"
+        android:text="題目名稱 :"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_question_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_question_title"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="5dp"
+        app:strokeWidth="3dp">
+
+        <EditText
+            android:id="@+id/et_question_title"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="5dp"
+            android:background="@null"
+            android:hint="example"
+            android:paddingHorizontal="10dp"
+            android:textSize="20sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tv_question_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_below="@id/card_question_title"
+        android:text="題目描述 :"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_question_description"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="5dp"
+        app:strokeWidth="3dp">
+
+        <EditText
+            android:id="@+id/et_question_description"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginHorizontal="5dp"
+            android:background="@null"
+            android:gravity=""
+            android:hint="This is the example of question description. Btw I'm out of my brain energy and I can't come up with more text so if you still watching, I have to say you are such a weirdo"
+            android:inputType="textMultiLine"
+            android:paddingHorizontal="10dp"
+            android:scrollbars="vertical"
+            android:textSize="20sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_height="wrap_content"
+        app:strokeWidth="3dp"
+        app:strokeColor="@color/green"
+        app:cardCornerRadius="50dp">
+
+        <TextView
+            android:id="@+id/tv_modify"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:onClick="modifySetting"
+            android:text="確定修改"
+            android:gravity="center"
+            android:textSize="20sp"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>

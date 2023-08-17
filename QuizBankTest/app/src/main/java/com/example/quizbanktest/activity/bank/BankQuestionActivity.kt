@@ -118,7 +118,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {
-        val singleAnswerQuestionActivity = Intent(this, BankSingleAnswerQuestionActivity:: class.java)
+        val singleAnswerQuestionActivity = Intent(this, BankQuestionDetailActivity:: class.java)
 
         singleAnswerQuestionActivity.putExtra("id", questionModels[position]._id)
         singleAnswerQuestionActivity.putExtra("title", questionModels[position].title)
@@ -136,7 +136,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankQuestionActivity", questionModels[position]._id.toString())
 
         startActivity(singleAnswerQuestionActivity)
-//        overridePendingTransition(R.anim.bank_to_question_out, R.anim.bank_to_question_in);
     }
 
     @SuppressLint("UnsafeOptInUsageError")

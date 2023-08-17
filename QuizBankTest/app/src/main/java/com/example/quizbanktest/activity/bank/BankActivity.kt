@@ -77,27 +77,12 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             addBankDialog.setContentView(R.layout.dialog_add_bank)
             addBankDialog.show()
 
-            val etBankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title)
-            val etBankType = addBankDialog.findViewById<EditText>(R.id.bank_type)
-
-            val current = LocalDate.now().toString()
-            Log.e("BankActivity", "the time now is $current")
-            if (etBankTitle == null) {
-                Log.e("BankActivity", "the title is null")
-            } else {
-                Log.e("BankActivity", "the title is " + etBankTitle.text.toString())
-            }
-            if (etBankTitle == null) {
-                Log.e("BankActivity", "the type is null")
-            } else {
-                Log.e("BankActivity", "the type is " + etBankType.text.toString())
-            }
-
             val btnBankSubmit = addBankDialog.findViewById<ImageButton>(R.id.btn_bank_submit)
             btnBankSubmit.setOnClickListener {
                 // TODO id setting needs to be flexible
                 val bankId = "52fde333-3eba-4140-a244-2b1aaf992a0e"
-                val bankTitle = etBankTitle.text.toString()
+                val bankTitle =
+                    addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
                 val bankType = "single"
                 val bankCreatedDate = LocalDate.now().toString()
                 val bankMembers: ArrayList<String> = arrayListOf()
@@ -256,7 +241,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
-
     }
 
 }

@@ -81,16 +81,8 @@ class MultiQuizPage : Fragment() {
         QuizList.add(0, quiz)
         quizListAdapter.notifyDataSetChanged()
     }
-    fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
-        QuizList[position].title = title
-        QuizList[position].questions = questions
-        QuizList[position].duringTime = duringTime
-        QuizList[position].status = status
-        QuizList[position].startDateTime = startDateTime
-        QuizList[position].endDateTime = endDateTime
-        quizListAdapter.notifyItemChanged(position)
-    }
-    fun putQuizFromSave(quizIndex: Int, tmpQuestions: ArrayList<Question>, tmpTitle: String,  tmpCasualDuringTime: ArrayList<Int>, tmpMembers: ArrayList<String>, tmpStatus: String, tmpStartDateTime: String, tmpEndDateTime: String){
+
+    fun putQuiz(quizIndex: Int, tmpQuestions: ArrayList<Question>?, tmpTitle: String?,  tmpCasualDuringTime: ArrayList<Int>?, tmpMembers: ArrayList<String>?, tmpStatus: String, tmpStartDateTime: String?, tmpEndDateTime: String?){
         QuizList[quizIndex].questions = tmpQuestions
         QuizList[quizIndex].title = tmpTitle
         QuizList[quizIndex].casualDuringTime = tmpCasualDuringTime
