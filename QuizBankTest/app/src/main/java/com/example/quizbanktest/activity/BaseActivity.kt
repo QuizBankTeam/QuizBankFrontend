@@ -2,6 +2,7 @@ package com.example.quizbanktest.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.*
 import android.graphics.Bitmap
@@ -28,6 +29,7 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.account.AccountSettingActivity
 import com.example.quizbanktest.activity.bank.BankActivity
 import com.example.quizbanktest.activity.quiz.QuizPage
+import com.example.quizbanktest.activity.scan.ScanActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.utils.*
 import com.google.android.material.snackbar.Snackbar
@@ -86,8 +88,6 @@ open class BaseActivity : AppCompatActivity() {
             val thumbnail: Bitmap? = BitmapFactory.decodeStream(getContentResolver().openInputStream(cameraPhotoUri!!))
             lifecycleScope.launch{
                 var returnString = saveBitmapFileForPicturesDir(thumbnail!!)
-
-
             }
             var base64String = ConstantsFunction.encodeImage(thumbnail!!)
             showProgressDialog("目前正在處理OCR之結果")
@@ -97,7 +97,13 @@ open class BaseActivity : AppCompatActivity() {
         }
 
     }
-
+    val startScanActivityForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = Intent(this@BaseActivity,ScannerTextWorkSpaceActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
     fun showProgressDialog(text: String) {
         mProgressDialog = Dialog(this)
 
@@ -189,20 +195,43 @@ open class BaseActivity : AppCompatActivity() {
         val pictureDialog = AlertDialog.Builder(this)
         pictureDialog.setTitle("Select Action")
         val pictureDialogItems =
-            arrayOf("從相簿選擇", "拍照新增題目")
+            arrayOf("掃描", "拍照新增題目","從相簿選擇")
         pictureDialog.setItems(
             pictureDialogItems
         ) { dialog, which ->
             when (which) {
+                0-> scanPhoto()
                 // Here we have create the methods for image selection from GALLERY
-                0 -> choosePhotoToOcr(0, onSuccess = { it1 ->  }, onFailure = { it1 -> })
                 1 -> takePhotoFromCamera()
+                2 -> choosePhotoToOcr(0, onSuccess = { it1 ->  }, onFailure = { it1 -> })
             }
         }
         pictureDialog.show()
     }
 
+    fun scanPhoto(){
+        Dexter.withActivity(this)
+            .withPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            )
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
 
+                    val scanIntent = Intent(this@BaseActivity, ScanActivity::class.java)
+                    startScanActivityForResult.launch(scanIntent)
+
+                }
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    ConstantsFunction.showRationalDialogForPermissions(this@BaseActivity)
+                }
+            }).onSameThread()
+            .check()
+    }
     fun takePhotoFromCamera() {
         Dexter.withActivity(this)
             .withPermissions(
@@ -396,7 +425,7 @@ open class BaseActivity : AppCompatActivity() {
     private var backPressedTime: Long = 0
     private val BACK_PRESS_THRESHOLD = 2000  // 2000 milliseconds = 2 seconds
     @SuppressLint("UnsafeOptInUsageError")
-    fun doubleCheckExit(){
+    open fun doubleCheckExit(){
         if (BuildCompat.isAtLeastT()) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
@@ -625,9 +654,7 @@ open class BaseActivity : AppCompatActivity() {
                 ConstantsHoughAlgo.imageRotate(
                     base64String,this@BaseActivity,
                     onSuccess = { it1 ->
-
                         ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
-
                             processScan(it1)
                             onSuccess1("success")
                             hideProgressDialog()
