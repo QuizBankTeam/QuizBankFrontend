@@ -46,7 +46,7 @@ class TagActivity : AppCompatActivity() {
             }
 
             override fun onTagLongClick(position: Int, text: String) {
-                val dialog = AlertDialog.Builder(this@TagActivity)
+                val dialog = AlertDialog.Builder(this@TagActivity,R.style.CustomAlertDialogStyle)
                     .setTitle("long click")
                     .setMessage("You will delete this tag!")
                     .setPositiveButton("Delete") { dialog, which ->
