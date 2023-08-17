@@ -262,7 +262,7 @@ open class BaseActivity : AppCompatActivity() {
     }
     fun showAlertFromWorkSpace(onConfirm : () -> Unit) {
         if (ConstantsOcrResults.questionList.isNotEmpty()) {
-            val builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)
                 .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
                 .setTitle("OCR結果")
                 .setIcon(R.drawable.baseline_warning_amber_24)

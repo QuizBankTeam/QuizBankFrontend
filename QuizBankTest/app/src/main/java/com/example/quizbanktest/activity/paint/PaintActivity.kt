@@ -197,7 +197,7 @@ class PaintActivity : AppCompatActivity() {
         backButton.setOnClickListener{
             if(ConstantsOcrResults.getOcrResult().size!=0){
                 Log.e("nav","toolbar")
-                val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+                val builder = androidx.appcompat.app.AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)
                     .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
                     .setTitle("圖片工作區")
                     .setIcon(R.drawable.baseline_warning_amber_24)
@@ -253,7 +253,7 @@ class PaintActivity : AppCompatActivity() {
             ib_highlighter.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_border_color_24))
             ib_eraser.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ib_eraser_press))
 
-            val builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)
             builder.setMessage("使用此橡皮擦並不能復原，是否使用？")
                 .setTitle("超級橡皮擦\uD83E\uDE84")
                 .setPositiveButton("OK") { dialog, which ->
@@ -668,7 +668,7 @@ class PaintActivity : AppCompatActivity() {
     private var backPressedTime: Long = 0
     private val BACK_PRESS_THRESHOLD = 2000  // 2000 milliseconds = 2 seconds
     private fun showRationalDialogForPermissions() {
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)
             .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
             .setPositiveButton("GO TO SETTINGS"
             ) { _, _ ->

@@ -30,8 +30,8 @@ object ConstantsFunction {
 
     fun showRationalDialogForPermissions(context: Context) {
         AlertDialog.Builder(context)
-            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
-            .setPositiveButton("GO TO SETTINGS"
+            .setMessage("目前似乎已關閉此功能所需的權限。 請在設定下啟用它")
+            .setPositiveButton("前往設定"
             ) { _, _ ->
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -42,7 +42,7 @@ object ConstantsFunction {
                     e.printStackTrace()
                 }
             }
-            .setNegativeButton("Cancel") { dialog,
+            .setNegativeButton("取消") { dialog,
                                            _ ->
                 dialog.dismiss()
             }.show()
