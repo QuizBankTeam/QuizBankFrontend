@@ -36,7 +36,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun buttonClick(){
-//        startLogin(" ", " ")
         val email : String = binding.account.text.toString()
         val password : String = binding.password.text.toString()
         val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]+){1,6}$")
