@@ -38,7 +38,7 @@ class GroupListActivity : BaseActivity() {
 
         addGroupBtn.setOnClickListener {
 
-            val actionDialog = AlertDialog.Builder(this)
+            val actionDialog = AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)
             actionDialog.setTitle("群組功能選擇")
             val actionDialogItems =
                 arrayOf("加入群組", "創建群組")

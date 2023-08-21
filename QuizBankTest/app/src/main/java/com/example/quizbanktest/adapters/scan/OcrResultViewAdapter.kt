@@ -112,7 +112,7 @@ class OcrResultViewAdapter(
 
             val reScanBtn : TextView = holder.itemView.findViewById(R.id.btn_rescan)
             reScanBtn.setOnClickListener {
-                val builder =AlertDialog.Builder(activity)
+                val builder =AlertDialog.Builder(activity,R.style.CustomAlertDialogStyle)
                     .setMessage(" 您確定要重新掃描嗎 ")
                     .setTitle("掃描結果")
                     .setIcon(R.drawable.baseline_warning_amber_24)
@@ -160,7 +160,7 @@ class OcrResultViewAdapter(
                     }
 
                     override fun onTagLongClick(position: Int, text: String) {
-                        val dialog = android.app.AlertDialog.Builder(context)
+                        val dialog = android.app.AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                             .setTitle("long click")
                             .setMessage("You will delete this tag!")
                             .setPositiveButton("Delete") { dialog, which ->
@@ -300,7 +300,7 @@ class OcrResultViewAdapter(
                                 val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
                                 ConstantsOcrResults.questionList[position].image?.add(selectPhotoBase64String)
                                 imageList.add(selectPhotoBase64String)
-                                val actionDialog = AlertDialog.Builder(context)
+                                val actionDialog = AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                                 actionDialog.setTitle("是否答案圖片要OCR")
                                 val actionDialogItems =
                                     arrayOf("要", "不要")
@@ -340,7 +340,7 @@ class OcrResultViewAdapter(
                 //取消本次新增答案
                 val answerCancel : TextView = answerDialog.findViewById(R.id.answer_cancel)
                 answerCancel.setOnClickListener(View.OnClickListener {
-                    val builder =AlertDialog.Builder(context)
+                    val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                         .setMessage(" 您確定要取消所有目前的新增結果嗎 ")
                         .setTitle("取消新增答案")
                         .setIcon(R.drawable.baseline_warning_amber_24)
@@ -406,7 +406,7 @@ class OcrResultViewAdapter(
                 })
                 val createImageCancel : TextView = imageDialog.findViewById(R.id.answer_image_cancel)
                 createImageCancel.setOnClickListener(View.OnClickListener {
-                    val builder =AlertDialog.Builder(context)
+                    val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                         .setMessage(" 您確定要取消所有目前的新增圖片嗎 ")
                         .setTitle("取消新增圖片")
                         .setIcon(R.drawable.baseline_warning_amber_24)
@@ -557,26 +557,26 @@ class OcrResultViewAdapter(
 
                 //判斷是否符合格式符合才能新增
                 if(ConstantsOcrResults.questionList[position].title==""){
-                    val builder =AlertDialog.Builder(context)
+                    val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                         .setMessage(" 您的標題(title)不能為空喔 ")
                         .setTitle("確認標題")
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.show()
 
                 }else if(ConstantsOcrResults.questionList[position].number==""){
-                    val builder =AlertDialog.Builder(context)
+                    val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                         .setMessage(" 您的題號(number)不能為空喔 ")
                         .setTitle("確認題號")
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.show()
                 }else if(!isNumber){
-                    val builder =AlertDialog.Builder(context)
+                    val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                         .setMessage(" 您的題號需要為數字喔 ")
                         .setTitle("錯誤題號")
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.show()
                 }else if((questionTypeIndex==1||questionTypeIndex==3||questionTypeIndex==4)&&ConstantsOcrResults.questionList[position].options?.size==0){
-                    val builder =AlertDialog.Builder(context)
+                    val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                         .setMessage(" 您的題目選項(options)不能為空喔 ")
                         .setTitle("題目選項")
                         .setIcon(R.drawable.baseline_warning_amber_24)
@@ -585,7 +585,7 @@ class OcrResultViewAdapter(
                         ConstantsOcrResults.questionList[position].answerOptions?.add("目前答案選項為空")
                     }
                 }else if(ConstantsOcrResults.questionList[position].questionBank=="") {
-                    val builder = AlertDialog.Builder(context)
+                    val builder = AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                         .setMessage(" 選擇放入的題庫不能為空如果目前無可選擇的請先新增題庫喔 ")
                         .setTitle("選擇放入題庫")
                         .setIcon(R.drawable.baseline_warning_amber_24)
@@ -614,7 +614,7 @@ class OcrResultViewAdapter(
             val btnScanCancel : TextView  = holder.itemView.findViewById(R.id.btn_scan_cancel)
             btnScanCancel.setOnClickListener {
                 //TODO 取消新增
-                val builder =AlertDialog.Builder(context)
+                val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                     .setMessage(" 您確定要取消這次的掃描結果嗎 ")
                     .setTitle("取消掃描結果")
                     .setIcon(R.drawable.baseline_warning_amber_24)

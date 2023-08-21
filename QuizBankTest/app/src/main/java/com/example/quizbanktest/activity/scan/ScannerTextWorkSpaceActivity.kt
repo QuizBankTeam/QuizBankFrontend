@@ -57,7 +57,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
         backButton.setOnClickListener{
             if(ConstantsOcrResults.getOcrResult().size!=0){
                 Log.e("nav","toolbar")
-                val builder =AlertDialog.Builder(this)
+                val builder =AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)
                     .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
                     .setTitle("掃描修改")
                     .setIcon(R.drawable.baseline_warning_amber_24)
@@ -96,7 +96,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
         val deleteButton : ImageButton = findViewById(R.id.delete_all_scan_result)
 
         deleteButton.setOnClickListener {
-            val builder =AlertDialog.Builder(this)
+            val builder =AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)
                 .setMessage(" 您確定要刪除所有的暫存掃描結果嗎 ")
                 .setTitle("掃描結果")
                 .setIcon(R.drawable.baseline_warning_amber_24)
