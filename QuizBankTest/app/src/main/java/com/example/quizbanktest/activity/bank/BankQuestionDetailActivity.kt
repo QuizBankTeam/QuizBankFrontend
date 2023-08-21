@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
@@ -28,6 +29,7 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
     private lateinit var tvType: TextView
     private lateinit var tvDescription: TextView
     private lateinit var btnBackArrow: ImageButton
+    private lateinit var newDescription: String
 
     private lateinit var questionId: String
     private lateinit var questionTitle: String
@@ -48,32 +50,11 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         setContentView(R.layout.activity_bank_question_detail)
 
         init()
-
-//        val questionId = intent.getStringExtra("id").toString()
-//        val questionTitle = intent.getStringExtra("title").toString()
-//        val questionNumber = intent.getStringExtra("number").toString()
-////        val questionDescription = intent.getStringExtra("description").toString()
-//        val questionDescription =
-//            "This is a test string for testing the scroll function of TextView is usable or not.\n" +
-//                    "The tested function are scrollbars in xml file and movementMethod in kotlin file.\n" +
-//                    "Here is a testing article below:\n" +
-//                    "The Collateral Repair Podcast aims to share the stories of refugees living in Amman, Jordan.\n" +
-//                    "On a monthly basis, CRP invites you into an intimate space that will allow you to hear and understand refugees’ experiences in their own words.\n" +
-//                    "Each episode features an interview with a member of one of Jordan’s refugee communities,\n" +
-//                    "a supporting interview with a professional or employee at CRP, a Q&A in response to listeners’ questions,\n" +
-//                    "and a quick update of developments that month at CRP."
-//        val questionOptions = intent.getStringArrayListExtra("options")
-//        val questionType = intent.getStringExtra("type").toString()
-//        val answerOptions = intent.getStringArrayListExtra("answerOptions")
-//        val answerDescription = intent.getStringExtra("answerDescription").toString()
-//        val questionSource = intent.getStringExtra("source").toString()
-//        val questionImage = intent.getStringArrayListExtra("image")
-//        val questionTag = intent.getStringArrayListExtra("tag")
-
         Log.d("BankQuestionDetailActivity", questionDescription)
 
         tvTitle = findViewById(R.id.question_title)
         tvTitle.movementMethod = ScrollingMovementMethod()
+        tvTitle.isSelected = true
         tvType = findViewById(R.id.question_type)
         tvDescription = findViewById(R.id.question_description)
         tvDescription.movementMethod = ScrollingMovementMethod()
@@ -118,8 +99,30 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
 
             val etDescription =
                 descriptionDialog.findViewById<EditText>(R.id.et_question_description)
-            etDescription.setText(questionDescription)
+            etDescription.setText(newDescription)
 
+            etDescription.addTextChangedListener(object: TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {  // p0:
+
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    Log.e("BankQuestionDescriptionDialog", "Doing: $s")
+                    newDescription = s.toString()
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    Log.e("BankQuestionDescriptionDialog", "after: " + s.toString())
+
+                }
+            })
+            descriptionDialog.setOnDismissListener {
+                if (newDescription != "") {
+                    Log.e("BankQuestionDescriptionDialog", "set new description")
+                    etDescription.setText(newDescription)
+                    tvDescription.text = newDescription
+                }
+            }
         }
 
         val btnSetting = findViewById<ImageButton>(R.id.setting)
@@ -193,6 +196,7 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
                     "Each episode features an interview with a member of one of Jordan’s refugee communities,\n" +
                     "a supporting interview with a professional or employee at CRP, a Q&A in response to listeners’ questions,\n" +
                     "and a quick update of developments that month at CRP."
+        newDescription = questionDescription
         questionOptions = intent.getStringArrayListExtra("options")!!
         questionType = intent.getStringExtra("type").toString()
         answerOptions = intent.getStringArrayListExtra("answerOptions")!!

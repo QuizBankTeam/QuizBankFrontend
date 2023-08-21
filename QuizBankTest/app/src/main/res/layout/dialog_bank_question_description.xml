@@ -21,7 +21,6 @@
             android:layout_marginBottom="3dp"
             android:gravity="top|left"
             android:text="題目描述"
-            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -35,7 +34,7 @@
             android:hint="question description"
             android:inputType="textMultiLine"
             android:scrollbars="vertical"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 

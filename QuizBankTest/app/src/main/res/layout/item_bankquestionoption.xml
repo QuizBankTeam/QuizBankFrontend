@@ -9,9 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
         app:cardCornerRadius="3dp"
-        app:strokeColor="@color/black"
         app:cardElevation="3dp"
         app:strokeWidth="1dp">
 
@@ -23,14 +22,13 @@
             <TextView
                 android:id="@+id/tv_option"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="top|left"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
                 android:hint="option"
-                android:padding="5dp"
+                android:padding="15dp"
                 android:scrollbars="vertical"
                 android:singleLine="false"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
