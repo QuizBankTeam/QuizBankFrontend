@@ -20,6 +20,7 @@ class BankQuestionSettingActivity : AppCompatActivity() {
     private lateinit var unmodifiedText: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank_question_setting)
 

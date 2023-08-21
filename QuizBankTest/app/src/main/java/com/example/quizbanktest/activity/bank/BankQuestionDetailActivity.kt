@@ -20,10 +20,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
-import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
 
-class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
+class BankQuestionDetailActivity : AppCompatActivity() {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
@@ -82,6 +81,7 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
 
                 }
             })
+
             descriptionDialog.setOnDismissListener {
                 if (newDescription != "") {
                     Log.e("BankQuestionDescriptionDialog", "set new description")
@@ -117,9 +117,13 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
 
         val optionRecyclerView: RecyclerView = findViewById(R.id.optionRecyclerView)
         val optionAdapter =
-            QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList, this)
+            QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList)
         optionRecyclerView.adapter = optionAdapter
         optionRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    private fun showAnswer() {
+
     }
 
     fun backToPreviousPage(view: View?) {
@@ -146,31 +150,7 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         finish()
     }
 
-    override fun onItemClick(position: Int) {
-        Log.e("BankQuestionDetailActivity", "show option dialog")
-        val optionDialog = Dialog(this)
-        optionDialog.setContentView(R.layout.dialog_bank_question_option)
-        optionDialog.show()
-
-        val etOptionDescription =
-            optionDialog.findViewById<EditText>(R.id.et_option_description)
-        etOptionDescription.setText(questionOptions[position])
-    }
-
     private fun init() {
-        // View initialization
-        tvTitle = findViewById(R.id.question_title)
-        tvType = findViewById(R.id.question_type)
-        tvDescription = findViewById(R.id.question_description)
-        btnSetting = findViewById(R.id.setting)
-
-        tvTitle.text = questionTitle
-        tvTitle.movementMethod = ScrollingMovementMethod()
-        tvTitle.isSelected = true
-        tvType.text = questionType
-        tvDescription.movementMethod = ScrollingMovementMethod()
-        tvDescription.text = questionDescription
-
         // Question variable initialization
         questionId = intent.getStringExtra("id").toString()
         questionTitle = intent.getStringExtra("title").toString()
@@ -193,5 +173,18 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         questionSource = intent.getStringExtra("source").toString()
         questionImage = intent.getStringArrayListExtra("image")!!
         questionTag = intent.getStringArrayListExtra("tag")!!
+
+        // View initialization
+        tvTitle = findViewById(R.id.question_title)
+        tvType = findViewById(R.id.question_type)
+        tvDescription = findViewById(R.id.question_description)
+        btnSetting = findViewById(R.id.setting)
+
+        tvTitle.text = questionTitle
+        tvTitle.movementMethod = ScrollingMovementMethod()
+        tvTitle.isSelected = true
+        tvType.text = questionType
+        tvDescription.movementMethod = ScrollingMovementMethod()
+        tvDescription.text = questionDescription
     }
 }
