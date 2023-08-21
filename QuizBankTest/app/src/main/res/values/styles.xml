@@ -42,4 +42,9 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>        //smooth animation
         <item name="colorAccent">@color/colorAccent</item>                      //change button text color
     </style>
+
+    <style name="roundedCorner" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
 </resources>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.window.OnBackInvokedDispatcher
@@ -32,10 +33,13 @@ class BankQuestionSettingActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 unmodifiedText = s.toString()
+                Log.e("BankQuestionSetting", "before s = $s")
                 cardQuestionTitle.strokeColor = getColor(R.color.light_blue1)
+                Log.e("BankQuestionSetting", "count = $count")
             }
 
             override fun afterTextChanged(s: Editable?) {
+                Log.e("BankQuestionSetting", "after s = $s")
                 if (unmodifiedText != s.toString()) { // text changed
                     cardQuestionTitle.strokeColor = getColor(R.color.green)
                 }
@@ -69,10 +73,8 @@ class BankQuestionSettingActivity : AppCompatActivity() {
         finish()
     }
 
-
     override fun onBackPressed() {
         finish()
     }
-
 
 }

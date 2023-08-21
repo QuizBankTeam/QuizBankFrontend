@@ -146,7 +146,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             bankMembers.add(item.members)
             bankSource.add(item.originateFrom)
             bankCreators.add(item.creator)
-
         }
         for (i in bankTitle.indices) {
             val questionBankModel = QuestionBankModel(
