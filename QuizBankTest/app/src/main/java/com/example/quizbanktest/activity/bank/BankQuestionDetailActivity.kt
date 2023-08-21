@@ -24,13 +24,12 @@ import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
 
 class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
-
+    // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
     private lateinit var tvDescription: TextView
-    private lateinit var btnBackArrow: ImageButton
-    private lateinit var newDescription: String
-
+    private lateinit var btnSetting: ImageButton
+    // Question variable
     private lateinit var questionId: String
     private lateinit var questionTitle: String
     private lateinit var questionNumber: String
@@ -42,6 +41,8 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
     private lateinit var questionSource: String
     private lateinit var questionImage: ArrayList<String>
     private lateinit var questionTag: ArrayList<String>
+    // variable
+    private lateinit var newDescription: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,47 +51,12 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         setContentView(R.layout.activity_bank_question_detail)
 
         init()
-        Log.d("BankQuestionDetailActivity", questionDescription)
-
-        tvTitle = findViewById(R.id.question_title)
-        tvTitle.movementMethod = ScrollingMovementMethod()
-        tvTitle.isSelected = true
-        tvType = findViewById(R.id.question_type)
-        tvDescription = findViewById(R.id.question_description)
-        tvDescription.movementMethod = ScrollingMovementMethod()
-
-        tvTitle.text = questionTitle
-        tvType.text = questionType
-        tvDescription.text = questionDescription
-
-        val tmpQuestionOptionsArrayList = ArrayList<String>()
-        if (questionOptions != null) {
-            for (item in questionOptions) {
-                tmpQuestionOptionsArrayList.add(item)
-            }
-            Log.e("BankQuestionDetailActivity", tmpQuestionOptionsArrayList.toString())
-        } else {
-            Log.e("BankQuestionDetailActivity", "questionOptions is empty")
-        }
-
-        val tmpAnswerOptionsArrayList = ArrayList<String>()
-        if (answerOptions != null) {
-            for (item in answerOptions) {
-                tmpAnswerOptionsArrayList.add(item)
-            }
-        } else {
-            Log.e("BankQuestionDetailActivity", "answerOptions is empty")
-        }
-        // TODO deannotate it when data is full confirmed
+        // TODO: deannotate it when data is full confirmed
 //        if (questionImage == null) {
 //            findViewById<ImageView>(R.id.question_image).visibility = View.INVISIBLE
 //        }
-        val optionRecyclerView : RecyclerView = findViewById(R.id.optionRecyclerView)
-        val optionAdapter = QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList, this)
-        optionRecyclerView.adapter = optionAdapter
-        optionRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        setupOptions(tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList)
+        // set up question options
+        setupOptions()
 
         tvDescription.setOnClickListener {
             val descriptionDialog = Dialog(this)
@@ -101,9 +67,9 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
                 descriptionDialog.findViewById<EditText>(R.id.et_question_description)
             etDescription.setText(newDescription)
 
-            etDescription.addTextChangedListener(object: TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {  // p0:
-
+            etDescription.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    // TODO: nothing
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -125,7 +91,6 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
             }
         }
 
-        val btnSetting = findViewById<ImageButton>(R.id.setting)
         btnSetting.setOnClickListener {
             startActivity(
                 Intent(
@@ -138,13 +103,23 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         pullExit()
     }
 
-    private fun setupOptions(
-        tmpQuestionOptionsArrayList: ArrayList<String>,
-        tmpAnswerOptionsArrayList: ArrayList<String>
-    ) {
-//        val optionAdapter = QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList)
-//        optionRecyclerView.adapter = optionAdapter
-//        optionRecyclerView.layoutManager = LinearLayoutManager(this)
+    private fun setupOptions() {
+        val tmpQuestionOptionsArrayList = ArrayList<String>()
+        for (item in questionOptions) {
+            tmpQuestionOptionsArrayList.add(item)
+        }
+        Log.e("BankQuestionDetailActivity", tmpQuestionOptionsArrayList.toString())
+
+        val tmpAnswerOptionsArrayList = ArrayList<String>()
+        for (item in answerOptions) {
+            tmpAnswerOptionsArrayList.add(item)
+        }
+
+        val optionRecyclerView: RecyclerView = findViewById(R.id.optionRecyclerView)
+        val optionAdapter =
+            QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList, this)
+        optionRecyclerView.adapter = optionAdapter
+        optionRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     fun backToPreviousPage(view: View?) {
@@ -183,6 +158,20 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
     }
 
     private fun init() {
+        // View initialization
+        tvTitle = findViewById(R.id.question_title)
+        tvType = findViewById(R.id.question_type)
+        tvDescription = findViewById(R.id.question_description)
+        btnSetting = findViewById(R.id.setting)
+
+        tvTitle.text = questionTitle
+        tvTitle.movementMethod = ScrollingMovementMethod()
+        tvTitle.isSelected = true
+        tvType.text = questionType
+        tvDescription.movementMethod = ScrollingMovementMethod()
+        tvDescription.text = questionDescription
+
+        // Question variable initialization
         questionId = intent.getStringExtra("id").toString()
         questionTitle = intent.getStringExtra("title").toString()
         questionNumber = intent.getStringExtra("number").toString()
