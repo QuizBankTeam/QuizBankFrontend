@@ -20,6 +20,7 @@ import com.example.quizbanktest.adapters.quiz.SPQuizAdapter
 import com.example.quizbanktest.databinding.ListSpQuizBinding
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.Quiz
+import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuiz
 
 // TODO: Rename parameter arguments, choose names that match
@@ -55,7 +56,7 @@ class SingleQuizPage : Fragment() {
     }
 
     private fun init(){
-        val quizType = "single"
+        val quizType = Constants.quizTypeSingle
         val batch = 0
         val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )
         val base64Image1 = bitmapToString(imageBitmap1)
@@ -80,6 +81,7 @@ class SingleQuizPage : Fragment() {
             quizBinding.QuizList.adapter = quizListAdapter
             quizBinding.QuizList.isClickable = true
             Log.d("initing", "on view created")
+
         }, onFailure = {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             initWithoutNetwork()

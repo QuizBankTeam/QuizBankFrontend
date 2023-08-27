@@ -1,10 +1,12 @@
 package com.example.quizbanktest.activity.quiz
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -19,12 +21,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.quizbanktest.databinding.ActivitySingleQuestionBinding
-import com.example.quizbanktest.models.Option
 import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.quiz.OptionAdapter
+import com.example.quizbanktest.databinding.ActivitySingleQuestionBinding
 import com.example.quizbanktest.fragment.SingleQuizPage
+import com.example.quizbanktest.models.Option
 import com.example.quizbanktest.utils.Constants
+
 
 class SingleQuestion : AppCompatActivity(){
     private lateinit var questionBinding: ActivitySingleQuestionBinding
@@ -50,11 +53,14 @@ class SingleQuestion : AppCompatActivity(){
     private var imageArr = ArrayList<Bitmap>()
     private var quizIndex = 0
     private var questionIndex = 0
+    private val openPhotoAlbum:Int = 1314
+    private var resolver: ContentResolver? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         questionBinding = ActivitySingleQuestionBinding.inflate(layoutInflater)
         setContentView(questionBinding.root)
         init()
+        resolver = this.contentResolver
 
         if(questionType=="MultipleChoiceS" || questionType=="MultipleChoiceM"){
             initMultiChoice()
@@ -88,6 +94,18 @@ class SingleQuestion : AppCompatActivity(){
             questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
         }
 
+        //修改圖片
+        questionBinding.editImage.setOnClickListener {
+            editImage()
+        }
+
+        //新增圖片
+        questionBinding.addImage.setOnClickListener {
+            val intent = Intent()
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.type = "image/*"
+            startActivityForResult(intent, openPhotoAlbum)
+        }
 
         //回傳修改的內容至 singleQuiz
         questionBinding.backBtn.setOnClickListener {
@@ -129,25 +147,44 @@ class SingleQuestion : AppCompatActivity(){
             setResult(Constants.RESULT_DELETE, intent)
             finish()
         }
-        else if(resultCode == RESULT_OK) {   //修改題目設定
-            Toast.makeText(this, "modify something", Toast.LENGTH_SHORT).show()
+        else if(resultCode == RESULT_OK) {
             if (data != null) {
-                this.questionTitle = data.getStringExtra("Key_title").toString()
-                this.questionAnswerDescription = data.getStringExtra("Key_answerDescription").toString()
-                this.questionNumber = data.getStringExtra("Key_number").toString()
-                this.questionType = if(questionType=="MultipleChoiceS" || questionType=="MultipleChoiceM")
-                                        data.getStringExtra("Key_type").toString() else this.questionType
-                questionBinding.QuestionTitle.text = this.questionTitle
+                if(requestCode == openPhotoAlbum){ //從圖片庫回傳
+                    val dataUri: Uri? = data.data
+                    Log.d(
+                        "mengyuanuri",
+                        "uri:" + dataUri!!.scheme + ":" + dataUri.schemeSpecificPart)
+                    val bitmap = BitmapFactory.decodeStream(resolver!!.openInputStream(dataUri))
+                    if(imageArr.isNotEmpty()){
+                        imageArr[0] = bitmap
+                    }else{
+                        imageArr.add(bitmap)
+                    }
+                    questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 230f, resources.displayMetrics).toInt()
+                    questionBinding.QuestionImage.setImageBitmap(bitmap)
+                    questionBinding.QuestionImage.setBackgroundResource(0)
+                    questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
+                    questionBinding.editImage.visibility = View.VISIBLE
+                    questionBinding.addImageContainer.visibility = View.GONE
+                }
+                else{                             //修改題目設定
+                    this.questionTitle = data.getStringExtra("Key_title").toString()
+                    this.questionAnswerDescription = data.getStringExtra("Key_answerDescription").toString()
+                    this.questionNumber = data.getStringExtra("Key_number").toString()
+                    this.questionType = if(questionType=="MultipleChoiceS" || questionType=="MultipleChoiceM")
+                        data.getStringExtra("Key_type").toString() else this.questionType
+                    questionBinding.QuestionTitle.text = this.questionTitle
 
-                questionBinding.QuestionType.text = if(questionType==Constants.questionTypeMultipleChoiceS) "單選"
-                else if(questionType==Constants.questionTypeMultipleChoiceM) "多選"
-                else if(questionType==Constants.questionTypeTrueOrFalse) "是非"
-                else if(questionType==Constants.questionTypeShortAnswer) "簡答"
-                else "填充"
+                    questionBinding.QuestionType.text = if(questionType==Constants.questionTypeMultipleChoiceS) "單選"
+                    else if(questionType==Constants.questionTypeMultipleChoiceM) "多選"
+                    else if(questionType==Constants.questionTypeTrueOrFalse) "是非"
+                    else if(questionType==Constants.questionTypeShortAnswer) "簡答"
+                    else "填充"
+                }
             }
         }
         else{  //啥都沒改
-            Toast.makeText(this, "modify nothing", Toast.LENGTH_SHORT).show()
+
         }
     }
     private fun init()
@@ -197,12 +234,12 @@ class SingleQuestion : AppCompatActivity(){
         if (options != null){
             optionListStr = options
         }
-        if(quizType=="casual"){
+        if(quizType==Constants.quizTypeCasual){
             val timeLimit = intent.getIntExtra("Key_timeLimit",0).toString() + "秒"
             this.time_limit = intent.getIntExtra("Key_timeLimit",0)
             questionBinding.timeLimit.text = timeLimit
         }else{
-            questionBinding.containerTimeLimit.removeView(questionBinding.timeLimit)
+            questionBinding.upperFrame.removeView(questionBinding.timeLimit)
         }
 
         for(item in SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex]){
@@ -215,8 +252,14 @@ class SingleQuestion : AppCompatActivity(){
             Log.d("quiz index = $quizIndex", "question index = $questionIndex")
         }
         if(imageArr.isNotEmpty()) {
+            questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 230f, resources.displayMetrics).toInt()
             questionBinding.QuestionImage.setImageBitmap(imageArr[0])
+            questionBinding.QuestionImage.setBackgroundResource(0)
+            questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
+            questionBinding.editImage.visibility = View.VISIBLE
+            questionBinding.addImageContainer.visibility = View.GONE
         }
+
         questionBinding.questionDescription.text = description
         questionBinding.QuestionTitle.text = title
         when(type){
@@ -469,6 +512,35 @@ class SingleQuestion : AppCompatActivity(){
             this.questionAnswerDescription = editDescription.text.toString()
             this.answerDescriptionView.text = this.questionAnswerDescription
         }
+    }
+
+    private fun editImage(){
+        val builder = AlertDialog.Builder(this)
+        val v:View =  layoutInflater.inflate(R.layout.dialog_edit_question_image, questionBinding.questionContainer,false)
+        builder.setView(v)
+        val dialog: AlertDialog = builder.create()
+        val questionImage: ImageView = v.findViewById(R.id.question_image)
+        val addImageBtn: TextView = v.findViewById(R.id.add_image)
+        val editImageBtn: TextView = v.findViewById(R.id.edit_image)
+        val deleteImageBtn: TextView = v.findViewById(R.id.delete_image)
+        questionImage.setImageBitmap(imageArr[0])
+        editImageBtn.setOnClickListener {
+            val intent = Intent()
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.type = "image/*"
+            startActivityForResult(intent, openPhotoAlbum)
+            dialog.dismiss()
+        }
+        deleteImageBtn.setOnClickListener {
+            questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 85f, resources.displayMetrics).toInt()
+            questionBinding.QuestionImage.setImageResource(0)
+            questionBinding.QuestionImage.setBackgroundResource(R.drawable.background_gray)
+            questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics).toInt()
+            questionBinding.editImage.visibility = View.GONE
+            questionBinding.addImageContainer.visibility = View.VISIBLE
+            dialog.dismiss()
+        }
+        dialog.show()
     }
     private fun questionSetting(){
         val intent = Intent()

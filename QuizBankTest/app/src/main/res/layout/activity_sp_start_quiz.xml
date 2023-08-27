@@ -94,7 +94,8 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/Question_image"
             android:layout_width="wrap_content"
-            android:layout_height="230dp"            android:layout_marginBottom="-10dp"
+            android:layout_height="230dp"
+            android:layout_marginBottom="-10dp"
             android:paddingHorizontal="15dp"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"

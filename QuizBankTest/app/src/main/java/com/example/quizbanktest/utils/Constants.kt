@@ -3,6 +3,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import java.time.format.DateTimeFormatter
 
 object Constants {
 //
@@ -19,6 +20,8 @@ object Constants {
     var accessToken : String = ""
     var COOKIE: String = ""
     var EXPIRE: Int = 0 //用於在每次login 後 去判斷server token是否過期
+    val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+    val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
     const val quizStatusReady = "ready"
     const val quizStatusDraft = "draft"
     const val quizStatusDoing = "doing"

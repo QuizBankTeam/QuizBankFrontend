@@ -115,7 +115,9 @@ class SingleQuiz: AppCompatActivity() {
                 intent.setClass(this, SPSingleRecord::class.java)
                 val questionRecordList = data?.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
                 val quizRecord = data?.getParcelableExtra<QuizRecord>("Key_quizRecord")
+                val activitySingleQuiz = "SingleQuiz"
 
+                intent.putExtra("previousActivity", activitySingleQuiz)
                 intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
                 intent.putExtra("Key_quizRecord", quizRecord)
                 intent.putExtra("quiz_index", this.quizIndex)

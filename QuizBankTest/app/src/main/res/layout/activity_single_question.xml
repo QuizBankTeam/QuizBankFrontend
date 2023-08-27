@@ -74,49 +74,90 @@
             android:layout_margin="3dp"
             android:elevation="5dp"
             android:background="@color/underline"/>
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/Question_image"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_marginBottom="-15dp"
-            android:paddingHorizontal="10dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:layout_gravity="center"
-            android:paddingTop="10dp"
-            android:background="@drawable/textview_border"
-            android:src="@drawable/society98_1"
-            app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
 
-        <RelativeLayout
-            android:id="@+id/container_timeLimit"
+        <FrameLayout
+            android:id="@+id/upper_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15dp"
-            android:paddingTop="5dp">
+            android:layout_height="85dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/Question_image"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingHorizontal="15dp"
+                android:paddingTop="5dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:background="@drawable/background_gray"
+                app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
+
+            <LinearLayout
+                android:id="@+id/add_image_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp">
+                <android.widget.ImageButton
+                    android:id="@+id/add_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/baseline_add_black"
+                    android:background="@drawable/corner_radius_primary"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="@string/Add_questionImage"/>
+            </LinearLayout>
 
             <android.widget.Button
                 android:id="@+id/time_limit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="15dp"
                 android:background="@drawable/corner_radius_yellow"
-                android:drawableLeft="@drawable/baseline_alarm_clock"
+                android:drawableStart="@drawable/baseline_alarm_clock"
                 android:minWidth="55dp"
                 android:minHeight="30dp"
                 android:padding="5dp"
                 android:text="20秒"
                 android:textColor="@color/black"
                 android:textSize="15dp" />
-            <LinearLayout
-                android:id="@+id/Question_Tags"
+
+            <android.widget.Button
+                android:id="@+id/edit_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:orientation="horizontal">
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/corner_radius_gray"
+                android:drawableStart="@drawable/baseline_edit"
+                android:visibility="gone"
+                android:minWidth="27dp"
+                android:minHeight="27dp" />
 
-            </LinearLayout>
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingHorizontal="15dp">
+
+                <LinearLayout
+                    android:id="@+id/Question_Tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+            </RelativeLayout>
+
+        </FrameLayout>
+
 
         <TextView
             android:id="@+id/question_description"
@@ -133,14 +174,28 @@
             android:textSize="14dp"
             android:hint="輕觸輸入答案敘述"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/QuestionOption"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/option_scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:overScrollMode="never"
-            android:textColor="@color/white"
-            android:textSize="30sp"/>
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/QuestionOption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:overScrollMode="never"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"/>
+
+
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
