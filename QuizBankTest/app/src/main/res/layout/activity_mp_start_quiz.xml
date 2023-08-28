@@ -94,7 +94,7 @@
             android:adjustViewBounds="true"
             android:layout_gravity="center"
             android:paddingTop="10dp"
-            android:background="@drawable/textview_border"
+            android:background="@drawable/image_border"
             android:src="@drawable/society98_1"
             app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
 

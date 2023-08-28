@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -16,8 +16,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:foreground="?attr/selectableItemBackground"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:foreground="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/bank_image"
@@ -27,7 +27,6 @@
                 android:layout_marginEnd="1dp"
                 app:srcCompat="@drawable/book_square_svgrepo_com" />
 
-
             <TextView
                 android:id="@+id/bank_title"
                 android:layout_width="wrap_content"
@@ -36,8 +35,7 @@
                 android:layout_toEndOf="@+id/bank_image"
                 android:text="This is title"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/bank_type"
@@ -72,7 +70,7 @@
                 android:layout_toEndOf="@id/bank_image"
                 android:text="Memebers: "
                 android:textColor="#606060"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/bank_from"
@@ -83,7 +81,7 @@
                 android:layout_toEndOf="@id/bank_image"
                 android:text="originate from: "
                 android:textColor="#606060"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/bank_creator"
@@ -94,7 +92,7 @@
                 android:layout_toEndOf="@id/bank_from"
                 android:text="creator: "
                 android:textColor="#606060"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
 
         </RelativeLayout>
