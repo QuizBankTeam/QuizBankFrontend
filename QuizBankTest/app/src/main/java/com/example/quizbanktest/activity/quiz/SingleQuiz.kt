@@ -12,6 +12,7 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.quiz.LinearLayoutWrapper
 import com.example.quizbanktest.adapters.quiz.QuestionAdapter
 import com.example.quizbanktest.databinding.ActivitySingleQuizBinding
+import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.Quiz
@@ -183,7 +184,22 @@ class SingleQuiz: AppCompatActivity() {
             }
             this.duringTime = duringTime
         }
-
+        for(questionIndex in questionlist.indices){
+            if(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex].isNotEmpty()){
+                if(questionlist[questionIndex].questionImage==null){
+                    questionlist[questionIndex].questionImage = ArrayList()
+                    questionlist[questionIndex].questionImage!!.add(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0])
+                }
+                else if(questionlist[questionIndex].questionImage!!.isEmpty()){
+                    questionlist[questionIndex].questionImage!!.add(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0])
+                }
+                else{
+                    questionlist[questionIndex].questionImage?.set(0,
+                        SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0]
+                    )
+                }
+            }
+        }
         val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, questionlist)
         ConstantsQuiz.putQuiz(this, putQuiz, onSuccess = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
@@ -318,6 +334,7 @@ class SingleQuiz: AppCompatActivity() {
         val tmpQuestion = questionlist[requestCode]
         if(resultCode== RESULT_OK) {
             if (data != null) {
+                val imageChange = data.getBooleanExtra("Image_change", false)
                 val tmpTag = ArrayList<String>()
                 val tmpTitle = data.getStringExtra("Key_title")
                 val tmpDescription = data.getStringExtra("Key_description")
@@ -333,7 +350,7 @@ class SingleQuiz: AppCompatActivity() {
                 if(tmpTag!=tmpQuestion.tag || tmpTitle!=tmpQuestion.title || tmpDescription!=tmpQuestion.description ||
                     tmpAnswerOptions!=tmpQuestion.answerOptions || tmpAnswerDescription!=tmpQuestion.answerDescription ||
                     tmpNumber!=tmpQuestion.number || tmpQuestionType!=tmpQuestion.questionType ||
-                    tmpOptions!=tmpQuestion.options){
+                    tmpOptions!=tmpQuestion.options || imageChange){
                     isModified = true
                 }
                 tmpQuestion.tag = tmpTag
@@ -344,12 +361,7 @@ class SingleQuiz: AppCompatActivity() {
                 tmpQuestion.answerDescription = tmpAnswerDescription
                 tmpQuestion.number = tmpNumber
                 tmpQuestion.questionType = tmpQuestionType
-                for(option in tmpQuestion.options!!){
-                    Log.d("option is ", option)
-                }
-                for(answerOption in tmpQuestion.answerOptions!!){
-                    Log.d("answer option is ", answerOption)
-                }
+
                 if (quizType == "casual") {
                     val tmpTimeLimit = data.getIntExtra("Key_timeLimit", 0)
                     if(tmpTimeLimit != casualDuringTime[requestCode]){
@@ -361,12 +373,12 @@ class SingleQuiz: AppCompatActivity() {
 
                 questionlist[requestCode] = tmpQuestion
 //                quizBinding.QuestionList.adapter?.notifyItemChanged(requestCode)
-                quizBinding.QuestionList.adapter?.notifyDataSetChanged()
+                quizAdapter?.notifyDataSetChanged()
             }
         }else if(resultCode== Constants.RESULT_DELETE){
             isModified = true
             questionlist.removeAt(requestCode)
-            quizBinding.QuestionList.adapter?.notifyDataSetChanged()
+            quizAdapter?.notifyDataSetChanged()
 //            quizAdapter.notifyItemChanged(requestCode)
 //            for(index in requestCode until questionlist.size){
 //                quizAdapter.notifyItemChanged(index)

@@ -35,7 +35,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class SingleQuizPage : Fragment() {
     companion object {
-        var quizListImages =  ArrayList< ArrayList< ArrayList<WeakReference<String>> > >()
+        var quizListImages =  ArrayList< ArrayList< ArrayList<String> > >()
     }
     private var param1: String? = null
     private var param2: String? = null
@@ -59,16 +59,16 @@ class SingleQuizPage : Fragment() {
         val quizType = Constants.quizTypeSingle
         val batch = 0
         val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )
-        val base64Image1 = bitmapToString(imageBitmap1)
+        val base64Image1 = Constants.bitmapToString(imageBitmap1)
 
         ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
             QuizList = quizList
             for(quiz in quizList){
-                val imageArr2 = ArrayList< ArrayList<WeakReference<String>>>()
+                val imageArr2 = ArrayList< ArrayList<String> >()
                 for(question in quiz.questions!!){
-                    val imageArr1 = ArrayList<WeakReference<String>>()
+                    val imageArr1 = ArrayList<String>()
                     for(image in question.questionImage!!){
-                        imageArr1.add(WeakReference(image))
+                        imageArr1.add(image)
                     }
                     imageArr2.add(imageArr1)
                 }
@@ -88,12 +88,7 @@ class SingleQuizPage : Fragment() {
         })
     }
 
-    private fun bitmapToString(bm: Bitmap): String? {
-        val baos = ByteArrayOutputStream()
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val b = baos.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
-    }
+
     fun postQuiz(quiz: Quiz){
         QuizList.add(0, quiz)//?????? notify的先後順序有差 會影響到app crushed掉 甚至連list顯示都會壞掉
 //        quizListAdapter.notifyItemChanged(QuizList.size)
@@ -101,11 +96,11 @@ class SingleQuizPage : Fragment() {
 //            quizListAdapter.notifyItemChanged(index)
 //        }
         quizListAdapter.notifyDataSetChanged()
-        val imageArr2 = ArrayList< ArrayList<WeakReference<String>>>()
+        val imageArr2 = ArrayList< ArrayList<String> >()
         for(question in quiz.questions!!){
-            val imageArr1 = ArrayList<WeakReference<String>>()
+            val imageArr1 = ArrayList<String>()
             for(image in question.questionImage!!){
-                imageArr1.add(WeakReference(image))
+                imageArr1.add(image)
             }
             imageArr2.add(imageArr1)
         }
@@ -136,8 +131,8 @@ class SingleQuizPage : Fragment() {
         val title = "第一次考試"
         val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )
         val imageBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.society9802 )
-        val base64Image1 = bitmapToString(imageBitmap1)
-        val base64Image2 = bitmapToString(imageBitmap2)
+        val base64Image1 = Constants.bitmapToString(imageBitmap1)
+        val base64Image2 = Constants.bitmapToString(imageBitmap2)
         val ImageArr1 = arrayOf(base64Image1!!, base64Image2!!).toCollection(ArrayList<String>())
         imageArr = ImageArr1
         val QuestionList: ArrayList<Question> = ArrayList()
@@ -183,23 +178,7 @@ class SingleQuizPage : Fragment() {
 
         QuizList.add(tmpQuiz)
         QuizList.add(tmpQuiz2)
-        for(quiz in 0..1){
-            val tmpArr2 = ArrayList< ArrayList<WeakReference<String>>>()
-            for(question in 0..3){
-                val tmpArr1 = ArrayList<WeakReference<String>>()
-                if(question==0){
-                    tmpArr1.add(WeakReference(base64Image1))
-                }else if(question==1){
-                    tmpArr1.add(WeakReference(base64Image2))
-                }else if(question==2){
-                    tmpArr1.add(WeakReference(base64Image1))
-                }else{
-                    tmpArr1.add(WeakReference(base64Image2))
-                }
-                tmpArr2.add(tmpArr1)
-            }
-            SingleQuizPage.Companion.quizListImages.add(tmpArr2)
-        }
+
         quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
         quizBinding.QuizList.setHasFixedSize(true)
         val quizAdapter = SPQuizAdapter(requireActivity(), QuizList)

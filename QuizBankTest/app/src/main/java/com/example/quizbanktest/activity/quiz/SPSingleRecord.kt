@@ -101,12 +101,9 @@ class SPSingleRecord: AppCompatActivity()  {
         val imageArr = ArrayList<Bitmap>()
         if(previousActivity==activitySingleQuiz){
             for(item in SingleQuizPage.Companion.quizListImages[quizIndex][currentAtQuestion]){
-                val tmpImageStr: String? = item.get()
-                if(tmpImageStr!=null) {
-                    val imageBytes: ByteArray = Base64.decode(tmpImageStr, Base64.DEFAULT)
-                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                    imageArr.add(decodeImage)
-                }
+                val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                imageArr.add(decodeImage)
             }
         }else if(previousActivity==activityRecordPage){
             if(!currentQuestion.questionImage.isNullOrEmpty()){

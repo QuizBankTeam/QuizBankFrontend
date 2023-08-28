@@ -17,6 +17,7 @@ import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.*
@@ -55,6 +56,9 @@ class SingleQuestion : AppCompatActivity(){
     private var questionIndex = 0
     private val openPhotoAlbum:Int = 1314
     private var resolver: ContentResolver? = null
+    private var imageChange = false
+    private val imageStatus_noImage = "noImage"
+    private val imageStatus_existImage = "existImage"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         questionBinding = ActivitySingleQuestionBinding.inflate(layoutInflater)
@@ -73,7 +77,9 @@ class SingleQuestion : AppCompatActivity(){
                 optionAdapter.setAnswerOptions(answerOptionInt)
                 optionAdapter.itemChange(answerOptionInt)
             }
-
+            if(optionlist.size>=Constants.optionNum.size){
+                questionBinding.optionAdd.visibility = View.GONE
+            }
 
             //修改選項
             optionAdapter.setSelectClickListener(object: OptionAdapter.SelectOnClickListener{
@@ -81,17 +87,22 @@ class SingleQuestion : AppCompatActivity(){
                     optionChange(position, holder)
                 }
             })
+
+            //新增選項
+            questionBinding.optionAdd.setOnClickListener {
+                addOption()
+            }
         }
         else if(questionType=="ShortAnswer"){
-            questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
+            questionBinding.questionContainer.removeView(questionBinding.optionScrollView)
             initShortAnswer()
         }
         else if(questionType=="TrueOrFalse"){
-            questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
+            questionBinding.questionContainer.removeView(questionBinding.optionScrollView)
             initTrueOrFalse()
         }
         else{
-            questionBinding.questionContainer.removeView(questionBinding.QuestionOption)
+            questionBinding.questionContainer.removeView(questionBinding.optionScrollView)
         }
 
         //修改圖片
@@ -106,6 +117,8 @@ class SingleQuestion : AppCompatActivity(){
             intent.type = "image/*"
             startActivityForResult(intent, openPhotoAlbum)
         }
+
+
 
         //回傳修改的內容至 singleQuiz
         questionBinding.backBtn.setOnClickListener {
@@ -154,18 +167,14 @@ class SingleQuestion : AppCompatActivity(){
                     Log.d(
                         "mengyuanuri",
                         "uri:" + dataUri!!.scheme + ":" + dataUri.schemeSpecificPart)
+                    imageChange = true
                     val bitmap = BitmapFactory.decodeStream(resolver!!.openInputStream(dataUri))
                     if(imageArr.isNotEmpty()){
                         imageArr[0] = bitmap
                     }else{
                         imageArr.add(bitmap)
                     }
-                    questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 230f, resources.displayMetrics).toInt()
-                    questionBinding.QuestionImage.setImageBitmap(bitmap)
-                    questionBinding.QuestionImage.setBackgroundResource(0)
-                    questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
-                    questionBinding.editImage.visibility = View.VISIBLE
-                    questionBinding.addImageContainer.visibility = View.GONE
+                    editImageContainer(imageStatus_existImage)
                 }
                 else{                             //修改題目設定
                     this.questionTitle = data.getStringExtra("Key_title").toString()
@@ -243,21 +252,13 @@ class SingleQuestion : AppCompatActivity(){
         }
 
         for(item in SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex]){
-            val tmpImageStr: String? = item.get()
-            if(tmpImageStr!=null){
-                val imageBytes: ByteArray = Base64.decode(tmpImageStr, Base64.DEFAULT)
-                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                imageArr.add(decodeImage)
-            }
+            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            imageArr.add(decodeImage)
             Log.d("quiz index = $quizIndex", "question index = $questionIndex")
         }
         if(imageArr.isNotEmpty()) {
-            questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 230f, resources.displayMetrics).toInt()
-            questionBinding.QuestionImage.setImageBitmap(imageArr[0])
-            questionBinding.QuestionImage.setBackgroundResource(0)
-            questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
-            questionBinding.editImage.visibility = View.VISIBLE
-            questionBinding.addImageContainer.visibility = View.GONE
+            editImageContainer(imageStatus_existImage)
         }
 
         questionBinding.questionDescription.text = description
@@ -365,13 +366,21 @@ class SingleQuestion : AppCompatActivity(){
         if(questionType==Constants.questionTypeMultipleChoiceS && answerOptionInt.size>1){
             AlertDialog.Builder(this).setTitle("單選題只能有一個正確選項!").setPositiveButton("我懂", null).show()
         }else {
-
+            if(imageArr.isNotEmpty()){
+                val imageBase64 = Constants.bitmapToString(imageArr[0])
+                if(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex].isEmpty()){
+                    SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex].add(imageBase64!!)
+                }else{
+                    SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0] = imageBase64!!
+                }
+            }
             intent.putStringArrayListExtra("Key_options", optionListStr)
             intent.putExtra("Key_description", questionBinding.questionDescription.text)
             intent.putExtra("Key_title", questionTitle)
             intent.putExtra("Key_answerDescription", questionAnswerDescription)
             intent.putExtra("Key_number", questionNumber)
             intent.putExtra("Key_type", questionType)
+            intent.putExtra("Image_change", imageChange)
             for (i in 0 until this.questionTag.size) {
                 val name = "Key_tag$i"
                 intent.putExtra(name, this.questionTag[i])
@@ -387,54 +396,120 @@ class SingleQuestion : AppCompatActivity(){
         }
     }
 
+    private fun addOption(){
+        val builder = AlertDialog.Builder(this)
+        val v:View =  layoutInflater.inflate(R.layout.dialog_edit_option, null)
+        val deleteOrAddBtn: ImageButton = v.findViewById(R.id.option_deleteOrAdd)
+        val optionNum: TextView = v.findViewById(R.id.optionNum)
+        val ansSwitch: SwitchCompat = v.findViewById(R.id.answer_switch)
+        val editOption:TextView = v.findViewById(R.id.optionContent)
+        var isCorrect = false
+        val needToChange = ArrayList<Int>()
+        optionNum.text = getString(R.string.Question_add_option)
+        deleteOrAddBtn.setImageResource(R.drawable.baseline_add_circle_24)
+        ansSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            isCorrect = isChecked
+        }
+        builder.setView(v)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
+        deleteOrAddBtn.setOnClickListener {
+            val tmpText =  editOption.text.toString()
+            if(tmpText.isNotEmpty()){
+                val tmpOption = Option(Constants.optionNum[optionlist.size], tmpText)
+                optionlist.add(tmpOption)
+                if(questionType==Constants.questionTypeMultipleChoiceS && isCorrect){
+                    answerOptionInt.clear()
+                    answerOptionInt.add(optionlist.size-1)
+                    optionAdapter.setAnswerOptions(answerOptionInt)
+                }
+                if(optionlist.size>=Constants.optionNum.size){
+                    questionBinding.optionAdd.visibility = View.GONE
+                }
+                optionAdapter.notifyDataSetChanged()
+            }
+            dialog.dismiss()
+        }
+    }
+
     private fun optionChange(position: Int, holder: OptionAdapter.MyViewHolder) {
         val currentOption = optionlist[position]
         val builder = AlertDialog.Builder(this)
         val v:View =  layoutInflater.inflate(R.layout.dialog_edit_option, null)
         val needToChange = ArrayList<Int>()
+        var isDeleted = false
         var originStatus = false
         if(answerOptionInt.contains(position)){  //正確答案中有這個被選取的選項
             originStatus = true
         }
 
-        builder.setTitle(currentOption.optionNum)
         builder.setView(v)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+        val optionDialog: AlertDialog = builder.create()
+        optionDialog.show()
         var newStatus = originStatus
         val editOption:TextView = v.findViewById(R.id.optionContent)
         val ansSwitch: SwitchCompat = v.findViewById(R.id.answer_switch)
+        val deleteOrAddBtn: ImageButton = v.findViewById(R.id.option_deleteOrAdd)
+        val optionNum: TextView = v.findViewById(R.id.optionNum)
+        optionNum.text = currentOption.optionNum
         editOption.text = currentOption.optionContent
         ansSwitch.isChecked = newStatus
         ansSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             newStatus = isChecked
         }
+        deleteOrAddBtn.setOnClickListener {
+            val deleteBuilder = AlertDialog.Builder(this)
+            deleteBuilder.setTitle("確定刪除選項?")
+            deleteBuilder.setPositiveButton("確定") { dialog, which ->
+                isDeleted = true
+                optionDialog.dismiss()
+            }
+            deleteBuilder.setNegativeButton("取消"){ dialog, which ->
+            }
+            deleteBuilder.show()
+        }
 
-        dialog.setOnDismissListener {
-            val tmpText =  editOption.text
-            optionlist[position].optionContent = tmpText.toString() //選項內的文字修改
-            if(originStatus!=newStatus) {
-                if(newStatus){ //原先不是正確答案 後來是
-                    if (this.questionType == "MultipleChoiceS") {
-                        if(answerOptionInt.isNotEmpty()){
-                            needToChange.add(answerOptionInt[0])
-                            answerOptionInt.clear()
+        optionDialog.setOnDismissListener {
+            if(!isDeleted){
+                val tmpText =  editOption.text
+                optionlist[position].optionContent = tmpText.toString() //選項內的文字修改
+                if(originStatus!=newStatus) {
+                    if(newStatus){ //原先不是正確答案 後來是
+                        if (this.questionType == "MultipleChoiceS") {
+                            if(answerOptionInt.isNotEmpty()){
+                                needToChange.add(answerOptionInt[0])
+                                answerOptionInt.clear()
+                            }
+                        }
+                        answerOptionInt.add(position)
+                    }else{  //原先是正確答案 後來不是
+                        if(answerOptionInt.size > 1)
+                            answerOptionInt.remove(position)
+                        else {
+                            AlertDialog.Builder(this).setTitle("至少要有一個正確選項!")
+                                .setPositiveButton("我懂", null).show()
                         }
                     }
-                    answerOptionInt.add(position)
-                }else{  //原先是正確答案 後來不是
-                    if(answerOptionInt.size > 1)
-                        answerOptionInt.remove(position)
-                    else {
-                        AlertDialog.Builder(this).setTitle("至少要有一個正確選項!")
-                            .setPositiveButton("我懂", null).show()
+                }
+                optionAdapter.setAnswerOptions(answerOptionInt)
+                needToChange.add(position)
+                optionAdapter.itemChange(needToChange)
+            }else{
+                answerOptionInt.remove(position)
+                optionlist.removeAt(position)
+                for(answerIndex in answerOptionInt.indices){
+                    if(position<answerOptionInt[answerIndex]){
+                        answerOptionInt[answerIndex] -= 1
                     }
                 }
-
+                for(index in position until optionlist.size){
+                    optionlist[index].optionNum = Constants.optionNum[index]
+                }
+                optionAdapter.setAnswerOptions(answerOptionInt)
+                optionAdapter.notifyDataSetChanged()
+                questionBinding.optionAdd.visibility = View.VISIBLE
             }
-            optionAdapter.setAnswerOptions(answerOptionInt)
-            needToChange.add(position)
-            optionAdapter.itemChange(needToChange)
         }
     }
 
@@ -532,15 +607,28 @@ class SingleQuestion : AppCompatActivity(){
             dialog.dismiss()
         }
         deleteImageBtn.setOnClickListener {
+            editImageContainer(imageStatus_noImage)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+    private fun editImageContainer(imageStatus: String){
+        if(imageStatus==imageStatus_noImage){
             questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 85f, resources.displayMetrics).toInt()
             questionBinding.QuestionImage.setImageResource(0)
             questionBinding.QuestionImage.setBackgroundResource(R.drawable.background_gray)
             questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics).toInt()
             questionBinding.editImage.visibility = View.GONE
             questionBinding.addImageContainer.visibility = View.VISIBLE
-            dialog.dismiss()
         }
-        dialog.show()
+        else if(imageStatus==imageStatus_existImage){
+            questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 230f, resources.displayMetrics).toInt()
+            questionBinding.QuestionImage.setImageBitmap(imageArr[0])
+            questionBinding.QuestionImage.setBackgroundResource(0)
+            questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
+            questionBinding.editImage.visibility = View.VISIBLE
+            questionBinding.addImageContainer.visibility = View.GONE
+        }
     }
     private fun questionSetting(){
         val intent = Intent()
@@ -610,12 +698,12 @@ class SingleQuestion : AppCompatActivity(){
         questionBinding.questionContainer.addView(v)
     }
     private fun initMultiChoice(){
-        val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
         val tmpAnswerOptionInt : ArrayList<Int> = ArrayList()
 
         if (optionListStr.isNotEmpty()) {
             for(i in optionListStr.indices) {
-                val tmpOption = Option(optionNum[i], optionListStr[i])
+                if(i==Constants.optionNum.size-1) break
+                val tmpOption = Option(Constants.optionNum[i], optionListStr[i])
                 optionlist.add(tmpOption)
 
                 if (this.answerOptions.isNotEmpty()) {  //找到option中對的選項

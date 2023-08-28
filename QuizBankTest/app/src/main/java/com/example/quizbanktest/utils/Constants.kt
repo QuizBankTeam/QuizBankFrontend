@@ -1,8 +1,11 @@
 package com.example.quizbanktest.utils
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Base64
+import java.io.ByteArrayOutputStream
 import java.time.format.DateTimeFormatter
 
 object Constants {
@@ -49,6 +52,13 @@ object Constants {
             val networkInfo = connectivityManager.activeNetworkInfo
             return networkInfo != null && networkInfo.isConnectedOrConnecting
         }
+    }
+
+    fun bitmapToString(bm: Bitmap): String? {
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 }
 

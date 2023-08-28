@@ -181,7 +181,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/QuestionOption"
@@ -192,6 +193,20 @@
                     android:textColor="@color/white"
                     android:textSize="30sp"/>
 
+                <android.widget.Button
+                    android:id="@+id/option_add"
+                    android:layout_width="120dp"
+                    android:layout_height="35dp"
+                    android:layout_below="@id/QuestionOption"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:paddingHorizontal="5dp"
+                    android:drawableStart="@drawable/baseline_add_black"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/corner_radius_primary"
+                    android:text="新增選項"
+                    android:minWidth="27dp"
+                    android:minHeight="27dp" />
 
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
