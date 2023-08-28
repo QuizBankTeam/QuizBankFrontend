@@ -45,7 +45,7 @@ class ScanActivity :AppCompatActivity(){
     private lateinit var barcodeView: DecoratedBarcodeView
     private var beepManager: BeepManager? = null
     private var lastText: String? = null
-
+    private var bmp : Bitmap ?=null
     private val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
             if (result.text == null || result.text == lastText) {
@@ -75,36 +75,22 @@ class ScanActivity :AppCompatActivity(){
         barcodeView.decodeContinuous(callback)
 
         barcodeView.barcodeView.cameraSettings.isContinuousFocusEnabled = true
-
         beepManager = BeepManager(this)
         val customViewFinder = findViewById<CustomViewfinderView>(R.id.zxing_viewfinder_view)
         customViewFinder.setLaserStart()
         val save_btn = findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.save)
 
+
         save_btn.setOnClickListener {
-            val progressDialog = ProgressDialog(this@ScanActivity)
-            progressDialog.setMessage("處理中")
-            progressDialog.setCancelable(false)
-            progressDialog.show()
             customViewFinder.setLaserStop()
             barcodeView.barcodeView.cameraInstance.requestPreview(object : PreviewCallback {
                 override fun onPreview(sourceData: SourceData) {
                     sourceData.cropRect = Rect(barcodeView.barcodeView.previewFramingRect)
-                    val bmp = sourceData.bitmap
-                    ConstantsScanServiceFunction.scanPhotoBase64ToOcrText(ConstantsFunction.encodeImage(bmp)!!, this@ScanActivity,1, onSuccess = { it1 ->
-                        ConstantsOcrResults.setOcrResult(it1)
-                        val resultIntent = Intent()
-                        setResult(Activity.RESULT_OK, resultIntent)
-                        progressDialog.dismiss()
-                        finish()
-                    }, onFailure = { it1 ->
-                        customViewFinder.setLaserStart()
-                        progressDialog.dismiss()
-                        Toast.makeText(this@ScanActivity,"請對準後再測試一次",Toast.LENGTH_SHORT).show()
-                    })
-
+                    bmp = sourceData.bitmap
+                    runOnUiThread {
+                        pause(null)
+                    }
                 }
-
                 override fun onPreviewError(e: Exception?) {
                     TODO("Not yet implemented")
                 }
@@ -124,6 +110,9 @@ class ScanActivity :AppCompatActivity(){
 
     fun pause(view: View?) {
         barcodeView!!.pause()
+        if(bmp!=null){
+            processScan(bmp!!)
+        }
     }
 
     fun resume(view: View?) {
@@ -161,5 +150,22 @@ class ScanActivity :AppCompatActivity(){
     }
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         return barcodeView!!.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event)
+    }
+    fun processScan(bmp:Bitmap){
+        val progressDialog = ProgressDialog(this@ScanActivity)
+        progressDialog.setMessage("處理中")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+        ConstantsScanServiceFunction.scanPhotoBase64ToOcrText(ConstantsFunction.encodeImage(bmp)!!, this@ScanActivity,1, onSuccess = { it1 ->
+            ConstantsOcrResults.setOcrResult(it1)
+            val resultIntent = Intent()
+            setResult(Activity.RESULT_OK, resultIntent)
+            progressDialog.dismiss()
+            finish()
+        }, onFailure = { it1 ->
+            progressDialog.dismiss()
+            Toast.makeText(this@ScanActivity,"請對準後再測試一次",Toast.LENGTH_SHORT).show()
+            onResume()
+        })
     }
 }
