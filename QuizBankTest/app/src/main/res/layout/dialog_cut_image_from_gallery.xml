@@ -64,7 +64,7 @@
                     />
 
                 <CheckBox
-                    android:id="@+id/cut_options_check"
+                    android:id="@+id/ucrop_cut_image_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="下次不再顯示" />
@@ -95,7 +95,7 @@
                         android:orientation="horizontal"
                         >
                         <TextView
-                            android:id="@+id/auto_cut_options_cancel"
+                            android:id="@+id/ucrop_cut_options_cancel"
                             android:layout_width="match_parent"
                             android:layout_height="38dp"
                             android:layout_weight="1"
@@ -109,7 +109,7 @@
                             android:foreground="?attr/selectableItemBackground"
                             android:text="取消 ❌" />
                         <TextView
-                            android:id="@+id/auto_cut_options_enter"
+                            android:id="@+id/ucrop_cut_options_enter"
                             android:layout_width="match_parent"
                             android:layout_height="38dp"
                             android:layout_weight="1"
