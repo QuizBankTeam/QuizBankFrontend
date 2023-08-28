@@ -38,6 +38,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,6 +60,25 @@ open class BaseActivity : AppCompatActivity() {
     private var heartbeatFuture: ScheduledFuture<*>? = null
     private lateinit var showRotateDialog : Dialog
     private lateinit var showAutoCutOptionsDialog : Dialog
+    private lateinit var showCutImageDialog : Dialog
+
+    private val uCropActivityResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val uri = UCrop.getOutput(result.data!!)
+            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+            onImageSelected?.invoke(bitmap)
+            deleteFileFromUri(this,uri!!)
+        } else if (result.resultCode == UCrop.RESULT_ERROR) {
+            Log.e("cropResult","error")
+            val cropError = UCrop.getError(result.data!!)
+            onImageSelected?.invoke(null)
+        }
+    }
+
+
+
     val openGalleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult() ){
             result->
@@ -72,7 +92,16 @@ open class BaseActivity : AppCompatActivity() {
                 val selectedImageBitmap =
                     BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI!!))
                 if(selectedImageBitmap!=null){
-                    onImageSelected?.invoke(selectedImageBitmap)
+                    if (getUcropOptionsOrNot() == -1) {
+                        showCutImageDialog(contentURI)
+                    } else if (getUcropOptionsOrNot() == 1) {
+                        val destinationUri = Uri.fromFile(File(externalCacheDir?.absoluteFile.toString()+File.separator+"QuizBankUcrop_"+SAMPLE_CROPPED_IMG_NAME))//裁切後的uri之後會覆蓋掉所以不會重複耗費空間
+                        val uCrop = UCrop.of(contentURI, destinationUri)
+                        val uCropIntent = uCrop.getIntent(this)
+                        uCropActivityResultLauncher.launch(uCropIntent)
+                    } else {
+                        onImageSelected?.invoke(selectedImageBitmap)
+                    }
                 }
             } catch (e: IOException) {
                 onImageSelected?.invoke(null)
@@ -595,6 +624,44 @@ open class BaseActivity : AppCompatActivity() {
         }
         showAutoCutOptionsDialog.show()
     }
+
+    @SuppressLint("CommitPrefEdits")
+    fun showCutImageDialog(sourceUriForUcrop : Uri) {
+        showCutImageDialog = Dialog(this)
+        showCutImageDialog.setContentView(R.layout.dialog_cut_image_from_gallery)
+
+        val ucropCutOptionsEnter = showCutImageDialog.findViewById<TextView>(R.id.ucrop_cut_options_enter)
+        val ucropCutOptionsCancel =showCutImageDialog.findViewById<TextView>(R.id.ucrop_cut_options_cancel)
+        val ucropCheckBox = showCutImageDialog.findViewById<CheckBox>(R.id.ucrop_cut_image_check)
+        val preferences = getSharedPreferences("settings", MODE_PRIVATE)
+        val editor = preferences.edit()
+        ucropCheckBox.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+            editor.putBoolean("doNotShowAgainForUcropCut", isChecked)
+            editor.apply()
+        }
+
+        ucropCutOptionsEnter.setOnClickListener {
+            editor.putBoolean("ucrop_cut_image", true)
+            editor.apply()
+            showCutImageDialog.dismiss()
+            val destinationUri = Uri.fromFile(File(externalCacheDir?.absoluteFile.toString()+File.separator+"QuizBankUcrop_"+SAMPLE_CROPPED_IMG_NAME))//裁切後的uri之後會覆蓋掉所以不會重複耗費空間
+            val uCrop = UCrop.of(sourceUriForUcrop!!, destinationUri)
+            val uCropIntent = uCrop.getIntent(this)
+            uCropActivityResultLauncher.launch(uCropIntent)
+        }
+
+        ucropCutOptionsCancel.setOnClickListener {
+            editor.putBoolean("ucrop_cut_image", false)
+            editor.apply()
+            showCutImageDialog.dismiss()
+            val selectedImageBitmap =
+                BitmapFactory.decodeStream(getContentResolver().openInputStream(sourceUriForUcrop))
+            onImageSelected?.invoke(selectedImageBitmap)
+        }
+        showCutImageDialog.show()
+    }
+
+
     fun getRotateOrNot() : Int {
         val preferences = getSharedPreferences("settings", MODE_PRIVATE)
         val doNotShowAgain = preferences.getBoolean("doNotShowAgain", false)
@@ -620,6 +687,22 @@ open class BaseActivity : AppCompatActivity() {
             return -1
         } else {
             if (rotate) {
+                return 1
+            } else {
+                return 0
+            }
+        }
+
+    }
+    fun getUcropOptionsOrNot() : Int {
+        val preferences = getSharedPreferences("settings", MODE_PRIVATE)
+        val doNotShowAgainForCutImage = preferences.getBoolean("doNotShowAgainForUcropCut", false)
+        val ucropChoose = preferences.getBoolean("ucrop_cut_image", false)
+        if (!doNotShowAgainForCutImage) {
+            // 沒有讀到設定或使用者未選擇「不再顯示」，所以顯示對話框
+            return -1
+        } else {
+            if (ucropChoose) {
                 return 1
             } else {
                 return 0
@@ -696,6 +779,7 @@ open class BaseActivity : AppCompatActivity() {
         return cut_options
     }
 
+
     fun processScan(it1 : String){
         ConstantsOcrResults.setOcrResult(it1)
         val result_auto_cut_choice = splitQuestionOptions(it1)
@@ -717,5 +801,20 @@ open class BaseActivity : AppCompatActivity() {
         showErrorSnackBar("辨識不出來目前的圖片請重新上傳")
         hideProgressDialog()
     }
+    fun deleteFileFromUri(context: Context, uri: Uri) {
+        val file = File(getPathFromUri(context, uri))
+        if (file.exists()) {
+            file.delete()
+        }
+    }
 
+    fun getPathFromUri(context: Context, uri: Uri): String {
+        val cursor = context.contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            it.moveToFirst()
+            val columnIndex = it.getColumnIndexOrThrow("_data")
+            return it.getString(columnIndex)
+        }
+        return ""
+    }
 }

@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import com.journeyapps.barcodescanner.ViewfinderView
 
 
-class CustomViewfinderView(context: android.content.Context, attrs: android.util.AttributeSet) : ViewfinderView(context, attrs) {
+class CustomViewfinderView(context: android.content.Context, attrs: android.util.AttributeSet) : ViewfinderView(context, attrs)  {
     private var scannerMiddle: Int = 0
     private var scannerDirection = 1
     private var laserStart = true
