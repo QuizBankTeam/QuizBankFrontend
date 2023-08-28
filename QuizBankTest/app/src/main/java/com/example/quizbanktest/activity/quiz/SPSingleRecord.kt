@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -24,6 +25,9 @@ import com.example.quizbanktest.models.Option
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.QuizRecord
+import com.example.quizbanktest.utils.Constants
+import com.example.quizbanktest.utils.ConstantsQuiz
+import com.example.quizbanktest.utils.ConstantsQuizRecord
 
 class SPSingleRecord: AppCompatActivity()  {
     private lateinit var singleRecordBinding: ActivitySpSingleRecordBinding
@@ -36,13 +40,15 @@ class SPSingleRecord: AppCompatActivity()  {
     private var shortAnswerView : TextView? = null
     private var trueOrFalseView: View? = null
     private  var quizIndex: Int = 0
+    private val activitySingleQuiz = "SingleQuiz"
+    private val activityRecordPage = "RecordPage"
+    private lateinit var previousActivity: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         singleRecordBinding = ActivitySpSingleRecordBinding.inflate(layoutInflater)
         setContentView(singleRecordBinding.root)
 
         init()
-        setQuestion()
         singleRecordBinding.gotoNextQuestion.setOnClickListener {
             gotoNextQ()
         }
@@ -56,50 +62,75 @@ class SPSingleRecord: AppCompatActivity()  {
     }
 
     private fun init(){
-        val spRecordList = intent.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
-        val spQuizRecord = intent.getParcelableExtra<QuizRecord>("Key_quizRecord")
-        val quizIndex = intent.getIntExtra("quiz_index", 0)
-        this.quizIndex = quizIndex
 
-        if (spRecordList != null) {
-            this.recordList = spRecordList
-        }
+        val previousActivity = intent.getStringExtra("previousActivity")
+        val spQuizRecord = intent.getParcelableExtra<QuizRecord>("Key_quizRecord")
+        this.previousActivity = previousActivity!!
         if (spQuizRecord != null) {
             this.quizRecord = spQuizRecord
         }
-        if (spRecordList != null) {
-            singleRecordBinding.progressBar.max = spRecordList.size
-            for (record in spRecordList){
-                questionList.add(record.question)
+
+        if(previousActivity==activitySingleQuiz){
+            val spRecordList = intent.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
+            val quizIndex = intent.getIntExtra("quiz_index", 0)
+            this.quizIndex = quizIndex
+            if (spRecordList != null) {
+                this.recordList = spRecordList
             }
+            initQuestion()
+        }else if(previousActivity==activityRecordPage){
+            ConstantsQuizRecord.getSingleQuizRecord(this, quizRecord._id, onSuccess = { quizRecord, questionRecords->
+                this.recordList = questionRecords
+                initQuestion()
+            }, onFailure = {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            })
         }
+
+
+    }
+    private fun initQuestion(){
+        singleRecordBinding.progressBar.max = recordList.size
+        for (record in recordList){
+            questionList.add(record.question)
+        }
+        setQuestion()
     }
 
-    private fun setQuestion(){
-        for(item in recordList[currentAtQuestion].userAnswerOptions!!){
-            Log.d("user ans is", item)
-        }
-        val currentQuestion = questionList[currentAtQuestion]
-        singleRecordBinding.QuestionType.text
-        singleRecordBinding.QuestionType.text = if(currentQuestion.questionType=="MultipleChoiceS") "單選題"
-                                            else if(currentQuestion.questionType=="MultipleChoiceM") "多選題"
-                                            else if(currentQuestion.questionType=="TrueOrFalse") "是非題"
-                                            else if(currentQuestion.questionType=="ShortAnswer") "簡答題"
-                                            else "填充題"
-        singleRecordBinding.questionDescription.text = currentQuestion.description
-        singleRecordBinding.progressBar.progress = currentAtQuestion+1
-        singleRecordBinding.tvProgress.text = (currentAtQuestion+1).toString() + "/" + questionList.size.toString()
+    private fun setQuestionImage(currentQuestion: Question){
         val imageArr = ArrayList<Bitmap>()
-        for(item in SingleQuizPage.Companion.quizListImages[quizIndex][currentAtQuestion]){
-            val tmpImageStr: String? = item.get()
-            if(tmpImageStr!=null) {
-                val imageBytes: ByteArray = Base64.decode(tmpImageStr, Base64.DEFAULT)
+        if(previousActivity==activitySingleQuiz){
+            for(item in SingleQuizPage.Companion.quizListImages[quizIndex][currentAtQuestion]){
+                val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 imageArr.add(decodeImage)
+            }
+        }else if(previousActivity==activityRecordPage){
+            if(!currentQuestion.questionImage.isNullOrEmpty()){
+                for(image in currentQuestion.questionImage!!){
+                    val imageBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
+                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    imageArr.add(decodeImage)
+                }
             }
         }
         if(imageArr.isNotEmpty())
             singleRecordBinding.QuestionImage.setImageBitmap(imageArr[0])
+    }
+    private fun setQuestion(){
+        val currentQuestion = questionList[currentAtQuestion]
+        singleRecordBinding.QuestionType.text
+        singleRecordBinding.QuestionType.text = if(currentQuestion.questionType=="MultipleChoiceS") this.getString(R.string.MultipleChoiceS_CN)
+                                            else if(currentQuestion.questionType=="MultipleChoiceM") this.getString(R.string.MultipleChoiceM_CN)
+                                            else if(currentQuestion.questionType=="TrueOrFalse") this.getString(R.string.TrueOrFalse_CN)
+                                            else if(currentQuestion.questionType=="ShortAnswer") this.getString(R.string.ShortAnswer_CN)
+                                            else this.getString(R.string.Filling_CN)
+        singleRecordBinding.questionDescription.text = currentQuestion.description
+        singleRecordBinding.progressBar.progress = currentAtQuestion+1
+        singleRecordBinding.tvProgress.text = (currentAtQuestion+1).toString() + "/" + questionList.size.toString()
+        setQuestionImage(currentQuestion)
+
+
 
         when(currentQuestion.questionType){
             "MultipleChoiceS", "MultipleChoiceM" ->{
@@ -130,7 +161,6 @@ class SPSingleRecord: AppCompatActivity()  {
 
     private fun setMultiChoice(currentQuestion: Question){
         val optionlist : ArrayList<Option> = ArrayList()
-        val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
         val answerOptions : ArrayList<Int> = ArrayList()
         val selectOption: ArrayList<Int> = ArrayList()
 
@@ -143,12 +173,12 @@ class SPSingleRecord: AppCompatActivity()  {
                 selectOption.add(index)
             }
 
-            val tmpOption = Option(optionNum[index], currentQuestion.options!![index])
+            val tmpOption = Option(Constants.optionNum[index], currentQuestion.options!![index])
             optionlist.add(tmpOption)
         }
         var userAns = "你的答案: "
         for(item in selectOption){
-            userAns = userAns + optionNum[item] + " "
+            userAns = userAns + Constants.optionNum[item] + " "
         }
         val tmpOption = Option("", userAns)
         optionlist.add(tmpOption)
@@ -272,3 +302,14 @@ class SPSingleRecord: AppCompatActivity()  {
         }
     }
 }
+//for(record in recordList){
+//    val imageArr2d = ArrayList< ArrayList<WeakReference<String>>>()
+//    for(question in quiz.questions!!){
+//        val imageArr1d = ArrayList<WeakReference<String>>()
+//        for(image in question.questionImage!!){
+//            imageArr1d.add(WeakReference(image))
+//        }
+//        imageArr2d.add(imageArr1d)
+//    }
+//    SingleQuizPage.Companion.quizListImages.add(imageArr2d)
+//}

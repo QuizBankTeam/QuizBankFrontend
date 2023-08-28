@@ -17,6 +17,7 @@ import com.example.quizbanktest.databinding.ActivitySpQuizFinishBinding
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.QuizRecord
+import com.example.quizbanktest.utils.Constants
 
 class SPQuizFinish : AppCompatActivity(){
     private lateinit var finishQuizBinding: ActivitySpQuizFinishBinding
@@ -27,14 +28,16 @@ class SPQuizFinish : AppCompatActivity(){
     private lateinit var quizId: String
     private lateinit var quizType: String
     private lateinit var quizTitle: String
-    private lateinit var startDate: String
-    private lateinit var endDate: String
+    private lateinit var startDateTime: String
+    private lateinit var endDateTime: String
     private var members = ArrayList<String>()
     private  var questionRecordList = ArrayList<QuestionRecord>()
     private lateinit var quizRecord: QuizRecord
     private var quizSize = ""
     private var duringTime: Int = 0
     private var correctNum: Int = 0
+    private val correctStr = "正確"
+    private val wrongStr = "錯誤"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         finishQuizBinding = ActivitySpQuizFinishBinding.inflate(layoutInflater)
@@ -77,8 +80,8 @@ class SPQuizFinish : AppCompatActivity(){
         val userAnsDescription = intent.getStringArrayListExtra("Key_userAnsDescription")
         val id = intent.getStringExtra("Key_id")
         val title = intent.getStringExtra("Key_title")
-        val startDate = intent.getStringExtra("Key_startDate")
-        val endDate = intent.getStringExtra("Key_endDate")
+        val startDateTime = intent.getStringExtra("Key_startDateTime")
+        val endDateTime = intent.getStringExtra("Key_endDateTime")
         val type  = intent.getStringExtra("Key_type")
         val duringTime = intent.getIntExtra("Key_duringTime", 0)
         if (id != null) {
@@ -93,11 +96,11 @@ class SPQuizFinish : AppCompatActivity(){
         if (questions != null) {
             questionlist = questions
         }
-        if (startDate != null) {
-            this.startDate = startDate
+        if (startDateTime != null) {
+            this.startDateTime = startDateTime
         }
-        if (endDate != null) {
-            this.endDate  = endDate
+        if (endDateTime != null) {
+            this.endDateTime  = endDateTime
         }
         if (userAnsOptions != null) {
             this.userAnsOptions = userAnsOptions
@@ -106,13 +109,13 @@ class SPQuizFinish : AppCompatActivity(){
             this.userAnsDescription = userAnsDescription
         }
 
-        if (startDate != null) {
-            questionRecordDate = startDate.substring(0, 10)
+        if (startDateTime != null) {
+            questionRecordDate = startDateTime.substring(0, 10)
         }else{
             questionRecordDate = ""
         }
         this.duringTime = duringTime
-        members.add("jacky")
+        members.add(Constants.userId)
     }
 
     private fun makeRecords(){
@@ -120,19 +123,19 @@ class SPQuizFinish : AppCompatActivity(){
         val questionRecordId = ArrayList<String>()
         var totalScore : Int = 0
         var hasShorAns = false
-        for(index in userAnsOptions.indices){
-            for(item1 in userAnsOptions[index]){
-                Log.d("確認答案", index.toString()+item1)
-            }
-        }
-        Log.d("answer record size is", userAnsOptions.size.toString())
+//        for(index in userAnsOptions.indices){
+//            for(item1 in userAnsOptions[index]){
+//                Log.d("確認答案", index.toString()+item1)
+//            }
+//        }
+//        Log.d("answer record size is", userAnsOptions.size.toString())
         for(index in questionlist.indices){
             val tmpId = UUID.randomUUID().toString()
             var isCorrect = false
-            Log.d("index is", index.toString())
+
             questionRecordId.add(tmpId)
 
-            if(questionlist[index].questionType=="ShortAnswer") {
+            if(questionlist[index].questionType==Constants.questionTypeShortAnswer) {
                 hasShorAns = true
                 setAnswerQuestion(questionlist[index], index, userAnsDescription[index]) //確定答案是否正確
             }
@@ -142,16 +145,16 @@ class SPQuizFinish : AppCompatActivity(){
 
             totalScore = if(isCorrect) totalScore+1 else totalScore
 
-//            Log.d(index.toString(), "is correct is"+isCorrect.toString())
-            val tmpQuestionRecord = QuestionRecord(tmpId, "jacky", userAnsOptions[index], userAnsDescription[index], isCorrect, questionRecordDate, questionlist[index], quizRecordId)
+            val tmpQuestionRecord = QuestionRecord(tmpId, Constants.userId, userAnsOptions[index], userAnsDescription[index], isCorrect, questionRecordDate, questionlist[index], quizRecordId)
             questionRecordList.add(tmpQuestionRecord)
         }
         if(!hasShorAns){
             finishQuizBinding.decideShortAns.text = ""
         }
         correctNum = totalScore
+        quizTitle = quizTitle.ifEmpty { "none" }
         val tmpQuizRecord = QuizRecord(quizRecordId, quizTitle, quizId, quizType, totalScore/questionlist.size,
-                                        duringTime, startDate, endDate, members, questionRecordId)
+                                        duringTime, startDateTime, endDateTime, members, questionRecordId)
         this.quizRecord = tmpQuizRecord
     }
 
@@ -168,18 +171,17 @@ class SPQuizFinish : AppCompatActivity(){
         questionNum.text = "第" + question.number + "題"
         answerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
-                isCorrectTag.text = "正確"
+                isCorrectTag.text = correctStr
                 isCorrectTag.setBackgroundColor(ContextCompat.getColor(this, R.color.answer_correct))
                 questionRecordList[index].correct = true
                 correctNum++
-                finishQuizBinding.correctNum.text = "你答對了 " +correctNum.toString()+ " / " +quizSize+ " 題 !"
             }else{
-                isCorrectTag.text = "錯誤"
+                isCorrectTag.text = wrongStr
                 isCorrectTag.setBackgroundColor(ContextCompat.getColor(this, R.color.answer_wrong))
                 questionRecordList[index].correct = false
                 correctNum--
-                finishQuizBinding.correctNum.text = "你答對了 " +correctNum.toString()+ " / " +quizSize+ " 題 !"
             }
+            finishQuizBinding.correctNum.text = "你答對了 $correctNum / $quizSize  題 !"
         }
         finishQuizBinding.questionContainer.addView(v)
     }

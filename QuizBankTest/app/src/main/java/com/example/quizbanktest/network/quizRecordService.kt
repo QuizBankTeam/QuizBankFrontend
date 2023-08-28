@@ -1,11 +1,15 @@
 package com.example.quizbanktest.network
 
+import com.example.quizbanktest.models.QuestionRecord
+import com.example.quizbanktest.models.Quiz
+import com.example.quizbanktest.models.QuizRecord
 import com.squareup.okhttp.ResponseBody
 import retrofit.Call
 import retrofit.http.Body
 import retrofit.http.DELETE
 import retrofit.http.GET
 import retrofit.http.Header
+import retrofit.http.POST
 import retrofit.http.Query
 
 interface quizRecordService {
@@ -21,7 +25,7 @@ interface quizRecordService {
     ): Call<ResponseBody>
 
     @GET("/quizRecord")
-    fun getQuizRecordWithQuestion(
+    fun getSingleQuizRecord(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("accessToken") accessToken: String,
@@ -30,14 +34,14 @@ interface quizRecordService {
         @Query("quizRecordId") quizRecordId: String
     ): Call<ResponseBody>
 
-    @DELETE("/quizRecord")
+    @POST("/quizRecord")
     fun postQuizRecord(
         @Header("Cookie") cookie:String,
         @Header("X-CSRF-Token") csrfToken: String,
         @Header("accessToken") accessToken: String,
         @Header("refreshToken") refreshToken: String,
         @Header("Session-Token")session : String,
-        @Body body: PostQuestionRecord
+        @Body body: PostQuizRecord
     ): Call<ResponseBody>
 
     @DELETE("/quizRecord")
@@ -57,7 +61,24 @@ interface quizRecordService {
                                  val questionImage: ArrayList<String>, val tag: ArrayList<String>)
     data class QuestionRecordInPostQuizRecord(val user: String, val userAnswerOptions: ArrayList<String>, val userAnswerDescription: String,
                                               val correct: Boolean, val date: String, val question: QuestionInPostQuizRecord)
-    data class PostQuestionRecord(val title: String, val quizId: String, val type: String,
+    data class PostQuizRecord(val title: String, val quizId: String, val type: String,
                                   val totalScore: Int, val duringTime: Int, val startDateTime: String, val endDateTime: String,
                                   val members: ArrayList<String>, val questionRecords: ArrayList<QuestionRecordInPostQuizRecord>)
+    data class AllQuizRecordsResponse(val message: String, val quizRecords: ArrayList<QuizRecord>, val status: String)
+    data class GetQuizRecordResponse(val message: String, val quizRecord: QuizRecordWithQuestionRecords, val status: String)
+
+    data class PostQuizRecordResponse(val message: String, val status: String)
+
+    data class DeleteQuizRecordResponse(val message: String, val status: String)
+
+    data class QuizRecordWithQuestionRecords(val _id: String,
+                                             val title: String,
+                                             val quizId: String,
+                                             val type: String,
+                                             val totalScore:Int,
+                                             val duringTime: Int?,
+                                             val startDateTime: String,
+                                             val endDateTime: String,
+                                             val members: ArrayList<String>,
+                                             val questionRecords: ArrayList<QuestionRecord>)
 }

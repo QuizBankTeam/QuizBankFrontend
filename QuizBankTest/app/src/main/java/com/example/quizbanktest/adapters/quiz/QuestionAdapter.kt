@@ -43,21 +43,18 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         val currentItem = questionList[position]
         holder.questionTitle.text = currentItem.title
         holder.questionNumber.text = currentItem.number + "."
-        holder.questionType.text = if(currentItem.questionType=="MultipleChoiceS") "單選"
-                                else if(currentItem.questionType=="MultipleChoiceM") "多選"
-                                else if(currentItem.questionType=="TrueOrFalse") "是非"
-                                else if(currentItem.questionType=="ShortAnswer") "簡答"
-                                else "填充"
+        holder.questionType.text = if(currentItem.questionType=="MultipleChoiceS") context.getString(R.string.MultipleChoiceS_CN)
+                                else if(currentItem.questionType=="MultipleChoiceM") context.getString(R.string.MultipleChoiceM_CN)
+                                else if(currentItem.questionType=="TrueOrFalse") context.getString(R.string.TrueOrFalse_CN)
+                                else if(currentItem.questionType=="ShortAnswer") context.getString(R.string.ShortAnswer_CN)
+                                else context.getString(R.string.Filling_CN)
         holder.questionDescription.text = currentItem.description
 
         for(item in SingleQuizPage.Companion.quizListImages[quizIndex][position]){
-            val tmpImageStr: String? = item.get()
-            if(tmpImageStr!=null){
-                val imageBytes: ByteArray = Base64.decode(tmpImageStr, Base64.DEFAULT)
-                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                holder.questionImage.setImageBitmap(decodeImage)
-                break
-            }
+            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            holder.questionImage.setImageBitmap(decodeImage)
+            break
         }
         if(currentItem.tag!=null) {
             if(currentItem.tag!!.size==0) {
@@ -74,10 +71,14 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         if(currentItem.questionType==Constants.questionTypeShortAnswer){
             if(currentItem.description.isNullOrEmpty()){
                 holder.questionTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_warning_red, 0)
+            }else{
+                holder.questionTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }else{
             if(currentItem.description.isNullOrEmpty()||currentItem.options.isNullOrEmpty()||currentItem.answerOptions.isNullOrEmpty()){
                 holder.questionTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_warning_red, 0)
+            }else{
+                holder.questionTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
 

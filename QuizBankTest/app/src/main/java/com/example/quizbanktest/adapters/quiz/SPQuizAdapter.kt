@@ -52,7 +52,7 @@ class SPQuizAdapter(private val context: Activity, private val questionList: Arr
                 holder.quizStartDate.text = "今天"
             }
         }
-        holder.quizNum.text = currentItem.questions?.size.toString() + "題"
+        holder.questionNum.text = currentItem.questions?.size.toString() + "題"
         holder.quizStatus.text = currentItem.status
         holder.quizTitle.text = currentItem.title
         holder.quizDuringTime.text = "考試時長: " + (currentItem.duringTime?.div(60)).toString() + "分鐘"
@@ -87,7 +87,7 @@ class SPQuizAdapter(private val context: Activity, private val questionList: Arr
     }
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {
-        val quizNum: TextView = itemView.findViewById(R.id.QuizNum)
+        val questionNum: TextView = itemView.findViewById(R.id.QuestionNum)
         val quizStatus: TextView = itemView.findViewById(R.id.QuizStatus)
         val quizStartDate: TextView = itemView.findViewById(R.id.QuizStartDate)
         val quizTitle: TextView = itemView.findViewById(R.id.QuizTitle)

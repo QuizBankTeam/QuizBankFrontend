@@ -55,11 +55,11 @@ class MultiQuizPage : Fragment() {
         ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
             QuizList = quizList
             for(quiz in quizList){
-                val imageArr2 = ArrayList< ArrayList<WeakReference<String>>>()
+                val imageArr2 = ArrayList< ArrayList<String> >()
                 for(question in quiz.questions!!){
-                    val imageArr1 = ArrayList<WeakReference<String>>()
+                    val imageArr1 = ArrayList<String>()
                     for(image in question.questionImage!!){
-                        imageArr1.add(WeakReference(base64Image1))
+                        imageArr1.add(image)
                     }
                     imageArr2.add(imageArr1)
                 }
