@@ -8,10 +8,10 @@ import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BuildCompat
-import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.quiz.LinearLayoutWrapper
 import com.example.quizbanktest.adapters.quiz.QuestionAdapter
 import com.example.quizbanktest.databinding.ActivitySingleQuizBinding
+import com.example.quizbanktest.fragment.QuestionAddDialog
 import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
@@ -52,15 +52,23 @@ class SingleQuiz: AppCompatActivity() {
             backBtn()
         }
         quizBinding.saveBtn.setOnClickListener {
+            Log.d("now saving", "")
             saveQuiz()
         }
         quizBinding.quizSetting.setOnClickListener { quizSetting() }
         quizBinding.startQuiz.setOnClickListener{
             startQuiz(questionlist, quizId)
         }
+        quizBinding.addQuestion.setOnClickListener{
+            QuestionAddDialog().show(supportFragmentManager, "tag")
+        }
+
     }
 
-
+    private fun addQuestion(){
+        val questionAddDialog = QuestionAddDialog()
+        QuestionAddDialog().show(supportFragmentManager, "tag")
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("in ", "single Quiz")
@@ -281,8 +289,11 @@ class SingleQuiz: AppCompatActivity() {
         val tmpCasualDuringTime = intent.getIntegerArrayListExtra("Key_casualDuringTime")
         val duringTime = intent.getIntExtra("Key_duringTime", 0)
 
-        if (questions != null)
+        if (questions != null) {
             questionlist = questions
+        }else{
+            questionlist = ArrayList()
+        }
         if (members != null)
             quizMembers = members
         if (title != null)
@@ -312,6 +323,7 @@ class SingleQuiz: AppCompatActivity() {
         this.quizIndex = quizIndex
         this.duringTime = duringTime
         quizBinding.quizTitle.text = title
+        quizBinding.questionNumber.text = "題目 (${questionlist.size})"
     }
     private fun quizSetting(){
         val intent = Intent()
