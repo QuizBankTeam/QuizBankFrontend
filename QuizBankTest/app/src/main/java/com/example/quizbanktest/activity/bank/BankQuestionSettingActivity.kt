@@ -29,14 +29,13 @@ class BankQuestionSettingActivity : AppCompatActivity() {
         etQuestionTitle = findViewById(R.id.et_question_title)
         etQuestionTitle.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {  // p0:
-
+                cardQuestionTitle.strokeColor = getColor(R.color.light_blue1)
+                Log.e("BankQuestionSetting", "count = $count")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 unmodifiedText = s.toString()
                 Log.e("BankQuestionSetting", "before s = $s")
-                cardQuestionTitle.strokeColor = getColor(R.color.light_blue1)
-                Log.e("BankQuestionSetting", "count = $count")
             }
 
             override fun afterTextChanged(s: Editable?) {

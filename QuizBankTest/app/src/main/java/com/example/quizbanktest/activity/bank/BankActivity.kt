@@ -242,4 +242,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         startActivity(bankQuestionActivity)
     }
 
+    override fun getAnswerOptionPosition(position: Int) {
+        //todo
+    }
+
 }

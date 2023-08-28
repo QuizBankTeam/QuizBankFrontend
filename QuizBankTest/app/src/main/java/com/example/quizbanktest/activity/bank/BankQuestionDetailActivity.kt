@@ -2,9 +2,7 @@ package com.example.quizbanktest.activity.bank
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.ClipDescription
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,16 +16,20 @@ import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
+import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
+import com.example.quizbanktest.utils.ConstantsQuestionFunction
+import org.w3c.dom.Text
 
 
-class BankQuestionDetailActivity : AppCompatActivity() {
+class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
     private lateinit var tvDescription: TextView
     private lateinit var btnSetting: ImageButton
+    private lateinit var optionRecyclerView: RecyclerView
+    private lateinit var optionAdapter: QuestionOptionsRecyclerViewAdapter
     // Question variable
     private lateinit var questionId: String
     private lateinit var questionTitle: String
@@ -42,6 +44,8 @@ class BankQuestionDetailActivity : AppCompatActivity() {
     private lateinit var questionTag: ArrayList<String>
     // variable
     private lateinit var newDescription: String
+    private lateinit var oldDescription: String
+    private var isModified: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +61,10 @@ class BankQuestionDetailActivity : AppCompatActivity() {
         // set up question options
         setupOptions()
 
+        findViewById<TextView>(R.id.btn_show_answer).setOnClickListener{
+            showAnswer()
+        }
+
         tvDescription.setOnClickListener {
             val descriptionDialog = Dialog(this)
             descriptionDialog.setContentView(R.layout.dialog_bank_question_description)
@@ -67,19 +75,14 @@ class BankQuestionDetailActivity : AppCompatActivity() {
             etDescription.setText(newDescription)
 
             etDescription.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    // TODO: nothing
-                }
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    Log.e("BankQuestionDescriptionDialog", "Doing: $s")
                     newDescription = s.toString()
+                    isModified = true
                 }
 
-                override fun afterTextChanged(s: Editable?) {
-                    Log.e("BankQuestionDescriptionDialog", "after: " + s.toString())
-
-                }
+                override fun afterTextChanged(s: Editable?) {}
             })
 
             descriptionDialog.setOnDismissListener {
@@ -88,17 +91,11 @@ class BankQuestionDetailActivity : AppCompatActivity() {
                     etDescription.setText(newDescription)
                     tvDescription.text = newDescription
                 }
+
             }
         }
 
-        btnSetting.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    BankQuestionSettingActivity::class.java
-                )
-            )
-        }
+        btnSetting.setOnClickListener { startActivity(Intent(this, BankQuestionSettingActivity::class.java)) }
 
         pullExit()
     }
@@ -114,20 +111,22 @@ class BankQuestionDetailActivity : AppCompatActivity() {
         for (item in answerOptions) {
             tmpAnswerOptionsArrayList.add(item)
         }
-
-        val optionRecyclerView: RecyclerView = findViewById(R.id.optionRecyclerView)
-        val optionAdapter =
-            QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList)
+        Log.e("BankQuestionDetailActivity", tmpAnswerOptionsArrayList.toString())
+        optionRecyclerView = findViewById(R.id.optionRecyclerView)
+        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
         optionRecyclerView.adapter = optionAdapter
         optionRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun showAnswer() {
-
+    fun showAnswer() {
+        optionAdapter.showAnswer()
+        optionAdapter.notifyDataSetChanged()
     }
 
-    fun backToPreviousPage(view: View?) {
-        this.finish()
+    private fun putQuestion() {
+        if (isModified) {
+//            ConstantsQuestionFunction.putQuestion()
+        }
     }
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -141,13 +140,30 @@ class BankQuestionDetailActivity : AppCompatActivity() {
         }
     }
 
+    fun backToPreviousPage(view: View?) {
+        putQuestion()
+        this.finish()
+    }
+
     private var doubleBackToExitPressedOnce = false
     private fun doubleBackToExit() {
+        putQuestion()
         finish()
     }
 
     override fun onBackPressed() {
+        putQuestion()
         finish()
+    }
+
+    // option be clicked
+    override fun onItemClick(position: Int) {
+        //TODO
+    }
+
+    private var pos: Int = 0
+    override fun getAnswerOptionPosition(position: Int) {
+        pos = position
     }
 
     private fun init() {
@@ -169,6 +185,7 @@ class BankQuestionDetailActivity : AppCompatActivity() {
         questionOptions = intent.getStringArrayListExtra("options")!!
         questionType = intent.getStringExtra("type").toString()
         answerOptions = intent.getStringArrayListExtra("answerOptions")!!
+        answerOptions.add("roughly")
         answerDescription = intent.getStringExtra("answerDescription").toString()
         questionSource = intent.getStringExtra("source").toString()
         questionImage = intent.getStringArrayListExtra("image")!!

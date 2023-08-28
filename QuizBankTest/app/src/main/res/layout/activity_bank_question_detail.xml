@@ -116,7 +116,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/green"
-        android:onClick="showAnswer"
+        android:clickable="true"
         android:gravity="center"
         android:text="顯示答案"
         android:textSize="20sp"
