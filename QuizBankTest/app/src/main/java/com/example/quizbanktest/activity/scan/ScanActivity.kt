@@ -82,7 +82,7 @@ class ScanActivity :AppCompatActivity(){
 
 
         save_btn.setOnClickListener {
-            customViewFinder.setLaserStop()
+
             barcodeView.barcodeView.cameraInstance.requestPreview(object : PreviewCallback {
                 override fun onPreview(sourceData: SourceData) {
                     sourceData.cropRect = Rect(barcodeView.barcodeView.previewFramingRect)
@@ -164,8 +164,8 @@ class ScanActivity :AppCompatActivity(){
             finish()
         }, onFailure = { it1 ->
             progressDialog.dismiss()
+            resume(null)
             Toast.makeText(this@ScanActivity,"請對準後再測試一次",Toast.LENGTH_SHORT).show()
-            onResume()
         })
     }
 }
