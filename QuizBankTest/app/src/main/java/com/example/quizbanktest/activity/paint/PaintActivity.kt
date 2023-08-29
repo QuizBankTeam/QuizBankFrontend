@@ -38,6 +38,7 @@ import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.utils.*
+import com.example.quizbanktest.utils.ConstantsFunction.encodeImage
 
 import com.example.quizbanktest.view.DrawingView
 import com.google.android.material.snackbar.Snackbar
@@ -346,10 +347,15 @@ class PaintActivity : AppCompatActivity() {
             showProgressDialog("提升畫質中請耐心等候")
             val imageBackground: ImageView = findViewById(R.id.iv_background)
             val backgroundBitmap = getBitmapFromView(imageBackground)
-            ConstantsRealESRGAN.realEsrgan(ConstantsFunction.encodeImage(backgroundBitmap)!! , this@PaintActivity,
+            ConstantsRealESRGAN.realEsrgan(
+                sourceUriForUcrop?.let { it1 -> ConstantsFunction.encodeFileImage(this, it1) }!! , this@PaintActivity,
                 onSuccess = { it1 ->
+                    Log.e("it1",it1)
                     val resultBitmap = base64ToBitmap(it1)
                     imageBackground.setImageBitmap(resultBitmap)
+                    if (resultBitmap != null) {
+                        encodeImage(resultBitmap)?.let { it2 -> Log.e("resultBitmap", it2) }
+                    }
                     hideProgressDialog()
                 },
                 onFailure = { it1 ->

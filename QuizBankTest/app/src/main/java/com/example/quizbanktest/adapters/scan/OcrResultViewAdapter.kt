@@ -538,7 +538,6 @@ class OcrResultViewAdapter(
                 }
                 val questionTypeOption : Spinner = holder.itemView.findViewById(R.id.spinner_question_type)
                 val questionTypeIndex : Int = questionTypeOption.selectedItemPosition
-
                 ConstantsOcrResults.questionList[position].questionBank= qb_id
                 ConstantsOcrResults.questionList[position].description = scannerText.text.toString()
                 ConstantsOcrResults.questionList[position].title = title.text.toString()
@@ -548,6 +547,12 @@ class OcrResultViewAdapter(
 
                 ConstantsOcrResults.questionList[position].options = options
                 ConstantsOcrResults.questionList[position].questionType =ConstantsOcrResults.questionTypeList[questionTypeIndex]
+                if(questionTypeIndex == 4){
+                    ConstantsOcrResults.questionList[position].options?.clear()
+                    ConstantsOcrResults.questionList[position].options?.add("true")
+                    ConstantsOcrResults.questionList[position].options?.add("false")
+                    Log.e("opitons    q",ConstantsOcrResults.questionList[position].options.toString())
+                }
 
                 Log.e("post question",ConstantsOcrResults.questionList[position].toString())
 
@@ -575,12 +580,14 @@ class OcrResultViewAdapter(
                         .setTitle("錯誤題號")
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.show()
-                }else if((questionTypeIndex==1||questionTypeIndex==3||questionTypeIndex==4)&&ConstantsOcrResults.questionList[position].options?.size==0){
+                }else if((questionTypeIndex==1||questionTypeIndex==3)&&ConstantsOcrResults.questionList[position].options?.size==0){
+
                     val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                         .setMessage(" 您的題目選項(options)不能為空喔 ")
                         .setTitle("題目選項")
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.show()
+
                     if(ConstantsOcrResults.questionList[position].answerOptions?.size == 0){
                         ConstantsOcrResults.questionList[position].answerOptions?.add("目前答案選項為空")
                     }
