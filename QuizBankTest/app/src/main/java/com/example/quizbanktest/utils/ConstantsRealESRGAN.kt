@@ -42,6 +42,7 @@ object ConstantsRealESRGAN {
             val api = retrofit.create(RealEsrganService::class.java)
             val compressBase64 = base64String
 //            copyToClipboard(activity, base64String!!)
+            Log.e("base",compressBase64)
             val body =RealEsrganService.PostBody(compressBase64!!)
 
             //TODO 拿到csrf token access token
@@ -57,20 +58,12 @@ object ConstantsRealESRGAN {
 
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    val source: BufferedSource? = response?.body()?.source()
-                    source?.request(Long.MAX_VALUE) // Buffer the entire body.
-
-                    val buffer: Buffer? = source?.buffer()
-                    val UTF8: Charset = Charset.forName("UTF-8")
-                    buffer?.clone()?.readString(UTF8)?.let { Log.d("REQUEST_JSON", it) }
                     if (response!!.isSuccess) {
                         val gson = Gson()
                         val esrganResponse = gson.fromJson(
                             response.body().charStream(),
                             EsrganResponse::class.java
                         )
-                        Log.e("Response Result", esrganResponse.image)
-
                         onSuccess(esrganResponse.image)
 
                     } else {
@@ -118,28 +111,6 @@ object ConstantsRealESRGAN {
         }
 
     }
-    fun copyToClipboard(context: Context, text: String) {
-        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("base64", text)
-        clipboard.setPrimaryClip(clip)
-    }
-//    fun compressBase64(base64Str: String, quality: Int): String {
-//        // 解碼Base64字符串到位圖
-//        val decodedBytes = Base64.decode(base64Str, 0)
-//        val decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-//
-//        // 壓縮位圖
-//        val byteArrayOutputStream = ByteArrayOutputStream()
-//        decodedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
-//        val compressedBytes = byteArrayOutputStream.toByteArray()
-//
-//        Log.e("esrgan image ",
-//            ConstantsFunction.estimateBase64SizeFromBase64String( Base64.encodeToString(compressedBytes, Base64.NO_WRAP))
-//                .toString()
-//        )
-//        // 重新編碼為Base64
-//        return Base64.encodeToString(compressedBytes, Base64.NO_WRAP)
-//    }
     data class EsrganResponse(val image: String)
 
 }
