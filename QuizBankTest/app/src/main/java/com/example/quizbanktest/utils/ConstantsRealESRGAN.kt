@@ -1,6 +1,9 @@
 package com.example.quizbanktest.utils
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -24,8 +27,6 @@ import java.util.concurrent.TimeUnit
 object ConstantsRealESRGAN {
     fun realEsrgan(base64String: String, activity: Activity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(activity)) {
-//            Log.e("esrgna","stest")
-//            Log.e("esrgna",base64String)
             val client = OkHttpClient()
             client.setConnectTimeout(560, TimeUnit.SECONDS) // 設定連接超時時間
 
@@ -39,8 +40,9 @@ object ConstantsRealESRGAN {
                 .client(client)
                 .build()
             val api = retrofit.create(RealEsrganService::class.java)
-            val compressBase64 = compressBase64(base64String,20)
-            val body =RealEsrganService.PostBody(compressBase64)
+            val compressBase64 = base64String
+//            copyToClipboard(activity, base64String!!)
+            val body =RealEsrganService.PostBody(compressBase64!!)
 
             //TODO 拿到csrf token access token
             Log.e("access in scan ", Constants.accessToken)
@@ -67,9 +69,9 @@ object ConstantsRealESRGAN {
                             response.body().charStream(),
                             EsrganResponse::class.java
                         )
-                        Log.e("Response Result", esrganResponse.base64)
+                        Log.e("Response Result", esrganResponse.image)
 
-                        onSuccess(esrganResponse.base64)
+                        onSuccess(esrganResponse.image)
 
                     } else {
 
@@ -92,7 +94,7 @@ object ConstantsRealESRGAN {
                                 onFailure("Request failed with status code $sc")
                             }
                             else -> {
-                                Log.e("Error", "in scan Generic Error")
+                                Log.e("Error","esrgan error")
                                 onFailure("Request failed with status code $sc")
                             }
 
@@ -116,23 +118,28 @@ object ConstantsRealESRGAN {
         }
 
     }
-    fun compressBase64(base64Str: String, quality: Int): String {
-        // 解碼Base64字符串到位圖
-        val decodedBytes = Base64.decode(base64Str, 0)
-        val decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-
-        // 壓縮位圖
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        decodedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
-        val compressedBytes = byteArrayOutputStream.toByteArray()
-
-        Log.e("esrgan image ",
-            ConstantsFunction.estimateBase64SizeFromBase64String( Base64.encodeToString(compressedBytes, Base64.DEFAULT))
-                .toString()
-        )
-        // 重新編碼為Base64
-        return Base64.encodeToString(compressedBytes, Base64.DEFAULT)
+    fun copyToClipboard(context: Context, text: String) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("base64", text)
+        clipboard.setPrimaryClip(clip)
     }
-    data class EsrganResponse(val base64: String)
+//    fun compressBase64(base64Str: String, quality: Int): String {
+//        // 解碼Base64字符串到位圖
+//        val decodedBytes = Base64.decode(base64Str, 0)
+//        val decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+//
+//        // 壓縮位圖
+//        val byteArrayOutputStream = ByteArrayOutputStream()
+//        decodedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
+//        val compressedBytes = byteArrayOutputStream.toByteArray()
+//
+//        Log.e("esrgan image ",
+//            ConstantsFunction.estimateBase64SizeFromBase64String( Base64.encodeToString(compressedBytes, Base64.NO_WRAP))
+//                .toString()
+//        )
+//        // 重新編碼為Base64
+//        return Base64.encodeToString(compressedBytes, Base64.NO_WRAP)
+//    }
+    data class EsrganResponse(val image: String)
 
 }
