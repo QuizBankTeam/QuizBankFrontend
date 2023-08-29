@@ -83,7 +83,7 @@ interface quizService {
     data class PutQuiz(val quizId: String, val title: String, val status: String, val duringTime: Int, val casualDuringTime: ArrayList<Int>,
                         val startDateTime: String, val endDateTime: String, val members: ArrayList<String>,
                         val questions: ArrayList<QuestionInPutQuiz> )
-    data class AllQuizsResponse(val message: String, val quiz: ArrayList<Quiz>, val status: String)
+    data class AllQuizsResponse(val message: String, val quizList: ArrayList<Quiz>, val status: String)
     data class PostQuizResponse(val message: String, val quiz: Quiz, val status: String)
     data class PutQuizResponse(val message: String, val status: String)
     data class GetQuizResponse(val message: String, val quiz: Quiz, val status: String)

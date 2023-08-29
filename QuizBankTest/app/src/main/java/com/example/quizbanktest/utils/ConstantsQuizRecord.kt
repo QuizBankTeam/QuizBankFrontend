@@ -35,7 +35,7 @@ object ConstantsQuizRecord {
                             quizRecordService.AllQuizRecordsResponse::class.java
                         )
 
-                        onSuccess(allQuizRecordResponse.quizRecords)
+                        onSuccess(allQuizRecordResponse.quizRecordList)
                     }
                     else{
                         onFailure("Request failed with status code ${response.code()}")
