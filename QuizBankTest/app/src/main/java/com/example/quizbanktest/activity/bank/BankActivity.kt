@@ -38,17 +38,20 @@ import jp.wasabeef.blurry.Blurry
 import java.time.LocalDate
 
 class BankActivity : BaseActivity(), RecyclerViewInterface {
+    // View variable
     private lateinit var searchView: SearchView
     private lateinit var menuButton: ImageButton
     private lateinit var bank_warning: TextView
-    private var wrapLayout: WrapLayout? = null
-    private var blurred = false
-    private var questionBankModels = ArrayList<QuestionBankModel>()
-
     private lateinit var viewDialog: View
     private lateinit var etBankCreatedDate: EditText
     private lateinit var etBankMembers: EditText
     private lateinit var etBankSource: EditText
+    // Bank variable
+    private var questionBankModels = ArrayList<QuestionBankModel>()
+    // Variable
+    private var wrapLayout: WrapLayout? = null
+    private var blurred = false
+
 
 
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
@@ -236,14 +239,10 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         val bankQuestionActivity = Intent(this, BankQuestionActivity::class.java)
 
         bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
-        bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
+        bankQuestionActivity.putExtra("BankId", questionBankModels[position]._id)
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
-    }
-
-    override fun getAnswerOptionPosition(position: Int) {
-        //todo
     }
 
 }

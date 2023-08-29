@@ -36,7 +36,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         setContentView(R.layout.activity_bank_question)
 
         val bankTitle = intent.getStringExtra("BankTitle").toString()
-        val bankId = intent.getStringExtra("BankID").toString()
+        val bankId = intent.getStringExtra("BankId").toString()
         tvTitle = findViewById(R.id.title)
         tvTitle.text = bankTitle
 
@@ -136,10 +136,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankQuestionActivity", questionModels[position]._id.toString())
 
         startActivity(singleAnswerQuestionActivity)
-    }
-
-    override fun getAnswerOptionPosition(position: Int) {
-        // TODO
     }
 
     @SuppressLint("UnsafeOptInUsageError")
