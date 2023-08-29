@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="設定"
+            android:text="修改"
             android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -123,7 +123,7 @@
             android:layout_height="40dp"
             android:clickable="true"
             android:onClick="modifySetting"
-            android:text="確定修改"
+            android:text="儲存修改"
             android:gravity="center"
             android:textSize="20sp"/>
 

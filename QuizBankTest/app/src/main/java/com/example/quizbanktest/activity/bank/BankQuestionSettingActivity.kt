@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.window.OnBackInvokedDispatcher
@@ -19,6 +20,7 @@ class BankQuestionSettingActivity : AppCompatActivity() {
     private lateinit var unmodifiedText: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank_question_setting)
 
@@ -27,15 +29,17 @@ class BankQuestionSettingActivity : AppCompatActivity() {
         etQuestionTitle = findViewById(R.id.et_question_title)
         etQuestionTitle.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {  // p0:
-
+                cardQuestionTitle.strokeColor = getColor(R.color.light_blue1)
+                Log.e("BankQuestionSetting", "count = $count")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 unmodifiedText = s.toString()
-                cardQuestionTitle.strokeColor = getColor(R.color.light_blue1)
+                Log.e("BankQuestionSetting", "before s = $s")
             }
 
             override fun afterTextChanged(s: Editable?) {
+                Log.e("BankQuestionSetting", "after s = $s")
                 if (unmodifiedText != s.toString()) { // text changed
                     cardQuestionTitle.strokeColor = getColor(R.color.green)
                 }
@@ -69,10 +73,8 @@ class BankQuestionSettingActivity : AppCompatActivity() {
         finish()
     }
 
-
     override fun onBackPressed() {
         finish()
     }
-
 
 }

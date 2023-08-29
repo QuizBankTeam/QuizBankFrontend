@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     tools:context=".activity.bank.BankQuestionDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,8 +18,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="Question Title"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="Question Title"
+            android:text=""
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxWidth="150dp"
+            android:ellipsize="marquee"
+            android:scrollbars="horizontal"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
             android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,11 +47,11 @@
             android:id="@+id/question_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/light_yellow2"
+            android:background="@color/skin"
             android:gravity="center"
+            android:hint="Type"
             android:paddingHorizontal="6dp"
             android:paddingVertical="5dp"
-            android:text="Type"
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -63,63 +72,66 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/question_image"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@+id/title_bar"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/society98_1" />
+        android:adjustViewBounds="true"
+        android:background="@drawable/image_border"
+        android:maxHeight="200dp"
+        android:minHeight="150dp"
+        android:paddingHorizontal="15dp"
+        android:paddingTop="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/society98_1"
+        app:shapeAppearanceOverlay="@style/ImageRoundCorner" />
 
     <TextView
         android:id="@+id/question_description"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_below="@id/question_image"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/question_description"
-        android:gravity="center"
+        android:clickable="true"
+        android:gravity="top|left"
         android:hint="Question Description"
-        android:paddingVertical="5dp"
+        android:padding="15dp"
         android:scrollbars="vertical"
         android:singleLine="false"
-        android:textColor="@color/black"
         android:textSize="20sp" />
 
-    <!--    <ScrollView-->
-    <!--        android:id="@+id/scrollView_options"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_below="@+id/question_tags">-->
+    <TextView
+        android:id="@+id/btn_show_answer"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/green"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="顯示答案"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-    <!--        <LinearLayout-->
-    <!--            android:id="@+id/linearLayout_options"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:orientation="vertical">-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/optionRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/question_description"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="70dp"
+        tools:context=".activity.bank.BankQuestionDetailActivity">
 
-    <!--        </LinearLayout>-->
-
-    <!--    </ScrollView>-->
-
-    <!--    <LinearLayout-->
-    <!--        android:id="@+id/question_options"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_below="@+id/question_tags"-->
-    <!--        android:orientation="vertical">-->
-
-    <!--        <androidx.recyclerview.widget.RecyclerView-->
-    <!--            android:id="@+id/questionOptionsRecyclerView"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            tools:context=".activity.BankSingleAnswerQuestionActivity">-->
-
-    <!--        </androidx.recyclerview.widget.RecyclerView>-->
-
-    <!--    </LinearLayout>-->
+    </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>

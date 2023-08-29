@@ -1,8 +1,12 @@
 package com.example.quizbanktest.utils
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Base64
+import java.io.ByteArrayOutputStream
+import java.time.format.DateTimeFormatter
 
 object Constants {
 //
@@ -19,6 +23,8 @@ object Constants {
     var accessToken : String = ""
     var COOKIE: String = ""
     var EXPIRE: Int = 0 //用於在每次login 後 去判斷server token是否過期
+    val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+    val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
     const val quizStatusReady = "ready"
     const val quizStatusDraft = "draft"
     const val quizStatusDoing = "doing"
@@ -46,6 +52,13 @@ object Constants {
             val networkInfo = connectivityManager.activeNetworkInfo
             return networkInfo != null && networkInfo.isConnectedOrConnecting
         }
+    }
+
+    fun bitmapToString(bm: Bitmap): String? {
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 }
 

@@ -90,7 +90,7 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
-    fun getQuestion(context: Context, Id: String, onSuccess: (ArrayList<QuestionModel>) -> Unit, onFailure: (String) -> Unit) {
+    fun getQuestion(context: Context, id: String, onSuccess: (ArrayList<QuestionModel>) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -104,7 +104,7 @@ object ConstantsQuestionFunction {
                 Constants.COOKIE,
                 Constants.csrfToken,
                 Constants.session,
-                Id
+                id
             )
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
@@ -162,6 +162,66 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
+/*
+    fun putQuestion(context: Context, question: QuestionModel, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        if (Constants.isNetworkAvailable(context)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(QuestionService::class.java)
+            //TODO 拿到csrf token access token
+            val call = api.updateQuestion(
+                Constants.COOKIE,
+                Constants.csrfToken,
+                Constants.session,
+                Constants.refreshToken,
+                putQuestionBody
+            )
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+
+                        onSuccess("upload success")
+                    } else {
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e(
+                                    "Error 400", "Bad Re" +
+                                            "" +
+                                            "quest"
+                                )
+                            }
+                            404 -> {
+                                Log.e("Error 404", "Not Found")
+                            }
+                            else -> {
+                                Log.e("Error", "upload failed")
+                            }
+                        }
+                        Log.e("put question error",sc.toString())
+                        onFailure("Request failed with status code $sc")
+                    }
+                }
+
+                override fun onFailure(t: Throwable?) {
+
+                    onFailure("Request failed with status code ")
+                    Log.e("in get all questions Error", t?.message.toString())
+                }
+            })
+        } else {
+            Toast.makeText(
+                context,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
+ */
     data class AllQuestionsResponse(val questionBank : ArrayList<QuestionModel>)
     data class bankInnerQuestion(val questionBank:QuestionAndBank)
 

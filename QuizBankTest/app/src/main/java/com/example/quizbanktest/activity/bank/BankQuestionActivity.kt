@@ -138,6 +138,10 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         startActivity(singleAnswerQuestionActivity)
     }
 
+    override fun getAnswerOptionPosition(position: Int) {
+        // TODO
+    }
+
     @SuppressLint("UnsafeOptInUsageError")
     fun pullExit(){
         if (BuildCompat.isAtLeastT()) {

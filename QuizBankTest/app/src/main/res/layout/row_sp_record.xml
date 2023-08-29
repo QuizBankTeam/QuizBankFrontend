@@ -10,7 +10,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="5dp"
         app:cardUseCompatPadding="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardElevation="3dp">
@@ -18,40 +18,43 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <RelativeLayout
-                android:layout_width="100dp"
+            <FrameLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
                 <ImageView
-                    android:id="@+id/optionNum"
+                    android:id="@+id/quizImage"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/basic_quiz_pic"/>
+                    android:src="@drawable/basic_quiz_pic"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="-10dp"
+                    android:scaleType="fitStart"/>
 
                 <TextView
-                    android:id="@+id/QuizNum"
+                    android:id="@+id/QuestionNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_gravity="end|bottom"
                     android:paddingHorizontal="5dp"
                     android:background="@drawable/question_num_background"
                     android:text="10 題"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
-            </RelativeLayout>
+            </FrameLayout>
 
 
             <LinearLayout
-                android:layout_width="180dp"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
                     <TextView
-                        android:id="@+id/QuizTitle"
+                        android:id="@+id/QuizRecordTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="5"
@@ -60,7 +63,7 @@
                         android:textColor="@color/black"
                         android:gravity="center_vertical"
                         android:layout_marginTop="2dp"
-                        android:paddingStart="10dp"
+                        android:paddingStart="5dp"
                         android:paddingEnd="5dp"/>
 
                 </LinearLayout>
@@ -73,7 +76,7 @@
                     android:gravity="center_vertical"
                     android:text="得分: 8/10"
                     android:textSize="15dp"
-                    android:paddingStart="12dp" />
+                    android:paddingStart="8dp" />
                 <TextView
                     android:id="@+id/Quiz_duringTime"
                     android:layout_width="match_parent"
@@ -82,7 +85,7 @@
                     android:text="考試時長: 10分鐘"
                     android:textSize="15dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="12dp" />
+                    android:paddingStart="8dp" />
 
             </LinearLayout>
             <TextView
