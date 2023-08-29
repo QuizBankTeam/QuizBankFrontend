@@ -52,7 +52,6 @@ class SingleQuiz: AppCompatActivity() {
             backBtn()
         }
         quizBinding.saveBtn.setOnClickListener {
-            Log.d("now saving", "")
             saveQuiz()
         }
         quizBinding.quizSetting.setOnClickListener { quizSetting() }

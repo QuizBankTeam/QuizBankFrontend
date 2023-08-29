@@ -23,7 +23,7 @@
     <string name="Question_add_option">新增選項</string>
     <string name="add_question">新增題目</string>
     <string name="share_quiz">分享考試</string>
-    <string name="save_quiz">儲存考試</string>
+    <string name="save_quiz">儲存更改</string>
 
     <string-array name="bank_name_txt">
         <item>計算機組織</item>

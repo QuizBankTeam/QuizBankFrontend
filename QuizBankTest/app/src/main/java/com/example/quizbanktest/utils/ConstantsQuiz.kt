@@ -17,7 +17,7 @@ object ConstantsQuiz {
     private val onFailureStr = "network not available"
     private var quizList = ArrayList<Quiz>()
 
-    fun getAllQuizsWithBatch(context: Context, quizType: String, batch: Int, onSuccess: (ArrayList<Quiz>) -> Unit, onFailure: (String) -> Unit) {
+    fun getAllQuizsWithBatch(context: Context, quizType: String, batch: Int, onSuccess: (ArrayList<Quiz>?) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -35,7 +35,7 @@ object ConstantsQuiz {
                             quizService.AllQuizsResponse::class.java
                         )
 
-                        onSuccess(allQuizResponse.quiz)
+                        onSuccess(allQuizResponse.quizList)
                     }
                     else{
                         onFailure("Request failed with status code ${response.code()}")
