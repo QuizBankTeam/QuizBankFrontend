@@ -42,6 +42,7 @@ object ConstantsRealESRGAN {
             val api = retrofit.create(RealEsrganService::class.java)
             val compressBase64 = base64String
 //            copyToClipboard(activity, base64String!!)
+            Log.e("base",compressBase64)
             val body =RealEsrganService.PostBody(compressBase64!!)
 
             //TODO 拿到csrf token access token

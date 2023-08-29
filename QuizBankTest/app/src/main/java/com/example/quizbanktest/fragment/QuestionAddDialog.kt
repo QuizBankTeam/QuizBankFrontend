@@ -15,7 +15,7 @@ class QuestionAddDialog : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         if (context == null) return super.onCreateDialog(savedInstanceState)
-        val bottomSheetDialog = BottomSheetDialog(context!!,  R.style.BottomSheetDialog)
+        val bottomSheetDialog = BottomSheetDialog(context!!,  R.style.CustomAlertDialogStyle)
 //        val view = layoutInflater.inflate(R.layout.fragment_question_add_dialog, null)
         bottomSheetDialog.setContentView(R.layout.fragment_question_add_dialog)
         Log.d("in on create dialog", "$context")
