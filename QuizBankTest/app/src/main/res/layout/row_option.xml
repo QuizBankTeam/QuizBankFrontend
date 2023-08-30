@@ -34,6 +34,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="an example of the options\nand the content of this option is hehe xd 12345"
+                    android:maxLines="3"
+                    android:ellipsize="end"
                     android:gravity="center_vertical" />
             </LinearLayout>
 

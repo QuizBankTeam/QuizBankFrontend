@@ -24,6 +24,12 @@
     <string name="add_question">新增題目</string>
     <string name="share_quiz">分享考試</string>
     <string name="save_quiz">儲存更改</string>
+    <string name="AddQuestion_from_source">從%1$s</string>
+    <string name="Concatenate2word">%1$s / %2$s</string>
+    <string name="SingleQuiz">單人考試</string>
+    <string name="CasualQuiz">多人考試</string>
+    <string name="SingleBank">單人題庫</string>
+    <string name="GroupBank">群組題庫</string>
 
     <string-array name="bank_name_txt">
         <item>計算機組織</item>

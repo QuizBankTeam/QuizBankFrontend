@@ -16,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="180dp"
+            android:minHeight="250dp"
             android:orientation="horizontal">
             <EditText
                 android:id="@+id/edit_question_description"

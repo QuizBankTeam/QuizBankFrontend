@@ -61,6 +61,8 @@
                         android:text="考試名稱"
                         android:textSize="20dp"
                         android:textColor="@color/black"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:paddingStart="5dp"
@@ -84,6 +86,8 @@
                     android:layout_weight="1"
                     android:text="考試時長: 10分鐘"
                     android:textSize="15dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:paddingStart="8dp" />
 

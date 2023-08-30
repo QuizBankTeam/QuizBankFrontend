@@ -1,10 +1,8 @@
 package com.example.quizbanktest.adapters.quiz
 
 import android.app.Activity
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +12,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.activity.quiz.SingleQuestion
-import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.Constants
 import org.w3c.dom.Text
 
-class QuestionAddChooseQuestion(private val context: Activity, private val questionList: ArrayList<QuestionModel>):
+class QuestionAddChooseQuestion(private val context: Activity, private val questionList: ArrayList<Question>):
     RecyclerView.Adapter<QuestionAddChooseQuestion.MyViewHolder>()
 {
     private var selectOnClickListener: QuestionAddChooseQuestion.SelectOnClickListener? = null
@@ -34,7 +30,7 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
         fun onclick(position: Int, holder: QuestionAddChooseQuestion.MyViewHolder)
     }
 
-    fun setSelectClickListener(selectOnClickListener: SelectOnClickListener) {
+    fun setSelectClickListener(selectOnClickListener: QuestionAddChooseQuestion.SelectOnClickListener) {
         this.selectOnClickListener = selectOnClickListener
     }
 
@@ -54,8 +50,8 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
         holder.questionDescription.text = currentItem.description
 
 
-        if(currentItem.image!=null){
-            for(item in currentItem.image!!){
+        if(currentItem.questionImage!=null){
+            for(item in currentItem.questionImage!!){
                 val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 holder.questionImage.setImageBitmap(decodeImage)
@@ -79,7 +75,6 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
 
 
         holder.itemView.setOnClickListener {
-            holder.checkBox.isChecked = !holder.checkBox.isChecked
             if (this.selectOnClickListener != null) {
                 selectOnClickListener!!.onclick(position, holder)
             }

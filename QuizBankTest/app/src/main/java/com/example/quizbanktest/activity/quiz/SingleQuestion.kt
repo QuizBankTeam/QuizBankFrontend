@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
 import android.util.TypedValue
@@ -17,7 +18,6 @@ import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.*
@@ -291,55 +291,30 @@ class SingleQuestion : AppCompatActivity(){
         //設定tag
         val tmpTag : ArrayList<String> = ArrayList()
         val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6f, resources.displayMetrics).toInt()
-        val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+        val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
         val marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
         val marginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
-        val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val tagWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70f, resources.displayMetrics).toInt()
+        val layoutParam = LinearLayout.LayoutParams(tagWidth, LinearLayout.LayoutParams.WRAP_CONTENT)
         layoutParam.marginStart = marginHorizontal
         layoutParam.marginEnd = marginHorizontal
         layoutParam.topMargin = marginTop
 
-        if(tag.size>0) {
+        for(i in 0 until tag.size){
+            if(i>2){ break }
             val tagTextView = TextView(this)
             tagTextView.isClickable = true
-            tagTextView.text = tag[0]
+            tagTextView.text = tag[i]
             tagTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_tag, 0, 0, 0)
             tagTextView.setBackgroundResource(R.drawable.corner_radius_blue)
             tagTextView.setPadding(padding)
             tagTextView.layoutParams = layoutParam
             tagTextView.gravity = Gravity.CENTER
             tagTextView.setTextColor(Color.WHITE)
-            tagTextView.textSize = textSize1
-            questionBinding.QuestionTags.addView(tagTextView)
-            tmpTag.add(tag[0]) //QuestionTags is a container of questionTag
-        }
-        if(tag.size>1) {
-            val tagTextView1 = TextView(this)
-            tagTextView1.isClickable = true
-            tagTextView1.text = tag[1]
-            tagTextView1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_tag, 0, 0, 0)
-            tagTextView1.setBackgroundResource(R.drawable.corner_radius_blue)
-            tagTextView1.setPadding(padding)
-            tagTextView1.layoutParams = layoutParam
-            tagTextView1.gravity = Gravity.CENTER
-            tagTextView1.setTextColor(Color.WHITE)
-            tagTextView1.textSize = textSize1
-            questionBinding.QuestionTags.addView(tagTextView1)
-            tmpTag.add(tag[1])
-        }
-        if(tag.size>2){
-            val tagTextView2 = TextView(this)
-            tagTextView2.isClickable = true
-            tagTextView2.text = tag[2]
-            tagTextView2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_tag, 0, 0, 0)
-            tagTextView2.setBackgroundResource(R.drawable.corner_radius_blue)
-            tagTextView2.setPadding(padding)
-            tagTextView2.layoutParams = layoutParam
-            tagTextView2.gravity = Gravity.CENTER
-            tagTextView2.setTextColor(Color.WHITE)
-            tagTextView2.textSize = textSize1
-            questionBinding.QuestionTags.addView(tagTextView2)
-            tmpTag.add(tag[2])
+            tagTextView.textSize = textSize
+            tagTextView.ellipsize = TextUtils.TruncateAt.END
+            questionBinding.QuestionTags.addView(tagTextView) //QuestionTags is a container of questionTag
+            tmpTag.add(tag[i])
         }
         this.questionTag = tmpTag
     }

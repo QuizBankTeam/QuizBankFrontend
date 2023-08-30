@@ -59,7 +59,9 @@ class SingleQuiz: AppCompatActivity() {
             startQuiz(questionlist, quizId)
         }
         quizBinding.addQuestion.setOnClickListener{
-            QuestionAddDialog().show(supportFragmentManager, "tag")
+            val tmp = QuestionAddDialog()
+            tmp.show(supportFragmentManager, "tag")
+
         }
 
     }
@@ -70,8 +72,6 @@ class SingleQuiz: AppCompatActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("in ", "single Quiz")
-        Log.d("request code=", requestCode.toString())
 
         if(requestCode < 1000)  //從singleQuestion傳回single quiz的內容
         {
@@ -139,7 +139,7 @@ class SingleQuiz: AppCompatActivity() {
 
     private fun startQuiz(questionList: ArrayList<Question>, quizId: String){
         determineStatus()
-        if(quizStatus!="draft"){
+        if(quizStatus!=Constants.quizStatusDraft){
             val intent = Intent()
             intent.putExtra("Key_id", quizId)
             intent.putExtra("Key_quizTitle", quizTitle)
