@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary"
+            android:theme="@style/CustomToolbarStyle">
+
+            <TextView
+                android:id="@+id/cancel_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/cancel_CN"
+                android:textColor="@color/red"
+                android:textSize="18sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="    新增考試 📝️"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textAppearance="@style/CustomToolbarStyle"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:id="@+id/confirm_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="@string/confirm_CN"
+                android:textSize="18sp"
+                android:textColor="#01814A"/>
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="-5dp"
+        android:text="標題"
+        android:textColor="#3C3C3C"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+    <androidx.cardview.widget.CardView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="3dp">
+
+        <EditText
+            android:id="@+id/Quiz_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text=""
+            android:textSize="18dp"
+            android:layout_gravity="center_vertical"/>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="考試時長"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="-5dp"
+        android:textColor="#3C3C3C"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+            <EditText
+                android:id="@+id/Quiz_duringTime_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:digits="1234567890"
+                android:textSize="18dp"
+                android:hint="max limit: 200"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="15dp"
+            android:textSize="20dp"
+            android:text="分"
+            android:textStyle="bold"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="3dp">
+            <EditText
+                android:id="@+id/Quiz_duringTime_sec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:digits="1234567890"
+                android:hint="lesser than 60"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"/>
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="15dp"
+            android:textSize="20dp"
+            android:text="秒"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="-5dp"
+        android:text="開始日期"
+        android:textColor="#3C3C3C"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <androidx.cardview.widget.CardView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="3dp">
+
+        <TextView
+            android:id="@+id/Quiz_startDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="2023-09-06 11:01:30"
+            android:textSize="18dp"
+            android:layout_gravity="center_vertical"/>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/add_question_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/Question_List"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:overScrollMode="never"
+                android:textColor="@color/white"
+                android:textSize="30sp"/>
+
+            <android.widget.Button
+                android:id="@+id/question_add"
+                android:layout_width="120dp"
+                android:layout_height="37dp"
+                android:layout_below="@id/Question_List"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:paddingHorizontal="5dp"
+                android:paddingBottom="3dp"
+                android:drawableStart="@drawable/baseline_add_black"
+                android:drawablePadding="4dp"
+                android:background="@drawable/corner_radius_primary"
+                android:text="新增題目"
+                android:minWidth="27dp"
+                android:minHeight="27dp" />
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

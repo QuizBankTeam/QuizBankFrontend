@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.quiz.SingleQuestion
+import com.example.quizbanktest.activity.quiz.SingleQuiz
 import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.utils.Constants
@@ -50,7 +51,7 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
                                 else context.getString(R.string.Filling_CN)
         holder.questionDescription.text = currentItem.description
 
-        for(item in SingleQuizPage.Companion.quizListImages[quizIndex][position]){
+        for(item in SingleQuiz.Companion.quizImages[position]){
             val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
             val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             holder.questionImage.setImageBitmap(decodeImage)

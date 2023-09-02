@@ -8,8 +8,10 @@ import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BuildCompat
+import com.example.quizbanktest.R
 import com.example.quizbanktest.adapters.quiz.LinearLayoutWrapper
 import com.example.quizbanktest.adapters.quiz.QuestionAdapter
+import com.example.quizbanktest.adapters.quiz.QuestionAddChooseQuestion
 import com.example.quizbanktest.databinding.ActivitySingleQuizBinding
 import com.example.quizbanktest.fragment.QuestionAddDialog
 import com.example.quizbanktest.fragment.SingleQuizPage
@@ -19,8 +21,12 @@ import com.example.quizbanktest.models.Quiz
 import com.example.quizbanktest.models.QuizRecord
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuiz
+import java.util.UUID
 
 class SingleQuiz: AppCompatActivity() {
+    companion object{
+        var quizImages =  ArrayList< ArrayList<String> >()
+    }
     private lateinit var quizBinding: ActivitySingleQuizBinding
     private lateinit var questionlist : ArrayList<Question>
     private lateinit var casualDuringTime : ArrayList<Int>
@@ -32,6 +38,8 @@ class SingleQuiz: AppCompatActivity() {
     private lateinit var quizEndDateTime: String
     private lateinit var quizMembers: ArrayList<String>
     private lateinit var quizAdapter: QuestionAdapter
+    private var waitingToStartQuiz = false
+    private var saveFinishListener: saveQuizFinishListener? = null
     private var differentFromQuizList = false
     private var hadPutQuiz = false
     private var isModified = false
@@ -45,7 +53,6 @@ class SingleQuiz: AppCompatActivity() {
         quizBinding.QuestionList.layoutManager = LinearLayoutWrapper(this)
         quizBinding.QuestionList.setHasFixedSize(true)
         quizAdapter = QuestionAdapter(this, questionlist, casualDuringTime)
-        quizAdapter.setQuizIndex(quizIndex)
         quizAdapter.setQuizType(quizType)
         quizBinding.QuestionList.adapter = quizAdapter
         quizBinding.backBtn.setOnClickListener {
@@ -59,16 +66,50 @@ class SingleQuiz: AppCompatActivity() {
             startQuiz(questionlist, quizId)
         }
         quizBinding.addQuestion.setOnClickListener{
-            val tmp = QuestionAddDialog()
-            tmp.show(supportFragmentManager, "tag")
-
+            addQuestion()
         }
 
     }
 
     private fun addQuestion(){
-        val questionAddDialog = QuestionAddDialog()
-        QuestionAddDialog().show(supportFragmentManager, "tag")
+        val addQuestionFragment = QuestionAddDialog()
+        addQuestionFragment.setSendAddedQuiz(object : QuestionAddDialog.SendAddedQuiz {
+            override fun sendQuiz(questionAddedList: ArrayList<Question>) {
+                val preparedAddedQ = ArrayList<Question>()
+                val preparedAddedQImages = ArrayList< ArrayList<String> >()
+                for(question in questionAddedList){
+                    val qImage = ArrayList<String>()
+                    val newQ = question.copy(_id = UUID.randomUUID().toString())
+                    question.questionImage?.forEach {
+                        qImage.add(it)
+                    }
+                    preparedAddedQImages.add(qImage)
+                    preparedAddedQ.add(newQ)
+                }
+                if(preparedAddedQ.size>0){
+                    if(quizType==Constants.quizTypeCasual){
+                        for(i in 0 until preparedAddedQ.size){
+                            casualDuringTime.add(20)
+                        }
+                    }
+                    preparedAddedQ.addAll(0, questionlist)
+                    val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, preparedAddedQ)
+
+                    ConstantsQuiz.putQuiz(this@SingleQuiz, putQuiz, onSuccess = {
+                        quizImages.addAll(preparedAddedQImages)
+                        questionlist.clear()
+                        questionlist.addAll(preparedAddedQ)
+                        quizBinding.questionNumber.text = String.format( getString(R.string.Con2word),
+                            getString(R.string.Question_CN), String.format(getString(R.string.brackets_with_int), questionlist.size) )
+                        differentFromQuizList = true
+                        quizAdapter.notifyDataSetChanged()
+                    }, onFailure = {
+                        Toast.makeText(this@SingleQuiz, it, Toast.LENGTH_SHORT).show()
+                    })
+                }
+            }
+        })
+        addQuestionFragment.show(supportFragmentManager, "addQuestion")
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -132,7 +173,11 @@ class SingleQuiz: AppCompatActivity() {
                 startActivity(intent)
             }
             else if(resultCode == RESULT_CANCELED){ //不保存考試紀錄
-                finish()
+                if(differentFromQuizList && !isModified){ //使用者按下儲存考試(開始考試前要先儲存) 再按返回
+                    backAndUpdateQuizInQuizList()
+                }else{
+                    finish()
+                }
             }
         }
     }
@@ -157,20 +202,19 @@ class SingleQuiz: AppCompatActivity() {
                 intent.putExtra("Key_duringTime", duringTime)
             }
 
-            if(isModified){  //有改過 儲存後再考。 之所以寫成這麼複雜 是因為害怕異步執行
-                val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, questionlist)
-
-                ConstantsQuiz.putQuiz(this, putQuiz, onSuccess = {
-                    isModified = false
-
-                    startActivityForResult(intent, 2000)
-                }, onFailure = {
-                    if(quizType==Constants.quizTypeCasual){ //多人考試使用資料庫的資料來考試 不使用目前user的本地端資料
-                        Toast.makeText(this, "考試儲存錯誤 請重新儲存", Toast.LENGTH_SHORT).show()
-                    }else if(quizType==Constants.quizTypeSingle){ //單人考試就算了 使用修改後的版本考
-                        startActivityForResult(intent, 2000)
+            if(isModified){  //有改過 儲存後再考。 之所以寫成這麼複雜 是因為害怕同步執行
+                setOnQuizFinishListener(object : saveQuizFinishListener{
+                    override fun onSaveFinish(isSuccess: Boolean) {
+                        if(isSuccess){
+                            startActivityForResult(intent, 2000)
+                        }else{
+                            Toast.makeText(this@SingleQuiz, "考試儲存錯誤 請重新儲存再考試", Toast.LENGTH_SHORT).show()
+                        }
+                        waitingToStartQuiz = false
                     }
                 })
+                waitingToStartQuiz = true
+                saveQuiz()
             } else{
                 startActivityForResult(intent, 2000)
             }
@@ -192,17 +236,17 @@ class SingleQuiz: AppCompatActivity() {
             this.duringTime = duringTime
         }
         for(questionIndex in questionlist.indices){
-            if(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex].isNotEmpty()){
+            if(quizImages[questionIndex].isNotEmpty()){
                 if(questionlist[questionIndex].questionImage==null){
                     questionlist[questionIndex].questionImage = ArrayList()
-                    questionlist[questionIndex].questionImage!!.add(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0])
+                    questionlist[questionIndex].questionImage!!.add(quizImages[questionIndex][0])
                 }
                 else if(questionlist[questionIndex].questionImage!!.isEmpty()){
-                    questionlist[questionIndex].questionImage!!.add(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0])
+                    questionlist[questionIndex].questionImage!!.add(quizImages[questionIndex][0])
                 }
                 else{
                     questionlist[questionIndex].questionImage?.set(0,
-                        SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0]
+                        quizImages[questionIndex][0]
                     )
                 }
             }
@@ -211,11 +255,16 @@ class SingleQuiz: AppCompatActivity() {
         ConstantsQuiz.putQuiz(this, putQuiz, onSuccess = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             isModified = false
+            if(waitingToStartQuiz && saveFinishListener!=null){
+                saveFinishListener!!.onSaveFinish(true)
+            }
         }, onFailure = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            saveFinishListener!!.onSaveFinish(false)
         })
     }
     private fun backAndUpdateQuizInQuizList(){ //返回並更新quizList中的此Quiz
+        SingleQuizPage.Companion.quizListImages[quizIndex] = quizImages
         val intentBack = Intent()
         intentBack.putExtra("Key_title", quizTitle)
         intentBack.putExtra("Key_type", quizType)
@@ -223,7 +272,7 @@ class SingleQuiz: AppCompatActivity() {
         intentBack.putExtra("Key_startDateTime", quizStartDateTime)
         intentBack.putExtra("Key_endDateTime", quizEndDateTime)
         intentBack.putParcelableArrayListExtra("Key_questions", questionlist)
-        if(quizType=="casual"){
+        if(quizType==Constants.quizTypeCasual){
             intentBack.putExtra("Key_casualDuringTime", casualDuringTime)
             intentBack.putStringArrayListExtra("Key_members", quizMembers)
         }else{
@@ -290,6 +339,9 @@ class SingleQuiz: AppCompatActivity() {
 
         if (questions != null) {
             questionlist = questions
+            for(index in questionlist.indices){
+                questionlist[index].number = (index+1).toString()
+            }
         }else{
             questionlist = ArrayList()
         }
@@ -321,8 +373,10 @@ class SingleQuiz: AppCompatActivity() {
         differentFromQuizList = false
         this.quizIndex = quizIndex
         this.duringTime = duringTime
+        quizImages = SingleQuizPage.Companion.quizListImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
         quizBinding.quizTitle.text = title
-        quizBinding.questionNumber.text = "題目 (${questionlist.size})"
+        quizBinding.questionNumber.text = String.format( getString(R.string.Con2word),
+            getString(R.string.Question_CN), String.format(getString(R.string.brackets_with_int), questionlist.size) )
     }
     private fun quizSetting(){
         val intent = Intent()
@@ -388,8 +442,11 @@ class SingleQuiz: AppCompatActivity() {
             }
         }else if(resultCode== Constants.RESULT_DELETE){
             isModified = true
+            quizImages.removeAt(requestCode)
             questionlist.removeAt(requestCode)
             quizAdapter?.notifyDataSetChanged()
+            quizBinding.questionNumber.text = String.format( getString(R.string.Con2word),
+                getString(R.string.Question_CN), String.format(getString(R.string.brackets_with_int), questionlist.size) )
 //            quizAdapter.notifyItemChanged(requestCode)
 //            for(index in requestCode until questionlist.size){
 //                quizAdapter.notifyItemChanged(index)
@@ -416,6 +473,12 @@ class SingleQuiz: AppCompatActivity() {
             }
             builder.show()
         }
+    }
+    interface saveQuizFinishListener{
+        fun onSaveFinish(isSuccess: Boolean)
+    }
+    private fun setOnQuizFinishListener(finishListener: saveQuizFinishListener){
+        this.saveFinishListener = finishListener
     }
     override fun onBackPressed() {
         backBtn()

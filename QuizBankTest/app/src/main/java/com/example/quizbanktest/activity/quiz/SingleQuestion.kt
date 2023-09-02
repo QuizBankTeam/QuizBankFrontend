@@ -251,7 +251,7 @@ class SingleQuestion : AppCompatActivity(){
             questionBinding.upperFrame.removeView(questionBinding.timeLimit)
         }
 
-        for(item in SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex]){
+        for(item in SingleQuiz.Companion.quizImages[questionIndex]){
             val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
             val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             imageArr.add(decodeImage)
@@ -294,8 +294,9 @@ class SingleQuestion : AppCompatActivity(){
         val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
         val marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
         val marginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
+        val tagHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32f, resources.displayMetrics).toInt()
         val tagWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70f, resources.displayMetrics).toInt()
-        val layoutParam = LinearLayout.LayoutParams(tagWidth, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val layoutParam = LinearLayout.LayoutParams(tagWidth, tagHeight)
         layoutParam.marginStart = marginHorizontal
         layoutParam.marginEnd = marginHorizontal
         layoutParam.topMargin = marginTop
@@ -343,10 +344,10 @@ class SingleQuestion : AppCompatActivity(){
         }else {
             if(imageArr.isNotEmpty()){
                 val imageBase64 = Constants.bitmapToString(imageArr[0])
-                if(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex].isEmpty()){
-                    SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex].add(imageBase64!!)
+                if(SingleQuiz.Companion.quizImages[questionIndex].isEmpty()){
+                    SingleQuiz.Companion.quizImages[questionIndex].add(imageBase64!!)
                 }else{
-                    SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0] = imageBase64!!
+                    SingleQuiz.Companion.quizImages[questionIndex][0] = imageBase64!!
                 }
             }
             intent.putStringArrayListExtra("Key_options", optionListStr)

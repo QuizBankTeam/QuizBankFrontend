@@ -11,6 +11,10 @@ import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 object ConstantsQuiz {
@@ -135,7 +139,6 @@ object ConstantsQuiz {
                 quiz.members = ArrayList()
                 quiz.members!!.add(Constants.userId)
             }
-//            quiz.members!!.add(Constants.userId)
 
             if(quiz.questions==null) {
                 quiz.questions = ArrayList()
@@ -156,7 +159,9 @@ object ConstantsQuiz {
                     if(question.answerDescription.isNullOrEmpty())
                         question.answerDescription="none"
                     if(question.provider.isNullOrEmpty())
-                        question.provider="none"
+                        question.provider=Constants.userId
+                    if(question.createdDate.isNullOrEmpty())
+                        question.createdDate=LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                     if(question.questionImage==null)
                         question.questionImage = ArrayList<String>()
                     if(question.answerImage==null)
@@ -167,8 +172,14 @@ object ConstantsQuiz {
                     putQuestionList.add(putQuestion)
                 }
             }
-
+//            val putQuestion = quizService.QuestionInPutQuiz(UUID.randomUUID().toString(),
+//                "題目2", "3", "簡介2asdaffffffffffff2", ArrayList(), "ShortAnswer",
+//                "none", "none", ArrayList(), "none", Constants.userId
+//                , Constants.userId, "2023/05/15", ArrayList(), ArrayList(), ArrayList())
+//            putQuestionList.add(putQuestion)
             val putQuiz = quizService.PutQuiz(quiz._id!!, quiz.title!!, quiz.status!!, quiz.duringTime!!, quiz.casualDuringTime!!, quiz.startDateTime!!, quiz.endDateTime!!, quiz.members!!, putQuestionList)
+
+            Log.d("put quiz is", putQuiz.toString())
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -184,6 +195,7 @@ object ConstantsQuiz {
                             response.body().charStream(),
                             quizService.PutQuizResponse::class.java
                         )
+                        Log.d("now saving quiz", "put quiz")
                         onSuccess(putQuizResponse.message)
                     }
                     else{

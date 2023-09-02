@@ -9,6 +9,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
@@ -100,7 +101,7 @@ class SPSingleRecord: AppCompatActivity()  {
     private fun setQuestionImage(currentQuestion: Question){
         val imageArr = ArrayList<Bitmap>()
         if(previousActivity==activitySingleQuiz){
-            for(item in SingleQuizPage.Companion.quizListImages[quizIndex][currentAtQuestion]){
+            for(item in SingleQuiz.Companion.quizImages[currentAtQuestion]){
                 val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 imageArr.add(decodeImage)
@@ -114,8 +115,13 @@ class SPSingleRecord: AppCompatActivity()  {
                 }
             }
         }
-        if(imageArr.isNotEmpty())
+        if(imageArr.isNotEmpty()) {
+            singleRecordBinding.QuestionImage.visibility = View.VISIBLE
             singleRecordBinding.QuestionImage.setImageBitmap(imageArr[0])
+        }else{
+            singleRecordBinding.QuestionImage.visibility = View.GONE
+        }
+
     }
     private fun setQuestion(){
         val currentQuestion = questionList[currentAtQuestion]
@@ -163,7 +169,13 @@ class SPSingleRecord: AppCompatActivity()  {
         val optionlist : ArrayList<Option> = ArrayList()
         val answerOptions : ArrayList<Int> = ArrayList()
         val selectOption: ArrayList<Int> = ArrayList()
-
+        val btnMarginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+        val btnMarginBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30f, resources.displayMetrics).toInt()
+        val btnMarginH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 23f, resources.displayMetrics).toInt()
+        val btnParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        btnParam.setMargins(btnMarginH, btnMarginTop, btnMarginH, btnMarginBottom)
+        btnParam.addRule(RelativeLayout.BELOW, singleRecordBinding.QuestionOption.id)
+        singleRecordBinding.gotoBtnContainer.layoutParams = btnParam
 
         for(index in currentQuestion.options?.indices!!){
             if(currentQuestion.answerOptions?.contains(currentQuestion.options!![index]) == true){
@@ -189,23 +201,27 @@ class SPSingleRecord: AppCompatActivity()  {
         optionAdapter.setRecord(true, recordList[currentAtQuestion].correct!!, selectOption, answerOptions)
     }
     private fun setShortAns(isCorrect: Boolean){
+        val btnMarginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+        val btnMarginBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30f, resources.displayMetrics).toInt()
+        val btnMarginH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 23f, resources.displayMetrics).toInt()
+        val btnParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        btnParam.setMargins(btnMarginH, btnMarginTop, btnMarginH, btnMarginBottom)
         if(this.shortAnswerView!=null){
             this.shortAnswerView!!.visibility = View.VISIBLE
-            Log.d("answerDesc is not null", "")
         }else{
             val textView = TextView(this)
             val answerMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150f, resources.displayMetrics).toInt()
             val descriptionMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130f, resources.displayMetrics).toInt()
             val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
             val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7f, resources.displayMetrics)
-            val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics).toInt()
-            val marginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
-            val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            layoutParam.marginStart = margin
-            layoutParam.marginEnd = margin
-            layoutParam.topMargin = marginTop
-            layoutParam.bottomMargin = marginTop
+            val marginH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics).toInt()
+            val marginV = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
+            val layoutParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+
             textView.id = View.generateViewId()
+            btnParam.setMargins(btnMarginH, btnMarginTop, btnMarginH, btnMarginBottom)
+            layoutParam.setMargins(marginH, marginV, marginH, marginV)
+            layoutParam.addRule(RelativeLayout.BELOW, singleRecordBinding.questionDescription.id)
 
             if(isCorrect)
                 textView.setBackgroundResource(R.drawable.textview_answer_border)
@@ -218,22 +234,35 @@ class SPSingleRecord: AppCompatActivity()  {
             textView.minHeight = answerMinH
             textView.text = recordList[currentAtQuestion].userAnswerDescription
             textView.hint = "你的答案"
-            singleRecordBinding.recordContainer.addView(textView, 4)
+            singleRecordBinding.lowerContainer.addView(textView, 1)
             singleRecordBinding.questionDescription.minHeight = descriptionMinH
             val answerDescriptionView = singleRecordBinding.root.findViewById<TextView>(textView.id)
             this.shortAnswerView = answerDescriptionView
         }
+        btnParam.addRule(RelativeLayout.BELOW, shortAnswerView!!.id)
+        singleRecordBinding.gotoBtnContainer.layoutParams = btnParam
 
     }
 
     private fun setTrueOrFalse(isCorrect: Boolean){
+        val btnMarginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+        val btnMarginBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30f, resources.displayMetrics).toInt()
+        val btnMarginH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 23f, resources.displayMetrics).toInt()
+        val btnParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        btnParam.setMargins(btnMarginH, btnMarginTop, btnMarginH, btnMarginBottom)
+
         if(trueOrFalseView!=null){
             this.trueOrFalseView!!.visibility = View.VISIBLE
         }else{
             val v:View =  layoutInflater.inflate(R.layout.item_option_trueorfalse, singleRecordBinding.recordContainer, false)
             val textViewTrue : TextView = v.findViewById(R.id.option_true)
             val textViewFalse: TextView = v.findViewById(R.id.option_false)
+            val vHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
+            val tfParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, vHeight)
+            tfParams.addRule(RelativeLayout.BELOW, singleRecordBinding.questionDescription.id)
 
+            v.layoutParams = tfParams
+            v.id = View.generateViewId()
 
             if(isCorrect) {
                 if(questionList[currentAtQuestion].answerOptions?.get(0)  == "true"){
@@ -258,9 +287,11 @@ class SPSingleRecord: AppCompatActivity()  {
                     textViewTrue.compoundDrawablePadding = 0
                 }
             }
-            singleRecordBinding.recordContainer.addView(v, 4)
+            singleRecordBinding.lowerContainer.addView(v, 1)
             this.trueOrFalseView = v
         }
+        btnParam.addRule(RelativeLayout.BELOW, this.trueOrFalseView!!.id)
+        singleRecordBinding.gotoBtnContainer.layoutParams = btnParam
     }
     private fun gotoNextQ(){
         if(questionList.size>1) {
@@ -302,14 +333,3 @@ class SPSingleRecord: AppCompatActivity()  {
         }
     }
 }
-//for(record in recordList){
-//    val imageArr2d = ArrayList< ArrayList<WeakReference<String>>>()
-//    for(question in quiz.questions!!){
-//        val imageArr1d = ArrayList<WeakReference<String>>()
-//        for(image in question.questionImage!!){
-//            imageArr1d.add(WeakReference(image))
-//        }
-//        imageArr2d.add(imageArr1d)
-//    }
-//    SingleQuizPage.Companion.quizListImages.add(imageArr2d)
-//}

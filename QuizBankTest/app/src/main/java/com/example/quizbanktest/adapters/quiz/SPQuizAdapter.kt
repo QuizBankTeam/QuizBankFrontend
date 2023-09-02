@@ -11,7 +11,7 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.quiz.SingleQuiz
 import com.example.quizbanktest.models.Quiz
 
-class SPQuizAdapter(private val context: Activity, private val questionList: ArrayList<Quiz>):
+class SPQuizAdapter(private val context: Activity, private val quizList: ArrayList<Quiz>):
     RecyclerView.Adapter<SPQuizAdapter.MyViewHolder>()
 {
     private var onClickListener: OnClickListener? = null
@@ -21,11 +21,11 @@ class SPQuizAdapter(private val context: Activity, private val questionList: Arr
     }
 
     override fun getItemCount(): Int {
-        return questionList.size
+        return quizList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = questionList[position]
+        val currentItem = quizList[position]
         val datetime = LocalDateTime.now()
 
         if(currentItem.startDateTime!=null) {

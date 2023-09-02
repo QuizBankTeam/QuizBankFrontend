@@ -40,16 +40,19 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="18dp"
+                    android:maxWidth="150dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="題目名稱"
                     android:textColor="#000000"
-                    android:textSize="22dp" />
+                    android:textSize="20dp" />
                 <TextView
                     android:id="@+id/Question_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="27dp"
                     android:layout_toEndOf="@id/Question_title"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:background="@color/colorPrimary"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="3dp"
@@ -158,7 +161,21 @@
         </FrameLayout>
 
 
-
+        <TextView
+            android:id="@+id/question_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            android:maxHeight="200dp"
+            android:clickable="true"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/textview_border"
+            android:padding="10dp"
+            android:textSize="14dp"
+            android:hint="輕觸輸入答案敘述"/>
 
 
         <androidx.core.widget.NestedScrollView
@@ -171,26 +188,10 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp">
 
-                <TextView
-                    android:id="@+id/question_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="80dp"
-                    android:clickable="true"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/textview_border"
-                    android:padding="10dp"
-                    android:textSize="14dp"
-                    android:hint="輕觸輸入答案敘述"/>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/QuestionOption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/question_description"
                     android:layout_marginHorizontal="20dp"
                     android:overScrollMode="never"
                     android:textColor="@color/white"

@@ -68,7 +68,7 @@
             <TextView
                 android:id="@+id/bank_members"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="17dp"
                 android:layout_below="@id/bank_createdDate"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/bank_image"
@@ -82,7 +82,7 @@
             <TextView
                 android:id="@+id/bank_creator"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="17dp"
                 android:layout_below="@id/bank_members"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/bank_image"

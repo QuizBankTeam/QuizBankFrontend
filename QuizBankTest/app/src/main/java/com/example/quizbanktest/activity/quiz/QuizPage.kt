@@ -26,8 +26,6 @@ class QuizPage: BaseActivity() {
     private lateinit var fragmentAdapter: QuizPageAdapter
     private lateinit var SPFragment: SingleQuizPage
     private lateinit var MPFragment: MultiQuizPage
-    private val quizTypeSingle = "single"
-    private val quizTypeCasual = "casual"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizPageBinding = ActivityQuizPageBinding.inflate(layoutInflater)
@@ -79,10 +77,10 @@ class QuizPage: BaseActivity() {
         if(resultCode == Constants.RESULT_DELETE){
             if(data != null){
                 val quizType = data.getStringExtra("Key_type").toString()
-                if(quizType == quizTypeSingle){
+                if(quizType == Constants.quizTypeSingle){
                     fragmentAdapter.getSPFragment().deleteQuiz(requestCode)
 
-                }else if(quizType == quizTypeCasual){
+                }else if(quizType == Constants.quizTypeCasual){
                     fragmentAdapter.getMPFragment()
                 }
             }
@@ -96,11 +94,11 @@ class QuizPage: BaseActivity() {
                 val tmpQuestions = data.getParcelableArrayListExtra<Question>("Key_questions")
                 val tmpTitle = data.getStringExtra("Key_title")
 
-                if(quizType == quizTypeSingle){
+                if(quizType == Constants.quizTypeSingle){
                     val tmpDuringTime = data.getIntExtra("Key_duringTime", 0)
                     fragmentAdapter.getSPFragment().putQuiz(requestCode, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
 
-                }else if(quizType == quizTypeCasual){
+                }else if(quizType == Constants.quizTypeCasual){
                     val tmpMembers = data.getStringArrayListExtra("Key_members")
                     val tmpCasualDuringTime = data.getIntegerArrayListExtra("Key_casualDuringTime")
                     fragmentAdapter.getMPFragment().putQuiz(requestCode, tmpQuestions, tmpTitle, tmpCasualDuringTime, tmpMembers, tmpStatus!!, tmpStartDateTime, tmpEndDateTime)
@@ -109,6 +107,9 @@ class QuizPage: BaseActivity() {
         }
     }
 
+    private fun addQuiz1(){
+
+    }
     private fun addQuiz(){
         if(quizPageBinding.quizPager.currentItem==0){
             val tmpMembers = ArrayList<String>()
@@ -135,9 +136,9 @@ class QuizPage: BaseActivity() {
             qList.add(tmpPostQuizQuestionSA)
             val tmpPostQuiz = quizService.PostQuiz("test quiz",  "single", "ready", 100, ArrayList(), "2023-07-13 13:04:10", "2023-07-13 13:04:10", tmpMembers, qList)
             ConstantsQuiz.postQuiz(this, tmpPostQuiz, onSuccess = { postQuiz ->
-                if(postQuiz.type == quizTypeSingle){
+                if(postQuiz.type == Constants.quizTypeSingle){
                     fragmentAdapter.getSPFragment().postQuiz(postQuiz)
-                }else if(postQuiz.type == quizTypeCasual){
+                }else if(postQuiz.type == Constants.quizTypeCasual){
                     fragmentAdapter.getMPFragment().postQuiz(postQuiz)
                 }
             }, onFailure = {
@@ -145,14 +146,5 @@ class QuizPage: BaseActivity() {
             })
         }
     }
-
-//    fun quizModified(quizIndex: Int, tmpQuestions: ArrayList<Question>, tmpTitle: String, tmpDuringTime: Int, tmpCasualDuringTime: ArrayList<Int>, tmpMembers: ArrayList<String>, tmpStatus: String, tmpStartDateTime: String, tmpEndDateTime: String, quizType: String){
-//        fragmentAdapter.getSPFragment().putQuiz(quizIndex, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
-//        if(quizType == quizTypeSingle){
-//            fragmentAdapter.getSPFragment().putQuiz(quizIndex, tmpQuestions, tmpTitle, tmpDuringTime, tmpStatus, tmpStartDateTime, tmpEndDateTime)
-//        }else if(quizType == quizTypeCasual){
-//            fragmentAdapter.getMPFragment().putQuizFromSave(quizIndex, tmpQuestions, tmpTitle, tmpCasualDuringTime, tmpMembers,  tmpStatus, tmpStartDateTime, tmpEndDateTime)
-//        }
-//    }
 
 }
