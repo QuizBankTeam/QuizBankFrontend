@@ -247,11 +247,14 @@ class SingleQuestion : AppCompatActivity(){
         }else{
             questionBinding.upperFrame.removeView(questionBinding.timeLimit)
         }
-
-        for(item in SingleQuiz.Companion.quizImages[questionIndex]){
-            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
-            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            imageArr.add(decodeImage)
+        if(questionIndex<SingleQuiz.Companion.quizImages.size) {
+            for (item in SingleQuiz.Companion.quizImages[questionIndex]) {
+                val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                imageArr.add(decodeImage)
+            }
+        }else{
+            Toast.makeText(this, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
         }
         if(imageArr.isNotEmpty()) {
             editImageContainer(imageStatus_existImage)

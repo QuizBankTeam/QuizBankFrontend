@@ -40,7 +40,7 @@ class SingleQuiz: AppCompatActivity() {
     private lateinit var quizAdapter: QuestionAdapter
     private var waitingToStartQuiz = false
     private var saveFinishListener: saveQuizFinishListener? = null
-    private var differentFromQuizList = false
+    private var differentFromQuizList = false //後端的資料和quizList的資料不相同
     private var hadPutQuiz = false
     private var isModified = false
     private var duringTime: Int = -1
@@ -121,7 +121,6 @@ class SingleQuiz: AppCompatActivity() {
         else if(requestCode == 1000)    //從quiz setting傳回
         {
             if(resultCode == Constants.RESULT_DELETE) {
-                isModified = true
                 deleteQuiz()
                 val intentBack = Intent()
                 intentBack.putExtra("Key_type", quizType)
@@ -225,9 +224,7 @@ class SingleQuiz: AppCompatActivity() {
     }
     private fun saveQuiz(){
         determineStatus()
-        if(isModified){
-            differentFromQuizList = true
-        }
+
         if(quizType==Constants.quizTypeCasual){
             var duringTime = 0
             for(time in casualDuringTime){
@@ -254,6 +251,9 @@ class SingleQuiz: AppCompatActivity() {
         val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, questionlist)
         ConstantsQuiz.putQuiz(this, putQuiz, onSuccess = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            if(isModified){
+                differentFromQuizList = true
+            }
             isModified = false
             if(waitingToStartQuiz && saveFinishListener!=null){
                 saveFinishListener!!.onSaveFinish(true)

@@ -101,10 +101,14 @@ class SPSingleRecord: AppCompatActivity()  {
     private fun setQuestionImage(currentQuestion: Question){
         val imageArr = ArrayList<Bitmap>()
         if(previousActivity==activitySingleQuiz){
-            for(item in SingleQuiz.Companion.quizImages[currentAtQuestion]){
-                val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
-                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                imageArr.add(decodeImage)
+            if(currentAtQuestion<SingleQuiz.Companion.quizImages.size) {
+                for (item in SingleQuiz.Companion.quizImages[currentAtQuestion]) {
+                    val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    imageArr.add(decodeImage)
+                }
+            }else{
+                Toast.makeText(this, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
             }
         }else if(previousActivity==activityRecordPage){
             if(!currentQuestion.questionImage.isNullOrEmpty()){

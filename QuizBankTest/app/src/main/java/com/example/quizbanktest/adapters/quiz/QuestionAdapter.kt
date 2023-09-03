@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.quiz.SingleQuestion
@@ -48,11 +49,15 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
                                 else context.getString(R.string.Filling_CN)
         holder.questionDescription.text = currentItem.description
 
-        for(item in SingleQuiz.Companion.quizImages[position]){
-            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
-            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            holder.questionImage.setImageBitmap(decodeImage)
-            break
+        if(position<SingleQuiz.Companion.quizImages.size) {
+            for (item in SingleQuiz.Companion.quizImages[position]) {
+                val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                holder.questionImage.setImageBitmap(decodeImage)
+                break
+            }
+        }else{
+            Toast.makeText(context, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
         }
         if(currentItem.tag!=null) {
             if(currentItem.tag!!.size==0) {

@@ -92,7 +92,6 @@ class SingleQuizPage : Fragment() {
 //        for(index in 0 until QuizList.size){
 //            quizListAdapter.notifyItemChanged(index)
 //        }
-        quizListAdapter.notifyDataSetChanged()
         val imageArr2 = ArrayList< ArrayList<String> >()
         for(question in quiz.questions!!){
             val imageArr1 = ArrayList<String>()
@@ -102,7 +101,7 @@ class SingleQuizPage : Fragment() {
             imageArr2.add(imageArr1)
         }
         SingleQuizPage.Companion.quizListImages.add(0, imageArr2)
-
+        quizListAdapter.notifyDataSetChanged()
     }
     fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
         QuizList[position].title = title
