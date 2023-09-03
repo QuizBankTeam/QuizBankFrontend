@@ -24,13 +24,10 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
     RecyclerView.Adapter<QuestionAdapter.MyViewHolder>()
 {
     private lateinit var quizType: String
-    private var quizIndex: Int = 0
     fun setQuizType(type: String){
         quizType=type
     }
-    fun setQuizIndex(index: Int){
-        quizIndex = index
-    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.row_question, parent, false)
         return MyViewHolder(itemView)
@@ -101,7 +98,6 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
             intent.putStringArrayListExtra("Key_answerOptions", currentItem.answerOptions)
             intent.putStringArrayListExtra("Key_options", currentItem.options)
             intent.putExtra("question_index", position)
-            intent.putExtra("quiz_index", quizIndex)
 
             if(quizType=="casual"){
                 intent.putExtra("Key_timeLimit", casualDuringTime[position])

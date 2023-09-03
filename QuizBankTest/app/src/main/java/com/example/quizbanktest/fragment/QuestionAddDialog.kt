@@ -310,22 +310,23 @@ class QuestionAddDialog : BottomSheetDialogFragment() {
                       adapter = QuestionAddQuizAdapter(requireActivity(), quizList, quizType)
                       list.adapter = adapter
                       list.isClickable = true
-                  }
-                  adapter.setOnClickListener(object :QuestionAddQuizAdapter.SelectOnClickListener{
-                      override fun onclick(position: Int, holder: QuestionAddQuizAdapter.MyViewHolder) {
-                          val currentQuizTitle = if(quizList!![position].title.isNullOrEmpty()) rootContext.getString(R.string.untitled_EN) else quizList[position].title
-                          if(F_ChooseQuestion[position]==null){
-                              F_ChooseQuestion[position] =  ChooseQuestion()
-                          }
-                          quizList[position].questions = if(quizList[position].questions.isNullOrEmpty()) ArrayList() else quizList[position].questions
-                          rpFragmentFinalLayer(quizType, F_ChooseQuestion[position]!!, currentQuizTitle!!)
-                          F_ChooseQuestion[position]!!.setOnInitializedListener(object : ChooseQuestion.OnInitializedListener{
-                              override fun onInitialized() {
-                                  F_ChooseQuestion[position]!!.setUpQuestionList(rootContext, rootActivity, quizList[position].questions!!, questionAddedList)
+
+                      adapter.setOnClickListener(object :QuestionAddQuizAdapter.SelectOnClickListener{
+                          override fun onclick(position: Int, holder: QuestionAddQuizAdapter.MyViewHolder) {
+                              val currentQuizTitle = if(quizList!![position].title.isNullOrEmpty()) rootContext.getString(R.string.untitled_EN) else quizList[position].title
+                              if(F_ChooseQuestion[position]==null){
+                                  F_ChooseQuestion[position] =  ChooseQuestion()
                               }
-                          })
-                      }
-                  })
+                              quizList[position].questions = if(quizList[position].questions.isNullOrEmpty()) ArrayList() else quizList[position].questions
+                              rpFragmentFinalLayer(quizType, F_ChooseQuestion[position]!!, currentQuizTitle!!)
+                              F_ChooseQuestion[position]!!.setOnInitializedListener(object : ChooseQuestion.OnInitializedListener{
+                                  override fun onInitialized() {
+                                      F_ChooseQuestion[position]!!.setUpQuestionList(rootContext, rootActivity, quizList[position].questions!!, questionAddedList)
+                                  }
+                              })
+                          }
+                      })
+                  }
               }, onFailure = {
                   Toast.makeText(context, it, Toast.LENGTH_LONG).show()
               })

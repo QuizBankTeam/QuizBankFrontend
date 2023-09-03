@@ -57,6 +57,7 @@ class SingleQuizPage : Fragment() {
         ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
             if(quizList!=null) {
                 QuizList = quizList
+
                 for (quiz in quizList) {
                     val imageArr2 = ArrayList<ArrayList<String>>()
                     for (question in quiz.questions!!) {
@@ -75,7 +76,9 @@ class SingleQuizPage : Fragment() {
                 quizBinding.QuizList.adapter = quizListAdapter
                 quizBinding.QuizList.isClickable = true
             }
-
+            else{
+                Log.d("quiz list size is", QuizList.size.toString())
+            }
         }, onFailure = {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             initWithoutNetwork()

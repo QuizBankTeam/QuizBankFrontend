@@ -2,6 +2,7 @@ package com.example.quizbanktest.utils
 
 import android.content.Context
 import android.util.Log
+import com.example.quizbanktest.R
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.Quiz
 import com.example.quizbanktest.network.quizService
@@ -12,6 +13,7 @@ import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
@@ -88,17 +90,59 @@ object ConstantsQuiz {
             onFailure(onFailureStr)
         }
     }
-    fun postQuiz(context: Context, postQuiz: quizService.PostQuiz ,onSuccess: (Quiz) -> Unit, onFailure: (String) -> Unit){
-        val tmpMembers = ArrayList<String>()
-        tmpMembers.add(Constants.userId)
-        val qList = ArrayList<quizService.QuestionInPostQuiz>()
+    fun postQuiz(context: Context, quiz: quizService.PostQuiz ,onSuccess: (Quiz) -> Unit, onFailure: (String) -> Unit){
         if (Constants.isNetworkAvailable(context)) {
+            if(quiz.startDateTime.isNullOrEmpty())
+                quiz.startDateTime = LocalDateTime.now().format(Constants.dateTimeFormat)
+            if(quiz.endDateTime.isNullOrEmpty())
+                quiz.endDateTime = LocalDateTime.now().format(Constants.dateTimeFormat)
+            if(quiz.title.isNullOrEmpty())
+                quiz.title = context.getString(R.string.untitled_EN)
+            if(quiz.casualDuringTime==null)
+                quiz.casualDuringTime = ArrayList()
+            if(quiz.duringTime==0)
+                quiz.duringTime = -1
+            if(quiz.members.isNullOrEmpty()) {
+                quiz.members = ArrayList()
+                quiz.members!!.add(Constants.userId)
+            }
+            if(quiz.questions==null){
+                quiz.questions = ArrayList()
+            }else{
+                for(question in quiz.questions!!){
+                    if(question.title.isNullOrEmpty())
+                        question.title = context.getString(R.string.untitled_EN)
+                    if(question.description.isNullOrEmpty())
+                        question.description = "none"
+                    if(question.options==null)
+                        question.options = ArrayList()
+                    if(question.answerOptions==null)
+                        question.answerOptions = ArrayList()
+                    if(question.bankType.isNullOrEmpty())
+                        question.bankType="none"
+                    if(question.questionBank.isNullOrEmpty())
+                        question.questionBank="none"
+                    if(question.answerDescription.isNullOrEmpty())
+                        question.answerDescription="none"
+                    if(question.originateFrom.isNullOrEmpty())
+                        question.originateFrom = Constants.userId
+                    if(question.createdDate.isEmpty())
+                        question.createdDate=LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    if(question.questionImage==null)
+                        question.questionImage = ArrayList()
+                    if(question.answerImage==null)
+                        question.answerImage = ArrayList()
+                    if(question.tag==null)
+                        question.tag = ArrayList()
+                }
+            }
+
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit.create(quizService::class.java)
-            val call = api.postQuiz(Constants.COOKIE, Constants.csrfToken, Constants.accessToken, Constants.refreshToken, Constants.session, postQuiz)
+            val call = api.postQuiz(Constants.COOKIE, Constants.csrfToken, Constants.accessToken, Constants.refreshToken, Constants.session, quiz)
 
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
@@ -128,11 +172,11 @@ object ConstantsQuiz {
         if (Constants.isNetworkAvailable(context)) {
             val putQuestionList = ArrayList<quizService.QuestionInPutQuiz>()
             if(quiz.startDateTime.isNullOrEmpty())
-                quiz.startDateTime = "none"
+                quiz.startDateTime = LocalDateTime.now().format(Constants.dateTimeFormat)
             if(quiz.endDateTime.isNullOrEmpty())
-                quiz.endDateTime = "none"
+                quiz.endDateTime = LocalDateTime.now().format(Constants.dateTimeFormat)
             if(quiz.title.isNullOrEmpty())
-                quiz.title = "none"
+                quiz.title = context.getString(R.string.untitled_EN)
             if(quiz.casualDuringTime==null)
                 quiz.casualDuringTime = ArrayList()
             if(quiz.members.isNullOrEmpty()) {
@@ -145,7 +189,7 @@ object ConstantsQuiz {
             }else{
                 for(question in quiz.questions!!){
                     if(question.title.isNullOrEmpty())
-                        question.title = "Untitled"
+                        question.title = context.getString(R.string.untitled_EN)
                     if(question.description.isNullOrEmpty())
                         question.description = "none"
                     if(question.options==null)
@@ -172,14 +216,8 @@ object ConstantsQuiz {
                     putQuestionList.add(putQuestion)
                 }
             }
-//            val putQuestion = quizService.QuestionInPutQuiz(UUID.randomUUID().toString(),
-//                "題目2", "3", "簡介2asdaffffffffffff2", ArrayList(), "ShortAnswer",
-//                "none", "none", ArrayList(), "none", Constants.userId
-//                , Constants.userId, "2023/05/15", ArrayList(), ArrayList(), ArrayList())
-//            putQuestionList.add(putQuestion)
             val putQuiz = quizService.PutQuiz(quiz._id!!, quiz.title!!, quiz.status!!, quiz.duringTime!!, quiz.casualDuringTime!!, quiz.startDateTime!!, quiz.endDateTime!!, quiz.members!!, putQuestionList)
 
-            Log.d("put quiz is", putQuiz.toString())
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

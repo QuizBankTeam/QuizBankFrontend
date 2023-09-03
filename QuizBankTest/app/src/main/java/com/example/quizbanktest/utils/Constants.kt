@@ -24,6 +24,7 @@ object Constants {
     var COOKIE: String = ""
     var EXPIRE: Int = 0 //用於在每次login 後 去判斷server token是否過期
     val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+    val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
     const val quizStatusReady = "ready"
     const val quizStatusDraft = "draft"

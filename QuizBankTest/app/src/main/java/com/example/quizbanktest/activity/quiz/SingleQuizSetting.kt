@@ -127,9 +127,10 @@ class SingleQuizSetting: AppCompatActivity() {
             val titleText = spQuizSetAttrBinding.QuizTitle.text.toString()
             val duringTimeMinStr : String = spQuizSetAttrBinding.QuizDuringTimeMin.text.toString()
             val duringTimeSecStr : String = spQuizSetAttrBinding.QuizDuringTimeSec.text.toString()
-            val duringTimeMin = duringTimeMinStr.toInt()
-            val duringTimeSec = duringTimeSecStr.toInt()
-            if(duringTimeMin>200 || duringTimeMin == 0 || duringTimeSec>59){
+            val duringTimeMin = if(duringTimeMinStr.isEmpty()) 0 else duringTimeMinStr.toInt()
+            val duringTimeSec = if(duringTimeSecStr.isEmpty()) 0 else duringTimeSecStr.toInt()
+            val duringTime = duringTimeMin*60 + duringTimeSec
+            if(duringTimeMin>200 || duringTime == 0 || duringTimeSec>59){
                 AlertDialog.Builder(this).setTitle("考試時長設定有誤!").setPositiveButton("我懂", null).show()
             }
             intentBack.putExtra("Key_title", titleText)

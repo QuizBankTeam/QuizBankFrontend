@@ -52,7 +52,6 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var optionAdapter: OptionAdapter
     private var selectedView =  ArrayList<View>()
     private var imageArr = ArrayList<Bitmap>()
-    private var quizIndex = 0
     private var questionIndex = 0
     private val openPhotoAlbum:Int = 1314
     private var resolver: ContentResolver? = null
@@ -213,9 +212,7 @@ class SingleQuestion : AppCompatActivity(){
         val answerOption = intent.getStringArrayListExtra("Key_answerOptions")
         val answerDescription = intent.getStringExtra("Key_answerDescription")
         val quizType = intent.getStringExtra("Key_quizType")
-        val quizIndex = intent.getIntExtra("quiz_index", 0)
         val questionIndex = intent.getIntExtra("question_index", 0)
-        this.quizIndex = quizIndex
         this.questionIndex = questionIndex
         optionlist.clear()
 
@@ -255,7 +252,6 @@ class SingleQuestion : AppCompatActivity(){
             val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
             val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             imageArr.add(decodeImage)
-            Log.d("quiz index = $quizIndex", "question index = $questionIndex")
         }
         if(imageArr.isNotEmpty()) {
             editImageContainer(imageStatus_existImage)
@@ -541,12 +537,8 @@ class SingleQuestion : AppCompatActivity(){
         val dialog: AlertDialog = builder.create()
         dialog.show()
         dialog.setOnDismissListener {
-            if(editTag.text.toString().length>5){
-                AlertDialog.Builder(this).setTitle("標籤過長!").setPositiveButton("確定", null).show()
-            }else{
-                this.questionTag[position] = editTag.text.toString()
-                this.questionTagTextView[position].text = this.questionTag[position]
-            }
+            this.questionTag[position] = editTag.text.toString()
+            this.questionTagTextView[position].text = this.questionTag[position]
         }
     }
 

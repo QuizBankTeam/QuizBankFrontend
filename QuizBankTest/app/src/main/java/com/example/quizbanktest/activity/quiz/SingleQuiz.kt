@@ -315,7 +315,6 @@ class SingleQuiz: AppCompatActivity() {
                         break
                     }
                 }
-
             }
         }
         quizStatus = status
