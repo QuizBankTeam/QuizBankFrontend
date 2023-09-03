@@ -21,6 +21,7 @@ object ConstantsOcrResults {
             questionTypeList.add("Filling")
             questionTypeList.add("MultipleChoiceS")
             questionTypeList.add("ShortAnswer")
+            questionTypeList.add("MultipleChoiceM")
             questionTypeList.add("TrueOrFalse")
         }
 
@@ -41,6 +42,7 @@ object ConstantsOcrResults {
             questionTypeList.add("Filling")
             questionTypeList.add("MultipleChoiceS")
             questionTypeList.add("ShortAnswer")
+            questionTypeList.add("MultipleChoiceM")
             questionTypeList.add("TrueOrFalse")
         }
 

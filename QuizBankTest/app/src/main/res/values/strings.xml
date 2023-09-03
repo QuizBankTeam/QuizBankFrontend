@@ -14,6 +14,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_hint">SEARCH FILES…</string>
     <string name="test">testing</string>
+    <string name="Add_questionImage">新增圖片</string>
+    <string name="Filling_CN">填充</string>
+    <string name="ShortAnswer_CN">簡答</string>
+    <string name="MultipleChoiceS_CN">單選</string>
+    <string name="MultipleChoiceM_CN">多選</string>
+    <string name="TrueOrFalse_CN">是非</string>
+    <string name="Question_add_option">新增選項</string>
+    <string name="add_question">新增題目</string>
+    <string name="share_quiz">分享考試</string>
+    <string name="save_quiz">儲存更改</string>
+
     <string-array name="bank_name_txt">
         <item>計算機組織</item>
         <item>離散數學</item>

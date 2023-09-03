@@ -44,6 +44,7 @@ class QuizPage: BaseActivity() {
 
         SPFragment = SingleQuizPage()
         MPFragment = MultiQuizPage()
+
         fragmentAdapter = QuizPageAdapter(supportFragmentManager, lifecycle, SPFragment, MPFragment)
         quizPageBinding.selectQuizMode.addTab(quizPageBinding.selectQuizMode.newTab().setText("單人"))
         quizPageBinding.selectQuizMode.addTab(quizPageBinding.selectQuizMode.newTab().setText("多人"))

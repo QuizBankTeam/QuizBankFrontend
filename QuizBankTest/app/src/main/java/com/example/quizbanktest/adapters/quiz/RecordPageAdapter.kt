@@ -8,18 +8,28 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.fragment.MultiRecordPage
 import com.example.quizbanktest.fragment.SingleRecordPage
 
-class RecordPageAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+class RecordPageAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, SRPFragment: SingleRecordPage, MRPFragment: MultiRecordPage) :
     FragmentStateAdapter(fragmentManager, lifecycle){
+    private val SRPf = SRPFragment
+    private val MRPf = MRPFragment
+
     override fun getItemCount(): Int {
         return 2
     }
 
     override fun createFragment(position: Int): Fragment {
         return if(position==0) {
-            SingleRecordPage()
+            SRPf
         } else {
-            MultiRecordPage()
+            MRPf
         }
     }
 
+    fun getSRPFragment(): SingleRecordPage{
+        return SRPf
+    }
+
+    fun getMRPFragment(): MultiRecordPage{
+        return MRPf
+    }
 }

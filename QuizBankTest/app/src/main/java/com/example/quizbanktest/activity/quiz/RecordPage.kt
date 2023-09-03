@@ -8,12 +8,16 @@ import androidx.core.os.BuildCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.quizbanktest.adapters.quiz.RecordPageAdapter
 import com.example.quizbanktest.databinding.ActivityRecordPageBinding
+import com.example.quizbanktest.fragment.MultiRecordPage
+import com.example.quizbanktest.fragment.SingleRecordPage
 import com.google.android.material.tabs.TabLayout
 
 
 class RecordPage: AppCompatActivity() {
     private lateinit var recordBinding: ActivityRecordPageBinding
     private lateinit var fragmentAdapter: RecordPageAdapter
+    private lateinit var SRPFragment: SingleRecordPage
+    private lateinit var MRPFragment: MultiRecordPage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +28,9 @@ class RecordPage: AppCompatActivity() {
             finish()
         }
 
-        fragmentAdapter = RecordPageAdapter(supportFragmentManager, lifecycle)
+        SRPFragment = SingleRecordPage()
+        MRPFragment = MultiRecordPage()
+        fragmentAdapter = RecordPageAdapter(supportFragmentManager, lifecycle, SRPFragment, MRPFragment)
         recordBinding.selectRecordMode.addTab( recordBinding.selectRecordMode.newTab().setText("單人") )
         recordBinding.selectRecordMode.addTab( recordBinding.selectRecordMode.newTab().setText("多人") )
 

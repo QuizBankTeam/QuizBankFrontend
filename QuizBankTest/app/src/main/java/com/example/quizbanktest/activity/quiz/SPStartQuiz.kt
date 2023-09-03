@@ -32,6 +32,7 @@ import com.example.quizbanktest.models.Option
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.QuizRecord
+import com.example.quizbanktest.utils.Constants
 
 class SPStartQuiz: AppCompatActivity() {
     private lateinit var startQuizBinding: ActivitySpStartQuizBinding
@@ -142,12 +143,9 @@ class SPStartQuiz: AppCompatActivity() {
 
         val imageArr = ArrayList<Bitmap>()
         for(item in SingleQuizPage.Companion.quizListImages[quizIndex][currentAtQuestion]){
-            val tmpImageStr: String? = item.get()
-            if(tmpImageStr!=null) {
-                val imageBytes: ByteArray = Base64.decode(tmpImageStr, Base64.DEFAULT)
-                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                imageArr.add(decodeImage)
-            }
+            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            imageArr.add(decodeImage)
         }
         if(imageArr.isNotEmpty())
             startQuizBinding.QuestionImage.setImageBitmap(imageArr[0])
@@ -306,8 +304,8 @@ class SPStartQuiz: AppCompatActivity() {
         val intent = Intent()
         val endDate = LocalDateTime.now()
         val duringTime = java.time.Duration.between(startDate, endDate).toMinutes().toInt()*60
-        val startDateStr = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"))
-        val endDateStr = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"))
+        val startDateTimeStr = startDate.format(Constants.dateTimeFormat)
+        val endDateTimeStr = endDate.format(Constants.dateTimeFormat)
 
         for(i in currentAtQuestion until questionlist.size){
             val tmpAnsOptions = ArrayList<String>()
@@ -319,8 +317,8 @@ class SPStartQuiz: AppCompatActivity() {
         intent.putStringArrayListExtra("Key_userAnsDescription", userAnsDescription)
         intent.putExtra("Key_id", quizId)
         intent.putExtra("Key_title", quizTitle)
-        intent.putExtra("Key_startDate", startDateStr)
-        intent.putExtra("Key_endDate", endDateStr)
+        intent.putExtra("Key_startDateTime", startDateTimeStr)
+        intent.putExtra("Key_endDateTime", endDateTimeStr)
         intent.putExtra("Key_type", quizType)
         intent.putExtra("Key_duringTime", duringTime)
         intent.putParcelableArrayListExtra("Key_questions", questionlist)

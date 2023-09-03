@@ -17,7 +17,7 @@ object ConstantsQuiz {
     private val onFailureStr = "network not available"
     private var quizList = ArrayList<Quiz>()
 
-    fun getAllQuizsWithBatch(context: Context, quizType: String, batch: Int, onSuccess: (ArrayList<Quiz>) -> Unit, onFailure: (String) -> Unit) {
+    fun getAllQuizsWithBatch(context: Context, quizType: String, batch: Int, onSuccess: (ArrayList<Quiz>?) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -34,10 +34,43 @@ object ConstantsQuiz {
                             response.body().charStream(),
                             quizService.AllQuizsResponse::class.java
                         )
-                        quizList = allQuizResponse.quiz
-                        onSuccess(allQuizResponse.quiz)
+
+                        onSuccess(allQuizResponse.quizList)
                     }
                     else{
+                        onFailure("Request failed with status code ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(t: Throwable?) {
+                    onFailure("Request failed with message ${t?.message.toString()}")
+                }
+
+            })
+        }else{
+            onFailure(onFailureStr)
+        }
+    }
+
+    fun getSingleQuiz(context: Context, quizId: String, onSuccess: (Quiz) -> Unit, onFailure: (String) -> Unit){
+        if (Constants.isNetworkAvailable(context)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(quizService::class.java)
+            val call = api.getSingleQuiz(Constants.COOKIE, Constants.csrfToken, Constants.accessToken, Constants.refreshToken, Constants.session, quizId)
+
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+                        val gson = Gson()
+                        val quizResponse = gson.fromJson(
+                            response.body().charStream(),
+                            quizService.GetQuizResponse::class.java
+                        )
+                        onSuccess(quizResponse.quiz)
+                    } else {
                         onFailure("Request failed with status code ${response.code()}")
                     }
                 }

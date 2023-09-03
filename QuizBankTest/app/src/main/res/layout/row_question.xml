@@ -24,7 +24,8 @@
                     android:id="@+id/question_image"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/society9802" />
+                    android:src="@drawable/notepad_and_pen_svgrepo_com"
+                    android:background="@color/white"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
