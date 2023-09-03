@@ -131,7 +131,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     private fun setupBankModel() {
-        val bankID = ArrayList<String>()
+        val bankId = ArrayList<String>()
         val bankTitle = ArrayList<String>()
         val bankType = ArrayList<String>()
         val bankCreatedDate = ArrayList<String>()
@@ -142,7 +142,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankActivity", "ConstantsQuestionBankFunction.questionBankList")
 
         for (item in ConstantsQuestionBankFunction.questionBankList) {
-            bankID.add(item._id)
+            bankId.add(item._id)
             bankTitle.add(item.title)
             bankType.add(item.questionBankType)
             bankCreatedDate.add(item.createdDate)
@@ -152,7 +152,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         }
         for (i in bankTitle.indices) {
             val questionBankModel = QuestionBankModel(
-                bankID[i], bankTitle[i], bankType[i],
+                bankId[i], bankTitle[i], bankType[i],
                 bankCreatedDate[i], bankMembers[i], bankSource[i], bankCreators[i]
             )
             Log.e("creators of banks", bankCreators[i])
