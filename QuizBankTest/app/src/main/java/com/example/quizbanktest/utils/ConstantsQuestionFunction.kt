@@ -125,7 +125,7 @@ object ConstantsQuestionFunction {
 //                        Log.d("All questions response", allQuestionsReturnResponse.toString())
                         questionList = allQuestionsResponse.questionBank.questions
 //                        Log.e("Question Response Result", questionList.toString())
-                        onSuccess(allQuestionsResponse.questionBank.questions)
+                        onSuccess(questionList)
                     } else {
                         val sc = response.code()
                         when (sc) {

@@ -20,9 +20,8 @@
             android:background="@color/colorRipple"
             android:gravity="center"
             android:text="Bank Title"
-            android:textStyle="bold"
             android:textSize="25sp"
-            />
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/btn_back_arrow"
@@ -49,11 +48,11 @@
             android:id="@+id/questionRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
             tools:context=".activity.BankActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
-
 
 </RelativeLayout>

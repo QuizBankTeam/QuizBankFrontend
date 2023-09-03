@@ -115,6 +115,8 @@
             android:id="@+id/bankRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="10dp"
             tools:context=".activity.BankActivity">
 
         </androidx.recyclerview.widget.RecyclerView>
