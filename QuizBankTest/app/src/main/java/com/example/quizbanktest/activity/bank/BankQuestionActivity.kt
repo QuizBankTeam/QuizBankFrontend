@@ -31,13 +31,14 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var backArrowBtn: ImageButton
     private lateinit var questionRecyclerView: RecyclerView
     private lateinit var questionAdapter: QuestionRecyclerViewAdapter
+
     // Question variable
     private var questionModels = ArrayList<QuestionModel>()
+
     // Variable
     private lateinit var bankTitle: String
     private lateinit var bankId: String
     private var toast: Toast? = null
-    private var isDataExisted : Boolean = false
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +51,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         showProgressDialog("取得資料中")
         init()
         hideProgressDialog()
-        setupQuestionModel()
 
 
         pullExit()
@@ -61,27 +61,25 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     private fun setupQuestionModel() {
-        Log.e("BankQuestionActivity", "isDataExisted: $isDataExisted")
-        if (isDataExisted) {
-            Log.e("BankQuestionActivity", "set up question model")
-            questionRecyclerView = findViewById(R.id.questionRecyclerView)
-            questionAdapter = QuestionRecyclerViewAdapter(this, questionModels, this)
+        Log.e("BankQuestionActivity", "set up question model")
+        questionRecyclerView = findViewById(R.id.questionRecyclerView)
+        questionAdapter = QuestionRecyclerViewAdapter(this, questionModels, this)
 
-            questionRecyclerView.adapter = questionAdapter
-            questionRecyclerView.addItemDecoration(
-                DividerItemDecoration(
-                    this,
-                    DividerItemDecoration.VERTICAL
-                )
+        questionRecyclerView.adapter = questionAdapter
+        questionRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
             )
-            questionRecyclerView.layoutManager = LinearLayoutManager(this)
+        )
+        questionRecyclerView.layoutManager = LinearLayoutManager(this)
 //        hideProgressDialog()
 
-            val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(questionRecyclerView) {
-                override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
-                    var buttons = listOf<UnderlayButton>()
-                    val deleteButton = deleteButton(position)
-                    buttons = listOf(deleteButton)
+        val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(questionRecyclerView) {
+            override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
+                var buttons = listOf<UnderlayButton>()
+                val deleteButton = deleteButton(position)
+                buttons = listOf(deleteButton)
 //                val markAsUnreadButton = markAsUnreadButton(position)
 //                val archiveButton = archiveButton(position)
 //                when (position) {
@@ -90,12 +88,11 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 //                    3 -> buttons = listOf(deleteButton, markAsUnreadButton, archiveButton)
 //                    else -> Unit
 //                }
-                    return buttons
-                }
-            })
+                return buttons
+            }
+        })
 
-            itemTouchHelper.attachToRecyclerView(questionRecyclerView)
-        }
+        itemTouchHelper.attachToRecyclerView(questionRecyclerView)
     }
 
     private fun toast(text: String) {
@@ -104,7 +101,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         toast?.show()
     }
 
-    private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
+    private fun deleteButton(position: Int): SwipeHelper.UnderlayButton {
         return SwipeHelper.UnderlayButton(
             this,
             "Delete",
@@ -151,25 +148,34 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         ConstantsQuestionFunction.getQuestion(this, bankId,
             onSuccess = { questionList ->
                 Log.e("BankQuestionActivity", "get questionList success!!!")
-//                Log.e("BankQuestionActivity", "$questionList")
-                for (item in ConstantsQuestionFunction.questionList) {
+                Log.e("BankQuestionActivity", "$questionList")
+                for (item in questionList) {
                     val questionModel = QuestionModel(
-                        item._id, item.title, item.number,
-                        item.description, item.options, item.questionType, item.bankType,
-                        item.questionBank, item.answerOptions, item.answerDescription, item.originateFrom,
-                        item.createdDate, item.image, item.tag
+                        item._id,
+                        item.title,
+                        item.number,
+                        item.description,
+                        item.options,
+                        item.questionType,
+                        item.bankType,
+                        item.questionBank,
+                        item.answerOptions,
+                        item.answerDescription,
+                        item.originateFrom,
+                        item.createdDate,
+                        item.image,
+                        item.tag
                     )
                     questionModels.add(questionModel)
                 }
                 Log.e("BankQuestionActivity", "question model finish")
-                isDataExisted = true
+                setupQuestionModel()
             },
             onFailure = { errorMessage ->
                 showErrorSnackBar("網路連線狀況不好")
 //                hideProgressDialog()
             }
         )
-        isDataExisted = true
     }
 
     override fun onItemClick(position: Int) {

@@ -50,13 +50,16 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var etBankSource: EditText
     private lateinit var bankRecyclerView: RecyclerView
     private lateinit var bankAdapter: BankRecyclerViewAdapter
+    private lateinit var btnGroup: ImageButton
+    private lateinit var btnAddBank: ImageButton
+
     // Bank variable
     private var questionBankModels = ArrayList<QuestionBankModel>()
+
     // Variable
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
     private var toast: Toast? = null
-
 
 
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
@@ -69,14 +72,12 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         init()
         setupBankModel()
 
-        val groupBtn: ImageButton = findViewById(R.id.bank_group)
-        groupBtn.setOnClickListener {
+        btnGroup.setOnClickListener {
             val intent = Intent(this, GroupListActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        val btnAddBank = findViewById<ImageButton>(R.id.bank_add)
         btnAddBank.setOnClickListener {
             val addBankDialog = Dialog(this)
             addBankDialog.setContentView(R.layout.dialog_add_bank)
@@ -111,7 +112,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         Log.d("addBankDialog", "add bank success")
                         addBankDialog.dismiss()
                         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
-                            onSuccess = { questionBanks ->
+                            onSuccess = { _ ->
                                 val intent = Intent(this@BankActivity, BankActivity::class.java)
                                 startActivity(intent)
                                 hideProgressDialog()
@@ -126,6 +127,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
                         Log.e("addBankDialog", "add bank failed")
                         addBankDialog.dismiss()
+                        hideProgressDialog()
                     }
                 )
             }
@@ -167,7 +169,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         toast?.show()
     }
 
-    private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
+    private fun deleteButton(position: Int): SwipeHelper.UnderlayButton {
         return SwipeHelper.UnderlayButton(
             this,
             "Delete",
@@ -256,30 +258,16 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     fun init() {
-        val bankId = ArrayList<String>()
-        val bankTitle = ArrayList<String>()
-        val bankType = ArrayList<String>()
-        val bankCreatedDate = ArrayList<String>()
-        val bankMembers = ArrayList<ArrayList<String>>()
-        val bankSource = ArrayList<String>()
-        val bankCreators = ArrayList<String>()
-
         for (item in ConstantsQuestionBankFunction.questionBankList) {
-            bankId.add(item._id)
-            bankTitle.add(item.title)
-            bankType.add(item.questionBankType)
-            bankCreatedDate.add(item.createdDate)
-            bankMembers.add(item.members)
-            bankSource.add(item.originateFrom)
-            bankCreators.add(item.creator)
-        }
-        for (i in bankTitle.indices) {
             val questionBankModel = QuestionBankModel(
-                bankId[i], bankTitle[i], bankType[i],
-                bankCreatedDate[i], bankMembers[i], bankSource[i], bankCreators[i]
+                item._id, item.title, item.questionBankType,
+                item.createdDate, item.members, item.originateFrom, item.creator
             )
             questionBankModels.add(questionBankModel)
         }
+
+        btnGroup = findViewById(R.id.bank_group)
+        btnAddBank = findViewById(R.id.bank_add)
     }
 
     override fun onItemClick(position: Int) {

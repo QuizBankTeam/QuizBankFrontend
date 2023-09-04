@@ -13,10 +13,13 @@ import com.example.quizbanktest.network.QuestionService
 import com.google.gson.Gson
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.ResponseBody
+import okio.Buffer
+import okio.BufferedSource
 import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
+import java.nio.charset.Charset
 
 object ConstantsQuestionFunction {
     var allQuestionsReturnResponse : bankInnerQuestion?= null
@@ -110,11 +113,11 @@ object ConstantsQuestionFunction {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
 //                        // TODO
-//                        val source: BufferedSource = response.body().source()
-//                        source.request(Long.MAX_VALUE) // Buffer the entire body.
-//
-//                        val buffer: Buffer = source.buffer()
-//                        val UTF8: Charset = Charset.forName("UTF-8")
+                        val source: BufferedSource = response.body().source()
+                        source.request(Long.MAX_VALUE) // Buffer the entire body.
+
+                        val buffer: Buffer = source.buffer()
+                        val UTF8: Charset = Charset.forName("UTF-8")
 //                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
                         val gson = Gson()
                         val allQuestionsResponse = gson.fromJson(
@@ -124,7 +127,7 @@ object ConstantsQuestionFunction {
                         allQuestionsReturnResponse = allQuestionsResponse
 //                        Log.d("All questions response", allQuestionsReturnResponse.toString())
                         questionList = allQuestionsResponse.questionBank.questions
-//                        Log.e("Question Response Result", questionList.toString())
+//                        Log.e("ConstantsQuestionFunction: Question Response Result:", questionList.toString())
                         onSuccess(questionList)
                     } else {
                         val sc = response.code()
