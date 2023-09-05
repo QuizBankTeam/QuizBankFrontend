@@ -64,7 +64,7 @@ interface quizRecordService {
     data class PostQuizRecord(val title: String, val quizId: String, val type: String,
                                   val totalScore: Int, val duringTime: Int, val startDateTime: String, val endDateTime: String,
                                   val members: ArrayList<String>, val questionRecords: ArrayList<QuestionRecordInPostQuizRecord>)
-    data class AllQuizRecordsResponse(val message: String, val quizRecords: ArrayList<QuizRecord>, val status: String)
+    data class AllQuizRecordsResponse(val message: String, val quizRecordList: ArrayList<QuizRecord>, val status: String)
     data class GetQuizRecordResponse(val message: String, val quizRecord: QuizRecordWithQuestionRecords, val status: String)
 
     data class PostQuizRecordResponse(val message: String, val status: String)

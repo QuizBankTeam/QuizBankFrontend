@@ -53,24 +53,26 @@ class MultiQuizPage : Fragment() {
         val base64Image1 = bitmapToString(imageBitmap1)
 
         ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
-            QuizList = quizList
-            for(quiz in quizList){
-                val imageArr2 = ArrayList< ArrayList<String> >()
-                for(question in quiz.questions!!){
-                    val imageArr1 = ArrayList<String>()
-                    for(image in question.questionImage!!){
-                        imageArr1.add(image)
+            if(quizList!=null) {
+                QuizList = quizList
+                for (quiz in quizList) {
+                    val imageArr2 = ArrayList<ArrayList<String>>()
+                    for (question in quiz.questions!!) {
+                        val imageArr1 = ArrayList<String>()
+                        for (image in question.questionImage!!) {
+                            imageArr1.add(image)
+                        }
+                        imageArr2.add(imageArr1)
                     }
-                    imageArr2.add(imageArr1)
+                    SingleQuizPage.Companion.quizListImages.add(imageArr2)
                 }
-                SingleQuizPage.Companion.quizListImages.add(imageArr2)
-            }
 
-            quizBinding.QuizList.layoutManager = LinearLayoutWrapper(requireContext())
-            quizBinding.QuizList.setHasFixedSize(true)
-            quizListAdapter = MPQuizAdapter(requireActivity(), QuizList)
-            quizBinding.QuizList.adapter = quizListAdapter
-            quizBinding.QuizList.isClickable = true
+                quizBinding.QuizList.layoutManager = LinearLayoutWrapper(requireContext())
+                quizBinding.QuizList.setHasFixedSize(true)
+                quizListAdapter = MPQuizAdapter(requireActivity(), QuizList)
+                quizBinding.QuizList.adapter = quizListAdapter
+                quizBinding.QuizList.isClickable = true
+            }
         }, onFailure = {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             initWithoutNetwork()
