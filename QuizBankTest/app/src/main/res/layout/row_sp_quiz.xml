@@ -56,11 +56,13 @@
                         android:id="@+id/QuizTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:text="考試名稱"
                         android:textSize="20dp"
                         android:textColor="@color/black"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:gravity="center_vertical"
-                        android:layout_marginTop="2dp"
                         android:paddingStart="3dp"/>
                 </LinearLayout>
 
@@ -80,8 +82,9 @@
                     android:layout_weight="1"
                     android:text="考試時長: 10分鐘"
                     android:textSize="15dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:gravity="center_vertical"
-
                     android:paddingStart="2dp" />
 
             </LinearLayout>

@@ -23,16 +23,10 @@ import com.example.quizbanktest.models.Quiz
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuiz
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SingleQuizPage.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class SingleQuizPage : Fragment() {
     companion object {
         var quizListImages =  ArrayList< ArrayList< ArrayList<String> > >()
@@ -63,6 +57,7 @@ class SingleQuizPage : Fragment() {
         ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
             if(quizList!=null) {
                 QuizList = quizList
+
                 for (quiz in quizList) {
                     val imageArr2 = ArrayList<ArrayList<String>>()
                     for (question in quiz.questions!!) {
@@ -81,7 +76,9 @@ class SingleQuizPage : Fragment() {
                 quizBinding.QuizList.adapter = quizListAdapter
                 quizBinding.QuizList.isClickable = true
             }
-
+            else{
+                Log.d("quiz list size is", QuizList.size.toString())
+            }
         }, onFailure = {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             initWithoutNetwork()
@@ -95,7 +92,6 @@ class SingleQuizPage : Fragment() {
 //        for(index in 0 until QuizList.size){
 //            quizListAdapter.notifyItemChanged(index)
 //        }
-        quizListAdapter.notifyDataSetChanged()
         val imageArr2 = ArrayList< ArrayList<String> >()
         for(question in quiz.questions!!){
             val imageArr1 = ArrayList<String>()
@@ -105,7 +101,7 @@ class SingleQuizPage : Fragment() {
             imageArr2.add(imageArr1)
         }
         SingleQuizPage.Companion.quizListImages.add(0, imageArr2)
-
+        quizListAdapter.notifyDataSetChanged()
     }
     fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
         QuizList[position].title = title

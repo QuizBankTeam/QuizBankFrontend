@@ -8,7 +8,7 @@ data class QuizRecord(
     val title: String,
     val quizId: String,
     val type: String, //casual, single
-    val totalScore:Int,
+    var totalScore:Int,
     val duringTime: Int?,
     val startDateTime: String,
     val endDateTime: String,

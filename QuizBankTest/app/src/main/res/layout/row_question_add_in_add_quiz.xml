@@ -111,10 +111,14 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text=""/>
-                    <CheckBox
-                        android:id="@+id/checkBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                    <ImageButton
+                        android:id="@+id/delete_btn"
+                        android:layout_width="25dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="3dp"
+                        android:background="?actionBarItemBackground"
+                        android:layout_gravity="end"
+                        android:src="@drawable/baseline_trash_bin" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

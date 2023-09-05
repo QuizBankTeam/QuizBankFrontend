@@ -124,6 +124,7 @@ object ConstantsQuizRecord {
                 questionRecord.correct!!, questionRecord.date, tmpQuestionInPostQuizRecord)
                 QRInPostQuizRecordList.add(tmpQRInPostQuizRecord)
             }
+            quizRecord.totalScore = if(quizRecord.totalScore==0) -1 else quizRecord.totalScore
             val postQuizRecordModel = quizRecordService.PostQuizRecord(quizRecord.title, quizRecord.quizId, quizRecord.type, quizRecord.totalScore, quizRecord.duringTime!!, quizRecord.startDateTime, quizRecord.endDateTime, quizRecord.members, QRInPostQuizRecordList)
 
             val retrofit: Retrofit = Retrofit.Builder()

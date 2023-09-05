@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.quiz.SingleQuestion
+import com.example.quizbanktest.activity.quiz.SingleQuiz
 import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.utils.Constants
@@ -23,13 +25,10 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
     RecyclerView.Adapter<QuestionAdapter.MyViewHolder>()
 {
     private lateinit var quizType: String
-    private var quizIndex: Int = 0
     fun setQuizType(type: String){
         quizType=type
     }
-    fun setQuizIndex(index: Int){
-        quizIndex = index
-    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.row_question, parent, false)
         return MyViewHolder(itemView)
@@ -50,11 +49,15 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
                                 else context.getString(R.string.Filling_CN)
         holder.questionDescription.text = currentItem.description
 
-        for(item in SingleQuizPage.Companion.quizListImages[quizIndex][position]){
-            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
-            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            holder.questionImage.setImageBitmap(decodeImage)
-            break
+        if(position<SingleQuiz.Companion.quizImages.size) {
+            for (item in SingleQuiz.Companion.quizImages[position]) {
+                val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                holder.questionImage.setImageBitmap(decodeImage)
+                break
+            }
+        }else{
+            Toast.makeText(context, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
         }
         if(currentItem.tag!=null) {
             if(currentItem.tag!!.size==0) {
@@ -100,7 +103,6 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
             intent.putStringArrayListExtra("Key_answerOptions", currentItem.answerOptions)
             intent.putStringArrayListExtra("Key_options", currentItem.options)
             intent.putExtra("question_index", position)
-            intent.putExtra("quiz_index", quizIndex)
 
             if(quizType=="casual"){
                 intent.putExtra("Key_timeLimit", casualDuringTime[position])
