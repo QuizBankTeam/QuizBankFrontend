@@ -18,6 +18,11 @@
         <item name="android:textSize">25sp</item>
     </style>
 
+    <style name="MySpinnerAlertDialogStyle" parent="Base.V7.ThemeOverlay.AppCompat.Dialog">
+        <item name="android:background">#000000</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

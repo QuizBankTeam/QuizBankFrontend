@@ -2,7 +2,6 @@ package com.example.quizbanktest.adapters.scan
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -21,12 +20,10 @@ import com.example.introducemyself.utils.ConstantsOcrResults.rescanPosition
 import com.example.introducemyself.utils.ConstantsTag
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
-
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.*
 import java.io.ByteArrayOutputStream
-import java.lang.Boolean
 
 
 class OcrResultViewAdapter(
@@ -61,8 +58,13 @@ class OcrResultViewAdapter(
 
         //題目的標題
         val title : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_title)
+        var isSingleChoice = false
         //題目的題號
         val questionNum : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_num)
+        val questionTypeSpinner : Spinner = holder.itemView.findViewById(R.id.spinner_question_type)
+        var mAdapter = QuestionTypeAdapter(activity, ConstantsOcrResults.questionTypeSpinner)
+        questionTypeSpinner.setAdapter(mAdapter)
+        questionTypeSpinner.setSelection(0, false)
 
         if (holder is MyViewHolder) {
             //一題最多只能有十個選項
@@ -76,28 +78,40 @@ class OcrResultViewAdapter(
             val option8 : EditText = holder.itemView.findViewById(R.id.question_option8)
             val option9 : EditText = holder.itemView.findViewById(R.id.question_option9)
             val option10 : EditText = holder.itemView.findViewById(R.id.question_option10)
-//            val option1_text  = optionList?.second?.get(1)
-//            val option2_text = optionList?.second?.get(2)
-//            val option3_text = optionList?.second?.get(3)
-//            val option4_text = optionList?.second?.get(4)
-//
-//
-//            if(option1_text!=null ){
-//                option1.setText(option1_text)
-//            }
-//            if(option2_text!=null ){
-//                option2.setText(option2_text)
-//            }
-//            if(option3_text!=null ){
-//                option3.setText(option3_text)
-//            }
-//            if(option4_text!=null ){
-//                option4.setText(option4_text)
-//            }
-//
-//
-//
+            val optionList : LinearLayout = holder.itemView.findViewById(R.id.options_list)
+            questionTypeSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    when(position){
+                        0 -> {
+                            optionList.visibility = View.GONE
+                            isSingleChoice = false
+                        }
+                        1 -> {
+                            optionList.visibility = View.VISIBLE
+                            isSingleChoice = true
+                        }
+                        2 -> {
+                            optionList.visibility = View.GONE
+                            isSingleChoice = false
+                        }
+                        3 -> {
+                            optionList.visibility = View.VISIBLE
+                            isSingleChoice = false
+                        }
+                        4 -> {
+                            optionList.visibility = View.GONE
+                            isSingleChoice = false
+                        }
+                    }
+                }
 
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            })
             //答案描述預設要有因此使用者沒填用預設
             ConstantsOcrResults.getOcrResult()[position].answerDescription = "目前為空"
             holder.itemView.setOnClickListener {
@@ -110,7 +124,7 @@ class OcrResultViewAdapter(
             scannerText.setText(ConstantsOcrResults.getOcrResult()[position].description,TextView.BufferType.EDITABLE)
 
 
-            val reScanBtn : TextView = holder.itemView.findViewById(R.id.btn_rescan)
+            val reScanBtn : ImageButton = holder.itemView.findViewById(R.id.btn_rescan)
             reScanBtn.setOnClickListener {
                 val builder =AlertDialog.Builder(activity,R.style.CustomAlertDialogStyle)
                     .setMessage(" 您確定要重新掃描嗎 ")
@@ -118,10 +132,20 @@ class OcrResultViewAdapter(
                     .setIcon(R.drawable.baseline_warning_amber_24)
                 builder.setPositiveButton("確認") { dialog, which ->
                     rescanPosition = position
-                    activity.choosePhotoToOcr(1, onSuccess = { it1 ->
-                        notifyDataSetChanged()
-                    }, onFailure = { it1 ->
-                    })
+                    val pictureDialog = AlertDialog.Builder(context)
+                    pictureDialog.setTitle("Select Action")
+                    val pictureDialogItems =
+                        arrayOf("拍照","從相簿選擇")
+                    pictureDialog.setItems(
+                        pictureDialogItems
+                    ) { dialog, which ->
+                        when (which) {
+                            // Here we have create the methods for image selection from GALLERY
+                            0 -> activity.takePhotoToOcr( 1,onSuccess = { it1 -> notifyDataSetChanged() }, onFailure = { it1 -> })
+                            1 -> activity.choosePhotoToOcr(1, onSuccess = { it1 ->notifyDataSetChanged()  }, onFailure = { it1 -> })
+                        }
+                    }
+                    pictureDialog.show()
                 }
 
                 builder.setNegativeButton("取消") { dialog, which ->
@@ -130,6 +154,93 @@ class OcrResultViewAdapter(
             }
             //選擇標籤
             val chooseTagButton = holder.itemView.findViewById<FrameLayout>(R.id.chooseTag)
+            val tagPickBtn = holder.itemView.findViewById<ImageButton>(R.id.tag_press)
+            tagPickBtn.setOnClickListener {
+                //用dialog去跳出標籤選單
+                val tagDialog = Dialog(context)
+                tagDialog.setContentView(R.layout.dialog_choose_tag)
+                //初始化所有的tag展示區域
+
+                //這邊之後要放使用者常用的tags
+                val list1 = ConstantsTag.getList1()
+
+                var mTagContainerLayout1 = tagDialog.findViewById<TagContainerLayout>(R.id.tagcontainerLayout1)
+                var mChooseTagContainerLayout1 = tagDialog.findViewById<TagContainerLayout>(R.id.chooseContainerLayout1)
+                mTagContainerLayout1!!.setTags(list1)
+                mChooseTagContainerLayout1.tags=tagQuestionList
+                tagDialog.setTitle("選擇標籤")
+                tagDialog.show()
+
+                //給定對應的初始化物件
+
+                mTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
+                    override fun onTagClick(tag_position: Int, text: String) {
+//                        tagBankList.add(text)
+                        tagQuestionList.add(text)
+                        //當使用者選擇某個tag擇要顯示
+//                        mChooseTagContainerLayout1.tags=tagBankList
+                        mChooseTagContainerLayout1.tags=tagQuestionList
+                        ConstantsOcrResults.getOcrResult()[position].tag?.add(text) //將此tag記錄到等等要放進資料庫的題目的標籤列
+                    }
+
+                    override fun onTagLongClick(position: Int, text: String) {
+                        val dialog = android.app.AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
+                            .setTitle("long click")
+                            .setMessage("You will delete this tag!")
+                            .setPositiveButton("Delete") { dialog, which ->
+                                if (position < mTagContainerLayout1.getChildCount()) {
+                                    mTagContainerLayout1.removeTag(position)
+                                }
+                            }
+                            .setNegativeButton(
+                                "Cancel"
+                            ) { dialog, which -> dialog.dismiss() }
+                            .create()
+                        dialog.show()
+                    }
+
+                    override fun onSelectedTagDrag(position: Int, text: String) {}
+                    override fun onTagCrossClick(position: Int) {
+                        //移除目前的tag
+                        mTagContainerLayout1.removeTag(position);
+
+                    }
+                })
+
+                mChooseTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
+                    override fun onTagClick(tag_position: Int, text: String) {
+                    }
+                    override fun onTagLongClick(position: Int, text: String) {
+                    }
+                    override fun onSelectedTagDrag(position: Int, text: String) {}
+                    override fun onTagCrossClick(tag_position: Int) {
+                        tagQuestionList.remove(mChooseTagContainerLayout1.getTagText(tag_position))
+                        ConstantsOcrResults.getOcrResult()[position].tag?.remove(mChooseTagContainerLayout1.getTagText(tag_position))
+                        mChooseTagContainerLayout1.removeTag(tag_position)
+                    }
+                })
+                val text = tagDialog.findViewById<View>(R.id.text_tag) as EditText
+                val btnAddTag = tagDialog.findViewById<View>(R.id.btn_add_tag) as TextView
+                btnAddTag.setOnClickListener {
+                    //新增置常用的標籤列
+                    mTagContainerLayout1.addTag(text.text.toString())
+                }
+                val enterButton : TextView = tagDialog.findViewById(R.id.enter_tag)
+                val cancelButton : TextView = tagDialog.findViewById(R.id.cancel_tag)
+
+                //按下確認新增結束tag
+                enterButton.setOnClickListener {
+
+                    holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion).tags=tagQuestionList
+                    tagDialog.dismiss()
+                    Toast.makeText(context,"successful upload tag",Toast.LENGTH_SHORT).show()
+                }
+
+                cancelButton.setOnClickListener {
+                    ConstantsOcrResults.getOcrResult()[position].tag?.clear()
+                    tagDialog.dismiss()
+                }
+            }
             chooseTagButton.setOnLongClickListener{
                 //用dialog去跳出標籤選單
                 val tagDialog = Dialog(context)
@@ -218,6 +329,41 @@ class OcrResultViewAdapter(
                 }
                 true
             }
+            val checkBox1 = holder.itemView.findViewById<CheckBox>(R.id.answer_option1_check)
+            val checkBox2 = holder.itemView.findViewById<CheckBox>(R.id.answer_option2_check)
+            val checkBox3 = holder.itemView.findViewById<CheckBox>(R.id.answer_option3_check)
+            val checkBox4= holder.itemView.findViewById<CheckBox>(R.id.answer_option4_check)
+            val checkBox5 = holder.itemView.findViewById<CheckBox>(R.id.answer_option5_check)
+            val checkBox6 = holder.itemView.findViewById<CheckBox>(R.id.answer_option6_check)
+            val checkBox7 = holder.itemView.findViewById<CheckBox>(R.id.answer_option7_check)
+            val checkBox8 = holder.itemView.findViewById<CheckBox>(R.id.answer_option8_check)
+            val checkBox9= holder.itemView.findViewById<CheckBox>(R.id.answer_option9_check)
+            val checkBox10 = holder.itemView.findViewById<CheckBox>(R.id.answer_option10_check)
+            val listener =
+                CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                    if (isSingleChoice && isChecked) {
+                        if (buttonView !== checkBox1) checkBox1.isChecked = false
+                        if (buttonView !== checkBox2) checkBox2.isChecked = false
+                        if (buttonView !== checkBox3) checkBox3.isChecked = false
+                        if (buttonView !== checkBox4) checkBox4.isChecked = false
+                        if (buttonView !== checkBox5) checkBox5.isChecked = false
+                        if (buttonView !== checkBox6) checkBox6.isChecked = false
+                        if (buttonView !== checkBox7) checkBox7.isChecked = false
+                        if (buttonView !== checkBox8) checkBox8.isChecked = false
+                        if (buttonView !== checkBox9) checkBox9.isChecked = false
+                        if (buttonView !== checkBox10) checkBox10.isChecked = false
+                    }
+                }
+            checkBox1.setOnCheckedChangeListener(listener)
+            checkBox2.setOnCheckedChangeListener(listener)
+            checkBox3.setOnCheckedChangeListener(listener)
+            checkBox4.setOnCheckedChangeListener(listener)
+            checkBox5.setOnCheckedChangeListener(listener)
+            checkBox6.setOnCheckedChangeListener(listener)
+            checkBox7.setOnCheckedChangeListener(listener)
+            checkBox8.setOnCheckedChangeListener(listener)
+            checkBox9.setOnCheckedChangeListener(listener)
+            checkBox10.setOnCheckedChangeListener(listener)
 
             //question bank type
             val questionBankType : Spinner = holder.itemView.findViewById(R.id.spinner_question_bank)
@@ -263,7 +409,7 @@ class OcrResultViewAdapter(
             })
             //題庫列表的下拉式選單
             val bankTypeList : ArrayList<String> = ArrayList()
-            val hintType : String = "請選擇將題目新增至下列題庫"
+            val hintType : String = "請選擇題庫 *"
             bankTypeList.add(hintType)
             if(ConstantsQuestionBankFunction.allBanksReturnResponse!=null){
                 for(i in ConstantsQuestionBankFunction.allBanksReturnResponse!!.questionBanks) bankTypeList.add(i.title)
@@ -279,13 +425,12 @@ class OcrResultViewAdapter(
                 answerDialog.setContentView(R.layout.dialog_create_answer)
                 answerDialog.setTitle("新增答案")
 
-                //答案選項 ex a b c 用空個分開
-                val answerOption: EditText = answerDialog.findViewById(R.id.iv_answer_option_text)!! //答案選項
+
                 //答案描述
                 val answerDescription: EditText = answerDialog.findViewById(R.id.iv_answer_description_text)!! //答案描述
 
                 //答案描述的圖片
-                val answerChoosePhoto: TextView = answerDialog.findViewById(R.id.answer_choose_photo)!! //選擇圖片 iv_answer_image用於顯示圖片
+                val answerChoosePhoto: ImageButton = answerDialog.findViewById(R.id.answer_choose_photo)!! //選擇圖片 iv_answer_image用於顯示圖片
                 answerChoosePhoto.setOnClickListener(View.OnClickListener {
                     //TODO
                     //iv_answer_image
@@ -345,7 +490,7 @@ class OcrResultViewAdapter(
                         .setTitle("取消新增答案")
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.setPositiveButton("確認") { dialog, which ->
-                        btnAddAnswer.text = "新增答案   ⬆"
+                        btnAddAnswer.text = "答案描述 \uD83D\uDCA1"
                         answerDialog.dismiss()
                     }
                     builder.setNegativeButton("取消") { dialog, which ->
@@ -357,16 +502,9 @@ class OcrResultViewAdapter(
                 val answerEnter: TextView = answerDialog.findViewById(R.id.answer_enter)!!
                 answerEnter.setOnClickListener(View.OnClickListener {
                     //TODO 將結果記錄至常數字串
-                    btnAddAnswer.text = "查看答案   ✅"
+                    btnAddAnswer.text = "查看答案 ✅"
                     if(answerDescription.text.toString()!=""){
                         ConstantsOcrResults.questionList[position].answerDescription = answerDescription.text.toString()
-                    }
-                    if(answerOption.text.toString().isNotEmpty()){
-                        val str =  answerOption.text.toString()
-                        val answerOptionsList : ArrayList<String> = ArrayList(str.split(" "))
-                        ConstantsOcrResults.questionList[position].answerOptions = answerOptionsList
-                    }else{
-                        ConstantsOcrResults.questionList[position].answerOptions?.add("目前為空")
                     }
                     answerDialog.dismiss()
                 })
@@ -374,7 +512,7 @@ class OcrResultViewAdapter(
             }
 
             //新增目前題目描述的圖片
-            val btnScanPhoto : TextView  = holder.itemView.findViewById(R.id.btn_scan_photo)
+            val btnScanPhoto : ImageButton  = holder.itemView.findViewById(R.id.btn_scan_photo)
             btnScanPhoto.setOnClickListener {
 
                 val imageDialog = Dialog(context)
@@ -421,16 +559,24 @@ class OcrResultViewAdapter(
                 val createImageEnter : TextView = imageDialog.findViewById(R.id.answer_image_enter)
                 createImageEnter.setOnClickListener {
 
-                    btnScanPhoto.text = "已新增圖片   ✅"
+                    btnScanPhoto.setImageResource(R.drawable.afteraddimage)
                     //TODO 將結果紀錄至常數字串的position
                     imageDialog.dismiss()
                 }
                 imageDialog.show()
             }
-
+            var optionLayout2 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout2)
+            var optionLayout3 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout3)
+            var optionLayout4 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout4)
+            var optionLayout5 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout5)
+            var optionLayout6 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout6)
+            var optionLayout7 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout7)
+            var optionLayout8 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout8)
+            var optionLayout9 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout9)
+            var optionLayout10 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout10)
             //超過四個選項因此點及新增選項
-            val addOptionsButton : ImageButton = holder.itemView.findViewById(R.id.add_options_button)
-            val removeOptionsButton : ImageButton = holder.itemView.findViewById(R.id.minus_options_button)
+            val addOptionsButton : TextView = holder.itemView.findViewById(R.id.add_options_button)
+            val removeOptionsButton : TextView = holder.itemView.findViewById(R.id.minus_options_button)
             addOptionsButton.setOnClickListener{
                 if(optionsNum == 10){ //不能超過十個
                     Toast.makeText(context,"已達最多的選項限制了喔",Toast.LENGTH_SHORT).show()
@@ -441,30 +587,48 @@ class OcrResultViewAdapter(
                     2 -> {
                         removeOptionsButton.visibility = View.VISIBLE
                         option2.visibility = View.VISIBLE
+                        optionLayout2.visibility = View.VISIBLE
+                        checkBox2.visibility = View.VISIBLE
                     }
                     3 -> {
                         option3.visibility = View.VISIBLE
+                        optionLayout3.visibility = View.VISIBLE
+                        checkBox3.visibility = View.VISIBLE
                     }
                     4-> {
                         option4.visibility = View.VISIBLE
+                        optionLayout4.visibility = View.VISIBLE
+                        checkBox4.visibility = View.VISIBLE
                     }
                     5 -> {
                         option5.visibility = View.VISIBLE
+                        optionLayout5.visibility = View.VISIBLE
+                        checkBox5.visibility = View.VISIBLE
                     }
                     6 -> {
                         option6.visibility = View.VISIBLE
+                        optionLayout6.visibility = View.VISIBLE
+                        checkBox6.visibility = View.VISIBLE
                     }
                     7-> {
                         option7.visibility = View.VISIBLE
+                        optionLayout7.visibility = View.VISIBLE
+                        checkBox7.visibility = View.VISIBLE
                     }
                     8-> {
                         option8.visibility = View.VISIBLE
+                        optionLayout8.visibility = View.VISIBLE
+                        checkBox8.visibility = View.VISIBLE
                     }
                     9-> {
                         option9.visibility = View.VISIBLE
+                        optionLayout9.visibility = View.VISIBLE
+                        checkBox9.visibility = View.VISIBLE
                     }
                     10-> {
                         option10.visibility = View.VISIBLE
+                        optionLayout10.visibility = View.VISIBLE
+                        checkBox10.visibility = View.VISIBLE
                     }
                 }
 
@@ -479,31 +643,48 @@ class OcrResultViewAdapter(
                 when (optionsNum+1) {
                     2 -> {
                         option2.visibility = View.GONE
-                        removeOptionsButton.visibility = View.GONE
+                        optionLayout2.visibility = View.GONE
+                        checkBox2.visibility = View.GONE
                     }
                     3 -> {
                         option3.visibility = View.GONE
+                        checkBox3.visibility = View.GONE
+                        optionLayout3.visibility = View.GONE
                     }
                     4-> {
                         option4.visibility = View.GONE
+                        checkBox4.visibility = View.GONE
+                        optionLayout4.visibility = View.GONE
                     }
                     5-> {
                         option5.visibility = View.GONE
+                        checkBox5.visibility = View.GONE
+                        optionLayout5.visibility = View.GONE
                     }
                     6 -> {
                         option6.visibility = View.GONE
+                        checkBox6.visibility = View.GONE
+                        optionLayout6.visibility = View.GONE
                     }
                     7-> {
                         option7.visibility = View.GONE
+                        checkBox7.visibility = View.GONE
+                        optionLayout7.visibility = View.GONE
                     }
                     8-> {
                         option8.visibility = View.GONE
+                        checkBox8.visibility = View.GONE
+                        optionLayout8.visibility = View.GONE
                     }
                     9-> {
                         option9.visibility = View.GONE
+                        checkBox9.visibility = View.GONE
+                        optionLayout9.visibility = View.GONE
                     }
                     10-> {
                         option10.visibility = View.GONE
+                        checkBox10.visibility = View.GONE
+                        optionLayout10.visibility = View.GONE
                     }
                 }
 
@@ -639,9 +820,8 @@ class OcrResultViewAdapter(
 
 
         }
-
-
     }
+
     override fun getItemCount(): Int {
         return list.size
     }

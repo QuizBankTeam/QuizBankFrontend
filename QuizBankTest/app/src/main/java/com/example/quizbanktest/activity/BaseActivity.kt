@@ -116,11 +116,33 @@ open class BaseActivity : AppCompatActivity() {
         if(result.resultCode == RESULT_OK){
             val thumbnail: Bitmap? = BitmapFactory.decodeStream(getContentResolver().openInputStream(cameraPhotoUri!!))
             lifecycleScope.launch{
-                var returnString = saveBitmapFileForPicturesDir(thumbnail!!)
+                val savedPhotoUriString = saveBitmapFileForPicturesDir(thumbnail!!)
+                val savedPhotoUri = Uri.parse(savedPhotoUriString)
+
+                try {
+                    val selectedImageBitmap =
+                        BitmapFactory.decodeStream(getContentResolver().openInputStream(savedPhotoUri!!))
+                    if(selectedImageBitmap!=null){
+                        if (getUcropOptionsOrNot() == -1) {
+                            showCutImageDialog(savedPhotoUri)
+                        } else if (getUcropOptionsOrNot() == 1) {
+                            val destinationUri = Uri.fromFile(File(externalCacheDir?.absoluteFile.toString()+File.separator+"QuizBankUcrop_"+SAMPLE_CROPPED_IMG_NAME))//裁切後的uri之後會覆蓋掉所以不會重複耗費空間
+                            val uCrop = UCrop.of(savedPhotoUri, destinationUri)
+                            val uCropIntent = uCrop.getIntent(this@BaseActivity)
+                            uCropActivityResultLauncher.launch(uCropIntent)
+                        } else {
+                            onImageSelected?.invoke(thumbnail)
+                        }
+                    }
+                } catch (e: IOException) {
+                    onImageSelected?.invoke(null)
+                    e.printStackTrace()
+                    showErrorSnackBar("出現了一點錯誤需要再重拍一次")
+                }
             }
-            var base64String = ConstantsFunction.encodeImage(thumbnail!!)
-            showProgressDialog("目前正在處理OCR之結果")
-            autoOcrAndRotate(base64String!!,0,onSuccess1 = { it1 -> }, onFailure1 = { it1 -> })
+//            var base64String = ConstantsFunction.encodeImage(thumbnail!!)
+//            showProgressDialog("目前正在處理OCR之結果")
+//            autoOcrAndRotate(base64String!!,0,onSuccess1 = { it1 -> }, onFailure1 = { it1 -> })
         }else if(result.resultCode == RESULT_CANCELED){
 
         }
@@ -231,13 +253,12 @@ open class BaseActivity : AppCompatActivity() {
             when (which) {
                 0-> scanPhoto()
                 // Here we have create the methods for image selection from GALLERY
-                1 -> takePhotoFromCamera()
+                1 -> takePhotoToOcr( 0,onSuccess = { it1 ->  }, onFailure = { it1 -> })
                 2 -> choosePhotoToOcr(0, onSuccess = { it1 ->  }, onFailure = { it1 -> })
             }
         }
         pictureDialog.show()
     }
-
     fun scanPhoto(){
         Dexter.withActivity(this)
             .withPermissions(
@@ -261,7 +282,9 @@ open class BaseActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
-    fun takePhotoFromCamera() {
+
+    fun takeCameraPhoto(onImageSelected: (Bitmap?) -> Unit) {
+        this.onImageSelected = onImageSelected
         Dexter.withActivity(this)
             .withPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -289,6 +312,43 @@ open class BaseActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
+    fun  takePhotoToOcr(flag: Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
+        takeCameraPhoto {
+                bitmap ->
+
+            if (bitmap != null) {
+                lifecycleScope.launch{
+                    saveBitmapFileForPicturesDir(bitmap)
+                }
+                var base64String = ConstantsFunction.encodeImage(bitmap)
+                autoOcrAndRotate(base64String!!,flag,onSuccess1 = { it1 -> }, onFailure1 = { it1 -> })
+            }else{
+                onFailure("can't choose empty photo")
+                Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+//    fun  choosePhotoToOcr(flag : Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
+//        choosePhotoFromGallery {
+//                bitmap ->
+//            if (bitmap != null) {
+//                var base64String = ConstantsFunction.encodeImage(bitmap)
+//                autoOcrAndRotate(base64String!!,flag,
+//                    onSuccess1 = { it1 ->
+//                        onSuccess(it1)
+//                    }
+//                    ,onFailure1 = { it1 ->
+//
+//                        onFailure(it1)
+//                    }
+//                )
+//            }else{
+//                onFailure("can't choose empty photo")
+//                Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+
     fun showAlertFromWorkSpace(onConfirm : () -> Unit) {
         if (ConstantsOcrResults.questionList.isNotEmpty()) {
             val builder = AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)

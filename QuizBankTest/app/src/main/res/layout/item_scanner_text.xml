@@ -35,55 +35,45 @@
                     android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:padding="5dp">
+                    <Spinner
+                        android:id="@+id/spinner_question_type"
+                        android:layout_width="match_parent"
+                        android:entries="@array/question_type"
+                        android:drawSelectorOnTop="true"
+                        android:spinnerMode="dialog"
+                        android:background="@drawable/spinner_back"
+                        android:layout_height="40dp" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <EditText
-                            android:id="@+id/iv_ocr_question_title"
-                            android:layout_width="0dp"
-                            android:layout_weight="18"
-                            android:layout_height="50dp"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:hint="題目標題 "
-                            android:gravity="left"
-                            android:inputType="textMultiLine"
-                            android:scrollbars = "vertical"
-                            android:singleLine="false" />
-<!--                        <TextView-->
-<!--                            android:id="@+id/rescan_button"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_weight="2"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:clickable="true"-->
-<!--                            android:textColor="#363A43"-->
-<!--                            android:textSize="25sp"-->
-<!--                            android:layout_marginTop="2dp"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:foreground="?attr/selectableItemBackground"-->
-<!--                            android:text="📷"-->
-<!--                            />-->
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <EditText
+                                android:id="@+id/iv_ocr_question_title"
+                                android:layout_width="match_parent"
+                                android:layout_weight="18"
+                                android:layout_height="50dp"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:hint="題目標題 "
+                                android:gravity="left"
+                                android:inputType="textMultiLine"
+                                android:scrollbars = "vertical"
+                                android:singleLine="false" />
+
+                        </FrameLayout>
+
 
                     </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="3dp"
                         android:background="@color/black"
                         />
-                    <EditText
-                        android:id="@+id/iv_scanner_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:hint="OCR 結果"
-                        android:gravity="left"
-                        android:inputType="textMultiLine"
-                        android:scrollbars = "vertical"
-                        android:singleLine="false" />
                     <LinearLayout
                         android:id="@+id/question_type"
                         android:layout_width="match_parent"
@@ -107,17 +97,12 @@
                             android:inputType="textMultiLine"
                             android:scrollbars = "vertical"
                             android:singleLine="false" />
-                        <Spinner
-                            android:id="@+id/spinner_question_type"
-                            android:layout_width="0dp"
-                            android:entries="@array/question_type"
-                            android:layout_weight="2"
-                            android:layout_height="38dp" />
+
                         <Spinner
                             android:id="@+id/spinner_question_bank"
                             android:layout_width="0dp"
-                            android:layout_weight="2"
-                            android:layout_height="38dp" />
+                            android:layout_height="38dp"
+                            android:layout_weight="2" />
                     </LinearLayout>
                     <View
                         android:layout_width="match_parent"
@@ -126,6 +111,7 @@
                         android:layout_marginBottom="3dp"
                         android:background="@color/black"
                         />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -134,17 +120,40 @@
                         android:orientation="vertical">
 
 
-
-
-                        <TextView
-                            android:layout_marginTop="5dp"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="#363A43"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:text="題目標籤"
-                            />
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_width="0dp"
+                                android:layout_weight="5"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="10dp"
+                                android:textColor="#363A43"
+                                android:textSize="16sp"
+                                android:text="題目標籤"
+                                />
+                            <ImageButton
+                                android:id="@+id/tag_press"
+                                android:layout_width="0dp"
+                                android:layout_weight="2"
+                                android:layout_height="25dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginBottom="3dp"
+                                android:layout_marginLeft="20dp"
+                                android:src="@drawable/label"
+                                android:foreground="?actionBarItemBackground"
+                                android:background="@drawable/shape_add_option"
+                                android:scaleType="fitXY"
+
+                                />
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="9"/>
+                        </LinearLayout>
+
                         <HorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -175,177 +184,474 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/black"
                             />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/iv_scanner_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:hint="OCR 結果"
+                            android:focusableInTouchMode="true"
+                            android:gravity="left"
+                            android:inputType="textMultiLine"
+                            android:scrollbars="vertical"
+                            android:singleLine="false" />
+
+                        <ImageButton
+                            android:id="@+id/btn_rescan"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginRight="40dp"
+                            android:src="@drawable/photocamera"
+                            android:foreground="?actionBarItemBackground"
+                            android:background="?actionBarItemBackground"
+                            android:scaleType="fitXY" />
+                        <ImageButton
+                            android:id="@+id/btn_scan_photo"
+                            android:layout_width="25dp"
+                            android:layout_height="27dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginRight="6dp"
+                            android:src="@drawable/addimage"
+                            android:foreground="?actionBarItemBackground"
+                            android:background="?actionBarItemBackground"
+                            android:scaleType="fitXY" />
+
+                    </FrameLayout>
+
+
+                    <TextView
+                        android:id="@+id/btn_add_answer"
+                        android:layout_width="80dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="left"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/shape_add_option"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:onClick="onClick"
+                        android:text="答案描述 💡"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/black"
+                        />
+
 
                         <LinearLayout
                             android:id="@+id/options_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
-                            android:layout_marginEnd="2dp"
+                            android:visibility="visible"
                             android:layout_marginTop="3dp"
+                            android:layout_marginEnd="2dp"
                             android:clickable="true"
                             android:focusable="true"
-                            android:orientation="horizontal"
-                            >
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/MyOptions"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="9dp"
+                                android:layout_weight="25"
+                                android:orientation="vertical">
 
                                 <LinearLayout
-                                    android:id="@+id/MyOptions"
-                                    android:layout_width="fill_parent"
+                                    android:id="@+id/optionLayout1"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="25"
-                                    android:layout_marginBottom="9dp"
-                                    android:orientation="vertical"
-                                    >
-                                    <EditText
-                                        android:id="@+id/question_option1"
-                                        android:layout_width="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(1)"
                                         android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 1 (單選跟多選必填)"
-                                        android:gravity="left"
-                                        android:inputType="textMultiLine"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
-                                    <EditText
-                                        android:id="@+id/question_option2"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="50dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 2 (單選跟多選必填)"
-                                        android:gravity="left"
-                                        android:visibility="gone"
-                                        android:inputType="textMultiLine"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
+                                        android:textStyle="bold" />
 
                                     <EditText
-                                        android:id="@+id/question_option3"
-                                        android:layout_width="match_parent"
+                                        android:id="@+id/question_option1"
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
+                                        android:layout_weight="7"
                                         android:gravity="left"
-                                        android:hint="題目選項 3 (單選跟多選必填)"
+                                        android:hint="請輸入選項描述"
                                         android:inputType="textMultiLine"
                                         android:scrollbars="vertical"
                                         android:singleLine="false"
-                                        android:visibility="gone"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option1_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(2)"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <EditText
+                                        android:id="@+id/question_option2"
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="7"
+                                        android:gravity="left"
+                                        android:hint="請輸入選項描述"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option2_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(3)"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <EditText
+                                        android:id="@+id/question_option3"
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="7"
+                                        android:gravity="left"
+                                        android:hint="請輸入選項描述"
+                                        android:inputType="textMultiLine"
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option3_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(4)"
                                         android:textSize="14sp"
                                         android:textStyle="bold" />
 
                                     <EditText
                                         android:id="@+id/question_option4"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 4 (單選跟多選必填)"
+                                        android:layout_weight="7"
                                         android:gravity="left"
+                                        android:hint="請輸入選項描述"
                                         android:inputType="textMultiLine"
-                                        android:visibility="gone"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option4_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(5)"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
                                     <EditText
                                         android:id="@+id/question_option5"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 5 (單選跟多選必填)"
+                                        android:layout_weight="7"
                                         android:gravity="left"
-                                        android:visibility="gone"
+                                        android:hint="請輸入選項描述"
                                         android:inputType="textMultiLine"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option5_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(6)"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
                                     <EditText
                                         android:id="@+id/question_option6"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 6 (單選跟多選必填)"
-                                        android:visibility="gone"
+                                        android:layout_weight="7"
                                         android:gravity="left"
+                                        android:hint="請輸入選項描述"
                                         android:inputType="textMultiLine"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option6_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(7)"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
                                     <EditText
                                         android:id="@+id/question_option7"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 7 (單選跟多選必填)"
+                                        android:layout_weight="7"
                                         android:gravity="left"
-                                        android:visibility="gone"
+                                        android:hint="請輸入選項描述"
                                         android:inputType="textMultiLine"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option7_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout8"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(8)"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
                                     <EditText
                                         android:id="@+id/question_option8"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 8 (單選跟多選必填)"
+                                        android:layout_weight="7"
                                         android:gravity="left"
-                                        android:visibility="gone"
+                                        android:hint="請輸入選項描述"
                                         android:inputType="textMultiLine"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option8_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(9)"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
                                     <EditText
                                         android:id="@+id/question_option9"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 9 (單選跟多選必填)"
-                                        android:visibility="gone"
+                                        android:layout_weight="7"
                                         android:gravity="left"
+                                        android:hint="請輸入選項描述"
                                         android:inputType="textMultiLine"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option9_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/optionLayout10"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="50dp"
+                                        android:layout_weight="1"
+                                        android:text="(10)"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
                                     <EditText
                                         android:id="@+id/question_option10"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="0dp"
                                         android:layout_height="50dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:hint="題目選項 10 (單選跟多選必填)"
-                                        android:visibility="gone"
+                                        android:layout_weight="7"
                                         android:gravity="left"
+                                        android:hint="請輸入選項描述"
                                         android:inputType="textMultiLine"
-                                        android:scrollbars = "vertical"
-                                        android:singleLine="false" />
+                                        android:scrollbars="vertical"
+                                        android:singleLine="false"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <CheckBox
+                                        android:id="@+id/answer_option10_check"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
                                 </LinearLayout>
+                            </LinearLayout>
 
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                >
-                                <ImageButton
+                                android:orientation="horizontal">
+
+                                <TextView
                                     android:id="@+id/add_options_button"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
+                                    android:layout_width="85dp"
+                                    android:layout_height="38dp"
                                     android:layout_weight="1"
-                                    android:layout_marginStart="10dp"
-                                    android:src="@drawable/baseline_add_circle_24"
-                                    android:background="@color/white"
-                                    android:scaleType="fitXY"
-                                    />
-                                <ImageButton
+                                    android:textStyle="bold"
+                                    android:textSize="12sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:onClick="onClick"
+                                    android:clickable="true"
+                                    android:foreground="?attr/selectableItemBackground"
+                                    android:background="@drawable/shape_add_option"
+                                    android:text="新增選項" />
+
+                                <TextView
                                     android:id="@+id/minus_options_button"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
+                                    android:layout_width="85dp"
+                                    android:layout_height="38dp"
                                     android:layout_weight="1"
-                                    android:layout_marginStart="10dp"
-                                    android:visibility="gone"
-                                    android:src="@drawable/round_remove_circle_24"
-                                    android:background="@color/white"
-                                    android:scaleType="fitXY"
-                                    />
+                                    android:textStyle="bold"
+                                    android:textSize="12sp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="20dp"
+                                    android:gravity="center"
+                                    android:onClick="onClick"
+                                    android:visibility="visible"
+                                    android:clickable="true"
+                                    android:foreground="?attr/selectableItemBackground"
+                                    android:background="@drawable/shape_add_option"
+                                    android:text="刪除選項" />
+
+
+
 
                             </LinearLayout>
 
@@ -358,39 +664,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
                             android:layout_marginEnd="2dp"
-                            android:layout_marginTop="3dp"
+                            android:layout_marginTop="12dp"
                             android:clickable="true"
                             android:focusable="true"
                             android:orientation="horizontal"
                             >
-                            <TextView
-                                android:id="@+id/btn_add_answer"
-                                android:layout_width="0dp"
-                                android:layout_height="38dp"
-                                android:layout_weight="1"
-                                android:textStyle="bold"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:onClick="onClick"
-                                android:clickable="true"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:background="@drawable/add_answer"
-                                android:text="新增答案   ⬆" />
 
-                            <TextView
-                                android:id="@+id/btn_scan_photo"
-                                android:layout_width="0dp"
-                                android:layout_height="38dp"
-                                android:layout_weight="1"
-                                android:textStyle="bold"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="5dp"
-                                android:gravity="center"
-                                android:onClick="onClick"
-                                android:clickable="true"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:background="@drawable/add_image"
-                                android:text="選擇圖片   📂" />
+
                         </LinearLayout>
 
                         <TextView
@@ -407,20 +687,7 @@
                             android:foreground="?attr/selectableItemBackground"
                             android:background="@drawable/shape_button_rounded"
                             android:text="確認送出   ✔" />
-                        <TextView
-                            android:id="@+id/btn_rescan"
-                            android:layout_width="match_parent"
-                            android:layout_height="38dp"
-                            android:textStyle="bold"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="5dp"
-                            android:gravity="center"
-                            android:onClick="onClick"
-                            android:textColor="@color/secondary_text_color"
-                            android:clickable="true"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:background="@drawable/rescan_border"
-                            android:text="重新掃描   📷" />
+
                         <TextView
                             android:id="@+id/btn_scan_cancel"
                             android:layout_width="match_parent"
@@ -430,11 +697,11 @@
                             android:layout_marginTop="5dp"
                             android:gravity="center"
                             android:onClick="onClick"
-                            android:textColor="@color/secondary_text_color"
+                            android:textColor="#7B7B7B"
                             android:clickable="true"
                             android:layout_marginBottom="3dp"
                             android:foreground="?attr/selectableItemBackground"
-                            android:background="@drawable/white_border_shape_button_rounded"
+                            android:background="@drawable/shape_add_option"
                             android:text="刪除ocr結果   ❌" />
 
                     </LinearLayout>

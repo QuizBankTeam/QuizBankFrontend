@@ -162,6 +162,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="#363A43"
                         android:textSize="18sp"
+                        android:visibility="gone"
                         android:layout_marginLeft="5dp"
                         android:textStyle="bold"
                         android:text="下列為待處理之掃描結果"
