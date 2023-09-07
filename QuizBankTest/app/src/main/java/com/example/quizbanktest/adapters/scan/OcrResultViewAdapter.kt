@@ -552,6 +552,13 @@ class OcrResultViewAdapter(
                         } else if (!isChecked) {
                             currentAnswerOptions.remove(optionText)
                         }
+                    }else{
+                        buttonView.isChecked = false
+                        val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
+                            .setMessage(" 選項內容不能為空喔 ")
+                            .setTitle("正確選項")
+                            .setIcon(R.drawable.baseline_warning_amber_24)
+                        builder.show()
                     }
 
                     ConstantsOcrResults.questionList[position].answerOptions = currentAnswerOptions
