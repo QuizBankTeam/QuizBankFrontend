@@ -171,16 +171,16 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         questionId = intent.getStringExtra("id").toString()
         questionTitle = intent.getStringExtra("title").toString()
         questionNumber = intent.getStringExtra("number").toString()
-//        val questionDescription = intent.getStringExtra("description").toString()
-        questionDescription =
-            "This is a test string for testing the scroll function of TextView is usable or not.\n" +
-                    "The tested function are scrollbars in xml file and movementMethod in kotlin file.\n" +
-                    "Here is a testing article below:\n" +
-                    "The Collateral Repair Podcast aims to share the stories of refugees living in Amman, Jordan.\n" +
-                    "On a monthly basis, CRP invites you into an intimate space that will allow you to hear and understand refugees’ experiences in their own words.\n" +
-                    "Each episode features an interview with a member of one of Jordan’s refugee communities,\n" +
-                    "a supporting interview with a professional or employee at CRP, a Q&A in response to listeners’ questions,\n" +
-                    "and a quick update of developments that month at CRP."
+        questionDescription = intent.getStringExtra("description").toString()
+//        questionDescription =
+//            "This is a test string for testing the scroll function of TextView is usable or not.\n" +
+//                    "The tested function are scrollbars in xml file and movementMethod in kotlin file.\n" +
+//                    "Here is a testing article below:\n" +
+//                    "The Collateral Repair Podcast aims to share the stories of refugees living in Amman, Jordan.\n" +
+//                    "On a monthly basis, CRP invites you into an intimate space that will allow you to hear and understand refugees’ experiences in their own words.\n" +
+//                    "Each episode features an interview with a member of one of Jordan’s refugee communities,\n" +
+//                    "a supporting interview with a professional or employee at CRP, a Q&A in response to listeners’ questions,\n" +
+//                    "and a quick update of developments that month at CRP."
         newDescription = questionDescription
         questionOptions = intent.getStringArrayListExtra("options")!!
         questionType = intent.getStringExtra("type").toString()

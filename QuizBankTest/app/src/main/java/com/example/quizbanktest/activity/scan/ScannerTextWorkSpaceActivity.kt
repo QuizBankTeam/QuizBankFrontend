@@ -1,15 +1,16 @@
 package com.example.quizbanktest.activity.scan
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
-
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introducemyself.utils.ConstantsOcrResults
+import com.example.introducemyself.utils.ConstantsOcrResults.questionTypeSpinner
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.MainActivity
@@ -22,10 +23,10 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_scanner_text_work_space)
-
+        initList()
         val intent = intent
         val optionsBundle = intent.getBundleExtra("options")
-        autoCutOptions()
+//        autoCutOptions()
         val first = optionsBundle?.getString("first")
         val second = optionsBundle?.getStringArrayList("second")
         val optionsPair: Pair<String, List<String>>? = if (first != null && second != null) {
@@ -88,7 +89,8 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
                 finish()
             }else{
                 val ocrList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.ocr_list)
-                ocrList.adapter?.notifyDataSetChanged()
+                val newPosition = ConstantsOcrResults.getOcrResult().size - 1
+                ocrList.adapter?.notifyItemInserted(newPosition)
             }
 
         }
@@ -116,7 +118,16 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
         doubleCheckExit()
 
     }
-
+    private fun initList() {
+        if(questionTypeSpinner.size>0){}
+        else{
+            questionTypeSpinner.add(QuestionTypeItem("填充題", R.drawable.crocodile))
+            questionTypeSpinner.add(QuestionTypeItem("單選題", R.drawable.fox))
+            questionTypeSpinner.add(QuestionTypeItem("簡答題", R.drawable.giraffe))
+            questionTypeSpinner.add(QuestionTypeItem("多選題", R.drawable.hedgehog))
+            questionTypeSpinner.add(QuestionTypeItem("是非題", R.drawable.lion))
+        }
+    }
     private fun setupOcrRecyclerView(ocrResultList: ArrayList<QuestionModel>, optionList :  Pair<String, List<String>>?) {
         val ocrList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.ocr_list)
         ocrList.layoutManager = LinearLayoutManager(this,

@@ -87,8 +87,8 @@ object ConstantsRealESRGAN {
                                 onFailure("Request failed with status code $sc")
                             }
                             else -> {
-                                Log.e("Error","esrgan error")
-                                onFailure("Request failed with status code $sc")
+                                Log.e("Error","$sc")
+                                onFailure(sc.toString())
                             }
 
                         }
