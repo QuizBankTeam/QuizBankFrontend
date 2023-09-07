@@ -89,7 +89,8 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
                 finish()
             }else{
                 val ocrList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.ocr_list)
-                ocrList.adapter?.notifyDataSetChanged()
+                val newPosition = ConstantsOcrResults.getOcrResult().size - 1
+                ocrList.adapter?.notifyItemInserted(newPosition)
             }
 
         }

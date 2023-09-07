@@ -80,6 +80,7 @@ class OcrResultViewAdapter(
             val option9 : EditText = holder.itemView.findViewById(R.id.question_option9)
             val option10 : EditText = holder.itemView.findViewById(R.id.question_option10)
             val optionList : LinearLayout = holder.itemView.findViewById(R.id.options_list)
+            val checkBoxTint : TextView = holder.itemView.findViewById(R.id.checkbox_tint)
             val trueFalseLayout : LinearLayout = holder.itemView.findViewById(R.id.true_false)
             questionTypeSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -92,29 +93,34 @@ class OcrResultViewAdapter(
                         0 -> {
                             optionList.visibility = View.GONE
                             trueFalseLayout.visibility=View.GONE
+                            checkBoxTint.visibility = View.GONE
                             isSingleChoice = false
                             isTrueFalse = false
                         }
                         1 -> {
                             trueFalseLayout.visibility=View.GONE
+                            checkBoxTint.visibility = View.VISIBLE
                             optionList.visibility = View.VISIBLE
                             isSingleChoice = true
                             isTrueFalse = false
                         }
                         2 -> {
                             trueFalseLayout.visibility=View.GONE
+                            checkBoxTint.visibility = View.GONE
                             optionList.visibility = View.GONE
                             isSingleChoice = false
                             isTrueFalse = false
                         }
                         3 -> {
                             trueFalseLayout.visibility=View.GONE
+                            checkBoxTint.visibility = View.VISIBLE
                             optionList.visibility = View.VISIBLE
                             isSingleChoice = false
                             isTrueFalse = false
                         }
                         4 -> {
                             trueFalseLayout.visibility=View.VISIBLE
+                            checkBoxTint.visibility = View.VISIBLE
                             optionList.visibility = View.GONE
                             isSingleChoice = false
                             isTrueFalse = true
@@ -363,44 +369,58 @@ class OcrResultViewAdapter(
             val checkBox8 = holder.itemView.findViewById<CheckBox>(R.id.answer_option8_check)
             val checkBox9= holder.itemView.findViewById<CheckBox>(R.id.answer_option9_check)
             val checkBox10 = holder.itemView.findViewById<CheckBox>(R.id.answer_option10_check)
-
             val checkBoxForTrue = holder.itemView.findViewById<CheckBox>(R.id.true_false_true_check)
             val checkBoxForFalse = holder.itemView.findViewById<CheckBox>(R.id.true_false_false_check)
-            val listener =
-                CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-                    if (isSingleChoice && isChecked) {
-                        if (buttonView !== checkBox1) checkBox1.isChecked = false
-                        if (buttonView !== checkBox2) checkBox2.isChecked = false
-                        if (buttonView !== checkBox3) checkBox3.isChecked = false
-                        if (buttonView !== checkBox4) checkBox4.isChecked = false
-                        if (buttonView !== checkBox5) checkBox5.isChecked = false
-                        if (buttonView !== checkBox6) checkBox6.isChecked = false
-                        if (buttonView !== checkBox7) checkBox7.isChecked = false
-                        if (buttonView !== checkBox8) checkBox8.isChecked = false
-                        if (buttonView !== checkBox9) checkBox9.isChecked = false
-                        if (buttonView !== checkBox10) checkBox10.isChecked = false
-                    }
-                }
+            val options = listOf(
+                option1, option2, option3, option4, option5,
+                option6, option7, option8, option9, option10
+            )
+            val checkBoxes = listOf(
+                checkBox1, checkBox2, checkBox3, checkBox4, checkBox5,
+                checkBox6, checkBox7, checkBox8, checkBox9, checkBox10
+            )
+            val checkBoxesForTureFalse = listOf(
+                checkBoxForTrue,
+                checkBoxForFalse
+            )
             val listenerForTrueFalse =
                 CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                    ConstantsOcrResults.questionList[position].answerOptions?.clear()
                     if (isTrueFalse && isChecked) {
                         if (buttonView !== checkBoxForTrue) checkBoxForTrue.isChecked = false
                         if (buttonView !== checkBoxForFalse) checkBoxForFalse.isChecked = false
+                        if(buttonView == checkBoxForTrue && checkBoxForTrue.isChecked) ConstantsOcrResults.questionList[position].answerOptions?.add("true")
+                        if(buttonView == checkBoxForFalse && checkBoxForFalse.isChecked) ConstantsOcrResults.questionList[position].answerOptions?.add("false")
                     }
                 }
-            checkBoxForTrue.setOnCheckedChangeListener(listenerForTrueFalse)
-            checkBoxForFalse.setOnCheckedChangeListener(listenerForTrueFalse)
-            checkBox1.setOnCheckedChangeListener(listener)
-            checkBox2.setOnCheckedChangeListener(listener)
-            checkBox3.setOnCheckedChangeListener(listener)
-            checkBox4.setOnCheckedChangeListener(listener)
-            checkBox5.setOnCheckedChangeListener(listener)
-            checkBox6.setOnCheckedChangeListener(listener)
-            checkBox7.setOnCheckedChangeListener(listener)
-            checkBox8.setOnCheckedChangeListener(listener)
-            checkBox9.setOnCheckedChangeListener(listener)
-            checkBox10.setOnCheckedChangeListener(listener)
+            val listener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                val index = checkBoxes.indexOf(buttonView)
 
+                if (index != -1) {
+                    val optionText = options[index].text.toString().trim()
+
+                    if (isSingleChoice && isChecked) {
+                        checkBoxes.forEachIndexed { i, checkBox ->
+                            if (i != index) checkBox.isChecked = false
+                        }
+                        ConstantsOcrResults.questionList[position].answerOptions?.clear()
+                    }
+
+                    val currentAnswerOptions = ConstantsOcrResults.questionList[position].answerOptions ?: ArrayList()
+
+                    if (optionText.isNotEmpty()) {
+                        if (isChecked && !currentAnswerOptions.contains(optionText)) {
+                            currentAnswerOptions.add(optionText)
+                        } else if (!isChecked) {
+                            currentAnswerOptions.remove(optionText)
+                        }
+                    }
+
+                    ConstantsOcrResults.questionList[position].answerOptions = currentAnswerOptions
+                }
+            }
+            checkBoxesForTureFalse.forEach { it.setOnCheckedChangeListener(listenerForTrueFalse) }
+            checkBoxes.forEach { it.setOnCheckedChangeListener(listener) }
             //question bank type
             val questionBankType : Spinner = holder.itemView.findViewById(R.id.spinner_question_bank)
             val handler = Handler(Looper.getMainLooper())
