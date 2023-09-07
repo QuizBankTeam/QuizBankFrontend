@@ -13,9 +13,11 @@ object ConstantsDialogFunction {
         activity.choosePhotoFromGallery { bitmap ->
             if (bitmap != null) {
                 onPhotoSelected(bitmap)
+                activity.hideProgressDialog()
             } else {
                 onPhotoSelected(null)
                 Toast.makeText(activity, "You didn't choose any photo", Toast.LENGTH_SHORT).show()
+                activity.hideProgressDialog()
             }
             activity.hideProgressDialog()
         }

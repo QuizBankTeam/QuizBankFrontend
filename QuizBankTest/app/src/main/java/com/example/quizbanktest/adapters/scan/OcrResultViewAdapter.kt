@@ -59,6 +59,7 @@ class OcrResultViewAdapter(
         //題目的標題
         val title : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_title)
         var isSingleChoice = false
+        var isTrueFalse = false
         //題目的題號
         val questionNum : EditText = holder.itemView.findViewById(R.id.iv_ocr_question_num)
         val questionTypeSpinner : Spinner = holder.itemView.findViewById(R.id.spinner_question_type)
@@ -79,6 +80,7 @@ class OcrResultViewAdapter(
             val option9 : EditText = holder.itemView.findViewById(R.id.question_option9)
             val option10 : EditText = holder.itemView.findViewById(R.id.question_option10)
             val optionList : LinearLayout = holder.itemView.findViewById(R.id.options_list)
+            val trueFalseLayout : LinearLayout = holder.itemView.findViewById(R.id.true_false)
             questionTypeSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>,
@@ -89,23 +91,33 @@ class OcrResultViewAdapter(
                     when(position){
                         0 -> {
                             optionList.visibility = View.GONE
+                            trueFalseLayout.visibility=View.GONE
                             isSingleChoice = false
+                            isTrueFalse = false
                         }
                         1 -> {
+                            trueFalseLayout.visibility=View.GONE
                             optionList.visibility = View.VISIBLE
                             isSingleChoice = true
+                            isTrueFalse = false
                         }
                         2 -> {
+                            trueFalseLayout.visibility=View.GONE
                             optionList.visibility = View.GONE
                             isSingleChoice = false
+                            isTrueFalse = false
                         }
                         3 -> {
+                            trueFalseLayout.visibility=View.GONE
                             optionList.visibility = View.VISIBLE
                             isSingleChoice = false
+                            isTrueFalse = false
                         }
                         4 -> {
+                            trueFalseLayout.visibility=View.VISIBLE
                             optionList.visibility = View.GONE
                             isSingleChoice = false
+                            isTrueFalse = true
                         }
                     }
                 }
@@ -123,6 +135,18 @@ class OcrResultViewAdapter(
             val scannerText : EditText = holder.itemView.findViewById(R.id.iv_scanner_text)
             scannerText.setText(ConstantsOcrResults.getOcrResult()[position].description,TextView.BufferType.EDITABLE)
 
+            scannerText.setOnTouchListener { view, event ->
+                val editText = view as EditText
+                val canScrollVertically = editText.canScrollVertically(1) || editText.canScrollVertically(-1)
+
+                if (canScrollVertically) {
+                    view.parent.requestDisallowInterceptTouchEvent(true)
+                    if ((event.action and MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
+                        view.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                return@setOnTouchListener false
+            }
 
             val reScanBtn : ImageButton = holder.itemView.findViewById(R.id.btn_rescan)
             reScanBtn.setOnClickListener {
@@ -339,6 +363,9 @@ class OcrResultViewAdapter(
             val checkBox8 = holder.itemView.findViewById<CheckBox>(R.id.answer_option8_check)
             val checkBox9= holder.itemView.findViewById<CheckBox>(R.id.answer_option9_check)
             val checkBox10 = holder.itemView.findViewById<CheckBox>(R.id.answer_option10_check)
+
+            val checkBoxForTrue = holder.itemView.findViewById<CheckBox>(R.id.true_false_true_check)
+            val checkBoxForFalse = holder.itemView.findViewById<CheckBox>(R.id.true_false_false_check)
             val listener =
                 CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                     if (isSingleChoice && isChecked) {
@@ -354,6 +381,15 @@ class OcrResultViewAdapter(
                         if (buttonView !== checkBox10) checkBox10.isChecked = false
                     }
                 }
+            val listenerForTrueFalse =
+                CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                    if (isTrueFalse && isChecked) {
+                        if (buttonView !== checkBoxForTrue) checkBoxForTrue.isChecked = false
+                        if (buttonView !== checkBoxForFalse) checkBoxForFalse.isChecked = false
+                    }
+                }
+            checkBoxForTrue.setOnCheckedChangeListener(listenerForTrueFalse)
+            checkBoxForFalse.setOnCheckedChangeListener(listenerForTrueFalse)
             checkBox1.setOnCheckedChangeListener(listener)
             checkBox2.setOnCheckedChangeListener(listener)
             checkBox3.setOnCheckedChangeListener(listener)
@@ -553,6 +589,7 @@ class OcrResultViewAdapter(
                         imageDialog.dismiss()
                     }
                     builder.setNegativeButton("取消") { dialog, which ->
+                        imageDialog.dismiss()
                     }
                     builder.show()
                 })

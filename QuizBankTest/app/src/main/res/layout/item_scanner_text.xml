@@ -198,6 +198,8 @@
                             android:focusableInTouchMode="true"
                             android:gravity="left"
                             android:inputType="textMultiLine"
+                            android:overScrollMode="always"
+                            android:scrollbarStyle="insideInset"
                             android:scrollbars="vertical"
                             android:singleLine="false" />
 
@@ -251,7 +253,86 @@
                         android:background="@color/black"
                         />
 
+                        <LinearLayout
+                            android:id="@+id/true_false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:visibility="gone"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginEnd="2dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="vertical">
 
+                            <LinearLayout
+                                android:id="@+id/true_false_true"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp"
+                                    android:layout_weight="1"
+                                    android:text="⭕"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/true_false_true1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="30dp"
+                                    android:layout_weight="7"
+                                    android:gravity="left"
+                                    android:text="True"
+                                    android:inputType="textMultiLine"
+                                    android:scrollbars="vertical"
+                                    android:singleLine="false"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <CheckBox
+                                    android:id="@+id/true_false_true_check"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/true_false_false"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp"
+                                    android:layout_weight="1"
+                                    android:text="❌"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/true_false_false1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="30dp"
+                                    android:layout_weight="7"
+                                    android:gravity="left"
+                                    android:hint="False"
+                                    android:inputType="textMultiLine"
+                                    android:scrollbars="vertical"
+                                    android:singleLine="false"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <CheckBox
+                                    android:id="@+id/true_false_false_check"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+
+                        </LinearLayout>
                         <LinearLayout
                             android:id="@+id/options_list"
                             android:layout_width="match_parent"
@@ -271,7 +352,6 @@
                                 android:layout_marginBottom="9dp"
                                 android:layout_weight="25"
                                 android:orientation="vertical">
-
                                 <LinearLayout
                                     android:id="@+id/optionLayout1"
                                     android:layout_width="match_parent"
