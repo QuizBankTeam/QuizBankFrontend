@@ -175,10 +175,10 @@ class OcrResultViewAdapter(
                 override fun onItemSelected(
                     parent: AdapterView<*>,
                     view: View,
-                    position: Int,
+                    position_spinner: Int,
                     id: Long
                 ) {
-                    when(position){
+                    when(position_spinner){
                         0 -> {
                             optionList.visibility = View.GONE
                             trueFalseLayout.visibility=View.GONE
@@ -188,7 +188,7 @@ class OcrResultViewAdapter(
                             checkBoxesForTureFalse.forEach { it.isChecked = false }
                             checkBoxes.forEach { it.isChecked = false}
                             options.forEach { it.setText("") }
-                            ConstantsOcrResults.questionList[position].questionType =ConstantsOcrResults.questionTypeList[0]
+                            ConstantsOcrResults.questionList[position].questionType ="Filling"
                         }
                         1 -> {
                             trueFalseLayout.visibility=View.GONE
@@ -217,7 +217,7 @@ class OcrResultViewAdapter(
                             optionNums.forEach {
                                 it.visibility = View.GONE
                             }
-                            ConstantsOcrResults.questionList[position].questionType =ConstantsOcrResults.questionTypeList[1]
+                            ConstantsOcrResults.questionList[position].questionType ="MultipleChoiceS"
                         }
                         2 -> {
                             trueFalseLayout.visibility=View.GONE
@@ -228,7 +228,7 @@ class OcrResultViewAdapter(
                             checkBoxesForTureFalse.forEach { it.isChecked = false }
                             checkBoxes.forEach { it.isChecked = false}
                             options.forEach { it.setText("") }
-                            ConstantsOcrResults.questionList[position].questionType =ConstantsOcrResults.questionTypeList[2]
+                            ConstantsOcrResults.questionList[position].questionType ="ShortAnswer"
                         }
                         3 -> {
                             trueFalseLayout.visibility=View.GONE
@@ -258,7 +258,7 @@ class OcrResultViewAdapter(
                             optionNums.forEach {
                                 it.visibility = View.GONE
                             }
-                            ConstantsOcrResults.questionList[position].questionType =ConstantsOcrResults.questionTypeList[3]
+                            ConstantsOcrResults.questionList[position].questionType ="MultipleChoiceM"
                         }
                         4 -> {
                             trueFalseLayout.visibility=View.VISIBLE
@@ -269,7 +269,7 @@ class OcrResultViewAdapter(
                             checkBoxesForTureFalse.forEach { it.isChecked = false }
                             checkBoxes.forEach { it.isChecked = false}
                             options.forEach { it.setText("") }
-                            ConstantsOcrResults.questionList[position].questionType =ConstantsOcrResults.questionTypeList[4]
+                            ConstantsOcrResults.questionList[position].questionType ="TrueOrFalse"
                         }
                     }
                 }
