@@ -1,36 +1,47 @@
 package com.example.quizbanktest.adapters.quiz
 import android.app.Activity
-import android.content.Intent
-import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.example.quizbanktest.R
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quizbanktest.activity.quiz.SingleQuiz
-import com.example.quizbanktest.models.Quiz
 import java.time.LocalDateTime
+import com.example.quizbanktest.R
+import com.example.quizbanktest.models.Quiz
+import com.example.quizbanktest.utils.Constants
 
-
-class MPQuizAdapter(private val context: Activity, private val questionList: ArrayList<Quiz>):
-    RecyclerView.Adapter<MPQuizAdapter.MyViewHolder>()
+class QuestionAddQuizAdapter(private val context: Activity, private val quizList: ArrayList<Quiz>, private val quizType: String):
+    RecyclerView.Adapter<QuestionAddQuizAdapter.MyViewHolder>()
 {
-    private var onClickListener: OnClickListener? = null
+    private var onClickListener: SelectOnClickListener? = null
+    fun setOnClickListener(onClickListener: SelectOnClickListener) {
+        this.onClickListener = onClickListener
+    }
+    interface SelectOnClickListener {
+        fun onclick(position: Int, holder: MyViewHolder)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.row_mp_quiz, parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
-        return questionList.size
+        return quizList.size
     }
 
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = questionList[position]
+        val currentItem = quizList[position]
         val datetime = LocalDateTime.now()
+        if(quizType==Constants.quizTypeSingle){
+            currentItem.members?.let {
+                holder.quizMembers.text = ""
+            }
+        }else if(quizType==Constants.quizTypeCasual){
+            currentItem.members?.let {
+                holder.quizMembers.text = context.getString(R.string.members_CN) + ": ${it.size}人"
+            }
+        }
         if(currentItem.startDateTime!=null) {
             val yearDiff = datetime.year - currentItem.startDateTime!!.substring(0, 4).toInt()
             val monthDiff = datetime.toString().substring(5, 7).toInt() - currentItem.startDateTime!!.substring(5, 7).toInt()
@@ -40,7 +51,6 @@ class MPQuizAdapter(private val context: Activity, private val questionList: Arr
                     holder.quizStartDate.text = yearDiff.toString() + "年前"
                 else
                     holder.quizStartDate.text = yearDiff.toString() + "年後"
-
             }else if(monthDiff!=0){
                 if(monthDiff>0)
                     holder.quizStartDate.text = monthDiff.toString() + "個月前"
@@ -54,53 +64,27 @@ class MPQuizAdapter(private val context: Activity, private val questionList: Arr
             }else{
                 holder.quizStartDate.text = "今天"
             }
-        }else{
-            holder.quizStartDate.text = ""
         }
-        holder.quizNum.text = currentItem.questions?.size.toString() + "題"
+        holder.questionNum.text = currentItem.questions?.size.toString() + "題"
         holder.quizStatus.text = currentItem.status
         holder.quizTitle.text = currentItem.title
-        if(currentItem.members != null) {
-            holder.quizMembers.text = "成員: " + currentItem.members!!.size.toString()
-        }else{
-            holder.quizMembers.text = "成員: 0"
-        }
         holder.quizDuringTime.text = "考試時長: " + (currentItem.duringTime?.div(60)).toString() + "分鐘"
 
         holder.itemView.setOnClickListener {
-            val intent = Intent()
-            intent.setClass(context, SingleQuiz::class.java)
-            intent.putExtra("Key_id", currentItem._id)
-            intent.putExtra("Key_title", currentItem.title)
-            intent.putExtra("Key_type", currentItem.type)
-            intent.putExtra("Key_status", currentItem.status)
-            intent.putExtra("Key_duringTime", currentItem.duringTime)
-            intent.putExtra("Key_startDateTime", currentItem.startDateTime)
-            intent.putExtra("Key_endDateTime", currentItem.endDateTime)
-            intent.putExtra("Key_members", currentItem.members)
-            intent.putParcelableArrayListExtra("Key_questions", currentItem.questions)
-            intent.putIntegerArrayListExtra("Key_casualDuringTime", currentItem.casualDuringTime)
-            context.startActivityForResult(intent, position)
+            if (this.onClickListener != null) {
+                onClickListener!!.onclick(position, holder)
+            }
         }
     }
 
-    // A function to bind the onclickListener.
-    fun setOnClickListener(onClickListener: OnClickListener) {
-        this.onClickListener = onClickListener
-    }
-
-    // onClickListener Interface
-    interface OnClickListener {
-        fun onClick(position: Int, model: Quiz)
-    }
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {
-        val quizNum: TextView = itemView.findViewById(R.id.QuestionNum)
+        val questionNum: TextView = itemView.findViewById(R.id.QuestionNum)
         val quizStatus: TextView = itemView.findViewById(R.id.QuizStatus)
         val quizStartDate: TextView = itemView.findViewById(R.id.QuizStartDate)
         val quizTitle: TextView = itemView.findViewById(R.id.QuizTitle)
-        val quizMembers: TextView = itemView.findViewById(R.id.QuizMembers)
         val quizDuringTime: TextView = itemView.findViewById(R.id.Quiz_duringTime)
+        val quizMembers: TextView = itemView.findViewById(R.id.QuizMembers)
     }
 
 }

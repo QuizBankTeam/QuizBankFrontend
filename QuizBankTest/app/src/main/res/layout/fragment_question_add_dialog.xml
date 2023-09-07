@@ -13,29 +13,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingVertical="10dp">
+        android:paddingVertical="7dp">
 
         <android.widget.Button
             android:id="@+id/cancel_btn"
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:gravity="left"
+            android:gravity="left|center_vertical"
             android:layout_margin="0dp"
-            android:paddingTop="12dp"
             android:paddingStart="10dp"
             android:text="❌"
             android:textSize="18sp"
             android:background="?actionBarItemBackground"
-            android:stateListAnimator="@null"/>
-        <TextView
-            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="新增題目"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="新增題目"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+            <TextView
+                android:id="@+id/resource_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-6dp"
+                android:layout_marginBottom="-5dp"
+                android:visibility="gone"
+                android:text="新增"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="	#7B7B7B"/>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/confirm_addition"
             android:layout_width="wrap_content"

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
 import android.util.TypedValue
@@ -17,7 +18,6 @@ import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.*
@@ -52,7 +52,6 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var optionAdapter: OptionAdapter
     private var selectedView =  ArrayList<View>()
     private var imageArr = ArrayList<Bitmap>()
-    private var quizIndex = 0
     private var questionIndex = 0
     private val openPhotoAlbum:Int = 1314
     private var resolver: ContentResolver? = null
@@ -213,9 +212,7 @@ class SingleQuestion : AppCompatActivity(){
         val answerOption = intent.getStringArrayListExtra("Key_answerOptions")
         val answerDescription = intent.getStringExtra("Key_answerDescription")
         val quizType = intent.getStringExtra("Key_quizType")
-        val quizIndex = intent.getIntExtra("quiz_index", 0)
         val questionIndex = intent.getIntExtra("question_index", 0)
-        this.quizIndex = quizIndex
         this.questionIndex = questionIndex
         optionlist.clear()
 
@@ -250,12 +247,14 @@ class SingleQuestion : AppCompatActivity(){
         }else{
             questionBinding.upperFrame.removeView(questionBinding.timeLimit)
         }
-
-        for(item in SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex]){
-            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
-            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            imageArr.add(decodeImage)
-            Log.d("quiz index = $quizIndex", "question index = $questionIndex")
+        if(questionIndex<SingleQuiz.Companion.quizImages.size) {
+            for (item in SingleQuiz.Companion.quizImages[questionIndex]) {
+                val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                imageArr.add(decodeImage)
+            }
+        }else{
+            Toast.makeText(this, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
         }
         if(imageArr.isNotEmpty()) {
             editImageContainer(imageStatus_existImage)
@@ -291,55 +290,31 @@ class SingleQuestion : AppCompatActivity(){
         //設定tag
         val tmpTag : ArrayList<String> = ArrayList()
         val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6f, resources.displayMetrics).toInt()
-        val textSize1 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+        val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
         val marginHorizontal = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics).toInt()
         val marginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
-        val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val tagHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32f, resources.displayMetrics).toInt()
+        val tagWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70f, resources.displayMetrics).toInt()
+        val layoutParam = LinearLayout.LayoutParams(tagWidth, tagHeight)
         layoutParam.marginStart = marginHorizontal
         layoutParam.marginEnd = marginHorizontal
         layoutParam.topMargin = marginTop
 
-        if(tag.size>0) {
+        for(i in 0 until tag.size){
+            if(i>2){ break }
             val tagTextView = TextView(this)
             tagTextView.isClickable = true
-            tagTextView.text = tag[0]
+            tagTextView.text = tag[i]
             tagTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_tag, 0, 0, 0)
             tagTextView.setBackgroundResource(R.drawable.corner_radius_blue)
             tagTextView.setPadding(padding)
             tagTextView.layoutParams = layoutParam
             tagTextView.gravity = Gravity.CENTER
             tagTextView.setTextColor(Color.WHITE)
-            tagTextView.textSize = textSize1
-            questionBinding.QuestionTags.addView(tagTextView)
-            tmpTag.add(tag[0]) //QuestionTags is a container of questionTag
-        }
-        if(tag.size>1) {
-            val tagTextView1 = TextView(this)
-            tagTextView1.isClickable = true
-            tagTextView1.text = tag[1]
-            tagTextView1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_tag, 0, 0, 0)
-            tagTextView1.setBackgroundResource(R.drawable.corner_radius_blue)
-            tagTextView1.setPadding(padding)
-            tagTextView1.layoutParams = layoutParam
-            tagTextView1.gravity = Gravity.CENTER
-            tagTextView1.setTextColor(Color.WHITE)
-            tagTextView1.textSize = textSize1
-            questionBinding.QuestionTags.addView(tagTextView1)
-            tmpTag.add(tag[1])
-        }
-        if(tag.size>2){
-            val tagTextView2 = TextView(this)
-            tagTextView2.isClickable = true
-            tagTextView2.text = tag[2]
-            tagTextView2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_tag, 0, 0, 0)
-            tagTextView2.setBackgroundResource(R.drawable.corner_radius_blue)
-            tagTextView2.setPadding(padding)
-            tagTextView2.layoutParams = layoutParam
-            tagTextView2.gravity = Gravity.CENTER
-            tagTextView2.setTextColor(Color.WHITE)
-            tagTextView2.textSize = textSize1
-            questionBinding.QuestionTags.addView(tagTextView2)
-            tmpTag.add(tag[2])
+            tagTextView.textSize = textSize
+            tagTextView.ellipsize = TextUtils.TruncateAt.END
+            questionBinding.QuestionTags.addView(tagTextView) //QuestionTags is a container of questionTag
+            tmpTag.add(tag[i])
         }
         this.questionTag = tmpTag
     }
@@ -368,10 +343,10 @@ class SingleQuestion : AppCompatActivity(){
         }else {
             if(imageArr.isNotEmpty()){
                 val imageBase64 = Constants.bitmapToString(imageArr[0])
-                if(SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex].isEmpty()){
-                    SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex].add(imageBase64!!)
+                if(SingleQuiz.Companion.quizImages[questionIndex].isEmpty()){
+                    SingleQuiz.Companion.quizImages[questionIndex].add(imageBase64!!)
                 }else{
-                    SingleQuizPage.Companion.quizListImages[quizIndex][questionIndex][0] = imageBase64!!
+                    SingleQuiz.Companion.quizImages[questionIndex][0] = imageBase64!!
                 }
             }
             intent.putStringArrayListExtra("Key_options", optionListStr)
@@ -565,12 +540,8 @@ class SingleQuestion : AppCompatActivity(){
         val dialog: AlertDialog = builder.create()
         dialog.show()
         dialog.setOnDismissListener {
-            if(editTag.text.toString().length>5){
-                AlertDialog.Builder(this).setTitle("標籤過長!").setPositiveButton("確定", null).show()
-            }else{
-                this.questionTag[position] = editTag.text.toString()
-                this.questionTagTextView[position].text = this.questionTag[position]
-            }
+            this.questionTag[position] = editTag.text.toString()
+            this.questionTagTextView[position].text = this.questionTag[position]
         }
     }
 

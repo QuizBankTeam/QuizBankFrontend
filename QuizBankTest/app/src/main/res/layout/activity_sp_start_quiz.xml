@@ -106,37 +106,35 @@
             app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
 
 
-
-        <TextView
-            android:id="@+id/question_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="80dp"
-            android:clickable="true"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/textview_border"
-            android:padding="10dp"
-            android:text="圖一為 2008 年的推估結果，顯示臺灣人口從 1960-2060 年間出生率與死亡率
-的預測變化，依圖所示，在不考慮社會增加率的情況下，下列何者最為正確？"
-            android:textSize="14dp" />
-
-
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/option_scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:id="@+id/lower_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/question_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="80dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/textview_border"
+                    android:padding="10dp"
+                    android:text="圖一為 2008 年的推估結果，顯示臺灣人口從 1960-2060 年間出生率與死亡率
+的預測變化，依圖所示，在不考慮社會增加率的情況下，下列何者最為正確？"
+                    android:textSize="14dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/QuestionOption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/question_description"
                     android:layout_marginHorizontal="20dp"
                     android:overScrollMode="never"
                     android:textColor="@color/white"

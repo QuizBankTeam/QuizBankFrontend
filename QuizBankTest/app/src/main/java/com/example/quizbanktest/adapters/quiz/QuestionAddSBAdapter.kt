@@ -1,18 +1,13 @@
 package com.example.quizbanktest.adapters.quiz
 
 import android.app.Activity
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.activity.quiz.SingleQuiz
-import com.example.quizbanktest.models.BankModel
 import com.example.quizbanktest.models.QuestionBankModel
-import com.example.quizbanktest.models.Quiz
-import java.time.LocalDateTime
 
 class QuestionAddSBAdapter(private val context: Activity, private val bankList: ArrayList<QuestionBankModel>):
     RecyclerView.Adapter<QuestionAddSBAdapter.MyViewHolder>() {
@@ -20,7 +15,7 @@ class QuestionAddSBAdapter(private val context: Activity, private val bankList: 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
-            LayoutInflater.from(context).inflate(R.layout.row_question_add_in_sb, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.row_question_add_from_single_bank, parent, false)
         return MyViewHolder(itemView)
     }
 

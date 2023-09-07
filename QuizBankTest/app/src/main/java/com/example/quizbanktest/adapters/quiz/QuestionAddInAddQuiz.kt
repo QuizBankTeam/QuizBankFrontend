@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,21 +19,21 @@ import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.Constants
 import org.w3c.dom.Text
 
-class QuestionAddChooseQuestion(private val context: Activity, private val questionList: ArrayList<Question>, private val positionIsSelected: ArrayList<Boolean>):
-    RecyclerView.Adapter<QuestionAddChooseQuestion.MyViewHolder>()
+class QuestionAddInAddQuiz(private val context: Activity, private val questionList: ArrayList<Question>):
+    RecyclerView.Adapter<QuestionAddInAddQuiz.MyViewHolder>()
 {
-    private var selectOnClickListener: QuestionAddChooseQuestion.SelectOnClickListener? = null
+    private var onDeleteClickListener: QuestionAddInAddQuiz.OnDeleteClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.row_question_add_choose_question, parent, false)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.row_question_add_in_add_quiz, parent, false)
         return MyViewHolder(itemView)
     }
-    interface SelectOnClickListener {
-        fun onclick(position: Int, holder: QuestionAddChooseQuestion.MyViewHolder)
+    interface OnDeleteClickListener {
+        fun onclick(position: Int, holder: MyViewHolder)
     }
 
-    fun setSelectClickListener(selectOnClickListener: QuestionAddChooseQuestion.SelectOnClickListener) {
-        this.selectOnClickListener = selectOnClickListener
+    fun setOnDeleteClickListener(onClickListener: OnDeleteClickListener) {
+        this.onDeleteClickListener = onClickListener
     }
 
     override fun getItemCount(): Int {
@@ -74,21 +75,12 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
             }
         }
 
-
-        holder.checkBox.isChecked = positionIsSelected[position]
-
-        holder.checkBox.setOnClickListener {
-            positionIsSelected[position] = !positionIsSelected[position]
-            holder.checkBox.isChecked = positionIsSelected[position]
-            selectOnClickListener!!.onclick(position, holder)
-        }
-        holder.itemView.setOnClickListener {
-            if (this.selectOnClickListener != null) {
-                positionIsSelected[position] = !positionIsSelected[position]
-                holder.checkBox.isChecked = positionIsSelected[position]
-                selectOnClickListener!!.onclick(position, holder)
+        holder.deleteBtn.setOnClickListener {
+            if(this.onDeleteClickListener!=null){
+                onDeleteClickListener!!.onclick(position, holder)
             }
         }
+
     }
 
 
@@ -102,6 +94,6 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
         val questionTag: TextView = itemView.findViewById(R.id.question_tag)
         val questionDescription: TextView = itemView.findViewById(R.id.question_description)
         val questionTagIcon: TextView = itemView.findViewById(R.id.question_tag_icon)
-        val checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
+        val deleteBtn: ImageButton = itemView.findViewById(R.id.delete_btn)
     }
 }

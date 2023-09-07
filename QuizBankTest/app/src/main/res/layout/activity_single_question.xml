@@ -40,16 +40,19 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="18dp"
+                    android:maxWidth="150dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="題目名稱"
                     android:textColor="#000000"
-                    android:textSize="22dp" />
+                    android:textSize="20dp" />
                 <TextView
                     android:id="@+id/Question_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="27dp"
                     android:layout_toEndOf="@id/Question_title"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:background="@color/colorPrimary"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="3dp"
@@ -152,7 +155,6 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:orientation="horizontal">
-
                 </LinearLayout>
             </RelativeLayout>
 
@@ -164,6 +166,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="80dp"
+            android:maxHeight="200dp"
             android:clickable="true"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
@@ -173,6 +176,7 @@
             android:padding="10dp"
             android:textSize="14dp"
             android:hint="輕觸輸入答案敘述"/>
+
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/option_scrollView"
@@ -196,13 +200,14 @@
                 <android.widget.Button
                     android:id="@+id/option_add"
                     android:layout_width="120dp"
-                    android:layout_height="35dp"
+                    android:layout_height="37dp"
                     android:layout_below="@id/QuestionOption"
                     android:layout_marginTop="10dp"
                     android:layout_centerHorizontal="true"
                     android:paddingHorizontal="5dp"
+                    android:paddingBottom="3dp"
                     android:drawableStart="@drawable/baseline_add_black"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="4dp"
                     android:background="@drawable/corner_radius_primary"
                     android:text="新增選項"
                     android:minWidth="27dp"

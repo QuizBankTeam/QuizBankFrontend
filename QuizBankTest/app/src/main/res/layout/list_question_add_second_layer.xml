@@ -8,5 +8,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/second_layer_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:minHeight="400dp"/>
 </LinearLayout>

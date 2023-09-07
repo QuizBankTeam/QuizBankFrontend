@@ -60,17 +60,24 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-                <View
-                    android:layout_width="0dp"
+                <ImageButton
+                    android:id="@+id/QuizRecord_delete"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="1dp"
+                    android:background="?actionBarItemBackground"
+                    android:src="@drawable/baseline_trash_bin"/>
                 <ImageButton
                     android:id="@+id/quiz_setting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginTop="1dp"
+                    android:layout_marginEnd="5dp"
                     android:background="?actionBarItemBackground"
                     android:src="@drawable/baseline_settings"/>
             </LinearLayout>

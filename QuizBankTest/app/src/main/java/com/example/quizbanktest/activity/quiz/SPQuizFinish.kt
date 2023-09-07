@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -18,6 +19,7 @@ import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.QuizRecord
 import com.example.quizbanktest.utils.Constants
+import com.example.quizbanktest.utils.ConstantsQuizRecord
 
 class SPQuizFinish : AppCompatActivity(){
     private lateinit var finishQuizBinding: ActivitySpQuizFinishBinding
@@ -58,6 +60,7 @@ class SPQuizFinish : AppCompatActivity(){
             val builder = AlertDialog.Builder(this)
             builder.setTitle("確定保存考試紀錄?")
             builder.setPositiveButton("確定") { dialog, which ->
+                saveQuizRecord(quizRecord, questionRecordList)
                 val intent = Intent()
                 intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
                 intent.putExtra("Key_quizRecord", quizRecord)
@@ -67,6 +70,14 @@ class SPQuizFinish : AppCompatActivity(){
             builder.setNegativeButton("取消", null)
             builder.show()
         }
+    }
+
+    private fun saveQuizRecord(quizRecord: QuizRecord, questionRecordList: ArrayList<QuestionRecord>){
+        ConstantsQuizRecord.postQuizRecord(this, quizRecord, questionRecordList, onSuccess = {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }, onFailure = {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onDestroy() {
@@ -123,12 +134,7 @@ class SPQuizFinish : AppCompatActivity(){
         val questionRecordId = ArrayList<String>()
         var totalScore : Int = 0
         var hasShorAns = false
-//        for(index in userAnsOptions.indices){
-//            for(item1 in userAnsOptions[index]){
-//                Log.d("確認答案", index.toString()+item1)
-//            }
-//        }
-//        Log.d("answer record size is", userAnsOptions.size.toString())
+
         for(index in questionlist.indices){
             val tmpId = UUID.randomUUID().toString()
             var isCorrect = false
@@ -153,7 +159,8 @@ class SPQuizFinish : AppCompatActivity(){
         }
         correctNum = totalScore
         quizTitle = quizTitle.ifEmpty { "none" }
-        val tmpQuizRecord = QuizRecord(quizRecordId, quizTitle, quizId, quizType, totalScore/questionlist.size,
+        Log.d("totalscore is", ((correctNum*100)/questionlist.size).toString())
+        val tmpQuizRecord = QuizRecord(quizRecordId, quizTitle, quizId, quizType, ((correctNum*100)/questionlist.size),
                                         duringTime, startDateTime, endDateTime, members, questionRecordId)
         this.quizRecord = tmpQuizRecord
     }

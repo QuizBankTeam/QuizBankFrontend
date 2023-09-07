@@ -12,10 +12,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -53,6 +50,7 @@ class SPStartQuiz: AppCompatActivity() {
     private var trueOrFalseView: View? = null
     private var trueOrFalseSelected = false
     private var quizIndex = 0
+    private var currentRemain = 0
     private var imageArr = ArrayList<Bitmap>()
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,10 +124,7 @@ class SPStartQuiz: AppCompatActivity() {
     }
 
     private fun setQuestion(){
-        val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
         val currentQuestion = questionlist[currentAtQuestion]
-        val optionlist : ArrayList<Option> = ArrayList()
-
 
         startQuizBinding.questionDescription.text = currentQuestion.description
         currentSelection.clear()
@@ -142,13 +137,22 @@ class SPStartQuiz: AppCompatActivity() {
                                         else "填充題"
 
         val imageArr = ArrayList<Bitmap>()
-        for(item in SingleQuizPage.Companion.quizListImages[quizIndex][currentAtQuestion]){
-            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
-            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            imageArr.add(decodeImage)
+        if(currentAtQuestion<SingleQuiz.Companion.quizImages.size) {
+            for (item in SingleQuiz.Companion.quizImages[currentAtQuestion]) {
+                val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                imageArr.add(decodeImage)
+            }
+        }else{
+            Toast.makeText(this, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
         }
-        if(imageArr.isNotEmpty())
+        if(imageArr.isNotEmpty()){
             startQuizBinding.QuestionImage.setImageBitmap(imageArr[0])
+            startQuizBinding.QuestionImage.visibility = View.VISIBLE
+        }else{
+            startQuizBinding.QuestionImage.visibility = View.GONE
+        }
+
 
 
 
@@ -158,21 +162,7 @@ class SPStartQuiz: AppCompatActivity() {
                     shortAnswerView!!.visibility = View.GONE
                 if(this.trueOrFalseView!=null)
                     trueOrFalseView!!.visibility = View.GONE
-
-                for(index in currentQuestion.options?.indices!!){
-                    val tmpOption = Option(optionNum[index], currentQuestion.options!![index])
-                    optionlist.add(tmpOption)
-                }
-                startQuizBinding.QuestionOption.visibility = View.VISIBLE
-                optionAdapter = OptionAdapter(this, optionlist)
-                startQuizBinding.QuestionOption.adapter = optionAdapter
-                startQuizBinding.QuestionOption.layoutManager = LinearLayoutManager(this)
-                startQuizBinding.QuestionOption.setHasFixedSize(true)
-                optionAdapter.setSelectClickListener(object: OptionAdapter.SelectOnClickListener{
-                    override fun onclick(position: Int, holder: OptionAdapter.MyViewHolder) {
-                        optionSelect(position, holder, currentQuestion.questionType!!)
-                    }
-                })
+                initMultiChoice(currentQuestion)
             }
             "TrueOrFalse" -> {
                 if(this.shortAnswerView!=null)
@@ -236,7 +226,6 @@ class SPStartQuiz: AppCompatActivity() {
         val addUserAns = ArrayList<String>()
         var readyToEnd = false
         var gotoNext = true
-        Log.d("in question submit", "")
 
         when(currentQuestion.questionType){
             "MultipleChoiceS", "MultipleChoiceM" -> {
@@ -257,7 +246,6 @@ class SPStartQuiz: AppCompatActivity() {
 
             }
             "ShortAnswer" -> {
-                Log.d("short ans is", this.shortAnswerView?.text.toString())
                 userAnsOptions.add( addUserAns )
                 userAnsDescription.add(this.shortAnswerView?.text.toString())
             }
@@ -266,7 +254,6 @@ class SPStartQuiz: AppCompatActivity() {
                     addUserAns.add(currentAnswer)
                     userAnsOptions.add(addUserAns)
                     userAnsDescription.add("")
-
                 }else{
                     Toast.makeText(this, "請選擇一個選項", Toast.LENGTH_LONG).show()
                     gotoNext = false
@@ -303,10 +290,10 @@ class SPStartQuiz: AppCompatActivity() {
         }
         val intent = Intent()
         val endDate = LocalDateTime.now()
-        val duringTime = java.time.Duration.between(startDate, endDate).toMinutes().toInt()*60
         val startDateTimeStr = startDate.format(Constants.dateTimeFormat)
         val endDateTimeStr = endDate.format(Constants.dateTimeFormat)
-
+        val duringQuizTime = duringTime-currentRemain
+        Log.d("in quiz end during time is", duringQuizTime.toString())
         for(i in currentAtQuestion until questionlist.size){
             val tmpAnsOptions = ArrayList<String>()
             userAnsOptions.add(tmpAnsOptions)
@@ -341,6 +328,7 @@ class SPStartQuiz: AppCompatActivity() {
                 val remainMin = totalRemain/60
                 var remainSec = (totalRemain%60).toInt()
                 var remainSecStr = remainSec.toString()
+
                 if(remainSec<10){
                     if(remainSec==0){
                         remainSecStr = "00"
@@ -349,30 +337,33 @@ class SPStartQuiz: AppCompatActivity() {
                     }
                 }
                 startQuizBinding.remainTime.text = remainMin.toString() + ":" + remainSecStr
-
+                currentRemain = remainSec
             }
         }.start()
     }
 
     private fun initShortAnswer(){
+        val hMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 21f, resources.displayMetrics).toInt()
+        val btnParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        btnParam.marginStart = hMargin
+        btnParam.marginEnd = hMargin
         if(this.shortAnswerView!=null){
             this.shortAnswerView!!.visibility = View.VISIBLE
-            Log.d("answerDesc is not null", "")
         }else{
             val textView = EditText(this)
             val answerMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150f, resources.displayMetrics).toInt()
             val descriptionMinH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130f, resources.displayMetrics).toInt()
             val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
             val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7f, resources.displayMetrics)
-            val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics).toInt()
-            val marginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
-            val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            layoutParam.marginStart = margin
-            layoutParam.marginEnd = margin
-            layoutParam.topMargin = marginTop
-            layoutParam.bottomMargin = marginTop
-            textView.id = View.generateViewId()
+            val marginH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics).toInt()
+            val marginV = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics).toInt()
+            val layoutParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
 
+            layoutParam.setMargins(marginH, marginV, marginH, marginV)
+            layoutParam.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescription.id)
+
+
+            textView.id = View.generateViewId()
             textView.setBackgroundResource(R.drawable.textview_inquiz_border)
             textView.setPadding(padding)
             textView.layoutParams = layoutParam
@@ -380,39 +371,80 @@ class SPStartQuiz: AppCompatActivity() {
             textView.textSize = textSize
             textView.minHeight = answerMinH
             textView.hint = "輕觸輸入答案"
-            startQuizBinding.startQuizContainer.addView(textView, 4)
+            startQuizBinding.lowerContainer.addView(textView, 1)
             startQuizBinding.questionDescription.minHeight = descriptionMinH
             val answerDescriptionView = startQuizBinding.root.findViewById<EditText>(textView.id)
             this.shortAnswerView = answerDescriptionView
         }
-
+        btnParam.addRule(RelativeLayout.BELOW, this.shortAnswerView!!.id)
+        startQuizBinding.btnSubmit.layoutParams = btnParam
     }
 
     private fun initTrueOrFalse(){
         trueOrFalseSelected = false
+        val hMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 23f, resources.displayMetrics).toInt()
+        val btnParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        btnParam.marginStart = hMargin
+        btnParam.marginEnd = hMargin
+
         if(trueOrFalseView!=null){
             this.trueOrFalseView!!.visibility = View.VISIBLE
         }else{
             val v:View =  layoutInflater.inflate(R.layout.item_option_trueorfalse, startQuizBinding.startQuizContainer, false)
+            val vHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
+            val tfParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, vHeight)
             val textViewTrue : TextView = v.findViewById(R.id.option_true)
             val textViewFalse: TextView = v.findViewById(R.id.option_false)
+            tfParams.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescription.id)
+
+            v.layoutParams = tfParams
+            v.id = View.generateViewId()
+
             textViewTrue.setOnClickListener {
                 textViewTrue.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
                 textViewFalse.setBackgroundResource(0)
-                this.currentAnswer = "true"
+                this.currentAnswer = Constants.TrueOrFalseAnsTrue
                 trueOrFalseSelected = true
             }
             textViewFalse.setOnClickListener {
                 textViewTrue.setBackgroundResource(0)
                 textViewFalse.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
-                this.currentAnswer  = "false"
+                this.currentAnswer  = Constants.TrueOrFalseAnsFalse
                 trueOrFalseSelected = true
             }
-            startQuizBinding.startQuizContainer.addView(v, 4)
+
+            startQuizBinding.lowerContainer.addView(v, 1)
             this.trueOrFalseView = v
         }
+        btnParam.addRule(RelativeLayout.BELOW, this.trueOrFalseView!!.id)
+        startQuizBinding.btnSubmit.layoutParams = btnParam
     }
 
+    private fun initMultiChoice(currentQuestion: Question){
+        val optionlist : ArrayList<Option> = ArrayList()
+        val btnParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        val hMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 23f, resources.displayMetrics).toInt()
+        btnParam.marginStart = hMargin
+        btnParam.marginEnd = hMargin
+
+        for(index in currentQuestion.options?.indices!!){
+            val tmpOption = Option(Constants.optionNum[index], currentQuestion.options!![index])
+            optionlist.add(tmpOption)
+        }
+        startQuizBinding.QuestionOption.visibility = View.VISIBLE
+        optionAdapter = OptionAdapter(this, optionlist)
+        startQuizBinding.QuestionOption.adapter = optionAdapter
+        startQuizBinding.QuestionOption.layoutManager = LinearLayoutManager(this)
+        startQuizBinding.QuestionOption.setHasFixedSize(true)
+        optionAdapter.setSelectClickListener(object: OptionAdapter.SelectOnClickListener{
+            override fun onclick(position: Int, holder: OptionAdapter.MyViewHolder) {
+                optionSelect(position, holder, currentQuestion.questionType!!)
+            }
+        })
+
+        btnParam.addRule(RelativeLayout.BELOW,startQuizBinding.QuestionOption.id)
+        startQuizBinding.btnSubmit.layoutParams = btnParam
+    }
     private fun exitQuiz(){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("確定退出考試?")
