@@ -48,9 +48,9 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 //        setupNavigationView()
 //        doubleCheckExit()
 
-        showProgressDialog("取得資料中")
+//        showProgressDialog("取得資料中")
         init()
-        hideProgressDialog()
+//        hideProgressDialog()
 
 
         pullExit()
@@ -145,6 +145,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         tvTitle.text = bankTitle
 
+        showProgressDialog("取得資料中")
         ConstantsQuestionFunction.getQuestion(this, bankId,
             onSuccess = { questionList ->
                 Log.e("BankQuestionActivity", "get questionList success!!!")
@@ -170,39 +171,34 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                 }
                 Log.e("BankQuestionActivity", "question model finish")
                 setupQuestionModel()
+                hideProgressDialog()
             },
             onFailure = { errorMessage ->
                 showErrorSnackBar("網路連線狀況不好")
-//                hideProgressDialog()
+                hideProgressDialog()
             }
         )
     }
 
     override fun onItemClick(position: Int) {
-        val singleAnswerQuestionActivity = Intent(this, BankQuestionDetailActivity::class.java)
+        val QuestionDetailActivity = Intent(this, BankQuestionDetailActivity::class.java)
 
-        singleAnswerQuestionActivity.putExtra("id", questionModels[position]._id)
-        singleAnswerQuestionActivity.putExtra("title", questionModels[position].title)
-        singleAnswerQuestionActivity.putExtra("number", questionModels[position].number)
-        singleAnswerQuestionActivity.putExtra("description", questionModels[position].description)
-        singleAnswerQuestionActivity.putExtra("options", questionModels[position].options)
-        singleAnswerQuestionActivity.putExtra("type", questionModels[position].questionType)
-        singleAnswerQuestionActivity.putExtra(
-            "answerOptions",
-            questionModels[position].answerOptions
-        )
-        singleAnswerQuestionActivity.putExtra(
-            "answerDescription",
-            questionModels[position].answerDescription
-        )
-        singleAnswerQuestionActivity.putExtra("source", questionModels[position].originateFrom)
-        singleAnswerQuestionActivity.putExtra("createdDate", questionModels[position].createdDate)
-        singleAnswerQuestionActivity.putExtra("image", questionModels[position].image)
-        singleAnswerQuestionActivity.putExtra("tag", questionModels[position].tag)
+        QuestionDetailActivity.putExtra("id", questionModels[position]._id)
+        QuestionDetailActivity.putExtra("title", questionModels[position].title)
+        QuestionDetailActivity.putExtra("number", questionModels[position].number)
+        QuestionDetailActivity.putExtra("description", questionModels[position].description)
+        QuestionDetailActivity.putExtra("options", questionModels[position].options)
+        QuestionDetailActivity.putExtra("type", questionModels[position].questionType)
+        QuestionDetailActivity.putExtra("answerOptions", questionModels[position].answerOptions)
+        QuestionDetailActivity.putExtra("answerDescription", questionModels[position].answerDescription)
+        QuestionDetailActivity.putExtra("source", questionModels[position].originateFrom)
+        QuestionDetailActivity.putExtra("createdDate", questionModels[position].createdDate)
+        QuestionDetailActivity.putExtra("image", questionModels[position].image)
+        QuestionDetailActivity.putExtra("tag", questionModels[position].tag)
 
-        Log.e("BankQuestionActivity", questionModels[position]._id.toString())
+//        Log.e("BankQuestionActivity", questionModels[position]._id.toString())
 
-        startActivity(singleAnswerQuestionActivity)
+        startActivity(QuestionDetailActivity)
     }
 
 }

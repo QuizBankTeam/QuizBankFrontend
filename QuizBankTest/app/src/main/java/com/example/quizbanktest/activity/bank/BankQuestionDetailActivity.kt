@@ -119,11 +119,11 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         }
         Log.e("BankQuestionDetailActivity", tmpAnswerOptionsArrayList.toString())
         optionRecyclerView = findViewById(R.id.optionRecyclerView)
-        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
+        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
         optionRecyclerView.setHasFixedSize(true)
 
         when (questionType) {
-            "true-false" -> {
+            "TrueOrFalse" -> {
                 optionRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
             }
             "cloze" -> {
