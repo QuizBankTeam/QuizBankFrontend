@@ -72,7 +72,7 @@
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_marginTop="10dp"
-                            android:hint="答案描述 \n (可用下方選擇圖片掃描成文字)"
+                            android:hint="答案描述 \n (可用右上方選擇圖片掃描成文字)"
                             android:gravity="left"
                             android:inputType="textMultiLine"
                             android:scrollbars = "vertical"

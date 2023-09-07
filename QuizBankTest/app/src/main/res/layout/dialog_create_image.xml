@@ -70,7 +70,7 @@
                         android:onClick="onClick"
                         android:clickable="true"
                         android:foreground="?attr/selectableItemBackground"
-                        android:background="@drawable/add_image"
+                        android:background="@drawable/shape_add_option"
                         android:text="新增圖片 ( 上限三張 ) 📂" />
                     <ImageView
                         android:id="@+id/iv_answer_image0"
@@ -119,7 +119,7 @@
                             android:onClick="onClick"
                             android:clickable="true"
                             android:foreground="?attr/selectableItemBackground"
-                            android:background="@drawable/add_image"
+                            android:background="@drawable/shape_add_option"
                             android:text="取消新增 ❌" />
                         <TextView
                             android:id="@+id/answer_image_enter"
@@ -134,7 +134,7 @@
                             android:onClick="onClick"
                             android:clickable="true"
                             android:foreground="?attr/selectableItemBackground"
-                            android:background="@drawable/add_image"
+                            android:background="@drawable/shape_add_option"
                             android:text="上傳圖片 ✅" />
                     </LinearLayout>
 
