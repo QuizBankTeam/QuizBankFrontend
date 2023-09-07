@@ -363,7 +363,7 @@ class SingleQuiz: AppCompatActivity() {
         }else{
             this.casualDuringTime = ArrayList()
         }
-        if(quizType=="casual" && casualDuringTime.size<questionlist.size){
+        if(quizType==Constants.quizTypeCasual && casualDuringTime.size<questionlist.size){
             for (i in casualDuringTime.size until questionlist.size){
                 casualDuringTime.add(20)
             }

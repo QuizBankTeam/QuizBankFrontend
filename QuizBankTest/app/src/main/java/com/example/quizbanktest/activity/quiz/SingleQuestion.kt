@@ -649,22 +649,25 @@ class SingleQuestion : AppCompatActivity(){
         val v:View =  layoutInflater.inflate(R.layout.item_option_trueorfalse, questionBinding.questionContainer, false)
         val textViewTrue : TextView = v.findViewById(R.id.option_true)
         val textViewFalse: TextView = v.findViewById(R.id.option_false)
-
-        if(answerOptions[0] == "true"){
-            textViewTrue.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
+        if(answerOptions.isNotEmpty()){
+            if(answerOptions[0] == Constants.TrueOrFalseAnsTrue){
+                textViewTrue.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
+            }else{
+                textViewFalse.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
+            }
         }else{
-            textViewFalse.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
+            answerOptions.add(Constants.TrueOrFalseAnsTrue)
         }
 
         textViewTrue.setOnClickListener {
             textViewTrue.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
             textViewFalse.setBackgroundColor( 0 )
-            answerOptions[0] = "true"
+            answerOptions[0] = Constants.TrueOrFalseAnsTrue
         }
         textViewFalse.setOnClickListener {
             textViewTrue.setBackgroundColor( 0 )
             textViewFalse.setBackgroundColor( ContextCompat.getColor(this, R.color.answer_correct) )
-            answerOptions[0] = "false"
+            answerOptions[0] = Constants.TrueOrFalseAnsFalse
         }
         questionBinding.questionContainer.addView(v)
     }
