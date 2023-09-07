@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
 import com.example.quizbanktest.activity.BaseActivity
+import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.ScanImageService
@@ -79,6 +80,10 @@ object ConstantsScanServiceFunction {
                                 activity.showErrorSnackBar("系統找不到")
                                 Log.e("Error 404", "Not Found")
                                 onFailure("Request failed with status code $sc")
+                            }
+                            401 -> {
+                                val intent = Intent(activity, IntroActivity::class.java)
+                                activity.startActivity(intent)
                             }
                             else -> {
                                 Log.e("Error", "in scan Generic Error")
@@ -169,6 +174,10 @@ object ConstantsScanServiceFunction {
 
                                 Log.e("Error 404", "Not Found")
                                 onFailure("Request failed with status code $sc")
+                            }
+                            401 -> {
+                                val intent = Intent(activity, IntroActivity::class.java)
+                                activity.startActivity(intent)
                             }
                             else -> {
                                 Log.e("Error", "in scan Generic Error")

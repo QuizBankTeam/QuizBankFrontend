@@ -1,8 +1,10 @@
 package com.example.quizbanktest.utils
 
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.network.HoughRotateService
 import com.example.quizbanktest.network.RealEsrganService
 import com.google.gson.Gson
@@ -72,6 +74,10 @@ object ConstantsHoughAlgo {
 
                                 Log.e("Error 404", "Not Found")
                                 onFailure("Request failed with status code $sc")
+                            }
+                            401 -> {
+                                val intent = Intent(activity, IntroActivity::class.java)
+                                activity.startActivity(intent)
                             }
                             else -> {
                                 Log.e("Error", "in hough Generic Error")
