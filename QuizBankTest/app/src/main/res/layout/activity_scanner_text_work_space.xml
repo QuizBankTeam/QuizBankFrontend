@@ -63,116 +63,121 @@
                 android:src="@drawable/baseline_add_black"/>
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
         android:id="@+id/fl_home"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="5dp"
-        android:padding="1dp"
+        android:layout_marginTop="8dp"
         android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="1dp"
         app:layout_constraintBottom_toTopOf="@id/ll_action_buttons"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_ocr_detail"
-        android:orientation="vertical"
-        >
-<!--        <ScrollView-->
-<!--            android:id="@+id/sv_ocr_main"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:fillViewport="true"-->
-<!--            >-->
+        app:layout_constraintTop_toBottomOf="@id/toolbar_ocr_detail">
+        <!--        <ScrollView-->
+        <!--            android:id="@+id/sv_ocr_main"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:fillViewport="true"-->
+        <!--            >-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <LinearLayout
+                android:id="@+id/empty_show"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:orientation="vertical"
-                >
-                <LinearLayout
-                    android:id="@+id/empty_show"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:visibility="gone"
-                    android:background="@color/white"
-                    >
-                    <ImageView
-                        android:id="@+id/iv_answer_image"
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="80dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="200dp"
-                        android:contentDescription="image"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/empty"/>
-                    <TextView
-                        android:layout_marginTop="100dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:textColor="#363A43"
-                        android:textSize="18sp"
-                        android:background="?attr/selectableItemBackground"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:text="目前還未新增任何題目喔  ‼️"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent">
 
-                        />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/secondary_text_color" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/enter_buttons"
+                <ImageView
+                    android:id="@+id/iv_answer_image"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:background="@color/white"
-                    >
+                    android:layout_height="200dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_weight="1"
+                    android:contentDescription="image"
+                    android:gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/empty" />
 
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/ocr_result"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    >
-                    <TextView
-                        android:layout_marginTop="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#363A43"
-                        android:textSize="18sp"
-                        android:visibility="gone"
-                        android:layout_marginLeft="5dp"
-                        android:textStyle="bold"
-                        android:text="下列為待處理之掃描結果"
-                        />
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/ocr_list"
-                        android:layout_marginTop="7dp"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="13dp"
-                        android:visibility="visible"
-                        tools:visibility="visible" />
-                </LinearLayout>
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginRight="10dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="目前還未新增任何題目喔  ‼️"
+                    android:textColor="#363A43"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/secondary_text_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/enter_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="right"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent">
 
             </LinearLayout>
-<!--        </ScrollView>-->
+
+            <LinearLayout
+                android:id="@+id/ocr_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="3dp"
+                    android:text="下列為待處理之掃描結果"
+                    android:textColor="#363A43"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ocr_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginRight="13dp"
+                    android:visibility="visible"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <!--        </ScrollView>-->
     </LinearLayout>
+
     <include
         layout="@layout/action_lower_tool"
         android:layout_width="match_parent"
