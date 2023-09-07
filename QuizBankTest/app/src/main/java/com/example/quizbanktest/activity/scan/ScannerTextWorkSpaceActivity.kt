@@ -16,6 +16,7 @@ import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.adapters.scan.OcrResultViewAdapter
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.models.ScanQuestionModel
 
 
 class ScannerTextWorkSpaceActivity : BaseActivity() {
@@ -128,7 +129,7 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             questionTypeSpinner.add(QuestionTypeItem("是非題", R.drawable.lion))
         }
     }
-    private fun setupOcrRecyclerView(ocrResultList: ArrayList<QuestionModel>, optionList :  Pair<String, List<String>>?) {
+    private fun setupOcrRecyclerView(ocrResultList: ArrayList<ScanQuestionModel>, optionList :  Pair<String, List<String>>?) {
         val ocrList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.ocr_list)
         ocrList.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL,false)

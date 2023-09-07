@@ -24,6 +24,7 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.models.ScanQuestionModel
 import com.example.quizbanktest.utils.*
 import java.io.ByteArrayOutputStream
 
@@ -31,7 +32,7 @@ import java.io.ByteArrayOutputStream
 class OcrResultViewAdapter(
     private val activity: BaseActivity,
     private val context: Context,
-    private var list: ArrayList<QuestionModel>,
+    private var list: ArrayList<ScanQuestionModel>,
     private var optionList :  Pair<String, List<String>>?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private var onClickListener: OnClickListener? = null
@@ -54,7 +55,10 @@ class OcrResultViewAdapter(
         if(ConstantsOcrResults.questionList[position].tag?.isNotEmpty() == true){
             tagQuestionList = ConstantsOcrResults.questionList[position].tag!!
         }
-        val imageList : ArrayList<String> = ArrayList() //目前選擇了那些圖片(包括 題目描述跟答案之圖片)
+        var imageList : ArrayList<String> = ArrayList() //目前選擇了那些圖片(包括 題目描述跟答案之圖片)
+        if(ConstantsOcrResults.questionList[position].image?.isNotEmpty() == true){
+            imageList = ConstantsOcrResults.questionList[position].image!!
+        }
         val out = ByteArrayOutputStream()
         var optionsNum : Int = 1 //預設選項為四個
         val model = list[position] //知道目前是哪個東西被選擇
@@ -421,6 +425,7 @@ class OcrResultViewAdapter(
 
                 cancelButton.setOnClickListener {
                     ConstantsOcrResults.getOcrResult()[position].tag?.clear()
+                    ConstantsOcrResults.getOcrResult()[position].tag?.add("目前為空")
                     tagDialog.dismiss()
                 }
             }
@@ -510,6 +515,7 @@ class OcrResultViewAdapter(
 
                 cancelButton.setOnClickListener {
                     ConstantsOcrResults.getOcrResult()[position].tag?.clear()
+                    ConstantsOcrResults.getOcrResult()[position].tag?.add("目前為空")
                     tagDialog.dismiss()
                 }
                 true
@@ -622,8 +628,8 @@ class OcrResultViewAdapter(
                     answerDescription.setText(ConstantsOcrResults.questionList[position].answerDescription)
                 }
 
-                if(ConstantsOcrResults.questionList[position].image?.isNotEmpty()==true){
-                   showImage.setImageBitmap(ConstantsOcrResults.questionList[position].image?.get(0)
+                if(ConstantsOcrResults.questionList[position].answerImages?.isNotEmpty()==true){
+                   showImage.setImageBitmap(ConstantsOcrResults.questionList[position].answerImages?.get(0)
                       ?.let { it1 -> base64ToBitmap(it1) })
                 }
 
@@ -640,8 +646,8 @@ class OcrResultViewAdapter(
                                 selectBitmap?.compress(Bitmap.CompressFormat.JPEG, 70, out)
                                 showImage.setImageBitmap(selectBitmap)
                                 val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
-                                ConstantsOcrResults.questionList[position].image?.add(selectPhotoBase64String)
-                                imageList.add(selectPhotoBase64String)
+                                ConstantsOcrResults.questionList[position].answerImages?.clear()
+                                ConstantsOcrResults.questionList[position].answerImages?.add(selectPhotoBase64String)
                                 val actionDialog = AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
                                 actionDialog.setTitle("是否答案圖片要OCR")
                                 val actionDialogItems =
@@ -689,7 +695,7 @@ class OcrResultViewAdapter(
                     builder.setPositiveButton("確認") { dialog, which ->
                         btnAddAnswer.text = "答案描述 \uD83D\uDCA1"
                         answerDialog.dismiss()
-                        ConstantsOcrResults.questionList[position].image?.clear()
+                        ConstantsOcrResults.questionList[position].answerImages?.clear()
                         ConstantsOcrResults.questionList[position].answerDescription = ""
                     }
                     builder.setNegativeButton("取消") { dialog, which ->
@@ -718,11 +724,14 @@ class OcrResultViewAdapter(
                 imageDialog.setContentView(R.layout.dialog_create_image)
                 imageDialog.setTitle("新增圖片")
                 var imageCount : Int = 1 //TODO 先暫時做只有一張的
+                val showImage : ImageView = imageDialog.findViewById(R.id.iv_answer_image0)
+                if(ConstantsOcrResults.questionList[position].image?.isNotEmpty()==true){
+                    showImage.setImageBitmap(ConstantsOcrResults.questionList[position].image?.get(0)
+                        ?.let { it1 -> base64ToBitmap(it1) })
+                }
                 val createPhoto: TextView = imageDialog.findViewById(R.id.answer_choose_image)!! //新增圖片(最多三張) iv_answer_image0 iv_answer_image1 iv_answer_image2
                 createPhoto.setOnClickListener(View.OnClickListener {
                     var selectBitmap : Bitmap?= null
-
-
                     ConstantsDialogFunction.dialogChoosePhotoFromGallery(activity) {
                             bitmap ->
                         if(bitmap!=null){
@@ -730,10 +739,10 @@ class OcrResultViewAdapter(
                             selectBitmap?.compress(Bitmap.CompressFormat.JPEG, 70, out)
                             Toast.makeText(context," success choose photo",Toast.LENGTH_SHORT).show()
                             //顯示目前已新增的圖片
-                            val showImage : ImageView = imageDialog.findViewById(R.id.iv_answer_image0)
                             showImage.setImageBitmap(selectBitmap)
                             val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
                             imageList.add(selectPhotoBase64String)
+                            ConstantsOcrResults.questionList[position].image = imageList
                             imageCount +=1
                         }else{
                             Toast.makeText(context," choosePhoto has error",Toast.LENGTH_SHORT).show()
@@ -748,6 +757,8 @@ class OcrResultViewAdapter(
                         .setTitle("取消新增圖片")
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.setPositiveButton("確認") { dialog, which ->
+                        ConstantsOcrResults.questionList[position].image?.clear()
+                        imageList.clear()
                         imageDialog.dismiss()
                     }
                     builder.setNegativeButton("取消") { dialog, which ->
@@ -899,7 +910,6 @@ class OcrResultViewAdapter(
                     ConstantsQuestionFunction.postQuestion( ConstantsOcrResults.questionList[position],activity,
                         onSuccess = {
                             activity.hideProgressDialog()
-                            notifyDataSetChanged()
                             val intent = Intent(activity, ScannerTextWorkSpaceActivity::class.java)
                             activity.startActivity(intent)
                             activity.finish()
@@ -941,7 +951,7 @@ class OcrResultViewAdapter(
         this.onClickListener = onClickListener
     }
     interface OnClickListener {
-        fun onClick(position: Int, model: QuestionModel)
+        fun onClick(position: Int, model: ScanQuestionModel)
     }
     fun base64ToBitmap(base64String: String): Bitmap? {
         val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
