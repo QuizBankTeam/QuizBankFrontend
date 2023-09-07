@@ -24,6 +24,7 @@ object Constants {
     var COOKIE: String = ""
     var EXPIRE: Int = 0 //用於在每次login 後 去判斷server token是否過期
     val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+    val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val optionNum = arrayOf("A", "B", "C", "D", "E", "F", "G", "H")
     const val quizStatusReady = "ready"
     const val quizStatusDraft = "draft"
@@ -35,7 +36,8 @@ object Constants {
     const val questionTypeShortAnswer = "ShortAnswer"
     const val questionTypeMultipleChoiceM = "MultipleChoiceM"
     const val questionTypeTrueOrFalse = "TrueOrFalse"
-
+    const val TrueOrFalseAnsTrue = "true"
+    const val TrueOrFalseAnsFalse = "false"
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //比較新的系統

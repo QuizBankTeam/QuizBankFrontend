@@ -359,6 +359,9 @@ class PaintActivity : AppCompatActivity() {
                     hideProgressDialog()
                 },
                 onFailure = { it1 ->
+                    if(it1 == "429"){
+                        showErrorSnackBar("目前伺服器忙碌中請稍後再使用")
+                    }
                     showErrorSnackBar("伺服器目前出現了點問題請稍後在試")
                     hideProgressDialog()
                 }

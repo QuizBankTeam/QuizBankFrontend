@@ -95,7 +95,7 @@ class MPQuizAdapter(private val context: Activity, private val questionList: Arr
     }
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {
-        val quizNum: TextView = itemView.findViewById(R.id.QuizNum)
+        val quizNum: TextView = itemView.findViewById(R.id.QuestionNum)
         val quizStatus: TextView = itemView.findViewById(R.id.QuizStatus)
         val quizStartDate: TextView = itemView.findViewById(R.id.QuizStartDate)
         val quizTitle: TextView = itemView.findViewById(R.id.QuizTitle)

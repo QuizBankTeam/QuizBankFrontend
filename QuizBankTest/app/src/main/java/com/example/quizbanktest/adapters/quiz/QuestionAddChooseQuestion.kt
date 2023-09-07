@@ -1,7 +1,6 @@
 package com.example.quizbanktest.adapters.quiz
 
 import android.app.Activity
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
@@ -14,14 +13,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.activity.quiz.SingleQuestion
-import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.Constants
 import org.w3c.dom.Text
 
-class QuestionAddChooseQuestion(private val context: Activity, private val questionList: ArrayList<QuestionModel>):
+class QuestionAddChooseQuestion(private val context: Activity, private val questionList: ArrayList<Question>, private val positionIsSelected: ArrayList<Boolean>):
     RecyclerView.Adapter<QuestionAddChooseQuestion.MyViewHolder>()
 {
     private var selectOnClickListener: QuestionAddChooseQuestion.SelectOnClickListener? = null
@@ -34,7 +31,7 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
         fun onclick(position: Int, holder: QuestionAddChooseQuestion.MyViewHolder)
     }
 
-    fun setSelectClickListener(selectOnClickListener: SelectOnClickListener) {
+    fun setSelectClickListener(selectOnClickListener: QuestionAddChooseQuestion.SelectOnClickListener) {
         this.selectOnClickListener = selectOnClickListener
     }
 
@@ -54,8 +51,8 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
         holder.questionDescription.text = currentItem.description
 
 
-        if(currentItem.image!=null){
-            for(item in currentItem.image!!){
+        if(currentItem.questionImage!=null){
+            for(item in currentItem.questionImage!!){
                 val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 holder.questionImage.setImageBitmap(decodeImage)
@@ -65,9 +62,10 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
 
         if(currentItem.tag!=null) {
             if(currentItem.tag!!.size==0) {
-                holder.questionContainer.removeAllViews()
+                holder.questionTagIcon.visibility = View.GONE
             }
             else{
+                holder.questionTagIcon.visibility = View.VISIBLE
                 var allTags= ""
                 for(tag in currentItem.tag!!){
                     allTags = "$allTags$tag "
@@ -77,14 +75,20 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
         }
 
 
+        holder.checkBox.isChecked = positionIsSelected[position]
 
+        holder.checkBox.setOnClickListener {
+            positionIsSelected[position] = !positionIsSelected[position]
+            holder.checkBox.isChecked = positionIsSelected[position]
+            selectOnClickListener!!.onclick(position, holder)
+        }
         holder.itemView.setOnClickListener {
-            holder.checkBox.isChecked = !holder.checkBox.isChecked
             if (this.selectOnClickListener != null) {
+                positionIsSelected[position] = !positionIsSelected[position]
+                holder.checkBox.isChecked = positionIsSelected[position]
                 selectOnClickListener!!.onclick(position, holder)
             }
         }
-
     }
 
 
@@ -97,7 +101,7 @@ class QuestionAddChooseQuestion(private val context: Activity, private val quest
         val questionType: TextView = itemView.findViewById(R.id.question_type)
         val questionTag: TextView = itemView.findViewById(R.id.question_tag)
         val questionDescription: TextView = itemView.findViewById(R.id.question_description)
-        val questionContainer: LinearLayout = itemView.findViewById(R.id.question_tag_container)
+        val questionTagIcon: TextView = itemView.findViewById(R.id.question_tag_icon)
         val checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
     }
 }

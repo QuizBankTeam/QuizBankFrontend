@@ -38,18 +38,19 @@
                         android:gravity="center"
                         android:scrollbars = "vertical"
                         android:singleLine="false" />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="3dp"
-                        android:background="@color/black"
-                        />
+<!--                    <View-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="1dp"-->
+<!--                        android:layout_marginTop="3dp"-->
+<!--                        android:background="@color/black"-->
+<!--                        />-->
                     <EditText
                         android:id="@+id/iv_answer_option_text"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:textSize="14sp"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         android:hint="*選擇跟多選須填其餘可跳過*\n答案選項 ( *多選題 每個選項用空格區隔)\n ex: 答案為AB則填寫方式為 A B"
                         android:gravity="left"
                         android:inputType="textMultiLine"
@@ -61,18 +62,35 @@
                         android:layout_marginTop="3dp"
                         android:background="@color/black"
                         />
-                    <EditText
-                        android:id="@+id/iv_answer_description_text"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="175dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="10dp"
-                        android:hint="答案描述 \n (可用下方選擇圖片掃描成文字)"
-                        android:gravity="left"
-                        android:inputType="textMultiLine"
-                        android:scrollbars = "vertical"
-                        android:singleLine="false" />
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/iv_answer_description_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="175dp"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="10dp"
+                            android:hint="答案描述 \n (可用右上方選擇圖片掃描成文字)"
+                            android:gravity="left"
+                            android:inputType="textMultiLine"
+                            android:scrollbars = "vertical"
+                            android:singleLine="false" />
+                        <ImageButton
+                            android:id="@+id/answer_choose_photo"
+                            android:layout_width="25dp"
+                            android:layout_height="27dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginRight="6dp"
+                            android:src="@drawable/addimage"
+                            android:foreground="?actionBarItemBackground"
+                            android:background="?actionBarItemBackground"
+                            android:scaleType="fitXY" />
+
+                    </FrameLayout>
+
                     <LinearLayout
                         android:id="@+id/question_type"
                         android:layout_width="match_parent"
@@ -84,20 +102,20 @@
                         android:focusable="true"
                         android:orientation="vertical"
                         >
-                        <TextView
-                            android:id="@+id/answer_choose_photo"
-                            android:layout_width="match_parent"
-                            android:layout_height="38dp"
-                            android:textStyle="bold"
-                            android:visibility="visible"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:gravity="center"
-                            android:onClick="onClick"
-                            android:clickable="true"
-                            android:background="@drawable/add_image"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="選擇答案圖片/OCR   📂" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/answer_choose_photo"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="38dp"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:visibility="visible"-->
+<!--                            android:layout_marginLeft="5dp"-->
+<!--                            android:layout_marginRight="5dp"-->
+<!--                            android:gravity="center"-->
+<!--                            android:onClick="onClick"-->
+<!--                            android:clickable="true"-->
+<!--                            android:background="@drawable/add_image"-->
+<!--                            android:foreground="?attr/selectableItemBackground"-->
+<!--                            android:text="選擇答案圖片/OCR   📂" />-->
                         <ImageView
                             android:id="@+id/iv_answer_image"
                             android:layout_width="match_parent"
@@ -125,23 +143,24 @@
                                 android:onClick="onClick"
                                 android:clickable="true"
                                 android:foreground="?attr/selectableItemBackground"
-                                android:background="@drawable/add_image"
+                                android:background="@drawable/shape_add_option"
                                 android:text="取消新增 ❌" />
+
                             <TextView
                                 android:id="@+id/answer_enter"
                                 android:layout_width="match_parent"
                                 android:layout_height="38dp"
-                                android:layout_weight="1"
-                                android:textStyle="bold"
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginRight="5dp"
-                                android:gravity="center"
-                                android:onClick="onClick"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_add_option"
                                 android:clickable="true"
                                 android:foreground="?attr/selectableItemBackground"
-                                android:background="@drawable/add_image"
-                                android:text="新增答案 ✅" />
+                                android:gravity="center"
+                                android:onClick="onClick"
+                                android:text="新增答案 ✅"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                     </LinearLayout>

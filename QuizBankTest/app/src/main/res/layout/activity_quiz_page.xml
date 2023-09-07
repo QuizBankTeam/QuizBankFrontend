@@ -6,7 +6,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.quiz.QuizPage">
 
+    <FrameLayout
+        android:id="@+id/add_quiz_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+    </FrameLayout>
+
     <LinearLayout
+        android:id="@+id/quiz_page_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -72,7 +72,7 @@
                     android:textStyle="bold"
                     android:gravity="center"
                     android:foreground="?attr/selectableItemBackground"
-                    android:background="@drawable/add_image"
+                    android:background="@drawable/shape_add_option"
                     android:text="新增題目標籤" />
             </LinearLayout>
             <co.lujun.androidtagview.TagContainerLayout
@@ -241,7 +241,7 @@
                 android:onClick="onClick"
                 android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
-                android:background="@drawable/add_image"
+                android:background="@drawable/shape_add_option"
                 android:text="取消新增 ❌" />
                 <TextView
                     android:id="@+id/enter_tag"
@@ -256,7 +256,7 @@
                     android:onClick="onClick"
                     android:foreground="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:background="@drawable/add_image"
+                    android:background="@drawable/shape_add_option"
                     android:text="新增標籤 ✅" />
 
             </LinearLayout>

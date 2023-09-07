@@ -5,21 +5,31 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.quiz.SPSingleRecord
 import com.example.quizbanktest.models.QuizRecord
-import org.w3c.dom.Text
 import java.time.LocalDateTime
 
 class SPRecordAdapter(private val context: Activity, private val recordList: ArrayList<QuizRecord>):
     RecyclerView.Adapter<SPRecordAdapter.MyViewHolder>() {
+    private var deleteBtnVisible = false
+    private var onClickListener: SelectOnDeleteClickListener? = null
+    interface SelectOnDeleteClickListener {
+        fun onclick(position: Int, holder: MyViewHolder)
+    }
+    fun setDeleteClickListener(selectOnClickListener: SelectOnDeleteClickListener) {
+        this.onClickListener = selectOnClickListener
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.row_sp_record, parent, false)
         return MyViewHolder(itemView)
     }
-
+    fun setDeleteBtnVisible(deleteMode: Boolean){
+        deleteBtnVisible = deleteMode
+    }
 
     override fun getItemCount(): Int {
         return recordList.size
@@ -50,12 +60,25 @@ class SPRecordAdapter(private val context: Activity, private val recordList: Arr
         }else{
             holder.quizStartDate.text = "今天"
         }
+        if(deleteBtnVisible){
+            holder.deleteBtn.visibility = View.VISIBLE
+        }else{
+            holder.deleteBtn.visibility = View.GONE
+        }
 
+        if(currentItem.totalScore==-1){
+            holder.score.text = "得分: 0"
+        }else{
+            holder.score.text = "得分: " + currentItem.totalScore.toString()
+        }
         holder.quizDuringTime.text = "考試時長: " + (currentItem.duringTime?.div(60)).toString() + "分鐘"
         holder.quizRecordTitle.text = currentItem.title
         holder.questionNum.text = currentItem.questionRecords.size.toString() + "題"
-        holder.score.text = "得分: " + currentItem.totalScore.toString()
-
+        holder.deleteBtn.setOnClickListener {
+            if(onClickListener!=null){
+                onClickListener!!.onclick(position, holder)
+            }
+        }
         holder.itemView.setOnClickListener {
             val intent = Intent()
             intent.setClass(context, SPSingleRecord::class.java)
@@ -71,5 +94,6 @@ class SPRecordAdapter(private val context: Activity, private val recordList: Arr
         val quizDuringTime: TextView = itemView.findViewById(R.id.Quiz_duringTime)
         val score: TextView = itemView.findViewById(R.id.quiz_score)
         val quizStartDate: TextView = itemView.findViewById(R.id.QuizStartDate)
+        val deleteBtn: ImageButton = itemView.findViewById(R.id.delete_btn)
     }
 }

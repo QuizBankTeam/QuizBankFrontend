@@ -13,10 +13,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -312,8 +309,14 @@ class  MPStartQuiz: AppCompatActivity() {
             this.trueOrFalseView!!.visibility = View.VISIBLE
         }else{
             val v: View =  layoutInflater.inflate(R.layout.item_option_trueorfalse, startQuizBinding.startQuizContainer, false)
+            val vHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
+            val tfParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, vHeight)
             val textViewTrue : TextView = v.findViewById(R.id.option_true)
             val textViewFalse: TextView = v.findViewById(R.id.option_false)
+            tfParams.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescription.id)
+            v.layoutParams = tfParams
+            v.id = View.generateViewId()
+
             textViewTrue.setOnClickListener {
                 textViewTrue.background = ContextCompat.getDrawable(this, R.drawable.select_option_border)
                 textViewFalse.setBackgroundResource(0)
@@ -326,7 +329,7 @@ class  MPStartQuiz: AppCompatActivity() {
                 this.currentAnswer  = "false"
                 trueOrFalseSelected = true
             }
-            startQuizBinding.startQuizContainer.addView(v, 4)
+            startQuizBinding.lowerContainer.addView(v, 1)
             this.trueOrFalseView = v
         }
     }

@@ -1,5 +1,6 @@
 package com.example.quizbanktest.fragment
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -34,14 +35,7 @@ class SingleRecordPage: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("in single record page", "")
         init()
-
-
-
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
     }
     private fun init(){
         val quizRecordType = Constants.quizTypeSingle
@@ -56,7 +50,32 @@ class SingleRecordPage: Fragment() {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             initWithoutNetwork()
         })
-
+    }
+    fun onDeleteBtnClick(deleteBtnVisible: Boolean){
+        if(deleteBtnVisible){
+            recordAdapter.setDeleteBtnVisible(true)
+            recordAdapter.notifyDataSetChanged()
+            recordAdapter.setDeleteClickListener(object : SPRecordAdapter.SelectOnDeleteClickListener{
+                override fun onclick(position: Int, holder: SPRecordAdapter.MyViewHolder) {
+                    val deleteBuilder = AlertDialog.Builder(requireContext())
+                    deleteBuilder.setTitle("確定刪除考試紀錄?")
+                    deleteBuilder.setPositiveButton("確定") { dialog, which ->
+                        ConstantsQuizRecord.deleteQuizRecord(requireContext(), recordList[position]._id, onSuccess = {
+                            recordList.removeAt(position)
+                            recordAdapter.notifyDataSetChanged()
+                        }, onFailure = {
+                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        })
+                    }
+                    deleteBuilder.setNegativeButton("取消"){ dialog, which ->
+                    }
+                    deleteBuilder.show()
+                }
+            })
+        }else{
+            recordAdapter.setDeleteBtnVisible(false)
+            recordAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun initWithoutNetwork() {
