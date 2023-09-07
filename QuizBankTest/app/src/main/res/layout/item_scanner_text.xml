@@ -413,6 +413,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num2"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"
@@ -447,6 +448,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num3"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"
@@ -481,6 +483,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num4"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"
@@ -515,6 +518,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num5"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"
@@ -549,6 +553,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num6"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"
@@ -583,6 +588,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num7"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"
@@ -617,6 +623,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num8"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"
@@ -651,6 +658,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num9"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"
@@ -685,6 +693,7 @@
                                     android:visibility="gone">
 
                                     <TextView
+                                        android:id="@+id/option_num10"
                                         android:layout_width="0dp"
                                         android:layout_height="50dp"
                                         android:layout_weight="1"

@@ -80,8 +80,45 @@ class OcrResultViewAdapter(
             val option9 : EditText = holder.itemView.findViewById(R.id.question_option9)
             val option10 : EditText = holder.itemView.findViewById(R.id.question_option10)
             val optionList : LinearLayout = holder.itemView.findViewById(R.id.options_list)
-            val checkBoxTint : TextView = holder.itemView.findViewById(R.id.checkbox_tint)
             val trueFalseLayout : LinearLayout = holder.itemView.findViewById(R.id.true_false)
+            val checkBoxTint : TextView = holder.itemView.findViewById(R.id.checkbox_tint)
+            val checkBox1 = holder.itemView.findViewById<CheckBox>(R.id.answer_option1_check)
+            val checkBox2 = holder.itemView.findViewById<CheckBox>(R.id.answer_option2_check)
+            val checkBox3 = holder.itemView.findViewById<CheckBox>(R.id.answer_option3_check)
+            val checkBox4= holder.itemView.findViewById<CheckBox>(R.id.answer_option4_check)
+            val checkBox5 = holder.itemView.findViewById<CheckBox>(R.id.answer_option5_check)
+            val checkBox6 = holder.itemView.findViewById<CheckBox>(R.id.answer_option6_check)
+            val checkBox7 = holder.itemView.findViewById<CheckBox>(R.id.answer_option7_check)
+            val checkBox8 = holder.itemView.findViewById<CheckBox>(R.id.answer_option8_check)
+            val checkBox9= holder.itemView.findViewById<CheckBox>(R.id.answer_option9_check)
+            val checkBox10 = holder.itemView.findViewById<CheckBox>(R.id.answer_option10_check)
+            val checkBoxForTrue = holder.itemView.findViewById<CheckBox>(R.id.true_false_true_check)
+            val checkBoxForFalse = holder.itemView.findViewById<CheckBox>(R.id.true_false_false_check)
+            val optionNum2 = holder.itemView.findViewById<TextView>(R.id.option_num2)
+            val optionNum3 = holder.itemView.findViewById<TextView>(R.id.option_num3)
+            val optionNum4 = holder.itemView.findViewById<TextView>(R.id.option_num4)
+            val optionNum5= holder.itemView.findViewById<TextView>(R.id.option_num5)
+            val optionNum6 = holder.itemView.findViewById<TextView>(R.id.option_num6)
+            val optionNum7 = holder.itemView.findViewById<TextView>(R.id.option_num7)
+            val optionNum8 = holder.itemView.findViewById<TextView>(R.id.option_num8)
+            val optionNum9 = holder.itemView.findViewById<TextView>(R.id.option_num9)
+            val optionNum10 = holder.itemView.findViewById<TextView>(R.id.option_num10)
+            val optionNums = listOf(
+                optionNum2, optionNum3, optionNum4, optionNum5,
+                optionNum6, optionNum7, optionNum8, optionNum9, optionNum10
+            )
+            val options = listOf(
+                option1, option2, option3, option4, option5,
+                option6, option7, option8, option9, option10
+            )
+            val checkBoxes = listOf(
+                checkBox1, checkBox2, checkBox3, checkBox4, checkBox5,
+                checkBox6, checkBox7, checkBox8, checkBox9, checkBox10
+            )
+            val checkBoxesForTureFalse = listOf(
+                checkBoxForTrue,
+                checkBoxForFalse
+            )
             questionTypeSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>,
@@ -96,6 +133,10 @@ class OcrResultViewAdapter(
                             checkBoxTint.visibility = View.GONE
                             isSingleChoice = false
                             isTrueFalse = false
+                            checkBoxesForTureFalse.forEach { it.isChecked = false }
+                            checkBoxes.forEach { it.isChecked = false}
+                            options.forEach { it.setText("") }
+
                         }
                         1 -> {
                             trueFalseLayout.visibility=View.GONE
@@ -103,6 +144,28 @@ class OcrResultViewAdapter(
                             optionList.visibility = View.VISIBLE
                             isSingleChoice = true
                             isTrueFalse = false
+                            checkBoxesForTureFalse.forEach { it.isChecked = false }
+                            checkBoxes.forEachIndexed { index , it ->
+                                it.isChecked = false
+                                if(index == 0){
+                                    it.visibility = View.VISIBLE
+                                }else{
+                                    it.visibility = View.GONE
+                                }
+                            }
+                            options.forEachIndexed { index, editText ->
+                                if (index == 0) {
+                                    editText.visibility = View.VISIBLE
+                                    editText.setText("")
+                                } else {
+                                    editText.visibility = View.GONE
+                                    editText.setText("")
+                                }
+                            }
+                            optionNums.forEach {
+                                it.visibility = View.GONE
+                            }
+
                         }
                         2 -> {
                             trueFalseLayout.visibility=View.GONE
@@ -110,6 +173,9 @@ class OcrResultViewAdapter(
                             optionList.visibility = View.GONE
                             isSingleChoice = false
                             isTrueFalse = false
+                            checkBoxesForTureFalse.forEach { it.isChecked = false }
+                            checkBoxes.forEach { it.isChecked = false}
+                            options.forEach { it.setText("") }
                         }
                         3 -> {
                             trueFalseLayout.visibility=View.GONE
@@ -117,6 +183,27 @@ class OcrResultViewAdapter(
                             optionList.visibility = View.VISIBLE
                             isSingleChoice = false
                             isTrueFalse = false
+                            checkBoxesForTureFalse.forEach { it.isChecked = false }
+                            checkBoxes.forEachIndexed { index , it ->
+                                it.isChecked = false
+                                if(index == 0){
+                                    it.visibility = View.VISIBLE
+                                }else{
+                                    it.visibility = View.GONE
+                                }
+                            }
+                            options.forEachIndexed { index, editText ->
+                                if (index == 0) {
+                                    editText.visibility = View.VISIBLE
+                                    editText.setText("")
+                                } else {
+                                    editText.visibility = View.GONE
+                                    editText.setText("")
+                                }
+                            }
+                            optionNums.forEach {
+                                it.visibility = View.GONE
+                            }
                         }
                         4 -> {
                             trueFalseLayout.visibility=View.VISIBLE
@@ -124,6 +211,9 @@ class OcrResultViewAdapter(
                             optionList.visibility = View.GONE
                             isSingleChoice = false
                             isTrueFalse = true
+                            checkBoxesForTureFalse.forEach { it.isChecked = false }
+                            checkBoxes.forEach { it.isChecked = false}
+                            options.forEach { it.setText("") }
                         }
                     }
                 }
@@ -359,30 +449,7 @@ class OcrResultViewAdapter(
                 }
                 true
             }
-            val checkBox1 = holder.itemView.findViewById<CheckBox>(R.id.answer_option1_check)
-            val checkBox2 = holder.itemView.findViewById<CheckBox>(R.id.answer_option2_check)
-            val checkBox3 = holder.itemView.findViewById<CheckBox>(R.id.answer_option3_check)
-            val checkBox4= holder.itemView.findViewById<CheckBox>(R.id.answer_option4_check)
-            val checkBox5 = holder.itemView.findViewById<CheckBox>(R.id.answer_option5_check)
-            val checkBox6 = holder.itemView.findViewById<CheckBox>(R.id.answer_option6_check)
-            val checkBox7 = holder.itemView.findViewById<CheckBox>(R.id.answer_option7_check)
-            val checkBox8 = holder.itemView.findViewById<CheckBox>(R.id.answer_option8_check)
-            val checkBox9= holder.itemView.findViewById<CheckBox>(R.id.answer_option9_check)
-            val checkBox10 = holder.itemView.findViewById<CheckBox>(R.id.answer_option10_check)
-            val checkBoxForTrue = holder.itemView.findViewById<CheckBox>(R.id.true_false_true_check)
-            val checkBoxForFalse = holder.itemView.findViewById<CheckBox>(R.id.true_false_false_check)
-            val options = listOf(
-                option1, option2, option3, option4, option5,
-                option6, option7, option8, option9, option10
-            )
-            val checkBoxes = listOf(
-                checkBox1, checkBox2, checkBox3, checkBox4, checkBox5,
-                checkBox6, checkBox7, checkBox8, checkBox9, checkBox10
-            )
-            val checkBoxesForTureFalse = listOf(
-                checkBoxForTrue,
-                checkBoxForFalse
-            )
+
             val listenerForTrueFalse =
                 CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                     ConstantsOcrResults.questionList[position].answerOptions?.clear()
@@ -631,120 +698,44 @@ class OcrResultViewAdapter(
             var optionLayout8 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout8)
             var optionLayout9 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout9)
             var optionLayout10 : LinearLayout = holder.itemView.findViewById(R.id.optionLayout10)
+            val optionLayouts = listOf(
+                optionLayout2,optionLayout3,optionLayout4,optionLayout5,optionLayout6,optionLayout7,optionLayout8,optionLayout9,optionLayout10
+
+            )
             //超過四個選項因此點及新增選項
             val addOptionsButton : TextView = holder.itemView.findViewById(R.id.add_options_button)
             val removeOptionsButton : TextView = holder.itemView.findViewById(R.id.minus_options_button)
-            addOptionsButton.setOnClickListener{
-                if(optionsNum == 10){ //不能超過十個
-                    Toast.makeText(context,"已達最多的選項限制了喔",Toast.LENGTH_SHORT).show()
-                }else{
-                    optionsNum += 1
-                }
-                when (optionsNum) {
-                    2 -> {
-                        removeOptionsButton.visibility = View.VISIBLE
-                        option2.visibility = View.VISIBLE
-                        optionLayout2.visibility = View.VISIBLE
-                        checkBox2.visibility = View.VISIBLE
-                    }
-                    3 -> {
-                        option3.visibility = View.VISIBLE
-                        optionLayout3.visibility = View.VISIBLE
-                        checkBox3.visibility = View.VISIBLE
-                    }
-                    4-> {
-                        option4.visibility = View.VISIBLE
-                        optionLayout4.visibility = View.VISIBLE
-                        checkBox4.visibility = View.VISIBLE
-                    }
-                    5 -> {
-                        option5.visibility = View.VISIBLE
-                        optionLayout5.visibility = View.VISIBLE
-                        checkBox5.visibility = View.VISIBLE
-                    }
-                    6 -> {
-                        option6.visibility = View.VISIBLE
-                        optionLayout6.visibility = View.VISIBLE
-                        checkBox6.visibility = View.VISIBLE
-                    }
-                    7-> {
-                        option7.visibility = View.VISIBLE
-                        optionLayout7.visibility = View.VISIBLE
-                        checkBox7.visibility = View.VISIBLE
-                    }
-                    8-> {
-                        option8.visibility = View.VISIBLE
-                        optionLayout8.visibility = View.VISIBLE
-                        checkBox8.visibility = View.VISIBLE
-                    }
-                    9-> {
-                        option9.visibility = View.VISIBLE
-                        optionLayout9.visibility = View.VISIBLE
-                        checkBox9.visibility = View.VISIBLE
-                    }
-                    10-> {
-                        option10.visibility = View.VISIBLE
-                        optionLayout10.visibility = View.VISIBLE
-                        checkBox10.visibility = View.VISIBLE
-                    }
-                }
+            val optionsBtn = listOf(
+                option2, option3, option4, option5, option6, option7, option8, option9, option10
+            )
 
+            val checkBoxesBtn = listOf(
+                checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7, checkBox8, checkBox9, checkBox10
+            )
+            addOptionsButton.setOnClickListener {
+                if (optionsNum < 10) {
+                    optionsNum += 1
+                    optionLayouts[optionsNum - 2].visibility = View.VISIBLE
+                    optionsBtn[optionsNum - 2].visibility = View.VISIBLE
+                    checkBoxesBtn[optionsNum - 2].visibility = View.VISIBLE
+                    optionNums[optionsNum-2].visibility = View.VISIBLE
+                } else {
+                    Toast.makeText(context, "已達最多的選項限制了喔", Toast.LENGTH_SHORT).show()
+                }
             }
 
-            removeOptionsButton.setOnClickListener{
-                if(optionsNum == 1){ //不能超過十個
-                    Toast.makeText(context,"已達不能再少了喔",Toast.LENGTH_SHORT).show()
-                }else{
+            removeOptionsButton.setOnClickListener {
+                if (optionsNum > 1) {
                     optionsNum -= 1
+                    optionLayouts[optionsNum - 1].visibility = View.GONE
+                    optionsBtn[optionsNum - 1].visibility = View.GONE
+                    checkBoxesBtn[optionsNum - 1].visibility = View.GONE
+                    optionNums[optionsNum-1].visibility = View.GONE
+                    optionsBtn[optionsNum - 1].setText("")
+                    checkBoxesBtn[optionsNum - 1].isChecked = false
+                } else {
+                    Toast.makeText(context, "已達不能再少了喔", Toast.LENGTH_SHORT).show()
                 }
-                when (optionsNum+1) {
-                    2 -> {
-                        option2.visibility = View.GONE
-                        optionLayout2.visibility = View.GONE
-                        checkBox2.visibility = View.GONE
-                    }
-                    3 -> {
-                        option3.visibility = View.GONE
-                        checkBox3.visibility = View.GONE
-                        optionLayout3.visibility = View.GONE
-                    }
-                    4-> {
-                        option4.visibility = View.GONE
-                        checkBox4.visibility = View.GONE
-                        optionLayout4.visibility = View.GONE
-                    }
-                    5-> {
-                        option5.visibility = View.GONE
-                        checkBox5.visibility = View.GONE
-                        optionLayout5.visibility = View.GONE
-                    }
-                    6 -> {
-                        option6.visibility = View.GONE
-                        checkBox6.visibility = View.GONE
-                        optionLayout6.visibility = View.GONE
-                    }
-                    7-> {
-                        option7.visibility = View.GONE
-                        checkBox7.visibility = View.GONE
-                        optionLayout7.visibility = View.GONE
-                    }
-                    8-> {
-                        option8.visibility = View.GONE
-                        checkBox8.visibility = View.GONE
-                        optionLayout8.visibility = View.GONE
-                    }
-                    9-> {
-                        option9.visibility = View.GONE
-                        checkBox9.visibility = View.GONE
-                        optionLayout9.visibility = View.GONE
-                    }
-                    10-> {
-                        option10.visibility = View.GONE
-                        checkBox10.visibility = View.GONE
-                        optionLayout10.visibility = View.GONE
-                    }
-                }
-
             }
             //掃描結果新增置資料庫
             val btnScanSubmit : TextView  = holder.itemView.findViewById(R.id.btn_scan_submit)
@@ -878,19 +869,15 @@ class OcrResultViewAdapter(
 
         }
     }
-
     override fun getItemCount(): Int {
         return list.size
     }
-
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
     }
-
     interface OnClickListener {
         fun onClick(position: Int, model: QuestionModel)
     }
-
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
 }
