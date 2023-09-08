@@ -772,6 +772,7 @@ class OcrResultViewAdapter(
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.setPositiveButton("確認") { dialog, which ->
                         ConstantsOcrResults.questionList[position].image?.clear()
+                        btnScanPhoto.setImageResource(R.drawable.addimage)
                         imageList.clear()
                         imageDialog.dismiss()
                     }
