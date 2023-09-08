@@ -1,12 +1,16 @@
 package com.example.quizbanktest.adapters.main
 
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.bank.BankQuestionActivity
+import com.example.quizbanktest.activity.quiz.SPSingleRecord
 import com.example.quizbanktest.models.QuestionBankModel
 
 open class RecentViewAdapter(
@@ -40,6 +44,15 @@ open class RecentViewAdapter(
                 if (onClickListener != null) {
                     onClickListener!!.onClick(position, model)
                 }
+                val bankQuestionActivity = Intent()
+                bankQuestionActivity.setClass(context, BankQuestionActivity::class.java)
+                val activityRecordPage = "RecordPage"
+
+                bankQuestionActivity.putExtra("BankTitle", model.title)
+                bankQuestionActivity.putExtra("BankID", model._id)
+                Log.e("BankActivity", "start bankQuestion activity")
+
+                context.startActivity(bankQuestionActivity)
             }
         }
     }
