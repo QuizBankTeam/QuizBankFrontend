@@ -54,14 +54,14 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/item_happy_place_description_text_color"
                     android:textSize="@dimen/item_quiz_bank_description_textSize"
-                    tools:text="Type" />
+                    tools:text="得分: " />
                 <TextView
                     android:id="@+id/wrongDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/item_happy_place_description_text_color"
                     android:textSize="12sp"
-                    tools:text="Date" />
+                    tools:text="考試時長: " />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

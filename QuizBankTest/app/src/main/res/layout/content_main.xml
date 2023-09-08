@@ -149,7 +149,7 @@
                     android:id="@+id/recent_wrong"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="  最近錯的題目 : "
+                    android:text="  最近的考試紀錄 : "
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recent_list"
