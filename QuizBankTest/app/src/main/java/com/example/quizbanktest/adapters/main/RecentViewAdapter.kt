@@ -34,7 +34,6 @@ open class RecentViewAdapter(
         val model = list[position]
 
         if (holder is MyViewHolder) {
-
             holder.itemView.findViewById<TextView>(R.id.recentTitle).text = model.title
             holder.itemView.findViewById<TextView>(R.id.recentType).text = model.questionBankType
             holder.itemView.findViewById<TextView>(R.id.recentDate).text = model.createdDate
@@ -46,11 +45,10 @@ open class RecentViewAdapter(
                 }
                 val bankQuestionActivity = Intent()
                 bankQuestionActivity.setClass(context, BankQuestionActivity::class.java)
-                val activityRecordPage = "RecordPage"
 
                 bankQuestionActivity.putExtra("BankTitle", model.title)
-                bankQuestionActivity.putExtra("BankID", model._id)
-                Log.e("BankActivity", "start bankQuestion activity")
+                bankQuestionActivity.putExtra("BankId", model._id)
+                Log.e("BankActivity", "start bankQuestion activity11")
 
                 context.startActivity(bankQuestionActivity)
             }
