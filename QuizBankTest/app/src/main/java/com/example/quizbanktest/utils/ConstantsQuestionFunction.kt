@@ -16,10 +16,13 @@ import com.example.quizbanktest.network.QuestionService
 import com.google.gson.Gson
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.ResponseBody
+import okio.Buffer
+import okio.BufferedSource
 import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
+import java.nio.charset.Charset
 
 object ConstantsQuestionFunction {
     var allQuestionsReturnResponse : bankInnerQuestion?= null
@@ -117,11 +120,11 @@ object ConstantsQuestionFunction {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
                     if (response!!.isSuccess) {
 //                        // TODO
-//                        val source: BufferedSource = response.body().source()
-//                        source.request(Long.MAX_VALUE) // Buffer the entire body.
-//
-//                        val buffer: Buffer = source.buffer()
-//                        val UTF8: Charset = Charset.forName("UTF-8")
+                        val source: BufferedSource = response.body().source()
+                        source.request(Long.MAX_VALUE) // Buffer the entire body.
+
+                        val buffer: Buffer = source.buffer()
+                        val UTF8: Charset = Charset.forName("UTF-8")
 //                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
                         val gson = Gson()
                         val allQuestionsResponse = gson.fromJson(
@@ -131,17 +134,13 @@ object ConstantsQuestionFunction {
                         allQuestionsReturnResponse = allQuestionsResponse
 //                        Log.d("All questions response", allQuestionsReturnResponse.toString())
                         questionList = allQuestionsResponse.questionBank.questions
-//                        Log.e("Question Response Result", questionList.toString())
-                        onSuccess(allQuestionsResponse.questionBank.questions)
+//                        Log.e("ConstantsQuestionFunction: Question Response Result:", questionList.toString())
+                        onSuccess(questionList)
                     } else {
                         val sc = response.code()
                         when (sc) {
                             400 -> {
-                                Log.e(
-                                    "Error 400", "Bad Re" +
-                                            "" +
-                                            "quest"
-                                )
+                                Log.e("Error 400", "Bad Request: $response")
                             }
                             404 -> {
                                 Log.e("Error 404", "Not Found")
@@ -156,7 +155,6 @@ object ConstantsQuestionFunction {
                 }
 
                 override fun onFailure(t: Throwable?) {
-
                     onFailure("Request failed with status code ")
                     Log.e("in get all questions Error", t?.message.toString())
                 }
@@ -169,7 +167,6 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
-/*
     fun putQuestion(context: Context, question: QuestionModel, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -177,13 +174,15 @@ object ConstantsQuestionFunction {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit.create(QuestionService::class.java)
+
+            val body = QuestionService.PutQuestionBody(question._id!!, question.title!!, question.number!!, question.description, question.options!!, question.questionType!!, question.bankType!!, question.questionBank!!, question.answerOptions!!, question.answerDescription!!, ConstantsAccountServiceFunction.userAccount!!._id, question.originateFrom!!, question.createdDate!!, question.image!!, question.tag!!)
             //TODO 拿到csrf token access token
             val call = api.updateQuestion(
                 Constants.COOKIE,
                 Constants.csrfToken,
                 Constants.session,
                 Constants.refreshToken,
-                putQuestionBody
+                body
             )
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
@@ -194,11 +193,7 @@ object ConstantsQuestionFunction {
                         val sc = response.code()
                         when (sc) {
                             400 -> {
-                                Log.e(
-                                    "Error 400", "Bad Re" +
-                                            "" +
-                                            "quest"
-                                )
+                                Log.e("Error 400", "Bad Request: $response")
                             }
                             404 -> {
                                 Log.e("Error 404", "Not Found")
@@ -228,7 +223,6 @@ object ConstantsQuestionFunction {
     }
 
 
- */
     data class AllQuestionsResponse(val questionBank : ArrayList<QuestionModel>)
     data class bankInnerQuestion(val questionBank:QuestionAndBank)
 

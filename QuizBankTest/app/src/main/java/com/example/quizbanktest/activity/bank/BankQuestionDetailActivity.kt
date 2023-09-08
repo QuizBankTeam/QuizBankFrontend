@@ -16,13 +16,16 @@ import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
+import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
+import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
 import org.w3c.dom.Text
 
 
-class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
+class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
@@ -37,9 +40,12 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
     private lateinit var questionDescription: String
     private lateinit var questionOptions: ArrayList<String>
     private lateinit var questionType: String
+    private lateinit var bankType: String
+    private lateinit var bankId: String
     private lateinit var answerOptions: ArrayList<String>
     private lateinit var answerDescription: String
     private lateinit var questionSource: String
+    private lateinit var createdDate: String
     private lateinit var questionImage: ArrayList<String>
     private lateinit var questionTag: ArrayList<String>
     // variable
@@ -113,19 +119,44 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         }
         Log.e("BankQuestionDetailActivity", tmpAnswerOptionsArrayList.toString())
         optionRecyclerView = findViewById(R.id.optionRecyclerView)
-        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
+        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
+        optionRecyclerView.setHasFixedSize(true)
+
+        when (questionType) {
+            "TrueOrFalse" -> {
+                optionRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+            }
+            "cloze" -> {
+
+            }
+            else -> {
+                optionRecyclerView.layoutManager = LinearLayoutManager(this)
+            }
+        }
+
         optionRecyclerView.adapter = optionAdapter
-        optionRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    fun showAnswer() {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showAnswer() {
         optionAdapter.showAnswer()
         optionAdapter.notifyDataSetChanged()
     }
 
     private fun putQuestion() {
+        Log.e("BankQuestionDetailActivity", "put question")
         if (isModified) {
-//            ConstantsQuestionFunction.putQuestion()
+            val putQuestionBody = QuestionModel(questionId, questionTitle, questionNumber, questionDescription, questionOptions, questionType, bankType, bankId, answerOptions, answerDescription, questionSource, createdDate, questionImage, questionTag)
+            ConstantsQuestionFunction.putQuestion(this, putQuestionBody,
+                onSuccess = {
+                    Log.e("BankQuestionDetailActivity", "upload success")
+                },
+                onFailure = { errorMessage ->
+//                    showErrorSnackBar("網路連線狀況不好")
+//                    hideProgressDialog()
+                    Log.e("BankQuestionDetailActivity", "Error Message: $errorMessage" )
+                }
+            )
         }
     }
 
@@ -156,14 +187,8 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         finish()
     }
 
-    // option be clicked
     override fun onItemClick(position: Int) {
         //TODO
-    }
-
-    private var pos: Int = 0
-    override fun getAnswerOptionPosition(position: Int) {
-        pos = position
     }
 
     private fun init() {
@@ -172,22 +197,15 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         questionTitle = intent.getStringExtra("title").toString()
         questionNumber = intent.getStringExtra("number").toString()
         questionDescription = intent.getStringExtra("description").toString()
-//        questionDescription =
-//            "This is a test string for testing the scroll function of TextView is usable or not.\n" +
-//                    "The tested function are scrollbars in xml file and movementMethod in kotlin file.\n" +
-//                    "Here is a testing article below:\n" +
-//                    "The Collateral Repair Podcast aims to share the stories of refugees living in Amman, Jordan.\n" +
-//                    "On a monthly basis, CRP invites you into an intimate space that will allow you to hear and understand refugees’ experiences in their own words.\n" +
-//                    "Each episode features an interview with a member of one of Jordan’s refugee communities,\n" +
-//                    "a supporting interview with a professional or employee at CRP, a Q&A in response to listeners’ questions,\n" +
-//                    "and a quick update of developments that month at CRP."
-        newDescription = questionDescription
         questionOptions = intent.getStringArrayListExtra("options")!!
         questionType = intent.getStringExtra("type").toString()
+        bankType = intent.getStringExtra("bankType").toString()
+        bankId = intent.getStringExtra("bankId").toString()
         answerOptions = intent.getStringArrayListExtra("answerOptions")!!
         answerOptions.add("roughly")
         answerDescription = intent.getStringExtra("answerDescription").toString()
         questionSource = intent.getStringExtra("source").toString()
+        createdDate = intent.getStringExtra("createdDate").toString()
         questionImage = intent.getStringArrayListExtra("image")!!
         questionTag = intent.getStringArrayListExtra("tag")!!
 
@@ -203,5 +221,8 @@ class BankQuestionDetailActivity : AppCompatActivity(), RecyclerViewInterface {
         tvType.text = questionType
         tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = questionDescription
+
+        // Variable initialization
+        newDescription = questionDescription
     }
 }

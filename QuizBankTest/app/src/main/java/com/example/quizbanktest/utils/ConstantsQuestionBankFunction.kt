@@ -129,11 +129,7 @@ object ConstantsQuestionBankFunction {
                     } else {
                         when (response.code()) {
                             400 -> {
-                                Log.e(
-                                    "Error 400", "Bad Re" +
-                                            "" +
-                                            "quest"+ response.toString()
-                                )
+                                Log.e("Error 400", "Bad Request$response")
                                 Toast.makeText(activity,"Error 400",Toast.LENGTH_SHORT).show()
                             }
                             404 -> {

@@ -15,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.*
 
 import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -32,17 +34,26 @@ import jp.wasabeef.blurry.Blurry
 import java.time.LocalDate
 
 class BankActivity : BaseActivity(), RecyclerViewInterface {
+    // View variable
     private lateinit var searchView: SearchView
     private lateinit var menuButton: ImageButton
     private lateinit var bank_warning: TextView
-    private var wrapLayout: WrapLayout? = null
-    private var blurred = false
-    private var questionBankModels = ArrayList<QuestionBankModel>()
-
     private lateinit var viewDialog: View
     private lateinit var etBankCreatedDate: EditText
     private lateinit var etBankMembers: EditText
     private lateinit var etBankSource: EditText
+    private lateinit var bankRecyclerView: RecyclerView
+    private lateinit var bankAdapter: BankRecyclerViewAdapter
+    private lateinit var btnGroup: ImageButton
+    private lateinit var btnAddBank: ImageButton
+
+    // Bank variable
+    private var questionBankModels = ArrayList<QuestionBankModel>()
+
+    // Variable
+    private var wrapLayout: WrapLayout? = null
+    private var blurred = false
+    private var toast: Toast? = null
 
 
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
@@ -51,21 +62,16 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         setContentView(R.layout.activity_bank)
         setupNavigationView()
         doubleCheckExit()
-        val recyclerView: RecyclerView = findViewById(R.id.bankRecyclerView)
+
+        init()
         setupBankModel()
-        val adapter = BankRecyclerViewAdapter(this, questionBankModels, this)
 
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val groupBtn: ImageButton = findViewById(R.id.bank_group)
-        groupBtn.setOnClickListener {
+        btnGroup.setOnClickListener {
             val intent = Intent(this, GroupListActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        val btnAddBank = findViewById<ImageButton>(R.id.bank_add)
         btnAddBank.setOnClickListener {
             val addBankDialog = Dialog(this)
             addBankDialog.setContentView(R.layout.dialog_add_bank)
@@ -100,7 +106,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         Log.d("addBankDialog", "add bank success")
                         addBankDialog.dismiss()
                         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
-                            onSuccess = { questionBanks ->
+                            onSuccess = { _ ->
                                 val intent = Intent(this@BankActivity, BankActivity::class.java)
                                 startActivity(intent)
                                 hideProgressDialog()
@@ -115,6 +121,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
                         Log.e("addBankDialog", "add bank failed")
                         addBankDialog.dismiss()
+                        hideProgressDialog()
                     }
                 )
             }
@@ -122,39 +129,57 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     private fun setupBankModel() {
-        val bankID = ArrayList<String>()
-        val bankTitle = ArrayList<String>()
-        val bankType = ArrayList<String>()
-        val bankCreatedDate = ArrayList<String>()
-        val bankMembers = ArrayList<ArrayList<String>>()
-        val bankSource = ArrayList<String>()
-        val bankCreators = ArrayList<String>()
 
-        Log.e("BankActivity", "ConstantsQuestionBankFunction.questionBankList")
+        bankRecyclerView = findViewById(R.id.bankRecyclerView)
+        bankAdapter = BankRecyclerViewAdapter(this, questionBankModels, this)
 
-        for (item in ConstantsQuestionBankFunction.questionBankList) {
-            bankID.add(item._id)
-            bankTitle.add(item.title)
-            bankType.add(item.questionBankType)
-            bankCreatedDate.add(item.createdDate)
-            bankMembers.add(item.members)
-            bankSource.add(item.originateFrom)
-            bankCreators.add(item.creator)
-        }
-        for (i in bankTitle.indices) {
-            val questionBankModel = QuestionBankModel(
-                bankID[i], bankTitle[i], bankType[i],
-                bankCreatedDate[i], bankMembers[i], bankSource[i], bankCreators[i]
-            )
-            Log.e("creators of banks", bankCreators[i])
-            questionBankModels.add(questionBankModel)
-        }
+        bankRecyclerView.adapter = bankAdapter
+        bankRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        bankRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(bankRecyclerView) {
+            override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
+                var buttons = listOf<UnderlayButton>()
+                val deleteButton = deleteButton(position)
+                buttons = listOf(deleteButton)
+//                val markAsUnreadButton = markAsUnreadButton(position)
+//                val archiveButton = archiveButton(position)
+//                when (position) {
+//                    1 -> buttons = listOf(deleteButton)
+//                    2 -> buttons = listOf(deleteButton, markAsUnreadButton)
+//                    3 -> buttons = listOf(deleteButton, markAsUnreadButton, archiveButton)
+//                    else -> Unit
+//                }
+                return buttons
+            }
+        })
+
+        itemTouchHelper.attachToRecyclerView(bankRecyclerView)
+    }
+
+    private fun toast(text: String) {
+        toast?.cancel()
+        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
+        toast?.show()
+    }
+
+    private fun deleteButton(position: Int): SwipeHelper.UnderlayButton {
+        return SwipeHelper.UnderlayButton(
+            this,
+            "Delete",
+            14.0f,
+            android.R.color.holo_red_light,
+            object : SwipeHelper.UnderlayButtonClickListener {
+                override fun onClick() {
+                    toast("Deleted item $position")
+                }
+            })
     }
 
 
     @SuppressLint("ClickableViewAccessibility")
     fun setPopupWindow(view: View?) {
-
+        showProgressDialog("處理中")
         if (blurred) {
             blurred = false
             Blurry.delete(findViewById(R.id.content))
@@ -223,21 +248,30 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             popupWindow.dismiss()     /* It will dismiss the popup window when tapped in it */
             return@setOnTouchListener true
         }
+        hideProgressDialog()
+    }
 
+    fun init() {
+        for (item in ConstantsQuestionBankFunction.questionBankList) {
+            val questionBankModel = QuestionBankModel(
+                item._id, item.title, item.questionBankType,
+                item.createdDate, item.members, item.originateFrom, item.creator
+            )
+            questionBankModels.add(questionBankModel)
+        }
+
+        btnGroup = findViewById(R.id.bank_group)
+        btnAddBank = findViewById(R.id.bank_add)
     }
 
     override fun onItemClick(position: Int) {
         val bankQuestionActivity = Intent(this, BankQuestionActivity::class.java)
 
         bankQuestionActivity.putExtra("BankTitle", questionBankModels[position].title)
-        bankQuestionActivity.putExtra("BankID", questionBankModels[position]._id)
+        bankQuestionActivity.putExtra("BankId", questionBankModels[position]._id)
+        Log.e("BankActivity", "start id: " + questionBankModels[position]._id + " bank")
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
     }
-
-    override fun getAnswerOptionPosition(position: Int) {
-        //todo
-    }
-
 }

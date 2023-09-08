@@ -21,6 +21,7 @@ import com.example.quizbanktest.activity.bank.BankQuestionDetailActivity
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
 class QuestionOptionsRecyclerViewAdapter(var context: Context,
+                                         var questionType: String,
                                          var questionOptions: ArrayList<String>,
                                          var answerOptions: ArrayList<String>,
                                          var recyclerViewInterface: RecyclerViewInterface
@@ -33,7 +34,14 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         try {
             val inflater = LayoutInflater.from(context)
-            val view = inflater.inflate(R.layout.item_bankquestionoption, parent, false)
+            val view: View = when(questionType) {
+                "TrueOrFalse" -> {
+                    inflater.inflate(R.layout.item_bankquestion_trueorfalse, parent, false)
+                }
+                else -> {
+                    inflater.inflate(R.layout.item_bankquestionoption, parent, false)
+                }
+            }
             return MyViewHolder(view, recyclerViewInterface, questionOptions, answerOptions)
         } catch (e: Exception) {
             Log.e("QuestionOptionsRecyclerViewAdapter", "onCreateView", e)

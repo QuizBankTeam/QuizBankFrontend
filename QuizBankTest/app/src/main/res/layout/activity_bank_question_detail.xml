@@ -15,13 +15,12 @@
 
         <TextView
             android:id="@+id/question_title"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="Question Title"
-            android:text=""
             android:marqueeRepeatLimit="marquee_forever"
             android:maxWidth="150dp"
             android:ellipsize="marquee"
@@ -45,7 +44,7 @@
 
         <TextView
             android:id="@+id/question_type"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/skin"
             android:gravity="center"
@@ -54,6 +53,7 @@
             android:paddingVertical="5dp"
             android:textColor="@color/black"
             android:textSize="15sp"
+            android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/setting"
             app:layout_constraintStart_toEndOf="@+id/question_title"

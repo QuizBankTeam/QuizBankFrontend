@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="10dp"
-    android:layout_marginVertical="10dp"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
-    app:cardUseCompatPadding="true"
+
     app:strokeColor="@color/black"
     app:strokeWidth="0dp">
 

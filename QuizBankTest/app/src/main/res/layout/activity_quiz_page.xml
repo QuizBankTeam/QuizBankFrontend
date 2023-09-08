@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.quiz.QuizPage">
+    tools:context=".activity.quiz.QuizPage"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/add_quiz_container"
@@ -17,8 +18,7 @@
         android:id="@+id/quiz_page_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_weight="1"
         android:orientation="vertical">
 
 
@@ -75,16 +75,15 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/quiz_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
+
     <include
+        android:id="@+id/lower_tool_list"
         layout="@layout/action_lower_tool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/colorRipple"
         android:gravity="center"
         android:orientation="horizontal"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

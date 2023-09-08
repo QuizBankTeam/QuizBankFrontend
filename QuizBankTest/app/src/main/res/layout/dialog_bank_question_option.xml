@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
-    app:cardUseCompatPadding="true"
     app:strokeColor="@color/black"
     app:strokeWidth="0dp">
 

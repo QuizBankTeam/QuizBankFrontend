@@ -123,10 +123,12 @@ class QuizPage: BaseActivity() {
                 val finishTransaction = supportFragmentManager.beginTransaction()
                 finishTransaction.remove(quizAdd).commit()
                 quizPageBinding.quizPageContainer.visibility = View.VISIBLE
+                quizPageBinding.lowerToolList.llActionButtons.visibility = View.VISIBLE
                 quizPageBinding.addQuizContainer.visibility = View.GONE
             }
         })
         quizPageBinding.quizPageContainer.visibility = View.GONE
+        quizPageBinding.lowerToolList.llActionButtons.visibility = View.GONE
         quizPageBinding.addQuizContainer.visibility = View.VISIBLE
         transaction.add(quizPageBinding.addQuizContainer.id, quizAdd).show(quizAdd)
         transaction.commit()

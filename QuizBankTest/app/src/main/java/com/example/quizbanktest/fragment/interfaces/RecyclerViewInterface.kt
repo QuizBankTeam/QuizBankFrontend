@@ -5,5 +5,4 @@ import android.widget.TextView
 interface RecyclerViewInterface {
     fun onItemClick(position: Int)
 
-    fun getAnswerOptionPosition(position: Int)
 }
