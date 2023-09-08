@@ -1,12 +1,14 @@
 package com.example.quizbanktest.adapters.main
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.quiz.SPSingleRecord
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.QuizRecord
@@ -46,6 +48,12 @@ class WrongViewAdapter (private val context: Context,
                 if (onClickListener != null) {
                     onClickListener!!.onClick(position, model)
                 }
+                val intent = Intent()
+                intent.setClass(context, SPSingleRecord::class.java)
+                val activityRecordPage = "RecordPage"
+                intent.putExtra("previousActivity", activityRecordPage)
+                intent.putExtra("Key_quizRecord", model)
+                context.startActivity(intent)
             }
         }
     }

@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.media.Image
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -14,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,16 +20,12 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
-import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.BankRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
 import com.example.quizbanktest.models.QuestionBankModel
-import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
-import com.example.quizbanktest.utils.ConstantsRecommend
-import com.example.quizbanktest.utils.ConstantsWrong
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
