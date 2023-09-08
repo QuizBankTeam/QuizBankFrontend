@@ -2,10 +2,12 @@ package com.example.quizbanktest.utils
 
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.introducemyself.utils.ConstantsOcrResults
+import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.models.QuestionSetModel
 import com.example.quizbanktest.models.ScanQuestionModel
@@ -72,6 +74,10 @@ object ConstantsQuestionFunction {
                             404 -> {
                                 Log.e("Error 404", "Not Found")
                                 Toast.makeText(activity,"Not Found 400",Toast.LENGTH_SHORT).show()
+                            }
+                            401 -> {
+                                val intent = Intent(activity, IntroActivity::class.java)
+                                activity.startActivity(intent)
                             }
                             else -> {
                                 Log.e("Error", "in post question Error")

@@ -162,7 +162,7 @@
                             android:layout_marginRight="5dp"
                             android:gravity="center"
                             android:clickable="true"
-                            android:background="@drawable/add_image"
+                            android:background="@drawable/shape_add_option"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="取消新增 ❌" />
                         <TextView
@@ -176,7 +176,7 @@
                             android:layout_marginRight="5dp"
                             android:gravity="center"
                             android:clickable="true"
-                            android:background="@drawable/add_image"
+                            android:background="@drawable/shape_add_option"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="新增群組 ✅" />
                     </LinearLayout>
