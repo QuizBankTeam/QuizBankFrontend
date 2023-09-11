@@ -39,6 +39,7 @@
             android:layout_height="55dp"
             android:background="?actionBarItemBackground"
             android:src="@drawable/baseline_more_selection"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

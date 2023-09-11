@@ -6,13 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
+import com.example.quizbanktest.utils.ConstantsQuestionFunction
 
 class QuestionRecyclerViewAdapter(var context: Context,
+                                  var activity: AppCompatActivity,
                                   var questionModels: ArrayList<QuestionModel>,
                                   var recyclerViewInterface: RecyclerViewInterface
 ) : RecyclerView.Adapter<QuestionRecyclerViewAdapter.MyViewHolder>() {
@@ -41,6 +45,19 @@ class QuestionRecyclerViewAdapter(var context: Context,
     override fun getItemCount(): Int {
 //        The recycler view just wants to know the number of items you want displayed
         return questionModels.size
+    }
+
+    fun deleteItem(position: Int) {
+        ConstantsQuestionFunction.deleteQuestion(activity, questionModels[position]._id.toString(),
+            onSuccess = {
+                Log.e("QuestionRecyclerViewAdapter", "delete successfully")
+                questionModels.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, questionModels.size)
+            },
+            onFailure = {
+                Log.e("BankRecyclerViewAdapter", "delete unsuccessfully")
+            })
     }
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {

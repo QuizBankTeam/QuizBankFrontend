@@ -128,7 +128,7 @@ object ConstantsQuestionFunction {
                         allQuestionsReturnResponse = allQuestionsResponse
 //                        Log.d("All questions response", allQuestionsReturnResponse.toString())
                         questionList = allQuestionsResponse.questionBank.questions
-//                        Log.e("ConstantsQuestionFunction: Question Response Result:", questionList.toString())
+                        Log.e("ConstantsQuestionFunction: Question Response Result:", questionList.toString())
                         onSuccess(questionList)
                     } else {
                         val sc = response.code()
@@ -169,7 +169,7 @@ object ConstantsQuestionFunction {
                 .build()
             val api = retrofit.create(QuestionService::class.java)
 
-            val body = QuestionService.PutQuestionBody(question._id!!, question.title!!, question.number!!, question.description, question.options!!, question.questionType!!, question.bankType!!, question.questionBank!!, question.answerOptions!!, question.answerDescription!!, ConstantsAccountServiceFunction.userAccount!!._id, question.originateFrom!!, question.createdDate!!, question.image!!, question.tag!!)
+            val body = QuestionService.PutQuestionBody(question._id!!, question.title!!, question.number!!, question.description, question.options!!, question.questionType!!, question.bankType!!, question.questionBank!!, question.answerOptions!!, question.answerDescription!!, ConstantsAccountServiceFunction.userAccount!!._id, question.originateFrom!!, question.createdDate!!, question.image!!, question.answerImage!!, question.tag!!)
             //TODO 拿到csrf token access token
             val call = api.updateQuestion(
                 Constants.COOKIE,
@@ -210,6 +210,60 @@ object ConstantsQuestionFunction {
         } else {
             Toast.makeText(
                 context,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    fun deleteQuestion(activity: AppCompatActivity, questionId: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        if (Constants.isNetworkAvailable(activity)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(QuestionService::class.java)
+
+           //TODO 拿到csrf token access token
+            val call = api.deleteQuestionByID(
+                Constants.COOKIE,
+                Constants.csrfToken,
+                Constants.session,
+                Constants.refreshToken,
+                questionId
+            )
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+
+                        onSuccess("delete success")
+                    } else {
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e("Error 400", "Bad Request: $response")
+                            }
+                            404 -> {
+                                Log.e("Error 404", "Not Found")
+                            }
+                            else -> {
+                                Log.e("Error", "upload failed")
+                            }
+                        }
+                        Log.e("delete question error",sc.toString())
+                        onFailure("Request failed with status code $sc")
+                    }
+                }
+
+                override fun onFailure(t: Throwable?) {
+
+                    onFailure("Request failed with status code ")
+                    Log.e("in get all questions Error", t?.message.toString())
+                }
+            })
+        } else {
+            Toast.makeText(
+                activity,
                 "No internet connection available.",
                 Toast.LENGTH_SHORT
             ).show()

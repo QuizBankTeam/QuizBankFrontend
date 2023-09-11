@@ -31,6 +31,7 @@ import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsRecommend
 import com.example.quizbanktest.utils.ConstantsWrong
@@ -86,16 +87,14 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             val btnBankSubmit = addBankDialog.findViewById<ImageButton>(R.id.btn_bank_submit)
             btnBankSubmit.setOnClickListener {
                 // TODO id setting needs to be flexible
-                val bankId = "52fde333-3eba-4140-a244-2b1aaf992a0e"
-                val bankTitle =
-                    addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
+                val bankId = Constants.userId
+                val bankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
                 val bankType = "single"
                 val bankCreatedDate = LocalDate.now().toString()
                 val bankMembers: ArrayList<String> = arrayListOf()
-                bankMembers.add("52fde333-3eba-4140-a244-2b1aaf992a0e")
-                bankMembers.add("52fde333-3eba-4140-a244-2b1aaf992a0e")
-                val bankSource = "52fde333-3eba-4140-a244-2b1aaf992a0e"
-                val bankCreator = "none"
+                bankMembers.add(Constants.userId)
+                val bankSource = Constants.userId
+                val bankCreator = Constants.userId
                 val tempQuestionBankModel = QuestionBankModel(
                     bankId,
                     bankTitle,
@@ -111,17 +110,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
                         Log.d("addBankDialog", "add bank success")
                         addBankDialog.dismiss()
-                        ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
-                            onSuccess = { _ ->
-                                val intent = Intent(this@BankActivity, BankActivity::class.java)
-                                startActivity(intent)
-                                hideProgressDialog()
-                                finish()
-                            },
-                            onFailure = { errorMessage ->
-                                hideProgressDialog()
-                            }
-                        )
+                        bankAdapter.addItem(tempQuestionBankModel)
+                        hideProgressDialog()
                     },
                     onFailure = {
                         Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
@@ -137,7 +127,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private fun setupBankModel() {
 
         bankRecyclerView = findViewById(R.id.bankRecyclerView)
-        bankAdapter = BankRecyclerViewAdapter(this, questionBankModels, this)
+        bankAdapter = BankRecyclerViewAdapter(this, this, questionBankModels, this)
 
         bankRecyclerView.adapter = bankAdapter
         bankRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
@@ -177,6 +167,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             android.R.color.holo_red_light,
             object : SwipeHelper.UnderlayButtonClickListener {
                 override fun onClick() {
+                    bankAdapter.deleteItem(position)
                     toast("Deleted item $position")
                 }
             })
