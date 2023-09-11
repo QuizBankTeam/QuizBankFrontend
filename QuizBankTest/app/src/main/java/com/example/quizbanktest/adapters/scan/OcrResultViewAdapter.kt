@@ -365,13 +365,16 @@ class OcrResultViewAdapter(
                 mTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
 //                        tagBankList.add(text)
-                        tagQuestionList.add(text)
                         //當使用者選擇某個tag擇要顯示
 //                        mChooseTagContainerLayout1.tags=tagBankList
                         mChooseTagContainerLayout1.tags=tagQuestionList
                         if(ConstantsOcrResults.getOcrResult()[position].tag?.contains(text)!=true){
+                            tagQuestionList.add(text)
+                            Log.e("tagtagtag","addaddadd ${ConstantsOcrResults.getOcrResult()[position].tag.toString()}")
                             ConstantsOcrResults.getOcrResult()[position].tag?.add(text) //將此tag記錄到等等要放進資料庫的題目的標籤列
+                            mChooseTagContainerLayout1.tags=tagQuestionList
                         }
+
                     }
 
                     override fun onTagLongClick(position: Int, text: String) {
@@ -455,12 +458,12 @@ class OcrResultViewAdapter(
                 mTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
 //                        tagBankList.add(text)
-                        tagQuestionList.add(text)
-                        //當使用者選擇某個tag擇要顯示
-//                        mChooseTagContainerLayout1.tags=tagBankList
                         mChooseTagContainerLayout1.tags=tagQuestionList
                         if(ConstantsOcrResults.getOcrResult()[position].tag?.contains(text)!=true){
+                            tagQuestionList.add(text)
+                            Log.e("tagtagtag","addaddadd ${ConstantsOcrResults.getOcrResult()[position].tag.toString()}")
                             ConstantsOcrResults.getOcrResult()[position].tag?.add(text) //將此tag記錄到等等要放進資料庫的題目的標籤列
+                            mChooseTagContainerLayout1.tags=tagQuestionList
                         }
                     }
 
