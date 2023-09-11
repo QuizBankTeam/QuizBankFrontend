@@ -31,6 +31,7 @@ object ConstantsQuestionFunction {
     fun postQuestion(question : ScanQuestionModel, activity: AppCompatActivity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
 
         if (Constants.isNetworkAvailable(activity)) {
+            Log.e("question post",question.toString())
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
