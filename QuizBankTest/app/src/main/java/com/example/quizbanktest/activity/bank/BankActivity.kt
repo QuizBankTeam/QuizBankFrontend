@@ -34,7 +34,6 @@ import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsRecommend
-import com.example.quizbanktest.utils.ConstantsWrong
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
