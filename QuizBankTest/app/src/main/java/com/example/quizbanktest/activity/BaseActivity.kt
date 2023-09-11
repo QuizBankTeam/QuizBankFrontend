@@ -465,6 +465,7 @@ open class BaseActivity : AppCompatActivity() {
     fun  choosePhotoToOcr(flag : Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
         choosePhotoFromGallery {
             bitmap ->
+            Toast.makeText(this,"photo ocr",Toast.LENGTH_SHORT).show()
             if (bitmap != null) {
                 var base64String = ConstantsFunction.encodeImage(bitmap)
                 autoOcrAndRotate(base64String!!,flag,
@@ -644,7 +645,8 @@ open class BaseActivity : AppCompatActivity() {
              showRotateDialog.dismiss()
 
              showProgressDialog("目前正在處理OCR之結果")
-             ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 -> hideProgressDialog() }, onFailure = { it1 -> hideProgressDialog()})
+             ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 -> processScan(it1)
+                 hideProgressDialog() }, onFailure = { it1 -> hideProgressDialog()})
          }
          showRotateDialog.show()
          showRotateDialog.setOnDismissListener{
@@ -819,7 +821,9 @@ open class BaseActivity : AppCompatActivity() {
                     } )
             }else{
                 showProgressDialog("目前正在處理OCR之結果")
-                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 -> hideProgressDialog() }, onFailure = { it1 -> hideProgressDialog()})
+                ConstantsScanServiceFunction.scanBase64ToOcrText(base64String!!, this@BaseActivity,1, onSuccess = { it1 ->
+                    processScan(it1)
+                    hideProgressDialog() }, onFailure = { it1 -> hideProgressDialog()})
             }
         }
 

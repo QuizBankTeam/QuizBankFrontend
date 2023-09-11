@@ -129,7 +129,7 @@
                             android:layout_marginRight="5dp"
                             android:gravity="center"
                             android:clickable="true"
-                            android:background="@drawable/add_image"
+                            android:background="@drawable/shape_add_option"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="取消自動旋轉 ❌" />
                         <TextView
@@ -143,7 +143,7 @@
                             android:layout_marginRight="5dp"
                             android:gravity="center"
                             android:clickable="true"
-                            android:background="@drawable/add_image"
+                            android:background="@drawable/shape_add_option"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="確認自動旋轉 ✅" />
                     </LinearLayout>

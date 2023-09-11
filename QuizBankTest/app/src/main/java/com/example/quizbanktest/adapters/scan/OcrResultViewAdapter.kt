@@ -105,6 +105,10 @@ class OcrResultViewAdapter(
 
         if (holder is MyViewHolder) {
             //一題最多只能有十個選項
+            val btnScanPhoto : ImageButton  = holder.itemView.findViewById(R.id.btn_scan_photo)
+            if(ConstantsOcrResults.questionList[position].image?.isNotEmpty()==true){
+                btnScanPhoto.setImageResource(R.drawable.afteraddimage)
+            }
             val option1 : EditText = holder.itemView.findViewById(R.id.question_option1)
             val option2 : EditText = holder.itemView.findViewById(R.id.question_option2)
             val option3 : EditText = holder.itemView.findViewById(R.id.question_option3)
@@ -361,13 +365,16 @@ class OcrResultViewAdapter(
                 mTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
 //                        tagBankList.add(text)
-                        tagQuestionList.add(text)
                         //當使用者選擇某個tag擇要顯示
 //                        mChooseTagContainerLayout1.tags=tagBankList
                         mChooseTagContainerLayout1.tags=tagQuestionList
                         if(ConstantsOcrResults.getOcrResult()[position].tag?.contains(text)!=true){
+                            tagQuestionList.add(text)
+                            Log.e("tagtagtag","addaddadd ${ConstantsOcrResults.getOcrResult()[position].tag.toString()}")
                             ConstantsOcrResults.getOcrResult()[position].tag?.add(text) //將此tag記錄到等等要放進資料庫的題目的標籤列
+                            mChooseTagContainerLayout1.tags=tagQuestionList
                         }
+
                     }
 
                     override fun onTagLongClick(position: Int, text: String) {
@@ -451,12 +458,12 @@ class OcrResultViewAdapter(
                 mTagContainerLayout1.setOnTagClickListener(object : TagView.OnTagClickListener {
                     override fun onTagClick(tag_position: Int, text: String) {
 //                        tagBankList.add(text)
-                        tagQuestionList.add(text)
-                        //當使用者選擇某個tag擇要顯示
-//                        mChooseTagContainerLayout1.tags=tagBankList
                         mChooseTagContainerLayout1.tags=tagQuestionList
                         if(ConstantsOcrResults.getOcrResult()[position].tag?.contains(text)!=true){
+                            tagQuestionList.add(text)
+                            Log.e("tagtagtag","addaddadd ${ConstantsOcrResults.getOcrResult()[position].tag.toString()}")
                             ConstantsOcrResults.getOcrResult()[position].tag?.add(text) //將此tag記錄到等等要放進資料庫的題目的標籤列
+                            mChooseTagContainerLayout1.tags=tagQuestionList
                         }
                     }
 
@@ -552,6 +559,13 @@ class OcrResultViewAdapter(
                         } else if (!isChecked) {
                             currentAnswerOptions.remove(optionText)
                         }
+                    }else{
+                        buttonView.isChecked = false
+                        val builder =AlertDialog.Builder(context,R.style.CustomAlertDialogStyle)
+                            .setMessage(" 選項內容不能為空喔 ")
+                            .setTitle("正確選項")
+                            .setIcon(R.drawable.baseline_warning_amber_24)
+                        builder.show()
                     }
 
                     ConstantsOcrResults.questionList[position].answerOptions = currentAnswerOptions
@@ -613,6 +627,9 @@ class OcrResultViewAdapter(
 
             //btn_scan_submit
             val btnAddAnswer : TextView = holder.itemView.findViewById(R.id.btn_add_answer)
+            if((ConstantsOcrResults.questionList[position].answerDescription?.isNotEmpty() == true && !ConstantsOcrResults.questionList[position].answerDescription.equals("目前為空"))||ConstantsOcrResults.questionList[position].answerImages?.isNotEmpty() == true){
+                btnAddAnswer.text = "查看答案 ✅"
+            }
             btnAddAnswer.setOnClickListener {
                 //新增答案
                 val answerDialog = Dialog(context)
@@ -717,7 +734,7 @@ class OcrResultViewAdapter(
             }
 
             //新增目前題目描述的圖片
-            val btnScanPhoto : ImageButton  = holder.itemView.findViewById(R.id.btn_scan_photo)
+
             btnScanPhoto.setOnClickListener {
 
                 val imageDialog = Dialog(context)
@@ -758,6 +775,7 @@ class OcrResultViewAdapter(
                         .setIcon(R.drawable.baseline_warning_amber_24)
                     builder.setPositiveButton("確認") { dialog, which ->
                         ConstantsOcrResults.questionList[position].image?.clear()
+                        btnScanPhoto.setImageResource(R.drawable.addimage)
                         imageList.clear()
                         imageDialog.dismiss()
                     }

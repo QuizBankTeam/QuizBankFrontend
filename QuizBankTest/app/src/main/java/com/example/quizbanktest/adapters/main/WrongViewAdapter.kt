@@ -1,16 +1,20 @@
 package com.example.quizbanktest.adapters.main
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.quiz.SPSingleRecord
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.models.QuestionRecord
+import com.example.quizbanktest.models.QuizRecord
 
 class WrongViewAdapter (private val context: Context,
-                        private var list: ArrayList<QuestionModel>
+                        private var list: ArrayList<QuizRecord>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private var onClickListener: OnClickListener? = null
 
@@ -31,14 +35,25 @@ class WrongViewAdapter (private val context: Context,
         if (holder is MyViewHolder) {
 
             holder.itemView.findViewById<TextView>(R.id.wrongTitle).text = model.title
-            holder.itemView.findViewById<TextView>(R.id.wrongType).text = "wrong tag"
-            holder.itemView.findViewById<TextView>(R.id.wrongDate).text = model.createdDate
+
+            if(model.totalScore==-1){
+                holder.itemView.findViewById<TextView>(R.id.wrongType).text = "得分: 0"
+            }else{
+                holder.itemView.findViewById<TextView>(R.id.wrongType).text = "得分: " + model.totalScore.toString()
+            }
+            holder.itemView.findViewById<TextView>(R.id.wrongDate).text = "考試時長: " + (model.duringTime?.div(60)).toString() + "分鐘"
 
             holder.itemView.setOnClickListener {
 
                 if (onClickListener != null) {
                     onClickListener!!.onClick(position, model)
                 }
+                val intent = Intent()
+                intent.setClass(context, SPSingleRecord::class.java)
+                val activityRecordPage = "RecordPage"
+                intent.putExtra("previousActivity", activityRecordPage)
+                intent.putExtra("Key_quizRecord", model)
+                context.startActivity(intent)
             }
         }
     }
@@ -54,7 +69,7 @@ class WrongViewAdapter (private val context: Context,
     }
 
     interface OnClickListener {
-        fun onClick(position: Int, model: QuestionModel)
+        fun onClick(position: Int, model: QuizRecord)
     }
 
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)

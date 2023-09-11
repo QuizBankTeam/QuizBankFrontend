@@ -69,6 +69,10 @@ object ConstantsAccountServiceFunction {
                             404 -> {
                                 Log.e("in csrf Error 404", "Not Found")
                             }
+                            401 -> {
+                                val intent = Intent(context, IntroActivity::class.java)
+                                context.startActivity(intent)
+                            }
                             else -> {
                                 Log.e("in csrf Error", "Generic Error")
                             }
@@ -157,6 +161,10 @@ object ConstantsAccountServiceFunction {
                             404 -> {
                                 Log.e("in login Error 404", "Not Found")
                             }
+                            401 -> {
+                                val intent = Intent(context, IntroActivity::class.java)
+                                context.startActivity(intent)
+                            }
                             else -> {
                                 Log.e("in login Error", "Generic Error")
                             }
@@ -222,6 +230,10 @@ object ConstantsAccountServiceFunction {
                             }
                             404 -> {
                                 Log.e("Error 404", "Not Found")
+                            }
+                            401 -> {
+                                val intent = Intent(context, IntroActivity::class.java)
+                                context.startActivity(intent)
                             }
                             else -> {
                                 Log.e("Error", "in log out  Generic Error")

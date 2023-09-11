@@ -19,8 +19,11 @@ import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.adapters.main.RecentViewAdapter
 import com.example.quizbanktest.adapters.main.RecommendViewAdapter
 import com.example.quizbanktest.adapters.main.WrongViewAdapter
+import com.example.quizbanktest.adapters.quiz.SPRecordAdapter
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.models.QuestionRecord
+import com.example.quizbanktest.models.QuizRecord
 import com.example.quizbanktest.utils.*
 import com.google.android.material.navigation.NavigationView
 
@@ -37,7 +40,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             onSuccess = { questionBanks ->
                 setupRecentRecyclerView(questionBanks)
                 setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
-                setupWrongListRecyclerView(ConstantsWrong.getQuestions())
                 hideProgressDialog()
 //                showEmptyBankImage.visibility = View.GONE
             },
@@ -51,6 +53,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             }
         )
+        val quizRecordType = Constants.quizTypeSingle
+        ConstantsQuizRecord.getAllQuizRecords(this, quizRecordType, onSuccess = { returnRecordList->
+            setupWrongListRecyclerView(returnRecordList)
+        }, onFailure = {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
 
 
         setupActionBar()
@@ -75,7 +83,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     }
 
-    private fun setupWrongListRecyclerView(wrongList: ArrayList<QuestionModel>) {
+    private fun setupWrongListRecyclerView(wrongList: ArrayList<QuizRecord>) {
         val recentWrongList : androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recent_wrong_list)
         recentWrongList.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
         recentWrongList.setHasFixedSize(true)

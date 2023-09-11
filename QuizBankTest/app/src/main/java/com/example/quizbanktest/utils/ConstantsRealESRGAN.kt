@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
+import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.network.RealEsrganService
 import com.google.gson.Gson
 import com.squareup.okhttp.OkHttpClient
@@ -85,6 +87,10 @@ object ConstantsRealESRGAN {
 
                                 Log.e("Error 404", "Not Found")
                                 onFailure("Request failed with status code $sc")
+                            }
+                            401 -> {
+                                val intent = Intent(activity, IntroActivity::class.java)
+                                activity.startActivity(intent)
                             }
                             else -> {
                                 Log.e("Error","$sc")
