@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
@@ -48,9 +49,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 //        setupNavigationView()
 //        doubleCheckExit()
 
-//        showProgressDialog("取得資料中")
         init()
-//        hideProgressDialog()
 
 
         pullExit()
@@ -63,7 +62,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     private fun setupQuestionModel() {
         Log.e("BankQuestionActivity", "set up question model")
         questionRecyclerView = findViewById(R.id.questionRecyclerView)
-        questionAdapter = QuestionRecyclerViewAdapter(this, questionModels, this)
+        questionAdapter = QuestionRecyclerViewAdapter(this, this, questionModels, this)
 
         questionRecyclerView.adapter = questionAdapter
         questionRecyclerView.addItemDecoration(
@@ -73,7 +72,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             )
         )
         questionRecyclerView.layoutManager = LinearLayoutManager(this)
-//        hideProgressDialog()
 
         val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(questionRecyclerView) {
             override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
@@ -109,6 +107,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             android.R.color.holo_red_light,
             object : SwipeHelper.UnderlayButtonClickListener {
                 override fun onClick() {
+                    questionAdapter.deleteItem(position)
                     toast("Deleted item $position")
                 }
             })
@@ -148,33 +147,42 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         showProgressDialog("取得資料中")
         ConstantsQuestionFunction.getQuestion(this, bankId,
             onSuccess = { questionList ->
-                Log.e("BankQuestionActivity", "get questionList success!!!")
-                Log.e("BankQuestionActivity", "$questionList")
-                for (item in questionList) {
-                    val questionModel = QuestionModel(
-                        item._id,
-                        item.title,
-                        item.number,
-                        item.description,
-                        item.options,
-                        item.questionType,
-                        item.bankType,
-                        item.questionBank,
-                        item.answerOptions,
-                        item.answerDescription,
-                        item.originateFrom,
-                        item.createdDate,
-                        item.image,
-                        item.tag
-                    )
-                    questionModels.add(questionModel)
+                if (questionList.isEmpty()) {
+                    findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
+                    showErrorSnackBar("裡面目前沒有題目喔")
+                    hideProgressDialog()
+                } else {
+//                Log.e("BankQuestionActivity", "get questionList success!!!")
+                    Log.e("BankQuestionActivity", "$questionList")
+                    Log.e("BankQuestionActivity", "answerImage = " + questionList[0].answerImage)
+                    for (item in questionList) {
+                        val questionModel = QuestionModel(
+                            item._id,
+                            item.title,
+                            item.number,
+                            item.description,
+                            item.options,
+                            item.questionType,
+                            item.bankType,
+                            item.questionBank,
+                            item.answerOptions,
+                            item.answerDescription,
+                            item.originateFrom,
+                            item.createdDate,
+                            item.image,
+                            item.answerImage,
+                            item.tag
+                        )
+                        questionModels.add(questionModel)
+                    }
+                    Log.e("BankQuestionActivity", "question model finish")
+                    setupQuestionModel()
+                    hideProgressDialog()
                 }
-                Log.e("BankQuestionActivity", "question model finish")
-                setupQuestionModel()
-                hideProgressDialog()
             },
-            onFailure = { errorMessage ->
-                showErrorSnackBar("網路連線狀況不好")
+            onFailure = {
+                findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
+                showErrorSnackBar("無法取得資料")
                 hideProgressDialog()
             }
         )
@@ -194,6 +202,8 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         QuestionDetailActivity.putExtra("source", questionModels[position].originateFrom)
         QuestionDetailActivity.putExtra("createdDate", questionModels[position].createdDate)
         QuestionDetailActivity.putExtra("image", questionModels[position].image)
+        QuestionDetailActivity.putExtra("answerImage", questionModels[position].answerImage)
+        QuestionDetailActivity.putStringArrayListExtra("answerImage", questionModels[position].answerImage)
         QuestionDetailActivity.putExtra("tag", questionModels[position].tag)
 
 //        Log.e("BankQuestionActivity", questionModels[position]._id.toString())

@@ -36,6 +36,14 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/img_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/todo"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="550dp"

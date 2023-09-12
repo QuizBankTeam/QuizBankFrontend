@@ -19,6 +19,7 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
+import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
@@ -47,6 +48,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var questionSource: String
     private lateinit var createdDate: String
     private lateinit var questionImage: ArrayList<String>
+    private lateinit var answerImage: ArrayList<String>
     private lateinit var questionTag: ArrayList<String>
     // variable
     private lateinit var newDescription: String
@@ -61,9 +63,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
         init()
         // TODO: deannotate it when data is full confirmed
-//        if (questionImage == null) {
-//            findViewById<ImageView>(R.id.question_image).visibility = View.INVISIBLE
-//        }
         // set up question options
         setupOptions()
 
@@ -126,7 +125,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
             "TrueOrFalse" -> {
                 optionRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
             }
-            "cloze" -> {
+            "Filling" -> {
 
             }
             else -> {
@@ -146,7 +145,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private fun putQuestion() {
         Log.e("BankQuestionDetailActivity", "put question")
         if (isModified) {
-            val putQuestionBody = QuestionModel(questionId, questionTitle, questionNumber, questionDescription, questionOptions, questionType, bankType, bankId, answerOptions, answerDescription, questionSource, createdDate, questionImage, questionTag)
+            val putQuestionBody = QuestionModel(questionId, questionTitle, questionNumber, questionDescription, questionOptions, questionType, bankType, bankId, answerOptions, answerDescription, questionSource, createdDate, questionImage, answerImage, questionTag)
             ConstantsQuestionFunction.putQuestion(this, putQuestionBody,
                 onSuccess = {
                     Log.e("BankQuestionDetailActivity", "upload success")
@@ -197,17 +196,36 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         questionTitle = intent.getStringExtra("title").toString()
         questionNumber = intent.getStringExtra("number").toString()
         questionDescription = intent.getStringExtra("description").toString()
-        questionOptions = intent.getStringArrayListExtra("options")!!
+        val questionOptions = intent.getStringArrayListExtra("options")
+        if (questionOptions != null) {
+            this.questionOptions = questionOptions
+        }
         questionType = intent.getStringExtra("type").toString()
         bankType = intent.getStringExtra("bankType").toString()
         bankId = intent.getStringExtra("bankId").toString()
-        answerOptions = intent.getStringArrayListExtra("answerOptions")!!
-        answerOptions.add("roughly")
+        val answerOptions = intent.getStringArrayListExtra("answerOptions")
+        if (answerOptions != null) {
+            this.answerOptions = answerOptions
+            answerOptions.add("roughly")
+        }
         answerDescription = intent.getStringExtra("answerDescription").toString()
         questionSource = intent.getStringExtra("source").toString()
         createdDate = intent.getStringExtra("createdDate").toString()
-        questionImage = intent.getStringArrayListExtra("image")!!
-        questionTag = intent.getStringArrayListExtra("tag")!!
+        val questionImage = intent.getStringArrayListExtra("image")
+        if (questionImage != null) {
+            this.questionImage = questionImage
+        } else {
+            findViewById<ImageView>(R.id.question_image).visibility = View.INVISIBLE
+        }
+        val answerImage = intent.getStringArrayListExtra("answerImage")
+        if (answerImage != null) {
+            this.answerImage = answerImage
+        }
+        val questionTag = intent.getStringArrayListExtra("tag")
+        if (questionTag != null) {
+            this.questionTag = questionTag
+        }
+
 
         // View initialization
         tvTitle = findViewById(R.id.question_title)

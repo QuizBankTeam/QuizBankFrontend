@@ -59,6 +59,8 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
                 if (showAnswer1) {
                     Log.e("QuestionOptionsRecyclerViewAdapter", "show answer")
                     holder.tvOption.setBackgroundColor(Color.parseColor("#c6fa73"))
+                } else {
+                    holder.tvOption.setBackgroundColor(Color.parseColor("#ffffff"))
                 }
             }
         }

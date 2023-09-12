@@ -16,6 +16,7 @@ data class QuestionModel(
     var originateFrom: String, // user id
     var createdDate: String,
     var image: ArrayList<String> ? = null, // base64 // dialog
+    var answerImage: ArrayList<String> ? = null, // base64 // dialog
     var tag: ArrayList<String> ? = null
 
 ): Serializable
