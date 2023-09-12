@@ -33,19 +33,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/setting"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:background="?actionBarItemBackground"
-            android:src="@drawable/baseline_more_selection"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/question_type"
-            android:layout_width="50dp"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:background="@color/skin"
             android:gravity="center"
@@ -56,7 +46,7 @@
             android:textSize="15sp"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/setting"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/question_title"
             app:layout_constraintTop_toTopOf="parent" />
 

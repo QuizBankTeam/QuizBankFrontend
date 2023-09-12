@@ -36,9 +36,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
-            android:name=".activity.bank.BankQuestionSettingActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.public_area.PublicAreaPageActivity"
             android:exported="false"
             android:screenOrientation="portrait"

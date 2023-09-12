@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp">
@@ -21,29 +20,31 @@
             android:layout_marginEnd="1dp"
             android:src="@drawable/book_square_svgrepo_com" />
 
-        <TextView
+        <EditText
             android:id="@+id/bank_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/bank_image"
-            android:text="This is title"
+            android:background="@null"
+            android:hint="This is title"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/bank_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bank_title"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="-21dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="8dp"
-            android:text="This is bank type"
+            android:background="@null"
+            android:hint="This is bank type"
             android:textColor="#606060"
             android:textSize="12sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/bank_createdDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,42 +52,69 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/bank_image"
-            android:text="YYYY/MM/DD"
+            android:background="@null"
+            android:hint="YYYY/MM/DD"
             android:textColor="#606060"
             android:textSize="12sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/bank_members"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/bank_createdDate"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/bank_image"
-            android:text="Memebers: "
+            android:background="@null"
+            android:hint="Memebers: "
             android:textColor="#606060"
             android:textSize="12sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/bank_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/bank_members"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/bank_image"
-            android:text="originate from: "
+            android:background="@null"
+            android:hint="originate from: "
             android:textColor="#606060"
             android:textSize="12sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/bank_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/bank_members"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/bank_from"
-            android:text="creator: "
+            android:background="@null"
+            android:hint="creator: "
             android:textColor="#606060"
             android:textSize="12sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bank_members"
+            android:layout_marginTop="-8dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:clickable="true"
+                android:padding="3dp"
+                android:text="確認修改"
+                android:textStyle="bold" />
+
+        </com.google.android.material.card.MaterialCardView>
 
     </RelativeLayout>
 

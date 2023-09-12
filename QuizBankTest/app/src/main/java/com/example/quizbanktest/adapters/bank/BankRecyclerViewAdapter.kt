@@ -23,7 +23,6 @@ class BankRecyclerViewAdapter(var context: Context,
 ) : RecyclerView.Adapter<BankRecyclerViewAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-//        This is where you inflate the layout (Giving a look to our rows)
         try {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.item_bankcard, parent, false)
@@ -58,8 +57,20 @@ class BankRecyclerViewAdapter(var context: Context,
         notifyDataSetChanged()
     }
 
+    fun setItem(position: Int, data: QuestionBankModel) {
+        ConstantsQuestionBankFunction.putQuestionBank(activity, data,
+            onSuccess = {
+                Log.e("BankRecyclerViewAdapter", "put successfully")
+                questionBankModels[position] = data
+                notifyItemChanged(position)
+            },
+            onFailure = {
+                Log.e("BankRecyclerViewAdapter", "put unsuccessfully")
+            })
+    }
+
     fun deleteItem(position: Int) {
-        ConstantsQuestionBankFunction.deleteQuestionBank(questionBankModels[position]._id, activity,
+        ConstantsQuestionBankFunction.deleteQuestionBank(activity, questionBankModels[position]._id,
             onSuccess = {
                 Log.e("BankRecyclerViewAdapter", "delete successfully")
                 questionBankModels.removeAt(position)
@@ -72,9 +83,6 @@ class BankRecyclerViewAdapter(var context: Context,
     }
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
-        //        Grabbing the views from our recycler_view_row layout file
-        //        Kinda like in the onCreate method
-//        TODO: BankID
         var tvBankTitle: TextView
         var tvBankType: TextView
         var tvBankCreatedDate: TextView
@@ -83,7 +91,6 @@ class BankRecyclerViewAdapter(var context: Context,
         var tvBankCreator: TextView
 
         init {
-//          TODO: bankID
             tvBankTitle = itemView.findViewById(R.id.bank_title)
             tvBankType = itemView.findViewById(R.id.bank_type)
             tvBankCreatedDate = itemView.findViewById(R.id.bank_createdDate)

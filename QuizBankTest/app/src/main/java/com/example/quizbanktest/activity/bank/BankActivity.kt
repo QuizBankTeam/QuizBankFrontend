@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.Image
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
@@ -37,6 +39,7 @@ import com.example.quizbanktest.utils.ConstantsRecommend
 
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
+import org.w3c.dom.Text
 import java.time.LocalDate
 
 class BankActivity : BaseActivity(), RecyclerViewInterface {
@@ -60,6 +63,13 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private var wrapLayout: WrapLayout? = null
     private var blurred = false
     private var toast: Toast? = null
+    private lateinit var newBankTitle: String
+    private lateinit var newBankType: String
+    private lateinit var newBankDate: String
+    private lateinit var newBankSource: String
+    private lateinit var newBankMembers: ArrayList<String>
+    private lateinit var newBankCreator: String
+    private var isModified: Boolean = false
 
 
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
@@ -95,13 +105,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 val bankSource = Constants.userId
                 val bankCreator = Constants.userId
                 val tempQuestionBankModel = QuestionBankModel(
-                    bankId,
-                    bankTitle,
-                    bankType,
-                    bankCreatedDate,
-                    bankMembers,
-                    bankSource,
-                    bankCreator
+                    bankId, bankTitle, bankType, bankCreatedDate,
+                    bankMembers, bankSource, bankCreator
                 )
                 showProgressDialog("新增中")
                 ConstantsQuestionBankFunction.postQuestionBank(tempQuestionBankModel, this,
@@ -136,8 +141,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
                 var buttons = listOf<UnderlayButton>()
                 val deleteButton = deleteButton(position)
-                buttons = listOf(deleteButton)
-//                val markAsUnreadButton = markAsUnreadButton(position)
+                val settingButton = settingButton(position)
+                buttons = listOf(deleteButton, settingButton)
 //                val archiveButton = archiveButton(position)
 //                when (position) {
 //                    1 -> buttons = listOf(deleteButton)
@@ -161,7 +166,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private fun deleteButton(position: Int): SwipeHelper.UnderlayButton {
         return SwipeHelper.UnderlayButton(
             this,
-            "Delete",
+            "刪除",
             14.0f,
             android.R.color.holo_red_light,
             object : SwipeHelper.UnderlayButtonClickListener {
@@ -170,6 +175,87 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                     toast("Deleted item $position")
                 }
             })
+    }
+
+    private fun settingButton(position: Int) : SwipeHelper.UnderlayButton {
+        return SwipeHelper.UnderlayButton(
+            this,
+            "編輯",
+            14.0f,
+            android.R.color.holo_green_light,
+            object : SwipeHelper.UnderlayButtonClickListener {
+                override fun onClick() {
+                    toast("Setting item $position")
+                    editBank(position)
+                }
+            })
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun editBank(position: Int) {
+        val editBankDialog = Dialog(this)
+        editBankDialog.setContentView(R.layout.dialog_bank_card)
+        editBankDialog.show()
+
+        val etBankTitle = editBankDialog.findViewById<EditText>(R.id.bank_title)
+        val etBankType = editBankDialog.findViewById<EditText>(R.id.bank_type)
+        val etBankDate = editBankDialog.findViewById<EditText>(R.id.bank_createdDate)
+        val etBankMember = editBankDialog.findViewById<EditText>(R.id.bank_members)
+        val etBankSource = editBankDialog.findViewById<EditText>(R.id.bank_from)
+        val etBankCreator = editBankDialog.findViewById<EditText>(R.id.bank_creator)
+
+        newBankTitle = questionBankModels[position].title
+        newBankType = questionBankModels[position].questionBankType
+        newBankDate = questionBankModels[position].createdDate
+        newBankMembers = questionBankModels[position].members
+        newBankSource = questionBankModels[position].originateFrom
+        newBankCreator = questionBankModels[position].creator
+
+        etBankTitle.setText(newBankTitle)
+        etBankType.setText(newBankType)
+        etBankDate.setText(newBankDate)
+        etBankMember.setText("Members: ${Constants.username}")
+        etBankSource.setText("From: ${Constants.username}")
+        etBankCreator.setText("Creator: ${Constants.username}")
+
+        etBankTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                newBankTitle = s.toString()
+                isModified = true
+            }
+        })
+
+        etBankType.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                newBankType = s.toString()
+                isModified = true
+            }
+        })
+
+        etBankDate.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                newBankDate = s.toString()
+                isModified = true
+            }
+        })
+
+        editBankDialog.setOnDismissListener {
+            if (isModified) {
+                val data = QuestionBankModel(questionBankModels[position]._id, newBankTitle,
+                    newBankType, newBankDate, questionBankModels[position].members,
+                    newBankSource, newBankCreator)
+                Log.e("BankActivity", "newdata = \n$data")
+                bankAdapter.setItem(position, data)
+            }
+
+        }
+
     }
 
 

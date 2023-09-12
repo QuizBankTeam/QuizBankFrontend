@@ -77,8 +77,8 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
                 var buttons = listOf<UnderlayButton>()
                 val deleteButton = deleteButton(position)
-                buttons = listOf(deleteButton)
-//                val markAsUnreadButton = markAsUnreadButton(position)
+                val settingButton = settingButton(position)
+                buttons = listOf(deleteButton, settingButton)
 //                val archiveButton = archiveButton(position)
 //                when (position) {
 //                    1 -> buttons = listOf(deleteButton)
@@ -102,7 +102,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     private fun deleteButton(position: Int): SwipeHelper.UnderlayButton {
         return SwipeHelper.UnderlayButton(
             this,
-            "Delete",
+            "刪除",
             14.0f,
             android.R.color.holo_red_light,
             object : SwipeHelper.UnderlayButtonClickListener {
@@ -111,6 +111,24 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     toast("Deleted item $position")
                 }
             })
+    }
+
+    private fun settingButton(position: Int) : SwipeHelper.UnderlayButton {
+        return SwipeHelper.UnderlayButton(
+            this,
+            "編輯",
+            14.0f,
+            android.R.color.holo_green_light,
+            object : SwipeHelper.UnderlayButtonClickListener {
+                override fun onClick() {
+                    toast("Setting item $position")
+                    editQuestion(position)
+                }
+            })
+    }
+
+    private fun editQuestion(position: Int) {
+        TODO("add edit function")
     }
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -152,30 +170,16 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     showErrorSnackBar("裡面目前沒有題目喔")
                     hideProgressDialog()
                 } else {
-//                Log.e("BankQuestionActivity", "get questionList success!!!")
-                    Log.e("BankQuestionActivity", "$questionList")
-                    Log.e("BankQuestionActivity", "answerImage = " + questionList[0].answerImage)
                     for (item in questionList) {
                         val questionModel = QuestionModel(
-                            item._id,
-                            item.title,
-                            item.number,
-                            item.description,
-                            item.options,
-                            item.questionType,
-                            item.bankType,
-                            item.questionBank,
-                            item.answerOptions,
-                            item.answerDescription,
-                            item.originateFrom,
-                            item.createdDate,
-                            item.image,
-                            item.answerImage,
-                            item.tag
+                            item._id, item.title, item.number, item.description, item.options,
+                            item.questionType, item.bankType, item.questionBank, item.answerOptions,
+                            item.answerDescription, item.originateFrom, item.createdDate,
+                            item.image, item.answerImage, item.tag
                         )
                         questionModels.add(questionModel)
                     }
-                    Log.e("BankQuestionActivity", "question model finish")
+                    Log.e("BankQuestionActivity", "set question model finish")
                     setupQuestionModel()
                     hideProgressDialog()
                 }
@@ -205,8 +209,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         QuestionDetailActivity.putExtra("answerImage", questionModels[position].answerImage)
         QuestionDetailActivity.putStringArrayListExtra("answerImage", questionModels[position].answerImage)
         QuestionDetailActivity.putExtra("tag", questionModels[position].tag)
-
-//        Log.e("BankQuestionActivity", questionModels[position]._id.toString())
 
         startActivity(QuestionDetailActivity)
     }
