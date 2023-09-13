@@ -41,7 +41,6 @@
             android:hint="This is question type"
             android:textAlignment="textEnd"
             android:textColor="#606060"
-            android:background="@color/skin"
             android:textSize="14sp" />
 
         <TextView
