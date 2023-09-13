@@ -31,7 +31,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
     private lateinit var tvDescription: TextView
-    private lateinit var btnSetting: ImageButton
     private lateinit var optionRecyclerView: RecyclerView
     private lateinit var optionAdapter: QuestionOptionsRecyclerViewAdapter
     // Question variable
@@ -52,7 +51,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var questionTag: ArrayList<String>
     // variable
     private lateinit var newDescription: String
-    private lateinit var oldDescription: String
     private var isModified: Boolean = false
 
 
@@ -62,8 +60,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         setContentView(R.layout.activity_bank_question_detail)
 
         init()
-        // TODO: deannotate it when data is full confirmed
-        // set up question options
         setupOptions()
 
         findViewById<TextView>(R.id.btn_show_answer).setOnClickListener{
@@ -81,17 +77,15 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
             etDescription.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
                     newDescription = s.toString()
                     isModified = true
                 }
-
-                override fun afterTextChanged(s: Editable?) {}
             })
 
             descriptionDialog.setOnDismissListener {
-                if (newDescription != "") {
+                if (isModified) {
                     Log.e("BankQuestionDescriptionDialog", "set new description")
                     etDescription.setText(newDescription)
                     tvDescription.text = newDescription
@@ -99,8 +93,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
             }
         }
-
-        btnSetting.setOnClickListener { startActivity(Intent(this, BankQuestionSettingActivity::class.java)) }
 
         pullExit()
     }
@@ -231,7 +223,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         tvTitle = findViewById(R.id.question_title)
         tvType = findViewById(R.id.question_type)
         tvDescription = findViewById(R.id.question_description)
-        btnSetting = findViewById(R.id.setting)
 
         tvTitle.text = questionTitle
         tvTitle.movementMethod = ScrollingMovementMethod()

@@ -112,10 +112,6 @@ object ConstantsQuestionBankFunction {
                 questionBank.members,
                 questionBank.originateFrom
             )
-
-            //TODO 拿到csrf token access token
-//            Log.e("access in scan ", Constants.accessToken)
-//            Log.e("COOKIE in scan ", Constants.COOKIE)
             val call = api.postQuestionBank(
                 Constants.COOKIE,
                 Constants.csrfToken,
@@ -168,7 +164,67 @@ object ConstantsQuestionBankFunction {
         }
     }
 
-    fun deleteQuestionBank(questionBankId: String, activity: AppCompatActivity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    fun putQuestionBank(activity: AppCompatActivity, questionBank: QuestionBankModel, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        if (Constants.isNetworkAvailable(activity)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(QuestionBankService::class.java)
+            val body = QuestionBankService.PutQuestionBankBody(
+                questionBank._id,
+                questionBank.title,
+                questionBank.questionBankType,
+                questionBank.members,
+            )
+            val call = api.updateQuestionBank(
+                Constants.COOKIE,
+                Constants.csrfToken,
+                Constants.accessToken,
+                Constants.refreshToken,
+                body
+            )
+
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+                        Toast.makeText(activity, "put successfully", Toast.LENGTH_SHORT).show()
+
+                        onSuccess("put successfully")
+                    } else {
+                        when (response.code()) {
+                            400 -> {
+                                Log.e("Error 400", "Bad Request$response")
+                                Toast.makeText(activity, "Error 400", Toast.LENGTH_SHORT).show()
+                            }
+                            404 -> {
+                                Log.e("Error 404", "Not Found")
+                                Toast.makeText(activity, "Not Found 400", Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {
+                                Log.e("Error", "in put question Error")
+                                Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        onFailure("put unsuccessfully")
+                    }
+                }
+
+                override fun onFailure(t: Throwable?) {
+                    onFailure("bad request")
+                    Log.e("in put bank error", t?.message.toString())
+                }
+            })
+        } else {
+            Toast.makeText(
+                activity,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    fun deleteQuestionBank(activity: AppCompatActivity, questionBankId: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

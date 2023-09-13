@@ -61,7 +61,7 @@ abstract class SwipeHelper(
             val left = right - width
             button.draw(
                 canvas,
-                RectF(left, itemView.top.toFloat(), right.toFloat(), (itemView.bottom-30).toFloat())    // the length of border
+                RectF(left, itemView.top.toFloat(), right.toFloat(), itemView.bottom.toFloat())    // the length of border
             )
 
             right = left.toInt()

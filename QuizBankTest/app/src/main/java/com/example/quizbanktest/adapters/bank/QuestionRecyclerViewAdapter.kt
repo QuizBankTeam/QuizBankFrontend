@@ -22,7 +22,6 @@ class QuestionRecyclerViewAdapter(var context: Context,
 ) : RecyclerView.Adapter<QuestionRecyclerViewAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-//        This is where you inflate the layout (Giving a look to our rows)
         try {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.item_questioncard, parent, false)
@@ -34,17 +33,25 @@ class QuestionRecyclerViewAdapter(var context: Context,
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-//        Assigning values to the views we created in the recycler_view_row layout file
-//        Based on the position of the recycler view
-//        TODO: bankID
         holder.tvQuestionTitle.text = questionModels[position].title
         holder.tvQuestionType.text = questionModels[position].questionType
         holder.tvQuestionCreatedDate.text = questionModels[position].createdDate
     }
 
     override fun getItemCount(): Int {
-//        The recycler view just wants to know the number of items you want displayed
         return questionModels.size
+    }
+
+    fun setItem(position: Int, data: QuestionModel) {
+        ConstantsQuestionFunction.putQuestion(activity, data,
+            onSuccess = {
+                Log.e("QuestionRecyclerViewAdapter", "put successfully")
+                questionModels[position] = data
+                notifyItemChanged(position)
+            },
+            onFailure = {
+                Log.e("QuestionRecyclerViewAdapter", "put unsuccessfully")
+            })
     }
 
     fun deleteItem(position: Int) {
@@ -61,9 +68,6 @@ class QuestionRecyclerViewAdapter(var context: Context,
     }
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
-        //        Grabbing the views from our recycler_view_row layout file
-        //        Kinda like in the onCreate method
-//        TODO: BankID
         var tvQuestionTitle: TextView
         var tvQuestionType: TextView
         var tvQuestionCreatedDate: TextView
