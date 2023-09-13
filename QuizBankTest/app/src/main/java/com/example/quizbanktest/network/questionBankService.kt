@@ -9,11 +9,8 @@ import javax.xml.transform.OutputKeys.METHOD
 import kotlin.collections.ArrayList
 
 interface QuestionBankService {
-
-
     data class PostQuestionBankBody(val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String) //questionBankType 只有 'multi', 'single', 'public' 要判斷
-
-    data class PutQuestionBankBody(val questionBankId:String,val title: String,val questionBankType: String,val createdDate: String,val members: ArrayList<String>,val originateFrom:String,val creator:String)
+    data class PutQuestionBankBody(val questionBankId: String, val title: String, val questionBankType: String, val members: ArrayList<String>)
 
     @POST("/questionBank")
     fun postQuestionBank(
