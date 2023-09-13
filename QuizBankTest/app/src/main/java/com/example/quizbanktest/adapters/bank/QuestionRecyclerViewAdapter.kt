@@ -43,7 +43,7 @@ class QuestionRecyclerViewAdapter(var context: Context,
     }
 
     fun setItem(position: Int, data: QuestionModel) {
-        ConstantsQuestionFunction.putQuestion(context, data,
+        ConstantsQuestionFunction.putQuestion(activity, data,
             onSuccess = {
                 Log.e("QuestionRecyclerViewAdapter", "put successfully")
                 questionModels[position] = data

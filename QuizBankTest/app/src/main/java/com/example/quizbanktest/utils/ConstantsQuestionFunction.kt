@@ -168,15 +168,22 @@ object ConstantsQuestionFunction {
             ).show()
         }
     }
-    fun putQuestion(context: Context, question: QuestionModel, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
-        if (Constants.isNetworkAvailable(context)) {
+
+    fun putQuestion(activity: AppCompatActivity, question: QuestionModel, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        if (Constants.isNetworkAvailable(activity)) {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit.create(QuestionService::class.java)
 
-            val body = QuestionService.PutQuestionBody(question._id!!, question.title!!, question.number!!, question.description, question.options!!, question.questionType!!, question.bankType!!, question.questionBank!!, question.answerOptions!!, question.answerDescription!!, ConstantsAccountServiceFunction.userAccount!!._id, question.originateFrom!!, question.createdDate!!, question.image!!, question.answerImage!!, question.tag!!)
+            Log.e("ConstantsQuestionFunction", "put question")
+            if (question.answerImage == null || question.answerImage!!.isEmpty()) {
+                val answerImage : ArrayList<String> = ArrayList()
+                question.answerImage = answerImage
+            }
+            val body = QuestionService.PutQuestionBody(question._id, question.title, question.number, question.description, question.options, question.questionType, question.bankType, question.answerOptions, question.answerDescription, question.image,
+                question.answerImage!!, question.tag)
             //TODO 拿到csrf token access token
             val call = api.updateQuestion(
                 Constants.COOKIE,
@@ -216,7 +223,7 @@ object ConstantsQuestionFunction {
             })
         } else {
             Toast.makeText(
-                context,
+                activity,
                 "No internet connection available.",
                 Toast.LENGTH_SHORT
             ).show()

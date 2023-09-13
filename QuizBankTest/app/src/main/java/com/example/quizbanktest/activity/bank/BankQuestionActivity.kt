@@ -1,16 +1,16 @@
 package com.example.quizbanktest.activity.bank
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.icu.text.CaseMap.Title
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,6 +22,7 @@ import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
+import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
 import kotlin.math.sin
@@ -40,6 +41,10 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var bankTitle: String
     private lateinit var bankId: String
     private var toast: Toast? = null
+    private lateinit var newQuestionTitle: String
+    private lateinit var newQuestionType: String
+    private lateinit var newQuestionDate: String
+    private var isModified: Boolean = false
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,7 +133,63 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     private fun editQuestion(position: Int) {
-        TODO("add edit function")
+        val editQuestionDialog = Dialog(this)
+        editQuestionDialog.setContentView(R.layout.dialog_question_card)
+        editQuestionDialog.show()
+
+        val etQuestionTitle = editQuestionDialog.findViewById<EditText>(R.id.question_title)
+        val etQuestionType = editQuestionDialog.findViewById<EditText>(R.id.question_type)
+        val etQuestionDate = editQuestionDialog.findViewById<EditText>(R.id.question_createdDate)
+
+        newQuestionTitle = questionModels[position].title.toString()
+        newQuestionType = questionModels[position].questionType.toString()
+        newQuestionDate = questionModels[position].createdDate
+
+        etQuestionTitle.setText(newQuestionTitle)
+        etQuestionType.setText(newQuestionType)
+        etQuestionDate.setText(newQuestionDate)
+
+        etQuestionTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                newQuestionTitle = s.toString()
+                isModified = true
+            }
+        })
+
+        etQuestionType.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                newQuestionType = s.toString()
+                isModified = true
+            }
+        })
+
+        etQuestionDate.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                newQuestionDate = s.toString()
+                isModified = true
+            }
+        })
+
+        editQuestionDialog.setOnDismissListener {
+            if (isModified) {
+                val data = QuestionModel(questionModels[position]._id, newQuestionTitle,
+                    questionModels[position].number, questionModels[position].description,
+                    questionModels[position].options, newQuestionType,
+                    questionModels[position].bankType, questionModels[position].questionBank,
+                    questionModels[position].answerOptions, questionModels[position].answerDescription,
+                    questionModels[position].originateFrom, newQuestionDate,
+                    questionModels[position].image, questionModels[position].answerImage,
+                    questionModels[position].tag)
+                Log.e("BankActivity", "newdata = \n$data")
+                questionAdapter.setItem(position, data)
+            }
+        }
     }
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -170,18 +231,38 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     showErrorSnackBar("裡面目前沒有題目喔")
                     hideProgressDialog()
                 } else {
-                    for (item in questionList) {
-                        val questionModel = QuestionModel(
-                            item._id, item.title, item.number, item.description, item.options,
-                            item.questionType, item.bankType, item.questionBank, item.answerOptions,
-                            item.answerDescription, item.originateFrom, item.createdDate,
-                            item.image, item.answerImage, item.tag
-                        )
-                        questionModels.add(questionModel)
+                    Log.e("BankQuestionActivity", "$questionList")
+                    try {
+                        for (item in questionList) {
+                            if (item.answerImage == null) {
+                                val answerImage : ArrayList<String> = ArrayList()
+                                item.answerImage = answerImage
+                            }
+                            val questionModel = QuestionModel(
+                                item._id,
+                                item.title,
+                                item.number,
+                                item.description,
+                                item.options,
+                                item.questionType,
+                                item.bankType,
+                                item.questionBank,
+                                item.answerOptions,
+                                item.answerDescription,
+                                item.originateFrom,
+                                item.createdDate,
+                                item.image,
+                                item.answerImage,
+                                item.tag
+                            )
+                            questionModels.add(questionModel)
+                        }
+                        Log.e("BankQuestionActivity", "set question model finish")
+                        setupQuestionModel()
+                        hideProgressDialog()
+                    } catch (e: Exception) {
+                        Log.e("BankQuestionActivity", "error message: $e")
                     }
-                    Log.e("BankQuestionActivity", "set question model finish")
-                    setupQuestionModel()
-                    hideProgressDialog()
                 }
             },
             onFailure = {

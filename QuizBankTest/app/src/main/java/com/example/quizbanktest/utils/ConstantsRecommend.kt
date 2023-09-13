@@ -11,6 +11,7 @@ object ConstantsRecommend {
         val answerOptions: ArrayList<String> = ArrayList()
         answerOptions.add("answer1")
         val image: ArrayList<String> = ArrayList()
+        val answerImage: ArrayList<String> = ArrayList()
         val tag: ArrayList<String> = ArrayList()
 
         var que1 = QuestionModel(
@@ -27,6 +28,7 @@ object ConstantsRecommend {
         "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
         "2023-6-29",
         image,   //todo
+            answerImage,
         tag
         )
         questionList.add(que1)
@@ -45,6 +47,7 @@ object ConstantsRecommend {
             "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
             "2023-6-29",
             image,   //todo
+            answerImage,
             tag
 
         )
@@ -64,6 +67,7 @@ object ConstantsRecommend {
             "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
             "2023-6-29",
             image,   //todo
+            answerImage,
             tag
         )
         questionList.add(que3)
@@ -82,6 +86,7 @@ object ConstantsRecommend {
             "fc29a730-2162-4a7c-a7e7-8a664987d8a7", // user id
             "2023-6-29",
             image,   //todo
+            answerImage,
             tag
         )
         questionList.add(que4)
