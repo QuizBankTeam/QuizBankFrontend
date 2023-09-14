@@ -740,29 +740,55 @@ class OcrResultViewAdapter(
                 val imageDialog = Dialog(context)
                 imageDialog.setContentView(R.layout.dialog_create_image)
                 imageDialog.setTitle("新增圖片")
-                var imageCount : Int = 1 //TODO 先暫時做只有一張的
+                var imageCount : Int = imageList.size //TODO 先暫時做只有一張的
                 val showImage : ImageView = imageDialog.findViewById(R.id.iv_answer_image0)
+                val showImage1 : ImageView = imageDialog.findViewById(R.id.iv_answer_image1)
+                val showImage2 : ImageView = imageDialog.findViewById(R.id.iv_answer_image2)
                 if(ConstantsOcrResults.questionList[position].image?.isNotEmpty()==true){
                     showImage.setImageBitmap(ConstantsOcrResults.questionList[position].image?.get(0)
                         ?.let { it1 -> base64ToBitmap(it1) })
                 }
+                if(ConstantsOcrResults.questionList[position].image?.size == 2){
+                    showImage1.setImageBitmap(ConstantsOcrResults.questionList[position].image?.get(1)
+                        ?.let { it1 -> base64ToBitmap(it1) })
+                    showImage1.visibility = View.VISIBLE
+                }
+                if(ConstantsOcrResults.questionList[position].image?.size == 3){
+                    showImage1.setImageBitmap(ConstantsOcrResults.questionList[position].image?.get(1)
+                        ?.let { it1 -> base64ToBitmap(it1) })
+                    showImage1.visibility = View.VISIBLE
+                    showImage2.setImageBitmap(ConstantsOcrResults.questionList[position].image?.get(2)
+                        ?.let { it1 -> base64ToBitmap(it1) })
+                    showImage2.visibility = View.VISIBLE
+                }
                 val createPhoto: TextView = imageDialog.findViewById(R.id.answer_choose_image)!! //新增圖片(最多三張) iv_answer_image0 iv_answer_image1 iv_answer_image2
                 createPhoto.setOnClickListener(View.OnClickListener {
                     var selectBitmap : Bitmap?= null
-                    ConstantsDialogFunction.dialogChoosePhotoFromGallery(activity) {
-                            bitmap ->
-                        if(bitmap!=null){
-                            selectBitmap = bitmap
-                            selectBitmap?.compress(Bitmap.CompressFormat.JPEG, 70, out)
-                            Toast.makeText(context," success choose photo",Toast.LENGTH_SHORT).show()
-                            //顯示目前已新增的圖片
-                            showImage.setImageBitmap(selectBitmap)
-                            val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
-                            imageList.add(selectPhotoBase64String)
-                            ConstantsOcrResults.questionList[position].image = imageList
-                            imageCount +=1
-                        }else{
-                            Toast.makeText(context," choosePhoto has error",Toast.LENGTH_SHORT).show()
+                    if(imageCount < 3){
+                        ConstantsDialogFunction.dialogChoosePhotoFromGallery(activity) {
+                                bitmap ->
+                            if(bitmap!=null){
+                                selectBitmap = bitmap
+                                selectBitmap?.compress(Bitmap.CompressFormat.JPEG, 70, out)
+                                Toast.makeText(context," success choose photo",Toast.LENGTH_SHORT).show()
+                                //顯示目前已新增的圖片
+                                if(imageCount == 0){
+                                    showImage.setImageBitmap(selectBitmap)
+                                }else if (imageCount == 1){
+                                    showImage1.setImageBitmap(selectBitmap)
+                                    showImage1.visibility = View.VISIBLE
+                                }else if(imageCount == 2){
+                                    showImage2.setImageBitmap(selectBitmap)
+                                    showImage2.visibility = View.VISIBLE
+                                }
+
+                                val selectPhotoBase64String : String = ConstantsFunction.encodeImage(selectBitmap!!)!!
+                                imageList.add(selectPhotoBase64String)
+                                ConstantsOcrResults.questionList[position].image = imageList
+                                imageCount +=1
+                            }else{
+                                Toast.makeText(context," choosePhoto has error",Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                     Log.e("in answer pic",selectBitmap.toString())
