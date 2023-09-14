@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview_option"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="60dp"
+    android:layout_gravity="top|center"
+    android:layout_marginBottom="15dp"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:strokeWidth="1dp">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
-        android:layout_marginBottom="15dp"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="3dp"
-        app:strokeWidth="1dp">
+        android:layout_height="match_parent"
+        android:foreground="?attr/selectableItemBackground">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="?attr/selectableItemBackground">
+            android:layout_weight="10"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:padding="15dp"
+            android:hint="title" />
 
-            <TextView
-                android:id="@+id/tv_option"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:gravity="center_vertical"
-                android:hint="option"
-                android:padding="15dp"
-                android:scrollbars="vertical"
-                android:singleLine="false"
-                android:textSize="15sp" />
+        <TextView
+            android:id="@+id/tv_option"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:hint="option"
+            android:gravity="left|center_vertical"
+            android:padding="15dp"
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:textSize="15sp" />
 
-        </RelativeLayout>
+    </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

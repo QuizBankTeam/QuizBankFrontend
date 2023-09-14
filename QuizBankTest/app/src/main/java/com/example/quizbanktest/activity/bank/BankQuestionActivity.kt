@@ -231,9 +231,14 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     showErrorSnackBar("裡面目前沒有題目喔")
                     hideProgressDialog()
                 } else {
-                    Log.e("BankQuestionActivity", "$questionList")
+//                    Log.e("BankQuestionActivity", "$questionList")
                     try {
                         for (item in questionList) {
+                            if (item.image == null) {
+                                val image : ArrayList<String> = ArrayList()
+                                item.image = image
+                            }
+
                             if (item.answerImage == null) {
                                 val answerImage : ArrayList<String> = ArrayList()
                                 item.answerImage = answerImage

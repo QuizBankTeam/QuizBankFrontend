@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/bank_image"
+            android:maxWidth="175dp"
+            android:singleLine="true"
             android:text="This is title"
             android:textColor="@color/black"
             android:textSize="20sp" />
@@ -39,6 +41,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="-21dp"
             android:layout_marginEnd="8dp"
+            android:maxWidth="100dp"
+            android:singleLine="true"
             android:text="This is bank type"
             android:textColor="#606060"
             android:textSize="12sp" />

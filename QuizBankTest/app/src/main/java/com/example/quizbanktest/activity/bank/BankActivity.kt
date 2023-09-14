@@ -250,7 +250,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 val data = QuestionBankModel(questionBankModels[position]._id, newBankTitle,
                     newBankType, newBankDate, questionBankModels[position].members,
                     newBankSource, newBankCreator)
-                Log.e("BankActivity", "newdata = \n$data")
+                Log.e("BankActivity", "newdata = $data")
                 bankAdapter.setItem(position, data)
             }
 

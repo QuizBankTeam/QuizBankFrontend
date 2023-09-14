@@ -21,6 +21,7 @@
     <color name="skin">#faedcd</color>
     <color name="red">#d62828</color>
     <color name="green">#99d98c</color>
+    <color name="light_green">#c6fa73</color>
     <color name="blue">#3a86ff</color>
     <color name="yellow">#ffb703</color>
     <color name="lollipop"> #a8dadc</color>

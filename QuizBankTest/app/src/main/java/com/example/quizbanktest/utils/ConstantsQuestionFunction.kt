@@ -108,9 +108,6 @@ object ConstantsQuestionFunction {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit.create(QuestionBankService::class.java)
-            //TODO 拿到csrf token access token
-//            Log.e("Question access in scan ", Constants.accessToken)
-//            Log.e("Question Cookie in scan ", Constants.COOKIE)
             val call = api.getQuestionBankByID(
                 Constants.COOKIE,
                 Constants.csrfToken,
@@ -135,7 +132,7 @@ object ConstantsQuestionFunction {
                         allQuestionsReturnResponse = allQuestionsResponse
 //                        Log.d("All questions response", allQuestionsReturnResponse.toString())
                         questionList = allQuestionsResponse.questionBank.questions
-                        Log.e("ConstantsQuestionFunction: Question Response Result:", questionList.toString())
+//                        Log.e("ConstantsQuestionFunction: Question Response Result:", questionList.toString())
                         onSuccess(questionList)
                     } else {
                         val sc = response.code()

@@ -2,7 +2,7 @@ package com.example.quizbanktest.activity.bank
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,19 +11,16 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
-import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
-import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
-import org.w3c.dom.Text
+import com.google.android.material.imageview.ShapeableImageView
 
 
 class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
@@ -31,8 +28,12 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
     private lateinit var tvDescription: TextView
+    private lateinit var tvAnswerDescription: TextView
+    private lateinit var btnShowAnswer: TextView
+    private lateinit var ivQuestionImage: ShapeableImageView
     private lateinit var optionRecyclerView: RecyclerView
     private lateinit var optionAdapter: QuestionOptionsRecyclerViewAdapter
+
     // Question variable
     private lateinit var questionId: String
     private lateinit var questionTitle: String
@@ -51,9 +52,18 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var questionTag: ArrayList<String>
     // variable
     private lateinit var newDescription: String
+    private lateinit var newAnswerDescription: String
     private var isModified: Boolean = false
+    private var isShowingAnswer: Boolean = true
+    private var isShowingFillingAnswer: Boolean = false
 
-
+    val list = mutableListOf<Int>()
+    private var imageUrls = listOf(
+        "https://img.zcool.cn/community/01b72057a7e0790000018c1bf4fce0.png",
+        "https://img.zcool.cn/community/016a2256fb63006ac7257948f83349.jpg",
+        "https://img.zcool.cn/community/01233056fb62fe32f875a9447400e1.jpg",
+        "https://img.zcool.cn/community/01700557a7f42f0000018c1bd6eb23.jpg"
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
@@ -62,7 +72,8 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         init()
         setupOptions()
 
-        findViewById<TextView>(R.id.btn_show_answer).setOnClickListener{
+
+        btnShowAnswer.setOnClickListener{
             showAnswer()
         }
 
@@ -89,6 +100,34 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                     Log.e("BankQuestionDescriptionDialog", "set new description")
                     etDescription.setText(newDescription)
                     tvDescription.text = newDescription
+                }
+
+            }
+        }
+
+        tvAnswerDescription.setOnClickListener {
+            val descriptionDialog = Dialog(this)
+            descriptionDialog.setContentView(R.layout.dialog_bank_question_description)
+            descriptionDialog.show()
+
+            val etDescription =
+                descriptionDialog.findViewById<EditText>(R.id.et_question_description)
+            etDescription.setText(newAnswerDescription)
+
+            etDescription.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    newAnswerDescription = s.toString()
+                    isModified = true
+                }
+            })
+
+            descriptionDialog.setOnDismissListener {
+                if (isModified) {
+                    Log.e("BankQuestionDescriptionDialog", "set new description")
+                    etDescription.setText(newAnswerDescription)
+                    tvAnswerDescription.text = newAnswerDescription
                 }
 
             }
@@ -130,8 +169,29 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showAnswer() {
-        optionAdapter.showAnswer()
-        optionAdapter.notifyDataSetChanged()
+        if (isShowingAnswer) {
+            btnShowAnswer.setBackgroundColor(Color.parseColor("#ff7575"))
+            btnShowAnswer.text = "隱藏答案"
+        }
+        else {
+            btnShowAnswer.setBackgroundColor(Color.parseColor("#c6fa73"))
+            btnShowAnswer.text = "顯示答案"
+        }
+        isShowingAnswer = !isShowingAnswer
+
+        if (questionType == "Filling") {
+            if (!isShowingFillingAnswer) {
+                tvAnswerDescription.visibility = View.VISIBLE
+            }
+            else {
+                tvAnswerDescription.visibility = View.INVISIBLE
+            }
+            isShowingFillingAnswer  = !isShowingFillingAnswer
+
+        } else {
+            optionAdapter.showAnswer()
+            optionAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun putQuestion() {
@@ -174,6 +234,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         putQuestion()
         finish()
     }
@@ -206,8 +267,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         val questionImage = intent.getStringArrayListExtra("image")
         if (questionImage != null) {
             this.questionImage = questionImage
-        } else {
-            findViewById<ImageView>(R.id.question_image).visibility = View.INVISIBLE
         }
         val answerImage = intent.getStringArrayListExtra("answerImage")
         if (answerImage != null) {
@@ -218,11 +277,15 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
             this.questionTag = questionTag
         }
 
+        Log.e("BankQuestionDetailActivity", "image: $questionImage")
 
         // View initialization
         tvTitle = findViewById(R.id.question_title)
         tvType = findViewById(R.id.question_type)
         tvDescription = findViewById(R.id.question_description)
+        tvAnswerDescription = findViewById(R.id.answer_description)
+        btnShowAnswer = findViewById(R.id.btn_show_answer)
+        ivQuestionImage = findViewById(R.id.question_image)
 
         tvTitle.text = questionTitle
         tvTitle.movementMethod = ScrollingMovementMethod()
@@ -230,8 +293,16 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         tvType.text = questionType
         tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = questionDescription
+        tvAnswerDescription.movementMethod = ScrollingMovementMethod()
+        tvAnswerDescription.text = answerDescription
 
         // Variable initialization
         newDescription = questionDescription
+        newAnswerDescription = answerDescription
+
+        if (questionImage!!.isEmpty()) {
+            ivQuestionImage.visibility = View.INVISIBLE
+            findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
+        }
     }
 }
