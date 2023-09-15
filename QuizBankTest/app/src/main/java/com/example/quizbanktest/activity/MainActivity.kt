@@ -121,8 +121,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 startActivity(intent)
             }
             R.id.mathWorkSpace -> {
-                val intent  = Intent(this,MathActivity::class.java)
-                startActivity(intent)
+                if (Constants.isNetworkAvailable(this)) {
+                    val intent  = Intent(this,MathActivity::class.java)
+                    startActivity(intent)
+                }else{
+                    Toast.makeText(this@MainActivity,"此功能需要網路請先開啟網路",Toast.LENGTH_SHORT).show()
+                }
+
             }
             R.id.nav_sign_out -> {
                ConstantsAccountServiceFunction.logout(this@MainActivity)
