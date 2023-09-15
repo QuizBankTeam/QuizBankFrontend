@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.account.MyProfileActivity
 import com.example.quizbanktest.activity.paint.PaintActivity
+import com.example.quizbanktest.activity.scan.MathActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.adapters.main.RecentViewAdapter
 import com.example.quizbanktest.adapters.main.RecommendViewAdapter
@@ -119,7 +120,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 val intent = Intent(this, MyProfileActivity::class.java)
                 startActivity(intent)
             }
-
+            R.id.mathWorkSpace -> {
+                val intent  = Intent(this,MathActivity::class.java)
+                startActivity(intent)
+            }
             R.id.nav_sign_out -> {
                ConstantsAccountServiceFunction.logout(this@MainActivity)
             }
