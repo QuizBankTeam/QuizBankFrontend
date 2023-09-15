@@ -3,20 +3,12 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>數學工作區</title>
+    <title>Math</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <!-- KaTeX specific code START -->
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.css"
-            integrity="sha384-NFGicHNcq1l2DafLerXQeI3h3jJY3dCcDQF+29rtRBHW7P7ti+/XIRY7ALbJOaeh"
-            crossorigin="anonymous"
-    />
-    <!-- KaTeX specific code END -->
+    <!-- MathJax specific code START -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <!-- MathJax specific code END -->
     <script type="module">
-      // KaTeX specific code START
-      import katex from 'https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.mjs';
-      // KaTeX specific code END
       import * as mke from 'https://cdn.jsdelivr.net/npm/mathkeyboardengine@v1.0.1/dist/MathKeyboardEngine.es2017-esm.min.js';
       let latexConfiguration = new mke.LatexConfiguration();
       let keyboardMemory = new mke.KeyboardMemory();
@@ -244,20 +236,22 @@
         document.getElementById('viewModeLatex').innerText = viewModeLatex;
       }
 
-      // === KaTeX specific code START ===
+      // === MathJax specific code START ===
       function typesetLatexInKey(latex, element) {
-        katex.render(latex, element, { throwOnError: false });
+        element.innerText = String.raw`\(` + latex + String.raw`\)`;
+        MathJax.Hub.Typeset(element);
       }
 
       function typesetLatexInOutputBox(latex, element) {
-        katex.render(String.raw`\displaystyle ` + latex, element, { throwOnError: false });
+        element.innerText = String.raw`\(\displaystyle ` + latex + String.raw`\)`;
+        MathJax.Hub.Typeset(element);
       }
 
       function setSelectionHightlightStart(color) {
-        latexConfiguration.selectionHightlightStart = String.raw`\colorbox{` + color + String.raw`}{\(\displaystyle`;
+        latexConfiguration.selectionHightlightStart = String.raw`\bbox[` + color + ']{';
       }
-      latexConfiguration.selectionHightlightEnd = String.raw`\)}`;
-      // === KaTeX specific code END ===
+      latexConfiguration.selectionHightlightEnd = '}';
+      // === MathJax specific code END ===
 
       // === Handle key presses of a physical keyboard START ===
       let inShift = false;
@@ -393,11 +387,7 @@
         }
         displayResult();
       };
-      function copyText() {
-        let textToCopy = document.getElementById("viewModeLatex").innerText;
-        Android.copyToClipboard(textToCopy);
-      }
-
+      // === Handle key presses of a physical keyboard END ===
     </script>
     <style>
       :root {
@@ -425,7 +415,9 @@
         font-size: 1rem;
         width: 2.5rem;
       }
-
+      .hidden-div {
+         display: none;
+      }
       #typesetEditModeLatex {
         border: 1px solid gray;
         padding: 0.25rem;
@@ -491,39 +483,66 @@
         top: 0;
         color: green;
       }
+      .blue-button {
+    background-color: #46A3FF;
+    color: white; /* 將按鈕文字設為白色 */
+    border: none;
+    padding: 10px 20px; /* 設定上下和左右的間距 */
+    margin-right: 10px; /* 在按鈕之間添加一些間距 */
+    cursor: pointer; /* 當鼠標移到按鈕上時會出現手指形狀 */
+    border-radius: 5px; /* 為按鈕添加圓角 */
+}
+
+.blue-button:hover {
+    background-color: #357ABD; /* 當滑鼠移到按鈕上時的背景色 */
+}
+
+.buttons-container {
+    display: flex; /* 使按鈕在同一行 */
+    justify-content: flex-start; /* 將按鈕對齊到行的開始位置 */
+}
+
+
     </style>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </head>
 <body class="light">
-<h1>    數學工作區</h1>
-<button onclick="Android.closeActivity()">Close Activity</button>
-<button onclick="(function(){
-    let textToCopy = document.getElementById('viewModeLatex').innerText;
-    Android.copyToClipboard(textToCopy);
-})()">Copy Latex</button>
 
-<div id="pureLatexFromPhysicalKeys"></div>
-<div id="typesetEditModeLatex"></div>
+<div class="d-flex align-items-center position-relative" style="background-color: #8ecae6;">
+    <button class="btn btn-outline-danger btn-sm position-absolute ml-2" style="left: 0;" onclick="Android.closeActivity()">❌</button>
+    <h3 class="mx-auto" style="margin-top: 13px; color: #2a4d69;">數學工作區</h3>
+</div>
+
+<br />
+
+<div class="d-flex justify-content-between align-items-center">
+    <div id="pureLatexFromPhysicalKeys"></div>
+    <div id="typesetEditModeLatex" class="border border-info rounded-5 flex-grow-1"></div>
+    <button class="btn btn-info mr-1"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="(function(){
+        let textToCopy = document.getElementById('viewModeLatex').innerText;
+        Android.copyToClipboard(textToCopy);
+    })()">📄</button>
+</div>
+
+
 <div id="viewModeLatex"></div>
-<div id="mathKeyboard">
-    <div id="selectionModeToggle"></div>
-    <div id="moveUp">&#x25B2;</div>
-    <div id="deleteLeft">&#128293;</div>
-    <br />
-    <div id="moveLeft">&#x25C0;</div>
-    <div id="moveDown">&#x25BC;</div>
-    <div id="moveRight">&#x25B6;</div>
-    <div onclick="const settingsContainer = document.getElementById('settingsContainer'); settingsContainer.style.display = settingsContainer.style.display == 'block' ? 'none' : 'block';">
-        <strong>Settings</strong>
-    </div>
-    <div id="settingsContainer">
-        <div id="multiplicationSignToggle" class="setting">Output multiplication sign: <span class="setting-value" id="multiplicationSignType">cross</span></div>
-        <div id="decimalSeparatorToggle" class="setting">Decimal separator: <span class="setting-value" id="decimalSeparatorType">decimal point</span></div>
-        <div id="colorSchemeToggle" class="setting">Color scheme: <span class="setting-value" id="colorScheme"></span></div>
-    </div>
-    <br />
-    <div id="digit0"></div>
-    <div id="digit1"></div>
-    <div id="digit2"></div>
+
+<div id="mathKeyboard" class="border border-info">
+
+    <div id="digit0" ></div>
+    <div id="digit1" ></div>
+    <div id="digit2" ></div>
     <div id="digit3"></div>
     <div id="digit4"></div>
     <div id="digit5"></div>
@@ -531,8 +550,11 @@
     <div id="digit7"></div>
     <div id="digit8"></div>
     <div id="digit9"></div>
-    <div id="decimalSeparator"></div>
     <br />
+    <div id="decimalSeparator"></div>
+    <!--    <div id="selectionModeToggle" class="hidden-div"></div>-->
+    <div id="moveUp">⬆️</div>
+
     <div id="a"></div>
     <div id="b"></div>
     <div id="c"></div>
@@ -540,12 +562,28 @@
     <div id="y"></div>
     <div id="z"></div>
     <div id="alpha"></div>
+    <div id="deleteLeft">🔙</div>
+    <br />
+    <div id="moveLeft">⬅️</div>
+    <div id="moveDown">⬇️</div>
+    <div id="moveRight">➡️</div>
     <div id="beta"></div>
     <div id="gamma"></div>
     <div id="lambda"></div>
     <div id="mu"></div>
     <div id="pi"></div>
     <br />
+    <!--    <div onclick="const settingsContainer = document.getElementById('settingsContainer'); settingsContainer.style.display = settingsContainer.style.display == 'block' ? 'none' : 'block';" >-->
+    <!--        <strong class="hidden-div">Settings</strong>-->
+    <!--    </div>-->
+
+    <div id="settingsContainer">
+        <div id="multiplicationSignToggle" class="setting">Output multiplication sign: <span class="setting-value" id="multiplicationSignType">cross</span></div>
+        <div id="decimalSeparatorToggle" class="setting">Decimal separator: <span class="setting-value" id="decimalSeparatorType">decimal point</span></div>
+        <div id="colorSchemeToggle" class="setting">Color scheme: <span class="setting-value" id="colorScheme"></span></div>
+    </div>
+
+
     <div id="plusminus"></div>
     <div id="plus"></div>
     <div id="minus"></div>
@@ -568,10 +606,10 @@
     <div id="doublePipes"></div>
     <br />
     <div style="text-align: right">
-        <label for="matrixHeight">Height</label>
+        <label for="matrixHeight">矩陣高</label>
         <input id="matrixHeight" type="number" value="2" min="1" class="disable-physical-keypress-math-input-when-focused" />
         <br />
-        <label for="matrixWidth">Width</label>
+        <label for="matrixWidth">矩陣寬</label>
         <input id="matrixWidth" type="number" value="2" min="1" class="disable-physical-keypress-math-input-when-focused" />
     </div>
     <div id="pmatrix"></div>
