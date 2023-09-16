@@ -202,7 +202,17 @@
                             android:scrollbarStyle="insideInset"
                             android:scrollbars="vertical"
                             android:singleLine="false" />
-
+                        <ImageButton
+                            android:id="@+id/btn_view"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginRight="74dp"
+                            android:src="@drawable/view"
+                            android:foreground="?actionBarItemBackground"
+                            android:background="?actionBarItemBackground"
+                            android:scaleType="fitXY" />
                         <ImageButton
                             android:id="@+id/btn_rescan"
                             android:layout_width="25dp"
