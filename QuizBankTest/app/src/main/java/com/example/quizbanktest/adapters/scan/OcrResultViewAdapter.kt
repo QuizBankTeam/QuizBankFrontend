@@ -12,6 +12,8 @@ import android.os.Looper
 import android.util.Base64
 import android.util.Log
 import android.view.*
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +28,7 @@ import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.models.ScanQuestionModel
 import com.example.quizbanktest.utils.*
+import com.qdot.mathrendererlib.TextAlign
 import java.io.ByteArrayOutputStream
 
 
@@ -312,6 +315,27 @@ class OcrResultViewAdapter(
                     if(scannerText.text.toString().isNotEmpty()){
                         ConstantsOcrResults.getOcrResult()[position].description = scannerText.text.toString()
                     }
+                }
+            }
+            val latexRenderView : ImageButton = holder.itemView.findViewById(R.id.btn_view)
+            latexRenderView.setOnClickListener {
+                val latexRenderDialog = Dialog(context)
+                latexRenderDialog.setContentView(R.layout.dialog_review_latex)
+                latexRenderDialog.setTitle("Latex Render")
+                val mathView : com.qdot.mathrendererlib.MathRenderView = latexRenderDialog.findViewById(R.id.mathView)
+
+                mathView.apply {
+                    text = scannerText.text.toString()
+                    textAlignment = TextAlign.CENTER
+                    textColor = "#000000"
+                    mathBackgroundColor = "#FFFFFF"
+
+                    setWebViewClient(object : WebViewClient() {
+                        override fun onPageFinished(view: WebView?, url: String?) {
+                            super.onPageFinished(view, url)
+                            latexRenderDialog.show()
+                        }
+                    })
                 }
             }
 

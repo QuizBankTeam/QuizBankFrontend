@@ -50,7 +50,7 @@ class MathActivity : BaseActivity() {
                 Log.e("math","copy")
                 Toast.makeText(this@MathActivity,"已經copy對應之latex語法 $text",Toast.LENGTH_SHORT).show()
                 val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("copiedText", escapeSpecialCharacters(text))
+                val clip = ClipData.newPlainText("copiedText", "\\("+escapeSpecialCharacters(text)+"\\)")
                 clipboard.setPrimaryClip(clip)
             }
         }
@@ -60,7 +60,6 @@ class MathActivity : BaseActivity() {
     }
     fun escapeSpecialCharacters(input: String): String {
         // 先轉換 \\ 至 \\\\，再轉換 \ 至 \\，然後轉換 & 至 &amp;
-        return input.replace("\\", "\\\\")
-            .replace("&", "&amp;")
+        return input.replace("&", "&amp;")
     }
 }

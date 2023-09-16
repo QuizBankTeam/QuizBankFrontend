@@ -95,7 +95,11 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             }
 
         }
-
+        val mathButton : ImageButton = findViewById(R.id.math_symbol_edit)
+        mathButton.setOnClickListener {
+            val intent : Intent = Intent(this@ScannerTextWorkSpaceActivity,MathActivity::class.java)
+            startActivity(intent)
+        }
         val deleteButton : ImageButton = findViewById(R.id.delete_all_scan_result)
 
         deleteButton.setOnClickListener {
