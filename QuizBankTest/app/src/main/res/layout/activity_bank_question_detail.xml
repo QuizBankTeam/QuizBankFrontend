@@ -11,6 +11,7 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+
         android:background="@color/colorRipple">
 
         <TextView
@@ -74,22 +75,52 @@
         android:visibility="invisible"
         android:src="@drawable/todo" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/question_image"
+<!--    <com.google.android.material.imageview.ShapeableImageView-->
+<!--        android:id="@+id/question_image"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:layout_below="@+id/title_bar"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:adjustViewBounds="true"-->
+<!--        android:background="@drawable/image_border"-->
+<!--        android:maxHeight="200dp"-->
+<!--        android:minHeight="150dp"-->
+<!--        android:paddingHorizontal="15dp"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:scaleType="fitCenter"-->
+<!--        android:src="@drawable/society98_1"-->
+<!--        app:shapeAppearanceOverlay="@style/ImageRoundCorner" />-->
+    <RelativeLayout
+        android:id="@+id/image_layout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/title_bar"
-        android:layout_centerHorizontal="true"
-        android:adjustViewBounds="true"
-        android:background="@drawable/image_border"
-        android:maxHeight="200dp"
-        android:minHeight="150dp"
-        android:paddingHorizontal="15dp"
-        android:paddingTop="10dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/society98_1"
-        app:shapeAppearanceOverlay="@style/ImageRoundCorner" />
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_above="@id/question_description"
+        android:layout_below="@id/title_bar">
 
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:id="@+id/imageNumberTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="#454545"
+            android:textSize="16sp"
+            tools:text="01/30" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/question_description"

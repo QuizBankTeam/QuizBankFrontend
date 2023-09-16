@@ -10,77 +10,81 @@
 9        android:targetSdkVersion="33" />
 9-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml
 10
-11    <permission
-11-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
-12        android:name="com.example.yiquizapptest.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-12-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
-13        android:protectionLevel="signature" />
-13-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
-14
-15    <uses-permission android:name="com.example.yiquizapptest.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-15-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
-15-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:5:5-66
+11-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:5:22-64
+12
+13    <permission
+13-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+14        android:name="com.example.yiquizapptest.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+14-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+15        android:protectionLevel="signature" />
+15-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
 16
-17    <application
-17-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:5:5-23:19
-18        android:allowBackup="true"
-18-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:6:9-35
-19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-19-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
-20        android:dataExtractionRules="@xml/data_extraction_rules"
-20-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:7:9-65
-21        android:debuggable="true"
-22        android:extractNativeLibs="false"
-23        android:fullBackupContent="@xml/backup_rules"
-23-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:8:9-54
-24        android:icon="@mipmap/ic_launcher"
-24-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:9:9-43
-25        android:label="@string/app_name"
-25-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:10:9-41
-26        android:supportsRtl="true"
-26-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:11:9-35
-27        android:testOnly="true"
-28        android:theme="@style/Theme.YiQuizAppTest" >
-28-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:12:9-51
-29        <activity
-29-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:14:9-22:20
-30            android:name="com.example.yiquizapptest.MainActivity"
-30-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:15:13-41
-31            android:exported="true" >
-31-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:16:13-36
-32            <intent-filter>
-32-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:17:13-21:29
-33                <action android:name="android.intent.action.MAIN" />
-33-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:18:17-69
-33-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:18:25-66
-34
-35                <category android:name="android.intent.category.LAUNCHER" />
-35-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:20:17-77
-35-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:20:27-74
-36            </intent-filter>
-37        </activity>
-38
-39        <provider
-39-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-40            android:name="androidx.startup.InitializationProvider"
-40-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
-41            android:authorities="com.example.yiquizapptest.androidx-startup"
-41-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
-42            android:exported="false" >
-42-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
-43            <meta-data
-43-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-44                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-44-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
-45                android:value="androidx.startup" />
-45-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
-46            <meta-data
-46-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\sycn0\.gradle\caches\transforms-3\2882a1b6f8a4e98c7a1903336c452fc8\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
-47                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-47-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\sycn0\.gradle\caches\transforms-3\2882a1b6f8a4e98c7a1903336c452fc8\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
-48                android:value="androidx.startup" />
-48-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\sycn0\.gradle\caches\transforms-3\2882a1b6f8a4e98c7a1903336c452fc8\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
-49        </provider>
-50    </application>
-51
-52</manifest>
+17    <uses-permission android:name="com.example.yiquizapptest.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+17-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+17-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+18
+19    <application
+19-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:7:5-25:19
+20        android:allowBackup="true"
+20-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:8:9-35
+21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+21-->[androidx.core:core:1.9.0] C:\Users\sycn0\.gradle\caches\transforms-3\24c8031572ced1a9ec505ef2513af626\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+22        android:dataExtractionRules="@xml/data_extraction_rules"
+22-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:9:9-65
+23        android:debuggable="true"
+24        android:extractNativeLibs="false"
+25        android:fullBackupContent="@xml/backup_rules"
+25-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:10:9-54
+26        android:icon="@mipmap/ic_launcher"
+26-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:11:9-43
+27        android:label="@string/app_name"
+27-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:12:9-41
+28        android:supportsRtl="true"
+28-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:13:9-35
+29        android:testOnly="true"
+30        android:theme="@style/Theme.YiQuizAppTest" >
+30-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:14:9-51
+31        <activity
+31-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:16:9-24:20
+32            android:name="com.example.yiquizapptest.MainActivity"
+32-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:17:13-41
+33            android:exported="true" >
+33-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:18:13-36
+34            <intent-filter>
+34-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:19:13-23:29
+35                <action android:name="android.intent.action.MAIN" />
+35-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:20:17-69
+35-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:20:25-66
+36
+37                <category android:name="android.intent.category.LAUNCHER" />
+37-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:22:17-77
+37-->C:\Users\sycn0\AndroidStudioProjects\QuizBankFrontend\YiQuizAppTest\app\src\main\AndroidManifest.xml:22:27-74
+38            </intent-filter>
+39        </activity>
+40
+41        <provider
+41-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+42            android:name="androidx.startup.InitializationProvider"
+42-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+43            android:authorities="com.example.yiquizapptest.androidx-startup"
+43-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+44            android:exported="false" >
+44-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+45            <meta-data
+45-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+46                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+46-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+47                android:value="androidx.startup" />
+47-->[androidx.emoji2:emoji2:1.2.0] C:\Users\sycn0\.gradle\caches\transforms-3\ae62b2ed57c08e4ce03649c04da30a3c\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+48            <meta-data
+48-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\sycn0\.gradle\caches\transforms-3\2882a1b6f8a4e98c7a1903336c452fc8\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+49                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+49-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\sycn0\.gradle\caches\transforms-3\2882a1b6f8a4e98c7a1903336c452fc8\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+50                android:value="androidx.startup" />
+50-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\sycn0\.gradle\caches\transforms-3\2882a1b6f8a4e98c7a1903336c452fc8\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+51        </provider>
+52    </application>
+53
+54</manifest>

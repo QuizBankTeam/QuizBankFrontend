@@ -14,13 +14,15 @@ import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
+import com.example.quizbanktest.adapters.bank.ViewPagerAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
-import com.google.android.material.imageview.ShapeableImageView
 
 
 class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
@@ -29,10 +31,13 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var tvType: TextView
     private lateinit var tvDescription: TextView
     private lateinit var tvAnswerDescription: TextView
+    private lateinit var tvImageNumber: TextView
     private lateinit var btnShowAnswer: TextView
-    private lateinit var ivQuestionImage: ShapeableImageView
+//    private lateinit var ivQuestionImage: ShapeableImageView
     private lateinit var optionRecyclerView: RecyclerView
     private lateinit var optionAdapter: QuestionOptionsRecyclerViewAdapter
+    private lateinit var imageViewPager: ViewPager
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     // Question variable
     private lateinit var questionId: String
@@ -57,13 +62,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private var isShowingAnswer: Boolean = true
     private var isShowingFillingAnswer: Boolean = false
 
-    val list = mutableListOf<Int>()
-    private var imageUrls = listOf(
-        "https://img.zcool.cn/community/01b72057a7e0790000018c1bf4fce0.png",
-        "https://img.zcool.cn/community/016a2256fb63006ac7257948f83349.jpg",
-        "https://img.zcool.cn/community/01233056fb62fe32f875a9447400e1.jpg",
-        "https://img.zcool.cn/community/01700557a7f42f0000018c1bd6eb23.jpg"
-    )
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
@@ -71,7 +69,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
         init()
         setupOptions()
-
+        setupImage()
 
         btnShowAnswer.setOnClickListener{
             showAnswer()
@@ -134,6 +132,33 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         }
 
         pullExit()
+    }
+
+    private fun setupImage() {
+        tvImageNumber = findViewById(R.id.imageNumberTV)
+        imageViewPager = findViewById(R.id.viewPager)
+        viewPagerAdapter = ViewPagerAdapter(this@BankQuestionDetailActivity, questionImage)
+
+        imageViewPager.adapter = viewPagerAdapter
+
+        //select any page you want as your starting page
+        val currentPageIndex = 0
+        imageViewPager.currentItem = currentPageIndex
+
+        // registering for page change callback
+        imageViewPager.addOnPageChangeListener(
+            object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {}
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                @SuppressLint("SetTextI18n")
+                override fun onPageSelected(position: Int) {
+                    //update the image number textview
+                    tvImageNumber.text = "${position + 1} / ${questionImage.size}"
+                }
+
+            }
+        )
+
     }
 
     private fun setupOptions() {
@@ -285,7 +310,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         tvDescription = findViewById(R.id.question_description)
         tvAnswerDescription = findViewById(R.id.answer_description)
         btnShowAnswer = findViewById(R.id.btn_show_answer)
-        ivQuestionImage = findViewById(R.id.question_image)
+//        ivQuestionImage = findViewById(R.id.question_image)
 
         tvTitle.text = questionTitle
         tvTitle.movementMethod = ScrollingMovementMethod()
@@ -301,7 +326,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         newAnswerDescription = answerDescription
 
         if (questionImage!!.isEmpty()) {
-            ivQuestionImage.visibility = View.INVISIBLE
+//            ivQuestionImage.visibility = View.INVISIBLE
             findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
         }
     }
