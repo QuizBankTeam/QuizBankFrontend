@@ -15,9 +15,10 @@ import android.webkit.WebViewClient
 import android.widget.TextView
 import android.widget.Toast
 import com.example.quizbanktest.R
+import com.example.quizbanktest.activity.BaseActivity
 
-class MathActivity : AppCompatActivity() {
-    private lateinit var mProgressDialog: Dialog
+class MathActivity : BaseActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_math)
@@ -49,26 +50,17 @@ class MathActivity : AppCompatActivity() {
                 Log.e("math","copy")
                 Toast.makeText(this@MathActivity,"已經copy對應之latex語法 $text",Toast.LENGTH_SHORT).show()
                 val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("copiedText", text)
+                val clip = ClipData.newPlainText("copiedText", escapeSpecialCharacters(text))
                 clipboard.setPrimaryClip(clip)
             }
         }
 
         webView.addJavascriptInterface(WebAppInterface(this), "Android")
+        setupNavigationView()
     }
-    fun showProgressDialog(text: String) {
-        mProgressDialog = Dialog(this)
-
-        /*Set the screen content from a layout resource.
-        The resource will be inflated, adding all top-level views to the screen.*/
-        mProgressDialog.setContentView(R.layout.dialog_progress)
-
-        mProgressDialog.findViewById<TextView>(R.id.tv_progressbar_text).text=text
-
-        //Start the dialog and display it on screen.
-        mProgressDialog.show()
-    }
-    fun hideProgressDialog() {
-        mProgressDialog.dismiss()
+    fun escapeSpecialCharacters(input: String): String {
+        // 先轉換 \\ 至 \\\\，再轉換 \ 至 \\，然後轉換 & 至 &amp;
+        return input.replace("\\", "\\\\")
+            .replace("&", "&amp;")
     }
 }
