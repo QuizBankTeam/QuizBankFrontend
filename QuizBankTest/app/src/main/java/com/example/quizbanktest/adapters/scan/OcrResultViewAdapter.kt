@@ -326,7 +326,7 @@ class OcrResultViewAdapter(
 
                 mathView.apply {
                     text = scannerText.text.toString()
-                    textAlignment = TextAlign.CENTER
+                    textAlignment = TextAlign.START
                     textColor = "#000000"
                     mathBackgroundColor = "#FFFFFF"
 
