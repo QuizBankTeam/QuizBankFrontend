@@ -352,7 +352,7 @@ open class BaseActivity : AppCompatActivity() {
     fun showAlertFromWorkSpace(onConfirm : () -> Unit) {
         if (ConstantsOcrResults.questionList.isNotEmpty()) {
             val builder = AlertDialog.Builder(this,R.style.CustomAlertDialogStyle)
-                .setMessage(" 您確定要離開嗎系統不會保存這次修改喔 ")
+                .setMessage(" 您確定要離開嗎\n(注意: 關閉APP將導致暫存於工作區的題目不見喔) ")
                 .setTitle("OCR結果")
                 .setIcon(R.drawable.baseline_warning_amber_24)
             builder.setPositiveButton("確認") { _, _ -> onConfirm.invoke() }

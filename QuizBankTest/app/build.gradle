@@ -77,5 +77,5 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
-    
+    implementation 'com.github.quantaDot:MathRenderer:1.0.3'
 }
