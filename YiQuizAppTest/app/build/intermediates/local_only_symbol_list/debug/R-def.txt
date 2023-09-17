@@ -12,9 +12,8 @@ drawable ic_baseline_error_outline_24
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 id content
-id imageNumberTV
+id idViewPager
 id iv_image
-id viewPager
 layout activity_main
 layout item_image
 mipmap ic_launcher

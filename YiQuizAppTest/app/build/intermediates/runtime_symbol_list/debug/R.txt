@@ -3224,11 +3224,11 @@ int id honorRequest 0x7f0800d4
 int id horizontal_only 0x7f0800d5
 int id icon 0x7f0800d6
 int id icon_group 0x7f0800d7
+int id idViewPager 0x7f0801f5
 int id ifRoom 0x7f0800d8
 int id ignore 0x7f0800d9
 int id ignoreRequest 0x7f0800da
 int id image 0x7f0800db
-int id imageNumberTV 0x7f0800dc
 int id immediateStop 0x7f0800dd
 int id included 0x7f0800de
 int id indeterminate 0x7f0800df
@@ -3491,7 +3491,6 @@ int id unlabeled 0x7f0801df
 int id up 0x7f0801e0
 int id useLogo 0x7f0801e1
 int id vertical_only 0x7f0801e2
-int id viewPager 0x7f0801e3
 int id view_offset_helper 0x7f0801e4
 int id view_transition 0x7f0801e5
 int id view_tree_lifecycle_owner 0x7f0801e6

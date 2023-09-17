@@ -3225,11 +3225,11 @@ id honorRequest
 id horizontal_only
 id icon
 id icon_group
+id idViewPager
 id ifRoom
 id ignore
 id ignoreRequest
 id image
-id imageNumberTV
 id immediateStop
 id included
 id indeterminate
@@ -3492,7 +3492,6 @@ id unlabeled
 id up
 id useLogo
 id vertical_only
-id viewPager
 id view_offset_helper
 id view_transition
 id view_tree_lifecycle_owner
