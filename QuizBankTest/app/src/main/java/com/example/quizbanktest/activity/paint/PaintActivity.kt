@@ -344,29 +344,33 @@ class PaintActivity : AppCompatActivity() {
 
         val ib_highQuality : ImageButton = findViewById(R.id.ib_highQuality)
         ib_highQuality.setOnClickListener {
-            showProgressDialog("提升畫質中請耐心等候")
+
             val imageBackground: ImageView = findViewById(R.id.iv_background)
             val backgroundBitmap = getBitmapFromView(imageBackground)
-            ConstantsRealESRGAN.realEsrgan(
-                sourceUriForUcrop?.let { it1 -> ConstantsFunction.encodeFileImage(this, it1) }!! , this@PaintActivity,
-                onSuccess = { it1 ->
-                    Log.e("it1",it1)
-                    val resultBitmap = base64ToBitmap(it1)
-                    imageBackground.setImageBitmap(resultBitmap)
-                    if (resultBitmap != null) {
-                        encodeImage(resultBitmap)?.let { it2 -> Log.e("resultBitmap", it2) }
+            if(sourceUriForUcrop!=null){
+                showProgressDialog("提升畫質中請耐心等候")
+                ConstantsRealESRGAN.realEsrgan(
+                    sourceUriForUcrop?.let { it1 -> ConstantsFunction.encodeFileImage(this, it1) }!! , this@PaintActivity,
+                    onSuccess = { it1 ->
+                        Log.e("it1",it1)
+                        val resultBitmap = base64ToBitmap(it1)
+                        imageBackground.setImageBitmap(resultBitmap)
+                        if (resultBitmap != null) {
+                            encodeImage(resultBitmap)?.let { it2 -> Log.e("resultBitmap", it2) }
+                        }
+                        hideProgressDialog()
+                    },
+                    onFailure = { it1 ->
+                        if(it1 == "429"){
+                            showErrorSnackBar("目前伺服器忙碌中請稍後再使用")
+                        }
+                        showErrorSnackBar("伺服器目前出現了點問題請稍後在試")
+                        hideProgressDialog()
                     }
-                    hideProgressDialog()
-                },
-                onFailure = { it1 ->
-                    if(it1 == "429"){
-                        showErrorSnackBar("目前伺服器忙碌中請稍後再使用")
-                    }
-                    showErrorSnackBar("伺服器目前出現了點問題請稍後在試")
-                    hideProgressDialog()
-                }
-            )
-
+                )
+            }else{
+                Toast.makeText(this,"要先選擇圖片喔",Toast.LENGTH_SHORT).show()
+            }
         }
 
         //儲存繪畫後的圖片

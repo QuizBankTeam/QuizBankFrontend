@@ -33,13 +33,21 @@
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_weight="2"/>-->
+            <ImageButton
+                android:id="@+id/math_symbol_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/baseline_functions_24"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:layout_gravity="center"
-                android:paddingLeft="13dp"
-                android:text="      掃描工作區 "
+                android:paddingLeft="0dp"
+                android:text="  掃描工作區 "
                 android:textSize="25dp"
                 android:gravity="center"
                 android:textStyle="bold"
@@ -119,7 +127,7 @@
                     android:layout_marginRight="10dp"
                     android:background="?attr/selectableItemBackground"
                     android:gravity="center"
-                    android:text="目前還未新增任何題目喔  ‼️"
+                    android:text="目前無任何暫存題目喔  ‼️"
                     android:textColor="#363A43"
                     android:textSize="18sp"
                     android:textStyle="bold"

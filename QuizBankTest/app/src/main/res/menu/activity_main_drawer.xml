@@ -12,6 +12,11 @@
             android:icon="@drawable/ib_text_editor"
             android:title="掃描工作區" />
         <item
+            android:id="@+id/mathWorkSpace"
+            android:background="@color/teal_700"
+            android:icon="@drawable/keys"
+            android:title="數學工作區" />
+        <item
             android:id="@+id/imageEditor"
             android:background="@color/teal_700"
             android:icon="@drawable/ic_photo_edit"
