@@ -295,7 +295,7 @@ class OcrResultViewAdapter(
                 }
             }
             //ocr 出來的文字
-
+            val latexRenderView : ImageButton = holder.itemView.findViewById(R.id.btn_view)
             scannerText.setText(ConstantsOcrResults.getOcrResult()[position].description,TextView.BufferType.EDITABLE)
 
             scannerText.setOnTouchListener { view, event ->
@@ -314,10 +314,17 @@ class OcrResultViewAdapter(
                 if (!hasFocus) {
                     if(scannerText.text.toString().isNotEmpty()){
                         ConstantsOcrResults.getOcrResult()[position].description = scannerText.text.toString()
+                        latexRenderView.visibility = View.VISIBLE
+                        reScanBtn.visibility = View.VISIBLE
+                        btnScanPhoto.visibility = View.VISIBLE
                     }
+                }else{
+                    latexRenderView.visibility = View.GONE
+                    reScanBtn.visibility = View.GONE
+                    btnScanPhoto.visibility = View.GONE
                 }
             }
-            val latexRenderView : ImageButton = holder.itemView.findViewById(R.id.btn_view)
+
             latexRenderView.setOnClickListener {
                 val latexRenderDialog = Dialog(context)
                 latexRenderDialog.setContentView(R.layout.dialog_review_latex)
