@@ -3,6 +3,7 @@ package com.example.quizbanktest.activity.bank
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +24,7 @@ import com.example.quizbanktest.adapters.bank.ViewPagerAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
+import org.w3c.dom.Text
 
 
 class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
@@ -33,7 +35,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var tvAnswerDescription: TextView
     private lateinit var tvImageNumber: TextView
     private lateinit var btnShowAnswer: TextView
-//    private lateinit var ivQuestionImage: ShapeableImageView
+    private lateinit var btnShowDetail: TextView
     private lateinit var optionRecyclerView: RecyclerView
     private lateinit var optionAdapter: QuestionOptionsRecyclerViewAdapter
     private lateinit var imageViewPager: ViewPager
@@ -71,8 +73,12 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         setupOptions()
         setupImage()
 
-        btnShowAnswer.setOnClickListener{
+        btnShowAnswer.setOnClickListener {
             showAnswer()
+        }
+
+        btnShowDetail.setOnClickListener {
+            showDetail()
         }
 
         tvDescription.setOnClickListener {
@@ -135,10 +141,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     private fun setupImage() {
-        tvImageNumber = findViewById(R.id.imageNumberTV)
-        imageViewPager = findViewById(R.id.viewPager)
         viewPagerAdapter = ViewPagerAdapter(this@BankQuestionDetailActivity, questionImage)
-
         imageViewPager.adapter = viewPagerAdapter
 
         //select any page you want as your starting page
@@ -194,16 +197,20 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showAnswer() {
+        // switch view while we are clicking button
         if (isShowingAnswer) {
             btnShowAnswer.setBackgroundColor(Color.parseColor("#ff7575"))
             btnShowAnswer.text = "隱藏答案"
+            btnShowDetail.visibility = View.VISIBLE
         }
         else {
             btnShowAnswer.setBackgroundColor(Color.parseColor("#c6fa73"))
             btnShowAnswer.text = "顯示答案"
+            btnShowDetail.visibility = View.INVISIBLE
         }
         isShowingAnswer = !isShowingAnswer
 
+        // decide the style of answer presentation in different type of question
         if (questionType == "Filling") {
             if (!isShowingFillingAnswer) {
                 tvAnswerDescription.visibility = View.VISIBLE
@@ -219,6 +226,39 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         }
     }
 
+    private fun showDetail() {
+        val detailDialog = Dialog(this)
+        detailDialog.setContentView(R.layout.dialog_bank_question_detail)
+        detailDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        detailDialog.show()
+
+        val tvDescription = detailDialog.findViewById<TextView>(R.id.answer_description)
+        val answerImageViewPager = detailDialog.findViewById<ViewPager>(R.id.viewPager)
+        val answerViewPagerAdapter = ViewPagerAdapter(this, answerImage)
+        val tvImageNumber = detailDialog.findViewById<TextView>(R.id.imageNumberTV)
+
+        tvDescription.movementMethod = ScrollingMovementMethod()
+        tvDescription.text = answerDescription
+
+        answerImageViewPager.adapter = answerViewPagerAdapter
+        //select any page you want as your starting page
+        val currentPageIndex = 0
+        answerImageViewPager.currentItem = currentPageIndex
+
+        answerImageViewPager.addOnPageChangeListener(
+            object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {}
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                @SuppressLint("SetTextI18n")
+                override fun onPageSelected(position: Int) {
+                    //update the image number textview
+                    tvImageNumber.text = "${position + 1} / ${questionImage.size}"
+                }
+
+            }
+        )
+    }
+
     private fun putQuestion() {
         Log.e("BankQuestionDetailActivity", "put question")
         if (isModified) {
@@ -228,8 +268,8 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                     Log.e("BankQuestionDetailActivity", "upload success")
                 },
                 onFailure = { errorMessage ->
-//                    showErrorSnackBar("網路連線狀況不好")
-//                    hideProgressDialog()
+                    showErrorSnackBar("網路連線狀況不好")
+                    hideProgressDialog()
                     Log.e("BankQuestionDetailActivity", "Error Message: $errorMessage" )
                 }
             )
@@ -303,6 +343,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         }
 
         Log.e("BankQuestionDetailActivity", "image: $questionImage")
+        Log.e("BankQuestionDetailActivity", "answerImage: $answerImage")
 
         // View initialization
         tvTitle = findViewById(R.id.question_title)
@@ -310,7 +351,9 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         tvDescription = findViewById(R.id.question_description)
         tvAnswerDescription = findViewById(R.id.answer_description)
         btnShowAnswer = findViewById(R.id.btn_show_answer)
-//        ivQuestionImage = findViewById(R.id.question_image)
+        btnShowDetail = findViewById(R.id.btn_show_detail)
+        tvImageNumber = findViewById(R.id.imageNumberTV)
+        imageViewPager = findViewById(R.id.viewPager)
 
         tvTitle.text = questionTitle
         tvTitle.movementMethod = ScrollingMovementMethod()
@@ -326,7 +369,9 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         newAnswerDescription = answerDescription
 
         if (questionImage!!.isEmpty()) {
-//            ivQuestionImage.visibility = View.INVISIBLE
+            imageViewPager.visibility = View.INVISIBLE
+            tvImageNumber.visibility = View.INVISIBLE
+            findViewById<RelativeLayout>(R.id.image_layout).visibility = View.INVISIBLE
             findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
         }
     }
