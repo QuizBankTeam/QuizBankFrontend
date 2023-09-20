@@ -189,6 +189,7 @@ class OcrResultViewAdapter(
                     position_spinner: Int,
                     id: Long
                 ) {
+                    scannerText.clearFocus()
                     when(position_spinner){
                         0 -> {
                             optionList.visibility = View.GONE
@@ -295,7 +296,7 @@ class OcrResultViewAdapter(
                 }
             }
             //ocr 出來的文字
-
+            val latexRenderView : ImageButton = holder.itemView.findViewById(R.id.btn_view)
             scannerText.setText(ConstantsOcrResults.getOcrResult()[position].description,TextView.BufferType.EDITABLE)
 
             scannerText.setOnTouchListener { view, event ->
@@ -314,10 +315,17 @@ class OcrResultViewAdapter(
                 if (!hasFocus) {
                     if(scannerText.text.toString().isNotEmpty()){
                         ConstantsOcrResults.getOcrResult()[position].description = scannerText.text.toString()
+                        latexRenderView.visibility = View.VISIBLE
+                        reScanBtn.visibility = View.VISIBLE
+                        btnScanPhoto.visibility = View.VISIBLE
                     }
+                }else{
+                    latexRenderView.visibility = View.GONE
+                    reScanBtn.visibility = View.GONE
+                    btnScanPhoto.visibility = View.GONE
                 }
             }
-            val latexRenderView : ImageButton = holder.itemView.findViewById(R.id.btn_view)
+
             latexRenderView.setOnClickListener {
                 val latexRenderDialog = Dialog(context)
                 latexRenderDialog.setContentView(R.layout.dialog_review_latex)
@@ -326,7 +334,7 @@ class OcrResultViewAdapter(
 
                 mathView.apply {
                     text = scannerText.text.toString()
-                    textAlignment = TextAlign.CENTER
+                    textAlignment = TextAlign.START
                     textColor = "#000000"
                     mathBackgroundColor = "#FFFFFF"
 
@@ -370,6 +378,7 @@ class OcrResultViewAdapter(
 
             tagPickBtn.setOnClickListener {
                 //用dialog去跳出標籤選單
+                scannerText.clearFocus()
                 val tagDialog = Dialog(context)
                 tagDialog.setContentView(R.layout.dialog_choose_tag)
                 //初始化所有的tag展示區域
@@ -462,6 +471,7 @@ class OcrResultViewAdapter(
             }
             chooseTagButton.setOnLongClickListener{
                 //用dialog去跳出標籤選單
+                scannerText.clearFocus()
                 val tagDialog = Dialog(context)
                 tagDialog.setContentView(R.layout.dialog_choose_tag)
                 //初始化所有的tag展示區域
@@ -554,6 +564,7 @@ class OcrResultViewAdapter(
 
             val listenerForTrueFalse =
                 CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                    scannerText.clearFocus()
                     ConstantsOcrResults.questionList[position].answerOptions?.clear()
                     if (isTrueFalse && isChecked) {
                         if (buttonView !== checkBoxForTrue) checkBoxForTrue.isChecked = false
@@ -564,7 +575,7 @@ class OcrResultViewAdapter(
                 }
             val listener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                 val index = checkBoxes.indexOf(buttonView)
-
+                scannerText.clearFocus()
                 if (index != -1) {
                     val optionText = options[index].text.toString().trim()
 
@@ -605,6 +616,7 @@ class OcrResultViewAdapter(
             }
             val  chooseTagOnAdapter = holder.itemView.findViewById<co.lujun.androidtagview.TagContainerLayout>(R.id.scannerTagForQuestion)
             chooseTagOnAdapter.setOnTouchListener { _, event ->
+                scannerText.clearFocus()
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     // 檢查觸摸點是否在任何標籤上
                     for (i in 0 until chooseTagOnAdapter.childCount) {
@@ -656,6 +668,7 @@ class OcrResultViewAdapter(
             }
             btnAddAnswer.setOnClickListener {
                 //新增答案
+                scannerText.clearFocus()
                 val answerDialog = Dialog(context)
                 answerDialog.setContentView(R.layout.dialog_create_answer)
                 answerDialog.setTitle("新增答案")
@@ -760,7 +773,7 @@ class OcrResultViewAdapter(
             //新增目前題目描述的圖片
 
             btnScanPhoto.setOnClickListener {
-
+                scannerText.clearFocus()
                 val imageDialog = Dialog(context)
                 imageDialog.setContentView(R.layout.dialog_create_image)
                 imageDialog.setTitle("新增圖片")
@@ -859,6 +872,7 @@ class OcrResultViewAdapter(
                 checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7, checkBox8, checkBox9, checkBox10
             )
             addOptionsButton.setOnClickListener {
+                scannerText.clearFocus()
                 if (optionsNum < 10) {
                     optionsNum += 1
                     optionLayouts[optionsNum - 2].visibility = View.VISIBLE
@@ -871,6 +885,7 @@ class OcrResultViewAdapter(
             }
 
             removeOptionsButton.setOnClickListener {
+                scannerText.clearFocus()
                 if (optionsNum > 1) {
                     optionsNum -= 1
                     optionLayouts[optionsNum - 1].visibility = View.GONE
