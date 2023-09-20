@@ -17,6 +17,9 @@ import retrofit.Callback
 import retrofit.GsonConverterFactory
 import retrofit.Response
 import retrofit.Retrofit
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object ConstantsAccountServiceFunction {
 
@@ -186,7 +189,75 @@ object ConstantsAccountServiceFunction {
             ).show()
         }
     }
+    fun register(context: Context, userName : String,email: String, password: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
 
+        if (Constants.isNetworkAvailable(context)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(AccountService::class.java)
+//            Constants.username = "test"
+//            Constants.password = "test"
+            val currentDate = Date()
+            val formatter = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+            val formattedDate = formatter.format(currentDate)
+            val body = AccountService.PostBodyForRegister(userName,email, password,formattedDate.toString())
+            Log.e("register Body",body.toString())
+            //TODO 用csrf token 拿access token
+
+            val call = api.register(Constants.cookie, Constants.csrfToken, Constants.session, body)
+
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                    if (response!!.isSuccess) {
+                        val cookieHeader: Headers? = response.headers()
+                        val gson = Gson()
+                        val accountResponse = gson.fromJson(
+                            response.body().charStream(),
+                            RegisterApiResponse::class.java
+                        )
+                        Log.e("register",accountResponse.toString())
+                        onSuccess("Ok")
+                    } else {
+
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e(
+                                    "in register Error 400", "Bad Re" +
+                                            "" +
+                                            "quest" + response.body()
+                                )
+                            }
+                            404 -> {
+                                Log.e("in register Error 404", "Not Found")
+                            }
+                            401 -> {
+                                val intent = Intent(context, IntroActivity::class.java)
+                                context.startActivity(intent)
+                            }
+                            else -> {
+                                Log.e("in register Error", "Generic Error")
+                            }
+                        }
+                        onFailure("Request failed with status code $sc")
+                    }
+                }
+
+                override fun onFailure(t: Throwable?) {
+                    Log.e("in register Errorrrrr", t?.message.toString())
+                    onFailure("Request failed with status code ")
+                }
+            })
+        } else {
+            Toast.makeText(
+                context,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
     fun logout(context: Context) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()
@@ -256,5 +327,5 @@ object ConstantsAccountServiceFunction {
 
     }
     data class LoginApiResponse(val message: String, val status: Int, val user: AccountModel)
-
+    data class RegisterApiResponse(val message: String, val status: Int)
 }

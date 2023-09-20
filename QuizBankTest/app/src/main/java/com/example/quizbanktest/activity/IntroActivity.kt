@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.quizbanktest.activity.account.LoginActivity
+import com.example.quizbanktest.activity.account.SignUpActivity
 import com.example.quizbanktest.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
@@ -15,6 +16,11 @@ class IntroActivity : AppCompatActivity() {
 
         binding.signInIntro.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        binding.signUpIntro.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
             finish()
         }
