@@ -18,7 +18,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_alignParentStart="true"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="1dp"
             android:maxWidth="100dp"
             app:srcCompat="@drawable/book_square_svgrepo_com" />
 
@@ -40,12 +40,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:hint="This is question type"
             android:singleLine="true"
             android:textAlignment="textEnd"
             android:textColor="#606060"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/question_createdDate"

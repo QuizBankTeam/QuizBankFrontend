@@ -143,6 +143,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private fun setupImage() {
         viewPagerAdapter = ViewPagerAdapter(this@BankQuestionDetailActivity, questionImage)
         imageViewPager.adapter = viewPagerAdapter
+        tvImageNumber.text = " "
 
         //select any page you want as your starting page
         val currentPageIndex = 0
@@ -236,6 +237,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         val answerImageViewPager = detailDialog.findViewById<ViewPager>(R.id.viewPager)
         val answerViewPagerAdapter = ViewPagerAdapter(this, answerImage)
         val tvImageNumber = detailDialog.findViewById<TextView>(R.id.imageNumberTV)
+        tvImageNumber.text = " "
 
         tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = answerDescription
