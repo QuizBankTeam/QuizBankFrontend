@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.bank.BankQuestionDetailActivity
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
+import com.google.android.material.card.MaterialCardView
 
 class QuestionOptionsRecyclerViewAdapter(var context: Context,
                                          var questionType: String,
@@ -29,7 +30,7 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
 
     private lateinit var newOption: String
     private var isModified: Boolean = false
-    private var showAnswer1: Boolean = false
+    private var isShowingAnswer: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         try {
@@ -49,20 +50,34 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
         }
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, @SuppressLint("RecyclerView") position: Int) {
         newOption = questionOptions[position]
 
         Log.e("QuestionOptionsRecyclerViewAdapter", answerOptions.toString())
         for (item in answerOptions) {
             if (questionOptions[position] == item) {
-                if (showAnswer1) {
+                if (isShowingAnswer) {
                     Log.e("QuestionOptionsRecyclerViewAdapter", "show answer")
                     holder.tvOption.setBackgroundColor(Color.parseColor("#c6fa73"))
+                    holder.tvTitle.setBackgroundColor(Color.parseColor("#c6fa73"))
+                    holder.cardView.strokeColor = Color.parseColor("#c6fa73")
                 } else {
                     holder.tvOption.setBackgroundColor(Color.parseColor("#ffffff"))
+                    holder.tvTitle.setBackgroundColor(Color.parseColor("#ffffff"))
+                    holder.cardView.strokeColor = Color.parseColor("#ffffff")
                 }
             }
+        }
+
+        when(position) {
+            0 -> holder.tvTitle.text = "A"
+            1 -> holder.tvTitle.text = "B"
+            2 -> holder.tvTitle.text = "C"
+            3 -> holder.tvTitle.text = "D"
+            4 -> holder.tvTitle.text = "E"
+            5 -> holder.tvTitle.text = "F"
+            6 -> holder.tvTitle.text = "G"
         }
 
         holder.tvOption.text = questionOptions[position]
@@ -101,7 +116,7 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
     }
 
     fun showAnswer() {
-        showAnswer1 = !showAnswer1
+        isShowingAnswer = !isShowingAnswer
     }
 
     private fun putQuestion() {
@@ -114,11 +129,15 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface, questionOptions: ArrayList<String>, answerOptions: ArrayList<String>) : RecyclerView.ViewHolder(itemView) {
 
+        var tvTitle: TextView
         var tvOption: TextView
+        lateinit var cardView: MaterialCardView
         var isAnswer: Boolean = false
 
         init {
+            tvTitle = itemView.findViewById(R.id.tv_title)
             tvOption = itemView.findViewById(R.id.tv_option)
+            cardView = itemView.findViewById(R.id.cardview_option)
 
             val position = adapterPosition
 //            itemView.setOnClickListener {

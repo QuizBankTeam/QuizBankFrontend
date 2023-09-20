@@ -3,12 +3,15 @@ package com.example.quizbanktest.activity.bank
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.icu.text.CaseMap.Title
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
@@ -52,18 +55,13 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank_question)
 //        setupNavigationView()
-//        doubleCheckExit()
+        doubleCheckExit()
 
         init()
 
 
         pullExit()
     }
-
-    fun backToPreviousPage(view: View?) {
-        finish()
-    }
-
     private fun setupQuestionModel() {
         Log.e("BankQuestionActivity", "set up question model")
         questionRecyclerView = findViewById(R.id.questionRecyclerView)
@@ -112,8 +110,23 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             android.R.color.holo_red_light,
             object : SwipeHelper.UnderlayButtonClickListener {
                 override fun onClick() {
+                    val deleteWarningDialog = Dialog(this@BankQuestionActivity)
+                    deleteWarningDialog.setContentView(R.layout.dialog_delete_warning)
+                    deleteWarningDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    deleteWarningDialog.window?.setGravity(Gravity.CENTER)
+                    deleteWarningDialog.show()
+
+                    val btnConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_confirm)
+                    val btnCancel = deleteWarningDialog.findViewById<TextView>(R.id.btn_cancel)
+
+                    btnConfirm.setOnClickListener {
                     questionAdapter.deleteItem(position)
-                    toast("Deleted item $position")
+                        toast("Deleted item $position")
+                        deleteWarningDialog.dismiss()
+                    }
+                    btnCancel.setOnClickListener {
+                        deleteWarningDialog.dismiss()
+                    }
                 }
             })
     }
@@ -135,6 +148,8 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     private fun editQuestion(position: Int) {
         val editQuestionDialog = Dialog(this)
         editQuestionDialog.setContentView(R.layout.dialog_question_card)
+        editQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        editQuestionDialog.window?.setGravity(Gravity.CENTER)
         editQuestionDialog.show()
 
         val etQuestionTitle = editQuestionDialog.findViewById<EditText>(R.id.question_title)
@@ -208,6 +223,9 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         finish()
     }
 
+    fun backToPreviousPage(view: View?) {
+        finish()
+    }
 
     override fun onBackPressed() {
         finish()
@@ -231,9 +249,14 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     showErrorSnackBar("裡面目前沒有題目喔")
                     hideProgressDialog()
                 } else {
-                    Log.e("BankQuestionActivity", "$questionList")
+//                    Log.e("BankQuestionActivity", "$questionList")
                     try {
                         for (item in questionList) {
+                            if (item.image == null) {
+                                val image : ArrayList<String> = ArrayList()
+                                item.image = image
+                            }
+
                             if (item.answerImage == null) {
                                 val answerImage : ArrayList<String> = ArrayList()
                                 item.answerImage = answerImage
@@ -287,7 +310,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         QuestionDetailActivity.putExtra("source", questionModels[position].originateFrom)
         QuestionDetailActivity.putExtra("createdDate", questionModels[position].createdDate)
         QuestionDetailActivity.putExtra("image", questionModels[position].image)
-        QuestionDetailActivity.putExtra("answerImage", questionModels[position].answerImage)
+//        QuestionDetailActivity.putExtra("answerImage", questionModels[position].answerImage)
         QuestionDetailActivity.putStringArrayListExtra("answerImage", questionModels[position].answerImage)
         QuestionDetailActivity.putExtra("tag", questionModels[position].tag)
 

@@ -8,14 +8,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
+import com.example.yiquizapptest.databinding.ActivityMainBinding
 import jp.wasabeef.blurry.Blurry
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
+    private lateinit var imageViewPagerAdapter: ImageViewPagerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
 
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        //initializing the adapter
+        imageViewPagerAdapter = ImageViewPagerAdapter(imageUrlList)
+
+        setUpViewPager()
+
+/*
         findViewById<View>(R.id.button).setOnClickListener {
             val startMs = System.currentTimeMillis()
             Blurry.with(this)
@@ -68,5 +82,39 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+        */
+    }
+    private fun setUpViewPager() {
+
+        binding.viewPager.adapter = imageViewPagerAdapter
+
+        //set the orientation of the viewpager using ViewPager2.orientation
+        binding.viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+        //select any page you want as your starting page
+        val currentPageIndex = 1
+        binding.viewPager.currentItem = currentPageIndex
+
+        // registering for page change callback
+        binding.viewPager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+
+                    //update the image number textview
+                    binding.imageNumberTV.text = "${position + 1} / 4"
+                }
+            }
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // unregistering the onPageChangedCallback
+        binding.viewPager.unregisterOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {}
+        )
     }
 }

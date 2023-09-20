@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.yiquizapptest.app-mergeDebugResources-27:/values-ldltr-v21/values-ldltr-v21.xml",
+            "outputFile": "com.example.yiquizapptest.app-mergeDebugResources-33:/values-ldltr-v21/values-ldltr-v21.xml",
             "map": [
                 {
                     "source": "C:\\Users\\sycn0\\.gradle\\caches\\transforms-3\\3e0b6e4cd00ec1094432a441bef118ac\\transformed\\appcompat-1.6.1\\res\\values-ldltr-v21\\values-ldltr-v21.xml",
