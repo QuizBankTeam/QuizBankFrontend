@@ -180,6 +180,19 @@ open class BaseActivity : AppCompatActivity() {
         )
         snackBar.show()
     }
+
+    fun showEmptySnackBar(message: String) {
+        val snackBar =
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+        val snackBarView = snackBar.view
+        snackBarView.setBackgroundColor(
+            ContextCompat.getColor(
+                this@BaseActivity,
+                R.color.answer_correct
+            )
+        )
+        snackBar.show()
+    }
     fun hideProgressDialog() {
         mProgressDialog.dismiss()
     }

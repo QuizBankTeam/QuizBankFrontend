@@ -56,7 +56,6 @@ class MathActivity : BaseActivity() {
         }
 
         webView.addJavascriptInterface(WebAppInterface(this), "Android")
-        setupNavigationView()
     }
     fun escapeSpecialCharacters(input: String): String {
         // 先轉換 \\ 至 \\\\，再轉換 \ 至 \\，然後轉換 & 至 &amp;
