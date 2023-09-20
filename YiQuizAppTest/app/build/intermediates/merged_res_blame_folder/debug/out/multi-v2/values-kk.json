@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.yiquizapptest.app-mergeDebugResources-27:/values-kk/values-kk.xml",
+            "outputFile": "com.example.yiquizapptest.app-mergeDebugResources-33:/values-kk/values-kk.xml",
             "map": [
                 {
                     "source": "C:\\Users\\sycn0\\.gradle\\caches\\transforms-3\\24c8031572ced1a9ec505ef2513af626\\transformed\\core-1.9.0\\res\\values-kk\\values-kk.xml",

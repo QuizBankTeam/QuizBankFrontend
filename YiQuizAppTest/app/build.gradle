@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -30,6 +31,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+    dataBinding {
+        enabled = true
+        enabledForTests = true // 未來寫測試會用到
+    }
 }
 
 dependencies {
@@ -42,4 +51,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'jp.wasabeef:blurry:4.0.1'
+
+    // Material - for viewpager2
+    implementation 'com.google.android.material:material:1.9.0'
+
+    // Glide - for loading images in ImageView
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 }

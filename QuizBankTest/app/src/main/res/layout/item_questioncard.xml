@@ -18,7 +18,8 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_alignParentStart="true"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="1dp"
+            android:maxWidth="100dp"
             app:srcCompat="@drawable/book_square_svgrepo_com" />
 
         <TextView
@@ -28,6 +29,8 @@
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/question_image"
             android:hint="This is title"
+            android:maxWidth="175dp"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -36,13 +39,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:hint="This is question type"
+            android:singleLine="true"
             android:textAlignment="textEnd"
             android:textColor="#606060"
-            android:background="@color/skin"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/question_createdDate"

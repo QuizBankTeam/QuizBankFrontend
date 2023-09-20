@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.yiquizapptest.app-mergeDebugResources-27:/values-sr/values-sr.xml",
+            "outputFile": "com.example.yiquizapptest.app-mergeDebugResources-33:/values-sr/values-sr.xml",
             "map": [
                 {
                     "source": "C:\\Users\\sycn0\\.gradle\\caches\\transforms-3\\3c73f4fb1f22b0874e0678d9c8eb54cd\\transformed\\material-1.9.0\\res\\values-sr\\values-sr.xml",

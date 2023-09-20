@@ -2921,6 +2921,7 @@ drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
 drawable ic_arrow_back_black_24
+drawable ic_baseline_error_outline_24
 drawable ic_clear_black_24
 drawable ic_clock_black_24dp
 drawable ic_keyboard_black_24dp
@@ -3106,7 +3107,6 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
-id button
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3146,6 +3146,7 @@ id currentState
 id custom
 id customPanel
 id cut
+id dataBinding
 id date_picker_actions
 id decelerate
 id decelerateAndComplete
@@ -3209,6 +3210,7 @@ id frost
 id fullscreen_header
 id ghost_view
 id ghost_view_holder
+id glide_custom_view_target_tag
 id gone
 id graph
 id graph_wrap
@@ -3223,6 +3225,7 @@ id honorRequest
 id horizontal_only
 id icon
 id icon_group
+id idViewPager
 id ifRoom
 id ignore
 id ignoreRequest
@@ -3235,13 +3238,13 @@ id invisible
 id inward
 id italic
 id item_touch_helper_previous_elevation
+id iv_image
 id jumpToEnd
 id jumpToStart
 id labeled
 id layout
 id left
 id leftToRight
-id left_bottom
 id legacy
 id line1
 id line3
@@ -3328,10 +3331,11 @@ id notification_main_column
 id notification_main_column_container
 id off
 id on
+id onAttachStateChangeListener
+id onDateChanged
 id onInterceptTouchReturnSwipe
 id outline
 id outward
-id overlay
 id overshoot
 id packed
 id parallax
@@ -3356,10 +3360,8 @@ id rectangles
 id reverseSawtooth
 id right
 id rightToLeft
-id right_bottom
 id right_icon
 id right_side
-id right_top
 id rounded
 id row_index_key
 id save_non_transition_alpha
@@ -3458,6 +3460,7 @@ id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
 id textTop
+id textWatcher
 id text_input_end_icon
 id text_input_error_icon
 id text_input_start_icon
@@ -3636,6 +3639,7 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
+layout item_image
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
 layout m3_alert_dialog_title
