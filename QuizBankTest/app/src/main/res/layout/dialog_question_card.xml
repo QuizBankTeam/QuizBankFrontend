@@ -1,68 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="3dp"
-    app:cardElevation="3dp">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foreground="?attr/selectableItemBackground">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/question_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp">
 
-        <ImageView
-            android:id="@+id/question_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="1dp"
-            app:srcCompat="@drawable/book_square_svgrepo_com" />
-
-        <EditText
-            android:id="@+id/question_title"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@+id/question_image"
-            android:background="@null"
-            android:hint="This is title"
-            android:maxWidth="175dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textSize="23sp" />
+            android:foreground="?attr/selectableItemBackground">
 
-        <EditText
-            android:id="@+id/question_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:background="@null"
-            android:hint="This is question type"
-            android:maxWidth="115dp"
-            android:singleLine="true"
-            android:textAlignment="textEnd"
-            android:textColor="#606060"
-            android:textSize="15sp" />
+            <ImageView
+                android:id="@+id/question_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="1dp"
+                app:srcCompat="@drawable/book_square_svgrepo_com" />
 
-        <EditText
-            android:id="@+id/question_createdDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/question_title"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/question_image"
-            android:background="@null"
-            android:hint="YYYY/MM/DD"
-            android:maxWidth="100dp"
-            android:singleLine="true"
-            android:textColor="#606060"
-            android:textSize="15sp" />
+            <EditText
+                android:id="@+id/question_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/question_image"
+                android:background="@null"
+                android:hint="This is title"
+                android:maxWidth="175dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="23sp" />
 
-    </RelativeLayout>
+            <EditText
+                android:id="@+id/question_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:hint="This is question type"
+                android:maxWidth="115dp"
+                android:singleLine="true"
+                android:textAlignment="textEnd"
+                android:textColor="#606060"
+                android:textSize="15sp" />
 
-</com.google.android.material.card.MaterialCardView>
+            <EditText
+                android:id="@+id/question_createdDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/question_title"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/question_image"
+                android:background="@null"
+                android:hint="YYYY/MM/DD"
+                android:maxWidth="100dp"
+                android:singleLine="true"
+                android:textColor="#606060"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/question_card"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_confirm_button"
+        android:clickable="true"
+        android:padding="5dp"
+        android:text="確定更改"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

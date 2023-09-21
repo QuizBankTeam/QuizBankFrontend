@@ -188,7 +188,7 @@ open class BaseActivity : AppCompatActivity() {
         snackBarView.setBackgroundColor(
             ContextCompat.getColor(
                 this@BaseActivity,
-                R.color.answer_correct
+                R.color.yellow
             )
         )
         snackBar.show()
@@ -394,6 +394,9 @@ open class BaseActivity : AppCompatActivity() {
                 }
             },
             onFailure = { errorMessage ->
+                val intent = Intent(this, BankActivity::class.java)
+                startActivity(intent)
+                finish()
                 Toast.makeText(this,"server error",Toast.LENGTH_SHORT).show()
             }
         )
