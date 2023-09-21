@@ -35,14 +35,9 @@ class BankRecyclerViewAdapter(var context: Context,
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-//        TODO: bankID
         holder.tvBankTitle.text = questionBankModels[position].title
         holder.tvBankType.text = questionBankModels[position].questionBankType
         holder.tvBankCreatedDate.text = questionBankModels[position].createdDate
-//        holder.tv_BankMembers.text = questionBankModels[position].members.joinToString(separator = ",")
-        holder.tvBankMembers.text = Constants.username
-        holder.tvBankOriginateFrom.text = Constants.username
-        holder.tvBankCreator.text = Constants.username
 
     }
 
@@ -86,17 +81,11 @@ class BankRecyclerViewAdapter(var context: Context,
         var tvBankTitle: TextView
         var tvBankType: TextView
         var tvBankCreatedDate: TextView
-        var tvBankMembers: TextView
-        var tvBankOriginateFrom: TextView
-        var tvBankCreator: TextView
 
         init {
             tvBankTitle = itemView.findViewById(R.id.bank_title)
             tvBankType = itemView.findViewById(R.id.bank_type)
             tvBankCreatedDate = itemView.findViewById(R.id.bank_createdDate)
-            tvBankMembers = itemView.findViewById(R.id.bank_members)
-            tvBankOriginateFrom = itemView.findViewById(R.id.bank_from)
-            tvBankCreator = itemView.findViewById(R.id.bank_creator)
 
             itemView.setOnClickListener {
                 val position = adapterPosition

@@ -34,6 +34,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var backArrowBtn: ImageButton
+    private lateinit var btnAddQuestion: ImageButton
     private lateinit var questionRecyclerView: RecyclerView
     private lateinit var questionAdapter: QuestionRecyclerViewAdapter
 
@@ -58,6 +59,10 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         doubleCheckExit()
 
         init()
+
+        btnAddQuestion.setOnClickListener {
+            //TODO: go to scan workspace
+        }
 
 
         pullExit()
@@ -155,20 +160,18 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         val etQuestionTitle = editQuestionDialog.findViewById<EditText>(R.id.question_title)
         val etQuestionType = editQuestionDialog.findViewById<EditText>(R.id.question_type)
         val etQuestionDate = editQuestionDialog.findViewById<EditText>(R.id.question_createdDate)
+        val btnSubmit = editQuestionDialog.findViewById<TextView>(R.id.btn_submit)
 
-        newQuestionTitle = questionModels[position].title.toString()
-        newQuestionType = questionModels[position].questionType.toString()
-        newQuestionDate = questionModels[position].createdDate
-
-        etQuestionTitle.setText(newQuestionTitle)
-        etQuestionType.setText(newQuestionType)
-        etQuestionDate.setText(newQuestionDate)
+        etQuestionTitle.setText(questionModels[position].title)
+        etQuestionType.setText(questionModels[position].questionType)
+        etQuestionDate.setText(questionModels[position].createdDate)
 
         etQuestionTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newQuestionTitle = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
@@ -178,6 +181,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newQuestionType = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
@@ -187,11 +191,12 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newQuestionDate = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
 
-        editQuestionDialog.setOnDismissListener {
+        btnSubmit.setOnClickListener {
             if (isModified) {
                 val data = QuestionModel(questionModels[position]._id, newQuestionTitle,
                     questionModels[position].number, questionModels[position].description,
@@ -201,8 +206,9 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     questionModels[position].originateFrom, newQuestionDate,
                     questionModels[position].image, questionModels[position].answerImage,
                     questionModels[position].tag)
-                Log.e("BankActivity", "newdata = \n$data")
+                Log.e("BankActivity", "new data = \n$data")
                 questionAdapter.setItem(position, data)
+                editQuestionDialog.dismiss()
             }
         }
     }
@@ -238,6 +244,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         backArrowBtn = findViewById(R.id.btn_back_arrow)
         tvTitle = findViewById(R.id.title)
+        btnAddQuestion = findViewById(R.id.question_add)
 
         tvTitle.text = bankTitle
 
@@ -246,7 +253,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             onSuccess = { questionList ->
                 if (questionList.isEmpty()) {
                     findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
-                    showErrorSnackBar("裡面目前沒有題目喔")
+                    showEmptySnackBar("裡面沒有題目喔~")
                     hideProgressDialog()
                 } else {
 //                    Log.e("BankQuestionActivity", "$questionList")
@@ -290,7 +297,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             },
             onFailure = {
                 findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
-                showErrorSnackBar("無法取得資料")
+                showEmptySnackBar("裡面沒有資料喔")
                 hideProgressDialog()
             }
         )
