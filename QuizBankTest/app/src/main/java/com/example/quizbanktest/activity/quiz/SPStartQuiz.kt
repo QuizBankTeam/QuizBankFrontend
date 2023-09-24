@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Base64
@@ -53,6 +54,7 @@ class SPStartQuiz: AppCompatActivity() {
     private var currentRemain = 0
     private var imageArr = ArrayList<Bitmap>()
     private lateinit var countDownTimer: CountDownTimer
+    private lateinit var player : MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = ActivitySpStartQuizBinding.inflate(layoutInflater)
@@ -99,6 +101,17 @@ class SPStartQuiz: AppCompatActivity() {
         startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + ":" + questionlist.size.toString()
         userAnsOptions =  ArrayList<ArrayList<String>>(questions!!.size)
         userAnsDescription = ArrayList<String>(questions.size)
+        player = MediaPlayer.create(this, R.raw.start_quiz_music)
+        player.setOnCompletionListener {
+            try {
+                player.stop()
+                player.prepare()
+                player.start()
+            }catch (e: Exception){
+            }
+        }
+        player.setVolume(6.0f, 6.0f)
+        player.start()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -274,6 +287,7 @@ class SPStartQuiz: AppCompatActivity() {
     }
 
     private fun quizEnd(){
+        player.stop()
         val answerlist = ArrayList<ArrayList<String>>()
 //        for(item in answerRecords){
 //            val first = ArrayList<String>(item.size)
@@ -453,6 +467,7 @@ class SPStartQuiz: AppCompatActivity() {
             if (::countDownTimer.isInitialized) {
                 countDownTimer.cancel()
             }
+            player.stop()
             finish()
         }
         builder.setNegativeButton("取消", null)

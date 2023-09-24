@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.SyncStateContract.Constants
@@ -57,6 +58,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private lateinit var countDownTimer: CountDownTimer
     private val roomNumber:Int = (100000 .. 999999).random()
     private val randomList = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10).shuffled()
+    private lateinit var player : MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = ActivityMpStartQuizBinding.inflate(layoutInflater)
@@ -131,6 +133,17 @@ class  MPStartQuiz: AppCompatActivity() {
         startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + ":" + questionList.size.toString()
         userAnsOptions =  ArrayList<ArrayList<String>>(questions!!.size)
         userAnsDescription = ArrayList<String>(questions.size)
+        player = MediaPlayer.create(this, R.raw.start_quiz_music)
+        player.setOnCompletionListener {
+            try {
+                player.stop()
+                player.prepare()
+                player.start()
+            }catch (e: Exception){
+            }
+        }
+        player.setVolume(6.0f, 6.0f)
+        player.start()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -286,7 +299,7 @@ class  MPStartQuiz: AppCompatActivity() {
 
     private fun quizEnd(){
         val intent = Intent()
-
+        player.stop()
         for(i in currentAtQuestion until questionList.size){
             val tmpAnsOptions = ArrayList<String>()
             userAnsOptions.add(tmpAnsOptions)
@@ -341,6 +354,7 @@ class  MPStartQuiz: AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("確定退出考試?")
         builder.setPositiveButton("確定") { dialog, which ->
+            player.stop()
             finish()
         }
         builder.setNegativeButton("取消", null)
