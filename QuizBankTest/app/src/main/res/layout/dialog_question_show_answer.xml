@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="答案圖片"
+        android:layout_marginStart="5dp"
+        android:scrollbars = "vertical"
+        android:singleLine="false" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/image_list"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/background_question_image"/>
+        <TextView
+            android:id="@+id/image_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#454545"
+            android:textSize="16sp"
+            android:text="1/5"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="答案敘述"
+        android:layout_marginStart="5dp"
+        android:scrollbars = "vertical"
+        android:singleLine="false" />
+    <EditText
+        android:id="@+id/answer_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="150dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginHorizontal="5dp"
+        android:hint="暫無敘述"
+        android:background="@drawable/background_question_image"/>
+</LinearLayout>

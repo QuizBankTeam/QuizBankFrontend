@@ -427,6 +427,7 @@ class SPStartQuiz: AppCompatActivity() {
         btnParam.marginStart = hMargin
         btnParam.marginEnd = hMargin
 
+        currentQuestion.options?.shuffle()
         for(index in currentQuestion.options?.indices!!){
             val tmpOption = Option(Constants.optionNum[index], currentQuestion.options!![index])
             optionlist.add(tmpOption)

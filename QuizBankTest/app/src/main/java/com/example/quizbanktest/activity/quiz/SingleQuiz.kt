@@ -233,18 +233,14 @@ class SingleQuiz: AppCompatActivity() {
             this.duringTime = duringTime
         }
         for(questionIndex in questionlist.indices){
+            if(questionlist[questionIndex].questionImage==null){
+                questionlist[questionIndex].questionImage = ArrayList()
+            }
+            questionlist[questionIndex].questionImage?.clear()
+
             if(quizImages[questionIndex].isNotEmpty()){
-                if(questionlist[questionIndex].questionImage==null){
-                    questionlist[questionIndex].questionImage = ArrayList()
-                    questionlist[questionIndex].questionImage!!.add(quizImages[questionIndex][0])
-                }
-                else if(questionlist[questionIndex].questionImage!!.isEmpty()){
-                    questionlist[questionIndex].questionImage!!.add(quizImages[questionIndex][0])
-                }
-                else{
-                    questionlist[questionIndex].questionImage?.set(0,
-                        quizImages[questionIndex][0]
-                    )
+                for(img in SingleQuiz.Companion.quizImages[questionIndex]){
+                    questionlist[questionIndex].questionImage!!.add(img)
                 }
             }
         }

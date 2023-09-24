@@ -55,6 +55,7 @@ class SingleQuizPage : Fragment() {
         val base64Image1 = Constants.bitmapToString(imageBitmap1)
 
         ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
+            SingleQuizPage.Companion.quizListImages.clear()
             if(quizList!=null) {
                 QuizList = quizList
 

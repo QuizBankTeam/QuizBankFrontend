@@ -171,6 +171,7 @@ class  MPStartQuiz: AppCompatActivity() {
                 if(this.trueOrFalseView!=null)
                     trueOrFalseView!!.visibility = View.GONE
 
+                currentQuestion.options?.shuffle()
                 for(index in currentQuestion.options?.indices!!){
                     val tmpOption = Option(optionNum[index], currentQuestion.options!![index])
                     optionlist.add(tmpOption)
