@@ -220,6 +220,8 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         settingQuestionDialog.setContentView(R.layout.dialog_setting_panel)
         settingQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         settingQuestionDialog.window?.setGravity(Gravity.CENTER)
+        settingQuestionDialog.setCanceledOnTouchOutside(true)
+        settingQuestionDialog.setCancelable(true)
         settingQuestionDialog.show()
 
         val btnSwitchPosition = settingQuestionDialog.findViewById<TextView>(R.id.tv_switch_position)
@@ -231,16 +233,15 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             switchPositionDialog.setContentView(R.layout.dialog_switch_position)
             switchPositionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             switchPositionDialog.window?.setGravity(Gravity.CENTER)
-            switchPositionDialog.show()
 
             ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
                 onSuccess = { questionBanks ->
                     Log.e("BankQuestionActivity", "There are ${questionBanks.size} banks available")
-                    switchBankRecyclerView = findViewById(R.id.switchBankRecyclerView)
+                    switchBankRecyclerView = switchPositionDialog.findViewById(R.id.switchBankRecyclerView)
                     switchBankAdapter = SwitchBankViewAdapter(this, this, questionBanks, this)
                     switchBankRecyclerView.adapter = switchBankAdapter
-                    switchBankRecyclerView.addItemDecoration(
-                        DividerItemDecoration(
+                    switchBankRecyclerView.addItemDecoration (
+                        DividerItemDecoration (
                             this,
                             DividerItemDecoration.VERTICAL
                         )
@@ -250,6 +251,8 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
                 }
             )
+
+            switchPositionDialog.show()
         }
     }
 
