@@ -5,14 +5,13 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.icu.text.CaseMap.Title
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
@@ -22,20 +21,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
-import com.example.quizbanktest.activity.group.GroupListActivity
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
+import com.example.quizbanktest.adapters.bank.SwitchBankViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
-import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
-import kotlin.math.sin
+
 
 class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var backArrowBtn: ImageButton
+    private lateinit var btnAddQuestion: ImageButton
     private lateinit var questionRecyclerView: RecyclerView
     private lateinit var questionAdapter: QuestionRecyclerViewAdapter
+    private lateinit var switchBankRecyclerView: RecyclerView
+    private lateinit var switchBankAdapter: SwitchBankViewAdapter
 
     // Question variable
     private var questionModels = ArrayList<QuestionModel>()
@@ -59,6 +61,10 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         init()
 
+        btnAddQuestion.setOnClickListener {
+            //TODO: go to scan workspace
+        }
+//        btnEditQuestion.setOnClickListener { settingQuestion() }
 
         pullExit()
     }
@@ -68,6 +74,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         questionAdapter = QuestionRecyclerViewAdapter(this, this, questionModels, this)
 
         questionRecyclerView.adapter = questionAdapter
+        // add dividing line
         questionRecyclerView.addItemDecoration(
             DividerItemDecoration(
                 this,
@@ -155,20 +162,18 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         val etQuestionTitle = editQuestionDialog.findViewById<EditText>(R.id.question_title)
         val etQuestionType = editQuestionDialog.findViewById<EditText>(R.id.question_type)
         val etQuestionDate = editQuestionDialog.findViewById<EditText>(R.id.question_createdDate)
+        val btnSubmit = editQuestionDialog.findViewById<TextView>(R.id.btn_submit)
 
-        newQuestionTitle = questionModels[position].title.toString()
-        newQuestionType = questionModels[position].questionType.toString()
-        newQuestionDate = questionModels[position].createdDate
-
-        etQuestionTitle.setText(newQuestionTitle)
-        etQuestionType.setText(newQuestionType)
-        etQuestionDate.setText(newQuestionDate)
+        etQuestionTitle.setText(questionModels[position].title)
+        etQuestionType.setText(questionModels[position].questionType)
+        etQuestionDate.setText(questionModels[position].createdDate)
 
         etQuestionTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newQuestionTitle = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
@@ -178,6 +183,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newQuestionType = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
@@ -187,11 +193,12 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newQuestionDate = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
 
-        editQuestionDialog.setOnDismissListener {
+        btnSubmit.setOnClickListener {
             if (isModified) {
                 val data = QuestionModel(questionModels[position]._id, newQuestionTitle,
                     questionModels[position].number, questionModels[position].description,
@@ -201,9 +208,48 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     questionModels[position].originateFrom, newQuestionDate,
                     questionModels[position].image, questionModels[position].answerImage,
                     questionModels[position].tag)
-                Log.e("BankActivity", "newdata = \n$data")
+                Log.e("BankActivity", "new data = \n$data")
                 questionAdapter.setItem(position, data)
+                editQuestionDialog.dismiss()
             }
+        }
+    }
+
+    override fun settingCard() {
+        val settingQuestionDialog = Dialog(this)
+        settingQuestionDialog.setContentView(R.layout.dialog_setting_panel)
+        settingQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        settingQuestionDialog.window?.setGravity(Gravity.CENTER)
+        settingQuestionDialog.show()
+
+        val btnSwitchPosition = settingQuestionDialog.findViewById<TextView>(R.id.tv_switch_position)
+
+        btnSwitchPosition.setOnClickListener {
+            settingQuestionDialog.dismiss()
+
+            val switchPositionDialog = Dialog(this)
+            switchPositionDialog.setContentView(R.layout.dialog_switch_position)
+            switchPositionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            switchPositionDialog.window?.setGravity(Gravity.CENTER)
+            switchPositionDialog.show()
+
+            ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+                onSuccess = { questionBanks ->
+                    Log.e("BankQuestionActivity", "There are ${questionBanks.size} banks available")
+                    switchBankRecyclerView = findViewById(R.id.switchBankRecyclerView)
+                    switchBankAdapter = SwitchBankViewAdapter(this, this, questionBanks, this)
+                    switchBankRecyclerView.adapter = switchBankAdapter
+                    switchBankRecyclerView.addItemDecoration(
+                        DividerItemDecoration(
+                            this,
+                            DividerItemDecoration.VERTICAL
+                        )
+                    )
+                },
+                onFailure = { errorMessage ->
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 
@@ -238,6 +284,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         backArrowBtn = findViewById(R.id.btn_back_arrow)
         tvTitle = findViewById(R.id.title)
+        btnAddQuestion = findViewById(R.id.question_add)
 
         tvTitle.text = bankTitle
 
@@ -246,7 +293,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             onSuccess = { questionList ->
                 if (questionList.isEmpty()) {
                     findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
-                    showErrorSnackBar("裡面目前沒有題目喔")
+                    showEmptySnackBar("裡面沒有題目喔~")
                     hideProgressDialog()
                 } else {
 //                    Log.e("BankQuestionActivity", "$questionList")
@@ -290,7 +337,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             },
             onFailure = {
                 findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
-                showErrorSnackBar("無法取得資料")
+                showEmptySnackBar("裡面沒有資料喔")
                 hideProgressDialog()
             }
         )
@@ -315,6 +362,10 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         QuestionDetailActivity.putExtra("tag", questionModels[position].tag)
 
         startActivity(QuestionDetailActivity)
+    }
+
+    override fun switchBank(position: Int) {
+        //TODO
     }
 
 }

@@ -59,38 +59,15 @@
             android:textColor="#606060"
             android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/bank_members"
+        <ImageButton
+            android:id="@+id/btn_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/bank_createdDate"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/bank_image"
-            android:text="Memebers: "
-            android:textColor="#606060"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/bank_from"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bank_members"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/bank_image"
-            android:text="originate from: "
-            android:textColor="#606060"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/bank_creator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bank_members"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/bank_from"
-            android:text="creator: "
-            android:textColor="#606060"
-            android:textSize="12sp" />
+            android:layout_below="@id/bank_type"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:src="@drawable/ic_edit_pen" />
 
     </RelativeLayout>
 

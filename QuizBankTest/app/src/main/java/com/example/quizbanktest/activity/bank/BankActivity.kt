@@ -34,6 +34,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var searchView: SearchView
     private lateinit var menuButton: ImageButton
+    private lateinit var btnGroup: ImageButton
+    private lateinit var btnAddBank: ImageButton
     private lateinit var bank_warning: TextView
     private lateinit var viewDialog: View
     private lateinit var etBankCreatedDate: EditText
@@ -41,8 +43,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var etBankSource: EditText
     private lateinit var bankRecyclerView: RecyclerView
     private lateinit var bankAdapter: BankRecyclerViewAdapter
-    private lateinit var btnGroup: ImageButton
-    private lateinit var btnAddBank: ImageButton
+    private lateinit var bankLayout: LinearLayout
 
     // Bank variable
     private var questionBankModels = ArrayList<QuestionBankModel>()
@@ -54,9 +55,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var newBankTitle: String
     private lateinit var newBankType: String
     private lateinit var newBankDate: String
-    private lateinit var newBankSource: String
-    private lateinit var newBankMembers: ArrayList<String>
-    private lateinit var newBankCreator: String
     private var isModified: Boolean = false
 
 
@@ -76,45 +74,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             finish()
         }
 
-        btnAddBank.setOnClickListener {
-            val addBankDialog = Dialog(this)
-            addBankDialog.setContentView(R.layout.dialog_add_bank)
-            addBankDialog.show()
-
-            val btnBankSubmit = addBankDialog.findViewById<ImageButton>(R.id.btn_bank_submit)
-            btnBankSubmit.setOnClickListener {
-                // TODO id setting needs to be flexible
-                val bankId = Constants.userId
-                val bankTitle =
-                    addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
-                val bankType = "single"
-                val bankCreatedDate = LocalDate.now().toString()
-                val bankMembers: ArrayList<String> = arrayListOf()
-                bankMembers.add(Constants.userId)
-                val bankSource = Constants.userId
-                val bankCreator = Constants.userId
-                val tempQuestionBankModel = QuestionBankModel(
-                    bankId, bankTitle, bankType, bankCreatedDate,
-                    bankMembers, bankSource, bankCreator
-                )
-                showProgressDialog("新增中")
-                ConstantsQuestionBankFunction.postQuestionBank(tempQuestionBankModel, this,
-                    onSuccess = {
-                        Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
-                        Log.d("addBankDialog", "add bank success")
-                        addBankDialog.dismiss()
-                        bankAdapter.addItem(tempQuestionBankModel)
-                        hideProgressDialog()
-                    },
-                    onFailure = {
-                        Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
-                        Log.e("addBankDialog", "add bank failed")
-                        addBankDialog.dismiss()
-                        hideProgressDialog()
-                    }
-                )
-            }
-        }
+        btnAddBank.setOnClickListener { addBank() }
     }
 
     private fun setupBankModel() {
@@ -149,6 +109,54 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         })
 
         itemTouchHelper.attachToRecyclerView(bankRecyclerView)
+    }
+
+    private fun addBank() {
+        val addBankDialog = Dialog(this)
+        addBankDialog.setContentView(R.layout.dialog_add_bank)
+        addBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        addBankDialog.window?.setGravity(Gravity.CENTER)
+        addBankDialog.show()
+
+        val btnBankSubmit = addBankDialog.findViewById<TextView>(R.id.btn_bank_submit)
+        btnBankSubmit.setOnClickListener {
+            val bankId = Constants.userId
+            val bankTitle =
+                addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
+            val bankType = "single"
+            val bankCreatedDate = LocalDate.now().toString()
+            val bankMembers: ArrayList<String> = arrayListOf()
+            bankMembers.add(Constants.userId)
+            val bankSource = Constants.userId
+            val bankCreator = Constants.userId
+            val tempQuestionBankModel = QuestionBankModel(
+                bankId, bankTitle, bankType, bankCreatedDate,
+                bankMembers, bankSource, bankCreator
+            )
+
+            if (bankTitle.isEmpty() || bankTitle == null) {
+                showErrorSnackBar("名稱不可為空")
+            } else {
+                showProgressDialog("新增中")
+                ConstantsQuestionBankFunction.postQuestionBank(tempQuestionBankModel, this,
+                    onSuccess = {
+                        Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
+                        Log.d("addBankDialog", "add bank success")
+                        addBankDialog.dismiss()
+                        bankAdapter.addItem(tempQuestionBankModel)
+                        findViewById<ImageView>(R.id.img_empty).visibility = View.INVISIBLE
+                        hideProgressDialog()
+                    },
+                    onFailure = {
+                        Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
+                        Log.e("addBankDialog", "add bank failed")
+                        addBankDialog.dismiss()
+                        showErrorSnackBar("新增失敗")
+                        hideProgressDialog()
+                    }
+                )
+            }
+        }
     }
 
     private fun toast(text: String) {
@@ -211,29 +219,18 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         val etBankTitle = editBankDialog.findViewById<EditText>(R.id.bank_title)
         val etBankType = editBankDialog.findViewById<EditText>(R.id.bank_type)
         val etBankDate = editBankDialog.findViewById<EditText>(R.id.bank_createdDate)
-        val etBankMember = editBankDialog.findViewById<EditText>(R.id.bank_members)
-        val etBankSource = editBankDialog.findViewById<EditText>(R.id.bank_from)
-        val etBankCreator = editBankDialog.findViewById<EditText>(R.id.bank_creator)
+        val btnSubmit = editBankDialog.findViewById<TextView>(R.id.btn_submit)
 
-        newBankTitle = questionBankModels[position].title
-        newBankType = questionBankModels[position].questionBankType
-        newBankDate = questionBankModels[position].createdDate
-        newBankMembers = questionBankModels[position].members
-        newBankSource = questionBankModels[position].originateFrom
-        newBankCreator = questionBankModels[position].creator
-
-        etBankTitle.setText(newBankTitle)
-        etBankType.setText(newBankType)
-        etBankDate.setText(newBankDate)
-        etBankMember.setText("Members: ${Constants.username}")
-        etBankSource.setText("From: ${Constants.username}")
-        etBankCreator.setText("Creator: ${Constants.username}")
+        etBankTitle.setText(questionBankModels[position].title)
+        etBankType.setText(questionBankModels[position].questionBankType)
+        etBankDate.setText(questionBankModels[position].createdDate)
 
         etBankTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newBankTitle = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
@@ -243,6 +240,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newBankType = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
@@ -252,25 +250,25 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 newBankDate = s.toString()
+                btnSubmit.visibility = View.VISIBLE
                 isModified = true
             }
         })
 
-        editBankDialog.setOnDismissListener {
+        btnSubmit.setOnClickListener {
             if (isModified) {
                 val data = QuestionBankModel(
                     questionBankModels[position]._id, newBankTitle,
                     newBankType, newBankDate, questionBankModels[position].members,
-                    newBankSource, newBankCreator
+                    questionBankModels[position].originateFrom, questionBankModels[position].creator
                 )
-                Log.e("BankActivity", "newdata = $data")
+                Log.e("BankActivity", "new data = $data")
                 bankAdapter.setItem(position, data)
+                editBankDialog.dismiss()
             }
-
         }
 
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     fun setPopupWindow(view: View?) {
@@ -346,13 +344,50 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         hideProgressDialog()
     }
 
+    override fun settingCard() {
+        val settingBankDialog = Dialog(this)
+        settingBankDialog.setContentView(R.layout.dialog_setting_panel)
+        settingBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        settingBankDialog.window?.setGravity(Gravity.CENTER)
+        settingBankDialog.show()
+
+//        val btnSwitchPosition = settingBankDialog.findViewById<TextView>(R.id.tv_switch_position)
+//
+//        btnSwitchPosition.setOnClickListener {
+//            settingBankDialog.dismiss()
+//
+//            val switchPositionDialog = Dialog(this)
+//            switchPositionDialog.setContentView(R.layout.dialog_switch_position)
+//            switchPositionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            switchPositionDialog.window?.setGravity(Gravity.CENTER)
+//            switchPositionDialog.show()
+//
+//            val linearLayout = switchPositionDialog.findViewById<LinearLayout>(R.id.layout_spinner)
+//
+//            for (i in )
+//
+//
+//        }
+    }
+
     fun init() {
-        for (item in ConstantsQuestionBankFunction.questionBankList) {
-            val questionBankModel = QuestionBankModel(
-                item._id, item.title, item.questionBankType,
-                item.createdDate, item.members, item.originateFrom, item.creator
-            )
-            questionBankModels.add(questionBankModel)
+        Log.e("BankActivity", "start init")
+        if (ConstantsQuestionBankFunction.questionBankList != null) {
+            if (ConstantsQuestionBankFunction.questionBankList.isEmpty()) {
+                Log.e("BankActivity", "is empty")
+                showEmptySnackBar("裡面沒有題庫喔~")
+                findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
+            } else {
+                for (item in ConstantsQuestionBankFunction.questionBankList) {
+                    val questionBankModel = QuestionBankModel(
+                        item._id, item.title, item.questionBankType,
+                        item.createdDate, item.members, item.originateFrom, item.creator
+                    )
+                    questionBankModels.add(questionBankModel)
+                }
+            }
+        } else {
+            showErrorSnackBar("null")
         }
 
         btnGroup = findViewById(R.id.bank_group)
@@ -368,5 +403,9 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
+    }
+
+    override fun switchBank(position: Int) {
+        //TODO
     }
 }

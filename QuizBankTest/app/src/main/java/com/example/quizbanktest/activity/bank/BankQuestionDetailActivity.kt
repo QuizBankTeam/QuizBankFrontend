@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
@@ -27,7 +28,7 @@ import com.example.quizbanktest.utils.ConstantsQuestionFunction
 import org.w3c.dom.Text
 
 
-class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
+class BankQuestionDetailActivity : BaseActivity() {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
@@ -73,69 +74,13 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         setupOptions()
         setupImage()
 
-        btnShowAnswer.setOnClickListener {
-            showAnswer()
-        }
+        btnShowAnswer.setOnClickListener { showAnswer() }
 
-        btnShowDetail.setOnClickListener {
-            showDetail()
-        }
+        btnShowDetail.setOnClickListener { showDetail() }
 
-        tvDescription.setOnClickListener {
-            val descriptionDialog = Dialog(this)
-            descriptionDialog.setContentView(R.layout.dialog_bank_question_description)
-            descriptionDialog.show()
+        tvDescription.setOnClickListener { editDescription() }
 
-            val etDescription =
-                descriptionDialog.findViewById<EditText>(R.id.et_question_description)
-            etDescription.setText(newDescription)
-
-            etDescription.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    newDescription = s.toString()
-                    isModified = true
-                }
-            })
-
-            descriptionDialog.setOnDismissListener {
-                if (isModified) {
-                    Log.e("BankQuestionDescriptionDialog", "set new description")
-                    etDescription.setText(newDescription)
-                    tvDescription.text = newDescription
-                }
-
-            }
-        }
-
-        tvAnswerDescription.setOnClickListener {
-            val descriptionDialog = Dialog(this)
-            descriptionDialog.setContentView(R.layout.dialog_bank_question_description)
-            descriptionDialog.show()
-
-            val etDescription =
-                descriptionDialog.findViewById<EditText>(R.id.et_question_description)
-            etDescription.setText(newAnswerDescription)
-
-            etDescription.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    newAnswerDescription = s.toString()
-                    isModified = true
-                }
-            })
-
-            descriptionDialog.setOnDismissListener {
-                if (isModified) {
-                    Log.e("BankQuestionDescriptionDialog", "set new description")
-                    etDescription.setText(newAnswerDescription)
-                    tvAnswerDescription.text = newAnswerDescription
-                }
-
-            }
-        }
+        tvAnswerDescription.setOnClickListener { editAnswerDescription() }
 
         pullExit()
     }
@@ -178,7 +123,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         }
         Log.e("BankQuestionDetailActivity", tmpAnswerOptionsArrayList.toString())
         optionRecyclerView = findViewById(R.id.optionRecyclerView)
-        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
+        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList)
         optionRecyclerView.setHasFixedSize(true)
 
         when (questionType) {
@@ -194,6 +139,70 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         }
 
         optionRecyclerView.adapter = optionAdapter
+    }
+
+    private fun editDescription() {
+        val descriptionDialog = Dialog(this)
+        descriptionDialog.setContentView(R.layout.dialog_bank_question_description)
+        descriptionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        descriptionDialog.window?.setGravity(Gravity.CENTER)
+        descriptionDialog.show()
+
+        val etDescription = descriptionDialog.findViewById<EditText>(R.id.et_question_description)
+        val btnSubmit = descriptionDialog.findViewById<TextView>(R.id.btn_submit)
+
+        etDescription.setText(newDescription)
+
+        etDescription.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                newDescription = s.toString()
+                btnSubmit.visibility = View.VISIBLE
+                isModified = true
+            }
+        })
+
+        btnSubmit.setOnClickListener {
+            if (isModified) {
+                Log.e("BankQuestionDescriptionDialog", "set new description")
+                etDescription.setText(newDescription)
+                tvDescription.text = newDescription
+                descriptionDialog.dismiss()
+            }
+        }
+    }
+
+    private fun editAnswerDescription() {
+        val descriptionDialog = Dialog(this)
+        descriptionDialog.setContentView(R.layout.dialog_bank_question_description)
+        descriptionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        descriptionDialog.window?.setGravity(Gravity.CENTER)
+        descriptionDialog.show()
+
+        val etDescription = descriptionDialog.findViewById<EditText>(R.id.et_question_description)
+        val btnSubmit = descriptionDialog.findViewById<TextView>(R.id.btn_submit)
+
+        etDescription.setText(newAnswerDescription)
+
+        etDescription.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                newAnswerDescription = s.toString()
+                btnSubmit.visibility = View.VISIBLE
+                isModified = true
+            }
+        })
+
+        btnSubmit.setOnClickListener {
+            if (isModified) {
+                Log.e("BankQuestionDescriptionDialog", "set new description")
+                etDescription.setText(newAnswerDescription)
+                tvAnswerDescription.text = newAnswerDescription
+                descriptionDialog.dismiss()
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -231,6 +240,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         val detailDialog = Dialog(this)
         detailDialog.setContentView(R.layout.dialog_bank_question_detail)
         detailDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        detailDialog.window?.setGravity(Gravity.CENTER)
         detailDialog.show()
 
         val tvDescription = detailDialog.findViewById<TextView>(R.id.answer_description)
@@ -256,7 +266,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                     //update the image number textview
                     tvImageNumber.text = "${position + 1} / ${questionImage.size}"
                 }
-
             }
         )
     }
@@ -304,10 +313,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         super.onBackPressed()
         putQuestion()
         finish()
-    }
-
-    override fun onItemClick(position: Int) {
-        //TODO
     }
 
     private fun init() {

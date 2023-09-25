@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -71,12 +72,14 @@ class QuestionRecyclerViewAdapter(var context: Context,
         var tvQuestionTitle: TextView
         var tvQuestionType: TextView
         var tvQuestionCreatedDate: TextView
+        var btnEditQuestion: ImageButton
 
         init {
 //          TODO: bankID
             tvQuestionTitle = itemView.findViewById(R.id.question_title)
             tvQuestionType = itemView.findViewById(R.id.question_type)
             tvQuestionCreatedDate = itemView.findViewById(R.id.question_createdDate)
+            btnEditQuestion = itemView.findViewById(R.id.btn_edit)
 
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -84,6 +87,7 @@ class QuestionRecyclerViewAdapter(var context: Context,
                     recyclerViewInterface.onItemClick(position)
                 }
             }
+            btnEditQuestion.setOnClickListener { recyclerViewInterface.settingCard() }
         }
     }
 }

@@ -188,7 +188,7 @@ open class BaseActivity : AppCompatActivity() {
         snackBarView.setBackgroundColor(
             ContextCompat.getColor(
                 this@BaseActivity,
-                R.color.answer_correct
+                R.color.yellow
             )
         )
         snackBar.show()

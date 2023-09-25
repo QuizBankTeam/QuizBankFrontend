@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.bank.BankQuestionActivity">
 
-
     <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_width="wrap_content"
@@ -34,17 +33,20 @@
             android:onClick="backToPreviousPage"
             android:src="@drawable/ic_black_color_back_24dp" />
 
+        <ImageButton
+            android:id="@+id/question_add"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:background="?actionBarItemBackground"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/baseline_add_black" />
+
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/img_empty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/todo"
-        android:visibility="gone" />
-
     <LinearLayout
+        android:id="@+id/question_layout"
         android:layout_width="match_parent"
         android:layout_height="550dp"
         android:layout_below="@+id/title_bar"
@@ -62,5 +64,13 @@
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_empty"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/box"
+        android:visibility="invisible" />
 
 </RelativeLayout>
