@@ -1,11 +1,20 @@
 package com.example.quizbanktest.network
 
 import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
-import com.squareup.okhttp.ResponseBody
-import retrofit.Call
-import retrofit.http.*
+//import com.squareup.okhttp.ResponseBody
+//import retrofit.Call
+//import retrofit.http.*
 import java.util.*
-
+import okhttp3.ResponseBody
+import retrofit2.*
+import retrofit2.http.Body
+//import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Header
+//import retrofit2.http.Headers
+import retrofit2.http.POST
+//import retrofit2.http.PUT
+import retrofit2.http.Path
 interface AccountService {
     data class GetBodyForUserProfile(val userId :String)
     data class PostBody(val username: String,val password:String) //login

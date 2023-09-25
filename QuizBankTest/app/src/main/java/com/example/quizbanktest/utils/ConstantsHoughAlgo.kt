@@ -8,14 +8,20 @@ import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.network.HoughRotateService
 import com.example.quizbanktest.network.RealEsrganService
 import com.google.gson.Gson
-import com.squareup.okhttp.OkHttpClient
-import com.squareup.okhttp.ResponseBody
+//import com.squareup.okhttp.OkHttpClient
+//import com.squareup.okhttp.ResponseBody
+import okhttp3.ResponseBody
 import okio.Buffer
 import okio.BufferedSource
-import retrofit.Callback
-import retrofit.GsonConverterFactory
-import retrofit.Response
-import retrofit.Retrofit
+//import retrofit.Callback
+//import retrofit.GsonConverterFactory
+//import retrofit.Response
+//import retrofit.Retrofit
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
@@ -43,12 +49,13 @@ object ConstantsHoughAlgo {
             )
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
 
-                    if (response!!.isSuccess) {
+                    if (response!!.isSuccessful) {
                         val gson = Gson()
                         val houghResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             HoughResponse::class.java
                         )
                         Log.e("Response Result", houghResponse.image)
@@ -88,7 +95,7 @@ object ConstantsHoughAlgo {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
 
                     Log.e("in hough Errorrrrr", t?.message.toString())
                     onFailure("Request failed with status code")
