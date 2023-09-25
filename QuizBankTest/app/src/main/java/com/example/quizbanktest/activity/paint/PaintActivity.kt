@@ -350,7 +350,7 @@ class PaintActivity : AppCompatActivity() {
             if(sourceUriForUcrop!=null){
                 showProgressDialog("提升畫質中請耐心等候")
                 ConstantsRealESRGAN.realEsrgan(
-                    sourceUriForUcrop?.let { it1 -> ConstantsFunction.encodeFileImage(this, it1) }!! , this@PaintActivity,
+                    sourceUriForUcrop!!, this@PaintActivity,
                     onSuccess = { it1 ->
                         Log.e("it1",it1)
                         val resultBitmap = base64ToBitmap(it1)

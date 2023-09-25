@@ -3,14 +3,25 @@ package com.example.quizbanktest.network
 import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.Quiz
 import com.example.quizbanktest.models.QuizRecord
-import com.squareup.okhttp.ResponseBody
-import retrofit.Call
-import retrofit.http.Body
-import retrofit.http.DELETE
-import retrofit.http.GET
-import retrofit.http.Header
-import retrofit.http.POST
-import retrofit.http.Query
+//import com.squareup.okhttp.ResponseBody
+//import retrofit.Call
+//import retrofit.http.Body
+//import retrofit.http.DELETE
+//import retrofit.http.GET
+//import retrofit.http.Header
+//import retrofit.http.POST
+//import retrofit.http.Query
+import okhttp3.ResponseBody
+import retrofit2.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Header
+//import retrofit2.http.Headers
+import retrofit2.http.POST
+//import retrofit2.http.PUT
+//import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface quizRecordService {
 
