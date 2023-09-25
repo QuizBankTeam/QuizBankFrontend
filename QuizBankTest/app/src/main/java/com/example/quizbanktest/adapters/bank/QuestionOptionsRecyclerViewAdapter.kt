@@ -25,7 +25,6 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
                                          var questionType: String,
                                          var questionOptions: ArrayList<String>,
                                          var answerOptions: ArrayList<String>,
-                                         var recyclerViewInterface: RecyclerViewInterface
 ) : RecyclerView.Adapter<QuestionOptionsRecyclerViewAdapter.MyViewHolder>() {
 
     private lateinit var newOption: String
@@ -43,7 +42,7 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
                     inflater.inflate(R.layout.item_bankquestionoption, parent, false)
                 }
             }
-            return MyViewHolder(view, recyclerViewInterface, questionOptions, answerOptions)
+            return MyViewHolder(view, questionOptions, answerOptions)
         } catch (e: Exception) {
             Log.e("QuestionOptionsRecyclerViewAdapter", "onCreateView", e)
             throw e
@@ -127,7 +126,7 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
         return questionOptions.size
     }
 
-    class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface, questionOptions: ArrayList<String>, answerOptions: ArrayList<String>) : RecyclerView.ViewHolder(itemView) {
+    class MyViewHolder(itemView: View, questionOptions: ArrayList<String>, answerOptions: ArrayList<String>) : RecyclerView.ViewHolder(itemView) {
 
         var tvTitle: TextView
         var tvOption: TextView

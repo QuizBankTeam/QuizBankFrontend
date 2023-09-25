@@ -28,7 +28,7 @@ import com.example.quizbanktest.utils.ConstantsQuestionFunction
 import org.w3c.dom.Text
 
 
-class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
+class BankQuestionDetailActivity : BaseActivity() {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
@@ -123,7 +123,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         }
         Log.e("BankQuestionDetailActivity", tmpAnswerOptionsArrayList.toString())
         optionRecyclerView = findViewById(R.id.optionRecyclerView)
-        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
+        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList)
         optionRecyclerView.setHasFixedSize(true)
 
         when (questionType) {
@@ -313,10 +313,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         super.onBackPressed()
         putQuestion()
         finish()
-    }
-
-    override fun onItemClick(position: Int) {
-        //TODO
     }
 
     private fun init() {
