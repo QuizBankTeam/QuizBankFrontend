@@ -11,12 +11,19 @@ import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.AccountService
 import com.example.quizbanktest.network.CsrfTokenService
 import com.google.gson.Gson
-import com.squareup.okhttp.Headers
-import com.squareup.okhttp.ResponseBody
-import retrofit.Callback
-import retrofit.GsonConverterFactory
-import retrofit.Response
-import retrofit.Retrofit
+//import com.squareup.okhttp.Headers
+//import com.squareup.okhttp.ResponseBody
+import okhttp3.Headers
+import okhttp3.ResponseBody
+import retrofit2.Call
+//import retrofit.Callback
+//import retrofit.GsonConverterFactory
+//import retrofit.Response
+//import retrofit.Retrofit
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -35,9 +42,13 @@ object ConstantsAccountServiceFunction {
             val call = api.getCSRFToken()
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
-                        val cookies: String = response.headers().get("Set-Cookie")
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if (response!!.isSuccessful) {
+                        val cookies: String? = response.headers().get("Set-Cookie")
                         val cookieHeader: Headers? = response.headers()
                         val cookiesToken: String? = cookieHeader?.get("Set-Cookie")
                         val cookieHeaders = response.headers().values("Set-Cookie")
@@ -84,7 +95,7 @@ object ConstantsAccountServiceFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e("in csrf Errorrrrr", t?.message.toString())
                     onFailure(t?.message.toString())
                 }
@@ -116,8 +127,13 @@ object ConstantsAccountServiceFunction {
             val call = api.login(Constants.cookie, Constants.csrfToken, Constants.session, body)
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if (response!!.isSuccessful) {
                         val cookieHeader: Headers? = response.headers()
 
                         Log.e("login in ","call")
@@ -137,7 +153,7 @@ object ConstantsAccountServiceFunction {
                         }
                         val gson = Gson()
                         val accountResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             LoginApiResponse::class.java
                         )
                         userAccount = accountResponse.user
@@ -176,7 +192,7 @@ object ConstantsAccountServiceFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e("in login Errorrrrr", t?.message.toString())
                     onFailure("Request failed with status code ")
                 }
@@ -209,12 +225,13 @@ object ConstantsAccountServiceFunction {
             val call = api.register(Constants.cookie, Constants.csrfToken, Constants.session, body)
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         val cookieHeader: Headers? = response.headers()
                         val gson = Gson()
                         val accountResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             RegisterApiResponse::class.java
                         )
                         Log.e("register",accountResponse.toString())
@@ -245,7 +262,7 @@ object ConstantsAccountServiceFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e("in register Errorrrrr", t?.message.toString())
                     onFailure("Request failed with status code ")
                 }
@@ -272,8 +289,9 @@ object ConstantsAccountServiceFunction {
             val call = api.logout(Constants.COOKIE, Constants.csrfToken, Constants.accessToken)
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         // 清空目前記錄的登入屬性
                         Constants.cookie = ""
                         Constants.COOKIE = ""
@@ -313,7 +331,7 @@ object ConstantsAccountServiceFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e("in log out Errorrrrr", t?.message.toString())
                 }
             })

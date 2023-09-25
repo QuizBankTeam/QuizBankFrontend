@@ -11,11 +11,18 @@ import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.QuestionBankService
 import com.example.quizbanktest.network.QuestionService
 import com.google.gson.Gson
-import com.squareup.okhttp.ResponseBody
-import retrofit.Callback
-import retrofit.GsonConverterFactory
-import retrofit.Response
-import retrofit.Retrofit
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+//import com.squareup.okhttp.ResponseBody
+//import retrofit.Callback
+//import retrofit.GsonConverterFactory
+//import retrofit.Response
+//import retrofit.Retrofit
 
 object ConstantsQuestionBankFunction {
     var allBanksReturnResponse: AllQuestionBanksResponse? = null
@@ -39,11 +46,12 @@ object ConstantsQuestionBankFunction {
             )
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         val gson = Gson()
                         val allBanksResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             AllQuestionBanksResponse::class.java
                         )
 //                        Log.e("Response Result", allBanksResponse.questionBanks[0].toString())
@@ -84,7 +92,7 @@ object ConstantsQuestionBankFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("Request failed with status code ")
                     Log.e("in get all banks error", t?.message.toString())
                 }
@@ -121,8 +129,9 @@ object ConstantsQuestionBankFunction {
             )
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         Log.e("Response Result", "success post bank")
                         Toast.makeText(activity, "upload successfully", Toast.LENGTH_SHORT).show()
 
@@ -150,7 +159,7 @@ object ConstantsQuestionBankFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("bad request")
                     Log.e("in post bank error", t?.message.toString())
                 }
@@ -186,8 +195,9 @@ object ConstantsQuestionBankFunction {
             )
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         Toast.makeText(activity, "put successfully", Toast.LENGTH_SHORT).show()
 
                         onSuccess("put successfully")
@@ -210,7 +220,7 @@ object ConstantsQuestionBankFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("bad request")
                     Log.e("in put bank error", t?.message.toString())
                 }
@@ -241,8 +251,9 @@ object ConstantsQuestionBankFunction {
                 questionBankId
             )
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         Toast.makeText(activity, "delete successfully", Toast.LENGTH_SHORT).show()
 
                         onSuccess("delete successfully")
@@ -265,7 +276,7 @@ object ConstantsQuestionBankFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("bad request")
                     Log.e("in delete bank error", t?.message.toString())
                 }

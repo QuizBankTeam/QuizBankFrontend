@@ -14,14 +14,20 @@ import com.example.quizbanktest.models.ScanQuestionModel
 import com.example.quizbanktest.network.QuestionBankService
 import com.example.quizbanktest.network.QuestionService
 import com.google.gson.Gson
-import com.squareup.okhttp.Request
-import com.squareup.okhttp.ResponseBody
+import okhttp3.ResponseBody
+//import com.squareup.okhttp.Request
+//import com.squareup.okhttp.ResponseBody
 import okio.Buffer
 import okio.BufferedSource
-import retrofit.Callback
-import retrofit.GsonConverterFactory
-import retrofit.Response
-import retrofit.Retrofit
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+//import retrofit.Callback
+//import retrofit.GsonConverterFactory
+//import retrofit.Response
+//import retrofit.Retrofit
 import java.nio.charset.Charset
 
 object ConstantsQuestionFunction {
@@ -53,8 +59,9 @@ object ConstantsQuestionFunction {
             )
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
 //                        Log.e("Response Result","success post question")
                         Toast.makeText(activity,"upload successfully",Toast.LENGTH_SHORT).show()
                         ConstantsOcrResults.questionList.removeAt(postQuestionPosition)
@@ -88,7 +95,7 @@ object ConstantsQuestionFunction {
                         onFailure("bad request")
                     }
                 }
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("bad request")
                     Log.e("in post question Errorrrrr", t?.message.toString())
                 }
@@ -115,10 +122,11 @@ object ConstantsQuestionFunction {
                 id
             )
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
 //                        // TODO
-                        val source: BufferedSource = response.body().source()
+                        val source: BufferedSource = response.body()!!.source()
                         source.request(Long.MAX_VALUE) // Buffer the entire body.
 
                         val buffer: Buffer = source.buffer()
@@ -126,7 +134,7 @@ object ConstantsQuestionFunction {
 //                        Log.d("REQUEST_JSON", buffer.clone().readString(UTF8))
                         val gson = Gson()
                         val allQuestionsResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()!!.charStream(),
                             bankInnerQuestion::class.java
                         )
                         allQuestionsReturnResponse = allQuestionsResponse
@@ -152,7 +160,7 @@ object ConstantsQuestionFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("Request failed with status code ")
                     Log.e("in get all questions Error", t?.message.toString())
                 }
@@ -190,8 +198,9 @@ object ConstantsQuestionFunction {
                 body
             )
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
 
                         onSuccess("upload success")
                     } else {
@@ -212,7 +221,7 @@ object ConstantsQuestionFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
 
                     onFailure("Request failed with status code ")
                     Log.e("in get all questions Error", t?.message.toString())
@@ -244,8 +253,9 @@ object ConstantsQuestionFunction {
                 questionId
             )
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
 
                         onSuccess("delete success")
                     } else {
@@ -266,7 +276,7 @@ object ConstantsQuestionFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
 
                     onFailure("Request failed with status code ")
                     Log.e("in get all questions Error", t?.message.toString())
