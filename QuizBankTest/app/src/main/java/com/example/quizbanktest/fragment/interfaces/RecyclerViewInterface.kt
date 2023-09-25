@@ -5,4 +5,8 @@ import android.widget.TextView
 interface RecyclerViewInterface {
     fun onItemClick(position: Int)
 
+    fun switchBank(position: Int)
+
+    fun settingCard()
+
 }
