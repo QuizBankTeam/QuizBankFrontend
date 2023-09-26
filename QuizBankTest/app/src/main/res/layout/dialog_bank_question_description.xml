@@ -4,10 +4,21 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/editing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="編輯中"
+        android:layout_marginBottom="3dp"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/description_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/editing"
         app:cardCornerRadius="5dp"
         app:cardElevation="5dp"
         app:strokeColor="@color/black"
@@ -66,6 +77,6 @@
         android:padding="5dp"
         android:text="確定更改"
         android:textSize="20sp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>
