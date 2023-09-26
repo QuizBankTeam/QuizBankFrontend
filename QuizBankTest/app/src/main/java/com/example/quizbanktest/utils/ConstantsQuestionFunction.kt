@@ -291,6 +291,57 @@ object ConstantsQuestionFunction {
         }
     }
 
+    fun moveQuestion(activity: AppCompatActivity, questionId: String, newBankId: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        if (Constants.isNetworkAvailable(activity)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(QuestionService::class.java)
+
+            val body = QuestionService.MoveQuestionBody(questionId, newBankId)
+            val call = api.moveQuestion(
+                Constants.COOKIE,
+                Constants.csrfToken,
+                Constants.session,
+                Constants.refreshToken,
+                body
+            )
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
+                        onSuccess("move success")
+                    } else {
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e("Error 400", "Bad Request: $response")
+                            }
+                            404 -> {
+                                Log.e("Error 404", "Not Found")
+                            }
+                            else -> {
+                                Log.e("Error", "upload failed")
+                            }
+                        }
+                        Log.e("move question error", sc.toString())
+                        onFailure("Request failed with status code $sc")
+                    }
+                }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    onFailure("Request failed with status code ")
+                    Log.e("in get all questions Error", t.message.toString())
+                }
+            })
+        } else {
+            Toast.makeText(
+                activity,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
 
     data class AllQuestionsResponse(val questionBank : ArrayList<QuestionModel>)
     data class bankInnerQuestion(val questionBank:QuestionAndBank)

@@ -1,6 +1,7 @@
 package com.example.quizbanktest.adapters.bank
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,8 @@ class QuestionRecyclerViewAdapter(var context: Context,
         holder.tvQuestionTitle.text = questionModels[position].title
         holder.tvQuestionType.text = questionModels[position].questionType
         holder.tvQuestionCreatedDate.text = questionModels[position].createdDate
+
+        holder.tvQuestionType.setBackgroundColor(Color.parseColor("#ffeb3b"))
     }
 
     override fun getItemCount(): Int {
@@ -87,7 +90,7 @@ class QuestionRecyclerViewAdapter(var context: Context,
                     recyclerViewInterface.onItemClick(position)
                 }
             }
-            btnEditQuestion.setOnClickListener { recyclerViewInterface.settingCard() }
+            btnEditQuestion.setOnClickListener { recyclerViewInterface.settingCard(adapterPosition) }
         }
     }
 }

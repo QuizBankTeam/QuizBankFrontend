@@ -83,12 +83,12 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         bankAdapter = BankRecyclerViewAdapter(this, this, questionBankModels, this)
 
         bankRecyclerView.adapter = bankAdapter
-        bankRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                DividerItemDecoration.VERTICAL
-            )
-        )
+//        bankRecyclerView.addItemDecoration(
+//            DividerItemDecoration(
+//                this,
+//                DividerItemDecoration.VERTICAL
+//            )
+//        )
         bankRecyclerView.layoutManager = LinearLayoutManager(this)
 
         val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(bankRecyclerView) {
@@ -344,32 +344,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         hideProgressDialog()
     }
 
-    override fun settingCard() {
-        val settingBankDialog = Dialog(this)
-        settingBankDialog.setContentView(R.layout.dialog_setting_panel)
-        settingBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        settingBankDialog.window?.setGravity(Gravity.CENTER)
-        settingBankDialog.show()
-
-//        val btnSwitchPosition = settingBankDialog.findViewById<TextView>(R.id.tv_switch_position)
-//
-//        btnSwitchPosition.setOnClickListener {
-//            settingBankDialog.dismiss()
-//
-//            val switchPositionDialog = Dialog(this)
-//            switchPositionDialog.setContentView(R.layout.dialog_switch_position)
-//            switchPositionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            switchPositionDialog.window?.setGravity(Gravity.CENTER)
-//            switchPositionDialog.show()
-//
-//            val linearLayout = switchPositionDialog.findViewById<LinearLayout>(R.id.layout_spinner)
-//
-//            for (i in )
-//
-//
-//        }
-    }
-
     fun init() {
         Log.e("BankActivity", "start init")
         if (ConstantsQuestionBankFunction.questionBankList != null) {
@@ -387,7 +361,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 }
             }
         } else {
-            showErrorSnackBar("null")
+            showErrorSnackBar("Error, data is null")
         }
 
         btnGroup = findViewById(R.id.bank_group)
@@ -405,7 +379,22 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         startActivity(bankQuestionActivity)
     }
 
-    override fun switchBank(position: Int) {
+    override fun switchBank(newBankPosition: Int) {
         //TODO
     }
+
+    override fun settingCard(position: Int) {
+        val settingBankDialog = Dialog(this)
+        settingBankDialog.setContentView(R.layout.dialog_setting_panel)
+        settingBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        settingBankDialog.window?.setGravity(Gravity.CENTER)
+        settingBankDialog.findViewById<TextView>(R.id.tv_switch_position).visibility = View.GONE
+        settingBankDialog.show()
+
+    }
+
+    override fun updateOption(position: Int, newOption: String) {
+//        TODO("Not yet implemented")
+    }
+
 }

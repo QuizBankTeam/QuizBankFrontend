@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
@@ -17,7 +18,6 @@ import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
@@ -25,10 +25,9 @@ import com.example.quizbanktest.adapters.bank.ViewPagerAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
-import org.w3c.dom.Text
 
 
-class BankQuestionDetailActivity : BaseActivity() {
+class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
@@ -72,7 +71,6 @@ class BankQuestionDetailActivity : BaseActivity() {
 
         init()
         setupOptions()
-        setupImage()
 
         btnShowAnswer.setOnClickListener { showAnswer() }
 
@@ -123,7 +121,7 @@ class BankQuestionDetailActivity : BaseActivity() {
         }
         Log.e("BankQuestionDetailActivity", tmpAnswerOptionsArrayList.toString())
         optionRecyclerView = findViewById(R.id.optionRecyclerView)
-        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList)
+        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
         optionRecyclerView.setHasFixedSize(true)
 
         when (questionType) {
@@ -150,16 +148,37 @@ class BankQuestionDetailActivity : BaseActivity() {
 
         val etDescription = descriptionDialog.findViewById<EditText>(R.id.et_question_description)
         val btnSubmit = descriptionDialog.findViewById<TextView>(R.id.btn_submit)
+        val editingHint = descriptionDialog.findViewById<TextView>(R.id.editing)
 
         etDescription.setText(newDescription)
+        // hint change loop
+        var count = 1
+        val handler = Handler()
+        handler.post(object : Runnable {
+            override fun run() {
+                if (count % 4 == 0) {
+                    editingHint.setText("編輯中")
+                } else {
+                    editingHint.append(".")
+                }
+                count++
+                handler.postDelayed(this, 500) // set time here to refresh textView
+            }
+        })
 
+        val originDescription: String = newDescription
         etDescription.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                newDescription = s.toString()
-                btnSubmit.visibility = View.VISIBLE
-                isModified = true
+                if (s.toString() == originDescription) {
+                    btnSubmit.visibility = View.GONE
+                    isModified = false
+                } else {
+                    btnSubmit.visibility = View.VISIBLE
+                    isModified = true
+                    newDescription = s.toString()
+                }
             }
         })
 
@@ -182,16 +201,36 @@ class BankQuestionDetailActivity : BaseActivity() {
 
         val etDescription = descriptionDialog.findViewById<EditText>(R.id.et_question_description)
         val btnSubmit = descriptionDialog.findViewById<TextView>(R.id.btn_submit)
+        val editingHint = descriptionDialog.findViewById<TextView>(R.id.editing)
 
         etDescription.setText(newAnswerDescription)
+        var count = 1
+        val handler = Handler()
+        handler.post(object : Runnable {
+            override fun run() {
+                if (count % 4 == 0) {
+                    editingHint.setText("編輯中")
+                } else {
+                    editingHint.append(".")
+                }
+                count++
+                handler.postDelayed(this, 500) // set time here to refresh textView
+            }
+        })
 
+        val originDescription: String = newDescription
         etDescription.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                newAnswerDescription = s.toString()
-                btnSubmit.visibility = View.VISIBLE
-                isModified = true
+                if (s.toString() == originDescription) {
+                    btnSubmit.visibility = View.GONE
+                    isModified = false
+                } else {
+                    btnSubmit.visibility = View.VISIBLE
+                    isModified = true
+                    newAnswerDescription = s.toString()
+                }
             }
         })
 
@@ -207,7 +246,7 @@ class BankQuestionDetailActivity : BaseActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showAnswer() {
-        // switch view while we are clicking button
+        // switch view when clicking show answer button
         if (isShowingAnswer) {
             btnShowAnswer.setBackgroundColor(Color.parseColor("#ff7575"))
             btnShowAnswer.text = "隱藏答案"
@@ -251,23 +290,39 @@ class BankQuestionDetailActivity : BaseActivity() {
 
         tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = answerDescription
+        tvDescription.setOnClickListener{ editAnswerDescription() }
 
-        answerImageViewPager.adapter = answerViewPagerAdapter
-        //select any page you want as your starting page
-        val currentPageIndex = 0
-        answerImageViewPager.currentItem = currentPageIndex
+        if (answerImage.isEmpty()) {
+            answerImageViewPager.visibility = View.INVISIBLE
+            tvImageNumber.visibility = View.GONE
+            detailDialog.findViewById<ImageView>(R.id.empty_box).visibility = View.VISIBLE
+            showEmptySnackBar("目前照片為空喔")
+        } else {
+            detailDialog.findViewById<ImageView>(R.id.empty_box).visibility = View.INVISIBLE
 
-        answerImageViewPager.addOnPageChangeListener(
-            object : ViewPager.OnPageChangeListener {
-                override fun onPageScrollStateChanged(state: Int) {}
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-                @SuppressLint("SetTextI18n")
-                override fun onPageSelected(position: Int) {
-                    //update the image number textview
-                    tvImageNumber.text = "${position + 1} / ${questionImage.size}"
+            answerImageViewPager.adapter = answerViewPagerAdapter
+            //select any page you want as your starting page
+            val currentPageIndex = 0
+            answerImageViewPager.currentItem = currentPageIndex
+
+            answerImageViewPager.addOnPageChangeListener(
+                object : ViewPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {}
+                    override fun onPageScrolled(
+                        position: Int,
+                        positionOffset: Float,
+                        positionOffsetPixels: Int
+                    ) {
+                    }
+
+                    @SuppressLint("SetTextI18n")
+                    override fun onPageSelected(position: Int) {
+                        //update the image number textview
+                        tvImageNumber.text = "${position + 1} / ${questionImage.size}"
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     private fun putQuestion() {
@@ -366,6 +421,7 @@ class BankQuestionDetailActivity : BaseActivity() {
         tvTitle.movementMethod = ScrollingMovementMethod()
         tvTitle.isSelected = true
         tvType.text = questionType
+        tvType.setBackgroundColor(Color.parseColor("#ffeb3b"))
         tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = questionDescription
         tvAnswerDescription.movementMethod = ScrollingMovementMethod()
@@ -380,6 +436,18 @@ class BankQuestionDetailActivity : BaseActivity() {
             tvImageNumber.visibility = View.INVISIBLE
             findViewById<RelativeLayout>(R.id.image_layout).visibility = View.INVISIBLE
             findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
+            showEmptySnackBar("目前照片為空喔")
+        } else {
+            setupImage()
         }
+    }
+
+    override fun onItemClick(position: Int) {}
+    override fun switchBank(newBankPosition: Int) {}
+    override fun settingCard(position: Int) {}
+
+    override fun updateOption(position: Int, newOption: String) {
+        // update question option's description data
+        questionOptions[position] = newOption
     }
 }

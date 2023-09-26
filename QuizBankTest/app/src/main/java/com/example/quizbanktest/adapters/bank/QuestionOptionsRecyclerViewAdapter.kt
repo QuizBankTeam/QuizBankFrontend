@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
@@ -25,6 +26,7 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
                                          var questionType: String,
                                          var questionOptions: ArrayList<String>,
                                          var answerOptions: ArrayList<String>,
+                                         var recyclerViewInterface: RecyclerViewInterface
 ) : RecyclerView.Adapter<QuestionOptionsRecyclerViewAdapter.MyViewHolder>() {
 
     private lateinit var newOption: String
@@ -88,30 +90,50 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
             optionDialog.setContentView(R.layout.dialog_bank_question_option)
             optionDialog.show()
 
-            val etOptionDescription =
-                optionDialog.findViewById<EditText>(R.id.et_option_description)
+            val etOptionDescription = optionDialog.findViewById<EditText>(R.id.et_option_description)
+            val btnSubmit = optionDialog.findViewById<TextView>(R.id.btn_submit)
+            val editingHint = optionDialog.findViewById<TextView>(R.id.editing)
+
             etOptionDescription.setText(questionOptions[position])
-
-            etOptionDescription.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    questionOptions[position] = s.toString()
-                    isModified = true
+            var count = 1
+            val handler = Handler()
+            handler.post(object : Runnable {
+                override fun run() {
+                    if (count % 4 == 0) {
+                        editingHint.setText("編輯中")
+                    } else {
+                        editingHint.append(".")
+                    }
+                    count++
+                    handler.postDelayed(this, 500) // set time here to refresh textView
                 }
-
-                override fun afterTextChanged(s: Editable?) {}
             })
 
-            optionDialog.setOnDismissListener {
-                if (questionOptions[position] != "") {
+            val originDescription: String = newOption
+            etOptionDescription.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    if (s.toString() == originDescription) {
+                        btnSubmit.visibility = View.GONE
+                        isModified = false
+                    } else {
+                        btnSubmit.visibility = View.VISIBLE
+                        isModified = true
+                        questionOptions[position] = s.toString()
+                    }
+                }
+            })
+
+            btnSubmit.setOnClickListener {
+                if (isModified) {
                     etOptionDescription.setText(questionOptions[position])
                     holder.tvOption.text = questionOptions[position]
-                    putQuestion()
+                    optionDialog.dismiss()
+                    recyclerViewInterface.updateOption(position, questionOptions[position])
                 }
             }
         }
-
     }
 
     fun showAnswer() {

@@ -34,37 +34,22 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/bank_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/bank_title"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="-21dp"
-            android:layout_marginEnd="10dp"
-            android:maxWidth="100dp"
-            android:singleLine="true"
-            android:text="This is bank type"
-            android:textColor="#606060"
-            android:textSize="12sp" />
-
-        <TextView
             android:id="@+id/bank_createdDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bank_type"
+            android:layout_below="@+id/bank_title"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/bank_image"
             android:text="YYYY/MM/DD"
             android:textColor="#606060"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bank_type"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:background="@null"
             android:src="@drawable/ic_edit_pen" />

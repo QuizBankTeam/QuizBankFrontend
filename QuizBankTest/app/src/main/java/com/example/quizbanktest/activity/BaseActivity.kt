@@ -200,10 +200,23 @@ open class BaseActivity : AppCompatActivity() {
         )
         snackBar.show()
     }
+
+    fun showSuccessSnackBar(message: String) {
+        val snackBar =
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+        val snackBarView = snackBar.view
+        snackBarView.setBackgroundColor(
+            ContextCompat.getColor(
+                this@BaseActivity,
+                R.color.green
+            )
+        )
+        snackBar.show()
+    }
+
     fun hideProgressDialog() {
         mProgressDialog.dismiss()
     }
-
 
     suspend fun saveBitmapFileForPicturesDir(mBitmap: Bitmap?): String {
         showProgressDialog("目前正在儲存圖片請稍等")
