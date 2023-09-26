@@ -83,12 +83,12 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         bankAdapter = BankRecyclerViewAdapter(this, this, questionBankModels, this)
 
         bankRecyclerView.adapter = bankAdapter
-        bankRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                DividerItemDecoration.VERTICAL
-            )
-        )
+//        bankRecyclerView.addItemDecoration(
+//            DividerItemDecoration(
+//                this,
+//                DividerItemDecoration.VERTICAL
+//            )
+//        )
         bankRecyclerView.layoutManager = LinearLayoutManager(this)
 
         val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(bankRecyclerView) {

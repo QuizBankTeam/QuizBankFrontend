@@ -421,6 +421,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         tvTitle.movementMethod = ScrollingMovementMethod()
         tvTitle.isSelected = true
         tvType.text = questionType
+        tvType.setBackgroundColor(Color.parseColor("#ffeb3b"))
         tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = questionDescription
         tvAnswerDescription.movementMethod = ScrollingMovementMethod()

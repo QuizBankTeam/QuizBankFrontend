@@ -37,11 +37,10 @@
             android:id="@+id/question_type"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:background="@color/skin"
             android:gravity="center"
             android:hint="Type"
-            android:paddingHorizontal="6dp"
-            android:paddingVertical="5dp"
+            android:maxWidth="150dp"
+            android:padding="5dp"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="15sp"
@@ -70,8 +69,8 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@id/title_bar"
-        android:padding="10dp"
         android:layout_centerInParent="true"
+        android:padding="10dp"
         android:src="@drawable/box"
         android:visibility="invisible" />
 
@@ -79,11 +78,11 @@
         android:id="@+id/image_layout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_above="@id/question_description"
+        android:layout_below="@id/title_bar"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="5dp"
-        android:layout_above="@id/question_description"
-        android:background="@drawable/background_question_image"
-        android:layout_below="@id/title_bar">
+        android:background="@drawable/background_question_image">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
@@ -96,9 +95,9 @@
             android:id="@+id/imageNumberTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_marginStart="3dp"
             android:textColor="#454545"
             android:textSize="16sp"
             tools:text="01/30" />
@@ -166,7 +165,7 @@
         android:text="詳細答案"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/optionRecyclerView"

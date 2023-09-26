@@ -79,12 +79,12 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         questionRecyclerView.adapter = questionAdapter
         // add dividing line
-        questionRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                DividerItemDecoration.VERTICAL
-            )
-        )
+//        questionRecyclerView.addItemDecoration(
+//            DividerItemDecoration(
+//                this,
+//                DividerItemDecoration.VERTICAL
+//            )
+//        )
         questionRecyclerView.layoutManager = LinearLayoutManager(this)
 
         val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(questionRecyclerView) {
