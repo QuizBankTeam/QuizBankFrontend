@@ -256,6 +256,10 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         }
     }
 
+    override fun updateOption(position: Int, newOption: String) {
+//        TODO("Not yet implemented")
+    }
+
     @SuppressLint("UnsafeOptInUsageError")
     fun pullExit() {
         if (BuildCompat.isAtLeastT()) {

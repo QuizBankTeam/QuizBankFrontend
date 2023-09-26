@@ -22,11 +22,12 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
 import com.example.quizbanktest.adapters.bank.ViewPagerAdapter
+import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
 
 
-class BankQuestionDetailActivity : BaseActivity() {
+class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
@@ -120,7 +121,7 @@ class BankQuestionDetailActivity : BaseActivity() {
         }
         Log.e("BankQuestionDetailActivity", tmpAnswerOptionsArrayList.toString())
         optionRecyclerView = findViewById(R.id.optionRecyclerView)
-        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList)
+        optionAdapter = QuestionOptionsRecyclerViewAdapter(this, questionType, tmpQuestionOptionsArrayList, tmpAnswerOptionsArrayList, this)
         optionRecyclerView.setHasFixedSize(true)
 
         when (questionType) {
@@ -438,5 +439,14 @@ class BankQuestionDetailActivity : BaseActivity() {
         } else {
             setupImage()
         }
+    }
+
+    override fun onItemClick(position: Int) {}
+    override fun switchBank(position: Int) {}
+    override fun settingCard() {}
+
+    override fun updateOption(position: Int, newOption: String) {
+        // update question option's description data
+        questionOptions[position] = newOption
     }
 }

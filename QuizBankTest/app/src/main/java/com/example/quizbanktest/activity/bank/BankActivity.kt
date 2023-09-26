@@ -370,6 +370,10 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 //        }
     }
 
+    override fun updateOption(position: Int, newOption: String) {
+//        TODO("Not yet implemented")
+    }
+
     fun init() {
         Log.e("BankActivity", "start init")
         if (ConstantsQuestionBankFunction.questionBankList != null) {
@@ -387,7 +391,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 }
             }
         } else {
-            showErrorSnackBar("null")
+            showErrorSnackBar("Error, data is null")
         }
 
         btnGroup = findViewById(R.id.bank_group)
