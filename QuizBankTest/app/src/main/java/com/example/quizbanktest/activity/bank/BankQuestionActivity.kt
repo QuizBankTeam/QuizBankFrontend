@@ -11,7 +11,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
@@ -227,7 +226,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         val btnSwitchPosition = settingQuestionDialog.findViewById<TextView>(R.id.tv_switch_position)
 
         btnSwitchPosition.setOnClickListener {
-            settingQuestionDialog.dismiss()
+//            settingQuestionDialog.dismiss()
 
             val switchPositionDialog = Dialog(this)
             switchPositionDialog.setContentView(R.layout.dialog_switch_position)
@@ -240,6 +239,10 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     switchBankRecyclerView = switchPositionDialog.findViewById(R.id.switchBankRecyclerView)
                     switchBankAdapter = SwitchBankViewAdapter(this, this, questionBanks, this)
                     switchBankRecyclerView.adapter = switchBankAdapter
+                    val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(
+                        applicationContext
+                    )
+                    switchBankRecyclerView.layoutManager = mLayoutManager
                     switchBankRecyclerView.addItemDecoration (
                         DividerItemDecoration (
                             this,

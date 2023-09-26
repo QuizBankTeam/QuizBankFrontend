@@ -20,23 +20,23 @@ class SwitchBankViewAdapter(
     var activity: AppCompatActivity,
     var questionBanks: ArrayList<QuestionBankModel>,
     var recyclerViewInterface: RecyclerViewInterface
-) : RecyclerView.Adapter<BankRecyclerViewAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<SwitchBankViewAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BankRecyclerViewAdapter.MyViewHolder {
+    ): MyViewHolder {
         try {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.item_switchposition_card, parent, false)
-            return BankRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface)
+            return MyViewHolder(view, recyclerViewInterface)
         } catch (e: Exception) {
             Log.e("BankRecyclerViewAdapter", "onCreateView", e)
             throw e
         }
     }
 
-    override fun onBindViewHolder(holder: BankRecyclerViewAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.tvBankTitle.text = questionBanks[position].title
 
     }
@@ -47,9 +47,9 @@ class SwitchBankViewAdapter(
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) :
         RecyclerView.ViewHolder(itemView) {
-        private var tvBankTitle: TextView
-        private var cardView: MaterialCardView
-        private var isClicked: Boolean = false
+        var tvBankTitle: TextView
+        var cardView: MaterialCardView
+        var isClicked: Boolean = false
 
         init {
             tvBankTitle = itemView.findViewById(R.id.tv_bankTitle)
