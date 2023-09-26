@@ -6,14 +6,15 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.View
+import android.view.*
+import android.view.View.OnTouchListener
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
@@ -22,12 +23,16 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.example.quizbanktest.R
+import com.example.quizbanktest.adapters.quiz.ImageRVAdapter
+import com.example.quizbanktest.adapters.quiz.ImageVPAdapter
 import com.example.quizbanktest.adapters.quiz.OptionAdapter
 import com.example.quizbanktest.databinding.ActivitySingleQuestionBinding
-import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Option
 import com.example.quizbanktest.utils.Constants
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class SingleQuestion : AppCompatActivity(){
@@ -50,14 +55,20 @@ class SingleQuestion : AppCompatActivity(){
     private lateinit var quizType: String
     private lateinit var answerDescriptionView: TextView
     private lateinit var optionAdapter: OptionAdapter
+    private lateinit var imageAdapter: ImageVPAdapter
+    private var dialogImageAdapter: ImageRVAdapter? = null
+    private var editImageAction = ""
+    private var editImagePosition = 0
     private var selectedView =  ArrayList<View>()
-    private var imageArr = ArrayList<Bitmap>()
+    private var questionImageArr = ArrayList<Bitmap>()
+    private var answerImageArr = ArrayList<Bitmap>()
     private var questionIndex = 0
     private val openPhotoAlbum:Int = 1314
     private var resolver: ContentResolver? = null
     private var imageChange = false
     private val imageStatus_noImage = "noImage"
     private val imageStatus_existImage = "existImage"
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         questionBinding = ActivitySingleQuestionBinding.inflate(layoutInflater)
@@ -131,9 +142,16 @@ class SingleQuestion : AppCompatActivity(){
             }
         }
 
+
         //修改題目簡介
-        questionBinding.questionDescription.setOnClickListener {
-            descriptionChange()
+        questionBinding.questionDescription.setOnTouchListener{ _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    descriptionChange()
+                    true
+                }
+                else -> false
+            }
         }
 
         //修改標籤
@@ -146,8 +164,8 @@ class SingleQuestion : AppCompatActivity(){
         }
 
         //修改題目設定
-        questionBinding.questionSetting.setOnClickListener {
-            questionSetting()
+        questionBinding.questionMoreAction.setOnClickListener {
+            questionMoreAction()
         }
     }
 
@@ -163,17 +181,28 @@ class SingleQuestion : AppCompatActivity(){
             if (data != null) {
                 if(requestCode == openPhotoAlbum){ //從圖片庫回傳
                     val dataUri: Uri? = data.data
-                    Log.d(
-                        "mengyuanuri",
-                        "uri:" + dataUri!!.scheme + ":" + dataUri.schemeSpecificPart)
+                    Log.d("mengyuanuri", "uri:" + dataUri!!.scheme + ":" + dataUri.schemeSpecificPart)
                     imageChange = true
-                    val bitmap = BitmapFactory.decodeStream(resolver!!.openInputStream(dataUri))
-                    if(imageArr.isNotEmpty()){
-                        imageArr[0] = bitmap
-                    }else{
-                        imageArr.add(bitmap)
+                    val returnedImage = BitmapFactory.decodeStream(resolver!!.openInputStream(dataUri))
+                    val itemView: View = layoutInflater.inflate(R.layout.item_quiz_question_image, null, false)
+                    val itemImage: ImageView = itemView.findViewById(R.id.question_image)
+                    itemImage.setImageBitmap(returnedImage)
+
+                    if(questionImageArr.size==0){
+                        questionImageArr.add(returnedImage)
+                        editImageContainer(imageStatus_existImage)
+                    }else if(editImageAction=="add"){
+                        questionImageArr.add(returnedImage)
+                        imageAdapter.updateList(questionImageArr)
+                        dialogImageAdapter?.notifyDataSetChanged()
+                        questionBinding.imageNumber.text = "$editImagePosition / ${questionImageArr.size}"
+                        questionBinding.imageViewPager.currentItem = questionImageArr.size
+                    }else if(editImageAction=="edit"){
+                        Log.d("edit image position =", editImagePosition.toString())
+                        questionImageArr[editImagePosition] = returnedImage
+                        imageAdapter.updateList(questionImageArr)
+                        dialogImageAdapter?.notifyDataSetChanged()
                     }
-                    editImageContainer(imageStatus_existImage)
                 }
                 else{                             //修改題目設定
                     this.questionTitle = data.getStringExtra("Key_title").toString()
@@ -247,18 +276,24 @@ class SingleQuestion : AppCompatActivity(){
         }else{
             questionBinding.upperFrame.removeView(questionBinding.timeLimit)
         }
-        if(questionIndex<SingleQuiz.Companion.quizImages.size) {
-            for (item in SingleQuiz.Companion.quizImages[questionIndex]) {
+        if(questionIndex<SingleQuiz.Companion.quizQuestionImages.size) {
+            for (item in SingleQuiz.Companion.quizQuestionImages[questionIndex]) {
                 val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                imageArr.add(decodeImage)
+                questionImageArr.add(decodeImage)
             }
         }else{
             Toast.makeText(this, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
         }
-        if(imageArr.isNotEmpty()) {
+        for (item in SingleQuiz.Companion.quizAnswerImages[questionIndex]) {
+            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            answerImageArr.add(decodeImage)
+        }
+        if(questionImageArr.isNotEmpty()) {
             editImageContainer(imageStatus_existImage)
         }
+        Log.d("answer images size in question is", answerImageArr.size.toString())
 
         questionBinding.questionDescription.text = description
         questionBinding.QuestionTitle.text = title
@@ -341,14 +376,19 @@ class SingleQuestion : AppCompatActivity(){
         if(questionType==Constants.questionTypeMultipleChoiceS && answerOptionInt.size>1){
             AlertDialog.Builder(this).setTitle("單選題只能有一個正確選項!").setPositiveButton("我懂", null).show()
         }else {
-            if(imageArr.isNotEmpty()){
-                val imageBase64 = Constants.bitmapToString(imageArr[0])
-                if(SingleQuiz.Companion.quizImages[questionIndex].isEmpty()){
-                    SingleQuiz.Companion.quizImages[questionIndex].add(imageBase64!!)
-                }else{
-                    SingleQuiz.Companion.quizImages[questionIndex][0] = imageBase64!!
+            SingleQuiz.Companion.quizQuestionImages[questionIndex].clear()
+            SingleQuiz.Companion.quizAnswerImages[questionIndex].clear()
+            if(questionImageArr.isNotEmpty()){
+                for(img in questionImageArr){
+                    val imageBase64 = Constants.bitmapToString(img)
+                    SingleQuiz.Companion.quizQuestionImages[questionIndex].add(imageBase64!!)
                 }
             }
+            for(img in answerImageArr){
+                val imageBase64 = Constants.bitmapToString(img)
+                SingleQuiz.Companion.quizAnswerImages[questionIndex].add(imageBase64!!)
+            }
+
             intent.putStringArrayListExtra("Key_options", optionListStr)
             intent.putExtra("Key_description", questionBinding.questionDescription.text)
             intent.putExtra("Key_title", questionTitle)
@@ -562,56 +602,154 @@ class SingleQuestion : AppCompatActivity(){
 
     private fun editImage(){
         val builder = AlertDialog.Builder(this)
-        val v:View =  layoutInflater.inflate(R.layout.dialog_edit_question_image, questionBinding.questionContainer,false)
+        val v:View =  layoutInflater.inflate(R.layout.dialog_edit_question_image, questionBinding.root,false)
         builder.setView(v)
         val dialog: AlertDialog = builder.create()
-        val questionImage: ImageView = v.findViewById(R.id.question_image)
+        val imageNum: TextView = v.findViewById(R.id.image_number)
+        val imageList: RecyclerView = v.findViewById(R.id.image_list)
+        val imgLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val addImageBtn: TextView = v.findViewById(R.id.add_image)
         val editImageBtn: TextView = v.findViewById(R.id.edit_image)
         val deleteImageBtn: TextView = v.findViewById(R.id.delete_image)
-        questionImage.setImageBitmap(imageArr[0])
+        dialogImageAdapter = ImageRVAdapter(this, questionImageArr)
+        imageList.adapter = dialogImageAdapter
+        imageList.layoutManager = imgLayoutManager
+        imageList.setHasFixedSize(true)
+        imageList.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                editImagePosition = imgLayoutManager.findFirstVisibleItemPosition()
+                imageNum.text = "${editImagePosition + 1} / ${questionImageArr.size}"
+            }
+        })
+        addImageBtn.setOnClickListener {
+            val intent = Intent()
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.type = "image/*"
+            editImageAction = "add"
+            if(questionImageArr.size>4){
+                addImageBtn.isEnabled = false
+            }
+            imageNum.text = "${editImagePosition + 1} / ${questionImageArr.size+1}"
+            startActivityForResult(intent, openPhotoAlbum)
+        }
         editImageBtn.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_GET_CONTENT
             intent.type = "image/*"
+            editImageAction = "edit"
             startActivityForResult(intent, openPhotoAlbum)
-            dialog.dismiss()
         }
         deleteImageBtn.setOnClickListener {
-            editImageContainer(imageStatus_noImage)
-            dialog.dismiss()
+            questionImageArr.removeAt(editImagePosition)
+            imageAdapter.updateList(questionImageArr)
+            dialogImageAdapter!!.notifyDataSetChanged()
+            questionBinding.imageNumber.text = "${editImagePosition+1} / ${questionImageArr.size}"
+            addImageBtn.isEnabled = true
+            if(questionImageArr.size==0){
+                editImageContainer(imageStatus_noImage)
+                dialog.dismiss()
+            }
         }
         dialog.show()
     }
     private fun editImageContainer(imageStatus: String){
         if(imageStatus==imageStatus_noImage){
             questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 85f, resources.displayMetrics).toInt()
-            questionBinding.QuestionImage.setImageResource(0)
-            questionBinding.QuestionImage.setBackgroundResource(R.drawable.background_gray)
-            questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics).toInt()
+            questionBinding.imageBackground.visibility = View.VISIBLE
+            questionBinding.imageViewPager.visibility = View.GONE
+            questionBinding.imageNumber.visibility = View.GONE
             questionBinding.editImage.visibility = View.GONE
             questionBinding.addImageContainer.visibility = View.VISIBLE
         }
         else if(imageStatus==imageStatus_existImage){
-            questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 230f, resources.displayMetrics).toInt()
-            questionBinding.QuestionImage.setImageBitmap(imageArr[0])
-            questionBinding.QuestionImage.setBackgroundResource(0)
-            questionBinding.QuestionImage.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
+            questionBinding.upperFrame.layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240f, resources.displayMetrics).toInt()
+            imageAdapter = ImageVPAdapter(this, questionImageArr)
+            questionBinding.imageBackground.visibility = View.GONE
+            questionBinding.imageViewPager.adapter = imageAdapter
+            questionBinding.imageViewPager.visibility = View.VISIBLE
+            questionBinding.imageNumber.visibility = View.VISIBLE
             questionBinding.editImage.visibility = View.VISIBLE
             questionBinding.addImageContainer.visibility = View.GONE
+            questionBinding.imageNumber.text = "1 / ${questionImageArr.size}"
+            questionBinding.imageViewPager.addOnPageChangeListener(
+                object : ViewPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {}
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                    @SuppressLint("SetTextI18n")
+                    override fun onPageSelected(position: Int) {
+                        //update the image number textview
+                        questionBinding.imageNumber.text = "${position + 1} / ${questionImageArr.size}"
+                    }
+                }
+            )
         }
     }
-    private fun questionSetting(){
-        val intent = Intent()
-        intent.setClass(this@SingleQuestion, SingleQuestionSetting::class.java)
-        intent.putExtra("Key_title", questionTitle)
-        intent.putExtra("Key_answerDescription", questionAnswerDescription)
-        intent.putExtra("Key_number", questionNumber)
-        intent.putExtra("Key_type", questionType)
-        intent.putExtra("Key_questionBank", questionBank)
-        intent.putExtra("Key_provider", questionProvider)
-        intent.putExtra("Key_createdDate", questionCreatedDate)
-        startActivityForResult(intent, 1001)
+
+    private fun questionMoreAction(){
+        val builder = AlertDialog.Builder(this)
+        val actions:View =  layoutInflater.inflate(R.layout.dialog_question_more_action, questionBinding.root,false)
+        val q_setting: TextView = actions.findViewById(R.id.question_setting)
+        val showAnswer: TextView = actions.findViewById(R.id.show_answer)
+        builder.setView(actions)
+        val dialog: AlertDialog = builder.create()
+        val dialogWindow = dialog.window
+        val dialogParm: WindowManager.LayoutParams? = dialogWindow?.attributes
+        dialogParm?.width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 85f, resources.displayMetrics).toInt()
+        dialogParm?.height = LinearLayout.LayoutParams.WRAP_CONTENT
+        dialogParm?.x = -100
+
+        dialogWindow?.setDimAmount(0f)
+
+
+        q_setting.setOnClickListener {
+            val intent = Intent()
+            intent.setClass(this@SingleQuestion, SingleQuestionSetting::class.java)
+            intent.putExtra("Key_title", questionTitle)
+            intent.putExtra("Key_answerDescription", questionAnswerDescription)
+            intent.putExtra("Key_number", questionNumber)
+            intent.putExtra("Key_type", questionType)
+            intent.putExtra("Key_questionBank", questionBank)
+            intent.putExtra("Key_provider", questionProvider)
+            intent.putExtra("Key_createdDate", questionCreatedDate)
+            startActivityForResult(intent, 1001)
+            dialog.dismiss()
+        }
+        showAnswer.setOnClickListener {
+            val answerDialog = BottomSheetDialog(this)
+            answerDialog.setContentView(R.layout.dialog_question_show_answer)
+            val answerDescription: EditText? = answerDialog.findViewById(R.id.answer_description)
+            val answerImageList: RecyclerView? = answerDialog.findViewById(R.id.image_list)
+            val imageNum: TextView? = answerDialog.findViewById(R.id.image_number)
+            val imgLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            answerDescription?.setText(questionAnswerDescription)
+
+            dialogImageAdapter = ImageRVAdapter(this, answerImageArr)
+            answerImageList?.adapter = dialogImageAdapter
+            answerImageList?.layoutManager = imgLayoutManager
+            answerImageList?.setHasFixedSize(true)
+
+            if(answerImageArr.size>0){
+                imageNum?.text = "1 / ${answerImageArr.size}"
+                answerImageList?.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        editImagePosition = imgLayoutManager.findFirstVisibleItemPosition()
+                        imageNum?.text = "${editImagePosition + 1} / ${answerImageArr.size}"
+                    }
+                })
+            }else{
+                imageNum?.text = "目前沒有答案圖片"
+            }
+            answerDialog.setOnDismissListener {
+                questionAnswerDescription = answerDescription?.text.toString()
+            }
+            dialog.dismiss()
+            answerDialog.show()
+        }
+        dialog.show()
+        dialogWindow?.setGravity(Gravity.TOP)
+        dialogWindow?.attributes = dialogParm
     }
 
     private fun initShortAnswer(){
@@ -637,7 +775,7 @@ class SingleQuestion : AppCompatActivity(){
         textView.minHeight = answerMinH
         textView.hint = "輕觸輸入答案敘述"
         questionBinding.questionContainer.addView(textView)
-        questionBinding.questionDescription.minHeight = descriptionMinH
+//        questionBinding.questionDescription.minHeight = descriptionMinH
         val answerDescriptionView = questionBinding.root.findViewById<TextView>(textView.id)
         this.answerDescriptionView = answerDescriptionView
         answerDescriptionView.setOnClickListener {
@@ -688,6 +826,13 @@ class SingleQuestion : AppCompatActivity(){
             }
             answerOptionInt = tmpAnswerOptionInt
         }
+    }
+    private var onImageEditListener: OnImageEditClickListener? = null
+    interface OnImageEditClickListener {
+        fun onclick(editImage: Bitmap)
+    }
+    fun setOnImageEditClickListener(onClickListener: OnImageEditClickListener) {
+        this.onImageEditListener = onClickListener
     }
     override fun onBackPressed() {
         backBtn()

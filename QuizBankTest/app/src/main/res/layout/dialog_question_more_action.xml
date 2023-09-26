@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="100dp"
+    android:orientation="vertical"
+    android:background="@drawable/textview_border">
+
+    <TextView
+        android:id="@+id/question_setting"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:gravity="center"
+        android:text="設定"
+        android:textSize="20sp"
+        android:clickable="true"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        />
+    <TextView
+        android:id="@+id/show_answer"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:gravity="center"
+        android:text="顯示答案"
+        android:textSize="20sp"
+        android:clickable="true"/>
+
+</LinearLayout>

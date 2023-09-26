@@ -14,6 +14,7 @@
         android:orientation="vertical"
         android:background="@drawable/background_gradient">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -61,16 +62,17 @@
                     android:textColor="@color/black" />
 
             </RelativeLayout>
+
             <ImageButton
-                android:id="@+id/question_setting"
+                android:id="@+id/question_more_action"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="center_vertical"
-                android:background="?actionBarItemBackground"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/baseline_more_selection"/>
-       </LinearLayout>
+                android:layout_weight="1"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/baseline_more_selection" />
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -84,7 +86,7 @@
             android:layout_height="85dp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/Question_image"
+                android:id="@+id/image_background"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:paddingHorizontal="15dp"
@@ -93,6 +95,16 @@
                 android:adjustViewBounds="true"
                 android:background="@drawable/background_gray"
                 app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/image_viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="7dp"
+                android:background="@drawable/background_question_image"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/add_image_container"
@@ -113,7 +125,16 @@
                     android:paddingLeft="5dp"
                     android:text="@string/Add_questionImage"/>
             </LinearLayout>
-
+            <TextView
+                android:id="@+id/image_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="5dp"
+                android:textColor="#454545"
+                android:textSize="16sp"
+                tools:text="1/5"
+                android:visibility="gone"/>
             <android.widget.Button
                 android:id="@+id/time_limit"
                 android:layout_width="wrap_content"
@@ -135,12 +156,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/corner_radius_gray"
                 android:drawableStart="@drawable/baseline_edit"
-                android:visibility="gone"
                 android:minWidth="27dp"
-                android:minHeight="27dp" />
+                android:minHeight="27dp"
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -159,23 +180,45 @@
             </RelativeLayout>
 
         </FrameLayout>
-
-
-        <TextView
-            android:id="@+id/question_description"
+        <LinearLayout
+            android:id="@+id/question_description_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="80dp"
-            android:maxHeight="200dp"
-            android:clickable="true"
+            android:layout_height="150dp"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:orientation="vertical"
+            android:minHeight="80dp"
             android:gravity="center_vertical"
-            android:background="@drawable/textview_border"
-            android:padding="10dp"
-            android:textSize="14dp"
-            android:hint="輕觸輸入答案敘述"/>
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/textview_border">
+
+            <com.qdot.mathrendererlib.MathRenderView
+                android:id="@+id/question_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:text="this is math \\(\\int_{0}^{20}x^{20}\\) "
+                app:textColor="#000000"
+                android:textSize="14dp"
+                android:hint="輕觸輸入答案敘述"
+                app:mathBackgroundColor="#FFFFFF"/>
+        </LinearLayout>
+
+<!--        <TextView-->
+<!--            android:id="@+id/question_description"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:minHeight="80dp"-->
+<!--            android:maxHeight="200dp"-->
+<!--            android:clickable="true"-->
+<!--            android:layout_marginHorizontal="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:background="@drawable/textview_border"-->
+<!--            android:padding="10dp"-->
+<!--            android:textSize="14dp"-->
+<!--            android:hint="輕觸輸入答案敘述"/>-->
 
 
         <androidx.core.widget.NestedScrollView
