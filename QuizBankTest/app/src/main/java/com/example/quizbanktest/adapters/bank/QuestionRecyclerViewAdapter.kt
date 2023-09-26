@@ -87,7 +87,7 @@ class QuestionRecyclerViewAdapter(var context: Context,
                     recyclerViewInterface.onItemClick(position)
                 }
             }
-            btnEditQuestion.setOnClickListener { recyclerViewInterface.settingCard() }
+            btnEditQuestion.setOnClickListener { recyclerViewInterface.settingCard(adapterPosition) }
         }
     }
 }

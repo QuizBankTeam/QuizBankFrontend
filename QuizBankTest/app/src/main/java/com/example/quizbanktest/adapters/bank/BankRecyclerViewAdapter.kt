@@ -98,7 +98,7 @@ class BankRecyclerViewAdapter(var context: Context,
                     recyclerViewInterface.onItemClick(position)
                 }
             }
-            btnEditBank.setOnClickListener { recyclerViewInterface.settingCard() }
+            btnEditBank.setOnClickListener { recyclerViewInterface.settingCard(adapterPosition) }
         }
     }
 }

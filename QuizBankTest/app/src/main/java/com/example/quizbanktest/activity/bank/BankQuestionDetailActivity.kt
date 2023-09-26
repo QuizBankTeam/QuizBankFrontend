@@ -246,7 +246,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showAnswer() {
-        // switch view while we are clicking button
+        // switch view when clicking show answer button
         if (isShowingAnswer) {
             btnShowAnswer.setBackgroundColor(Color.parseColor("#ff7575"))
             btnShowAnswer.text = "隱藏答案"
@@ -442,8 +442,8 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {}
-    override fun switchBank(position: Int) {}
-    override fun settingCard() {}
+    override fun switchBank(newBankPosition: Int) {}
+    override fun settingCard(position: Int) {}
 
     override fun updateOption(position: Int, newOption: String) {
         // update question option's description data
