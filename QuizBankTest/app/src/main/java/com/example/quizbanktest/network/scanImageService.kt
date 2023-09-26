@@ -1,10 +1,15 @@
 package com.example.quizbanktest.network
 
-import com.squareup.okhttp.ResponseBody
-import retrofit.Call
-import retrofit.Response
-import retrofit.http.*
-import retrofit2.http.Headers
+//import com.squareup.okhttp.ResponseBody
+import okhttp3.ResponseBody
+//import retrofit.Call
+//import retrofit.Response
+//import retrofit.http.*
+import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.Header
+//import retrofit2.http.Headers
+import retrofit2.http.POST
 
 interface ScanImageService {
 

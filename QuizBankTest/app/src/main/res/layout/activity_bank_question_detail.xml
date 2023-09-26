@@ -71,7 +71,7 @@
         android:layout_height="200dp"
         android:layout_below="@id/title_bar"
         android:layout_centerInParent="true"
-        android:src="@drawable/todo"
+        android:src="@drawable/box"
         android:visibility="invisible" />
 
     <RelativeLayout

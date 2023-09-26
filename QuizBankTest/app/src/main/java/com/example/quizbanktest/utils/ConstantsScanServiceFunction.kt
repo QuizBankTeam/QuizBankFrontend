@@ -11,11 +11,18 @@ import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.network.ScanImageService
 import com.google.gson.Gson
-import com.squareup.okhttp.ResponseBody
-import retrofit.Callback
-import retrofit.GsonConverterFactory
-import retrofit.Response
-import retrofit.Retrofit
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+//import com.squareup.okhttp.ResponseBody
+//import retrofit.Callback
+//import retrofit.GsonConverterFactory
+//import retrofit.Response
+//import retrofit.Retrofit
 
 object ConstantsScanServiceFunction {
     fun scanBase64ToOcrText(base64String: String, activity:BaseActivity, flag:Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
@@ -39,11 +46,12 @@ object ConstantsScanServiceFunction {
             )
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         val gson = Gson()
                         val ocrResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             OCRResponse::class.java
                         )
 //                        Log.e("Response Result", ocrResponse.text)
@@ -94,7 +102,7 @@ object ConstantsScanServiceFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     activity.showErrorSnackBar("掃描發生錯誤")
                     activity.hideProgressDialog()
                     Log.e("in scan Errorrrrr", t?.message.toString())
@@ -133,11 +141,12 @@ object ConstantsScanServiceFunction {
             )
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         val gson = Gson()
                         val ocrResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             OCRResponse::class.java
                         )
 //                        Log.e("Response Result", ocrResponse.text)
@@ -188,7 +197,7 @@ object ConstantsScanServiceFunction {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
 
                     Log.e("in scan Errorrrrr", t?.message.toString())
                     onFailure("Request failed with status code")

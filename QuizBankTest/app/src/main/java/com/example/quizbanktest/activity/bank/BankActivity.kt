@@ -27,7 +27,6 @@ import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
-import org.w3c.dom.Text
 import java.time.LocalDate
 
 
@@ -75,9 +74,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             finish()
         }
 
-        btnAddBank.setOnClickListener {
-            addBank()
-        }
+        btnAddBank.setOnClickListener { addBank() }
     }
 
     private fun setupBankModel() {
@@ -273,7 +270,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     fun setPopupWindow(view: View?) {
         showProgressDialog("處理中")
@@ -348,6 +344,32 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         hideProgressDialog()
     }
 
+    override fun settingCard() {
+        val settingBankDialog = Dialog(this)
+        settingBankDialog.setContentView(R.layout.dialog_setting_panel)
+        settingBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        settingBankDialog.window?.setGravity(Gravity.CENTER)
+        settingBankDialog.show()
+
+//        val btnSwitchPosition = settingBankDialog.findViewById<TextView>(R.id.tv_switch_position)
+//
+//        btnSwitchPosition.setOnClickListener {
+//            settingBankDialog.dismiss()
+//
+//            val switchPositionDialog = Dialog(this)
+//            switchPositionDialog.setContentView(R.layout.dialog_switch_position)
+//            switchPositionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            switchPositionDialog.window?.setGravity(Gravity.CENTER)
+//            switchPositionDialog.show()
+//
+//            val linearLayout = switchPositionDialog.findViewById<LinearLayout>(R.id.layout_spinner)
+//
+//            for (i in )
+//
+//
+//        }
+    }
+
     fun init() {
         Log.e("BankActivity", "start init")
         if (ConstantsQuestionBankFunction.questionBankList != null) {
@@ -381,5 +403,9 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         Log.e("BankActivity", "start bankQuestion activity")
 
         startActivity(bankQuestionActivity)
+    }
+
+    override fun switchBank(position: Int) {
+        //TODO
     }
 }

@@ -7,11 +7,18 @@ import com.example.quizbanktest.models.QuizRecord
 import com.example.quizbanktest.network.quizRecordService
 import com.example.quizbanktest.network.quizService
 import com.google.gson.Gson
-import com.squareup.okhttp.ResponseBody
-import retrofit.Callback
-import retrofit.GsonConverterFactory
-import retrofit.Response
-import retrofit.Retrofit
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+//import com.squareup.okhttp.ResponseBody
+//import retrofit.Callback
+//import retrofit.GsonConverterFactory
+//import retrofit.Response
+//import retrofit.Retrofit
 
 object ConstantsQuizRecord {
     private val onFailureStr = "network not available"
@@ -27,11 +34,12 @@ object ConstantsQuizRecord {
             val call = api.getAllQuizRecords(Constants.COOKIE, Constants.csrfToken, Constants.accessToken, Constants.refreshToken, Constants.session, quizRecordType)
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         val gson = Gson()
                         val allQuizRecordResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             quizRecordService.AllQuizRecordsResponse::class.java
                         )
 
@@ -41,7 +49,7 @@ object ConstantsQuizRecord {
                         onFailure("Request failed with status code ${response.code()}")
                     }
                 }
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("Request failed with message ${t?.message.toString()}")
                 }
             })
@@ -60,11 +68,12 @@ object ConstantsQuizRecord {
             val call = api.getSingleQuizRecord(Constants.COOKIE, Constants.csrfToken, Constants.accessToken, Constants.refreshToken, Constants.session, quizRecordId)
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         val gson = Gson()
                         val quizRecordResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             quizRecordService.GetQuizRecordResponse::class.java
                         )
                         val tmpQuestionRecords = ArrayList<QuestionRecord>()
@@ -86,7 +95,7 @@ object ConstantsQuizRecord {
                     }
                 }
 
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("Request failed with message ${t?.message.toString()}")
                 }
 
@@ -135,11 +144,12 @@ object ConstantsQuizRecord {
             val call = api.postQuizRecord(Constants.COOKIE, Constants.csrfToken, Constants.accessToken, Constants.refreshToken, Constants.session, postQuizRecordModel)
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         val gson = Gson()
                         val postQuizRecordResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             quizRecordService.PostQuizRecordResponse::class.java
                         )
 
@@ -149,7 +159,7 @@ object ConstantsQuizRecord {
                         onFailure("Request failed with status code ${response.code()}")
                     }
                 }
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("Request failed with message ${t?.message.toString()}")
                 }
             })
@@ -168,11 +178,12 @@ object ConstantsQuizRecord {
             val call = api.deleteQuizRecord(Constants.COOKIE, Constants.csrfToken, Constants.accessToken, Constants.refreshToken, Constants.session, quizRecordId)
 
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(response: Response<ResponseBody>?, retrofit: Retrofit?) {
-                    if (response!!.isSuccess) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
+                    if (response!!.isSuccessful) {
                         val gson = Gson()
                         val deleteQuizRecordResponse = gson.fromJson(
-                            response.body().charStream(),
+                            response.body()?.charStream(),
                             quizRecordService.DeleteQuizRecordResponse::class.java
                         )
 
@@ -182,7 +193,7 @@ object ConstantsQuizRecord {
                         onFailure("Request failed with status code ${response.code()}")
                     }
                 }
-                override fun onFailure(t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onFailure("Request failed with message ${t?.message.toString()}")
                 }
             })
