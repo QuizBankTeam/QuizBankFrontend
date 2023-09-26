@@ -22,7 +22,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.example.quizbanktest.R
+import com.example.quizbanktest.adapters.quiz.ImageVPAdapter
 import com.example.quizbanktest.adapters.quiz.OptionAdapter
 import com.example.quizbanktest.databinding.ActivityMpStartQuizBinding
 import com.example.quizbanktest.fragment.SingleQuizPage
@@ -49,6 +51,8 @@ class  MPStartQuiz: AppCompatActivity() {
     private lateinit var questionList : ArrayList<Question>
     private lateinit var userAnsOptions : ArrayList<ArrayList<String>>
     private lateinit var userAnsDescription : ArrayList<String>
+    private lateinit var questionImageArr: ArrayList< ArrayList<Bitmap> >
+    private lateinit var answerImageArr: ArrayList< ArrayList<Bitmap> >
     private var currentAtQuestion: Int = 0
     private var currentSelection = ArrayList<Int>() //被選過的option
     private var selectedView = ArrayList<View>()  //被選過的option的background index和currentSelection 相同
@@ -59,6 +63,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private val roomNumber:Int = (100000 .. 999999).random()
     private val randomList = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10).shuffled()
     private lateinit var player : MediaPlayer
+    private lateinit var imageAdapter: ImageVPAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = ActivityMpStartQuizBinding.inflate(layoutInflater)
@@ -128,6 +133,18 @@ class  MPStartQuiz: AppCompatActivity() {
         }
         this.quizIndex = quizIndex
 
+        for(qIndex in 0 until questionList.size){
+            val imageArr1d = ArrayList<Bitmap>()
+            if(SingleQuiz.Companion.quizQuestionImages.size>qIndex){
+                for(img in SingleQuiz.Companion.quizQuestionImages[qIndex]){
+                    val imageBytes: ByteArray = Base64.decode(img, Base64.DEFAULT)
+                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    imageArr1d.add(decodeImage)
+                }
+            }
+            questionImageArr.add(imageArr1d)
+        }
+
         startQuizBinding.progressBar.progress = 1
         startQuizBinding.progressBar.max = questionList.size
         startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + ":" + questionList.size.toString()
@@ -167,16 +184,23 @@ class  MPStartQuiz: AppCompatActivity() {
         else if(currentQuestion.questionType=="ShortAnswer") "簡答題"
         else "填充題"
 
-        val imageArr = ArrayList<Bitmap>()
-        for(item in SingleQuizPage.Companion.quizListImages[quizIndex][currentAtQuestion]){
-            val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
-            val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            imageArr.add(decodeImage)
-
+        if(questionImageArr[currentAtQuestion].isNotEmpty()){
+            imageAdapter = ImageVPAdapter(this, questionImageArr[currentAtQuestion])
+            startQuizBinding.imageViewPager.adapter = imageAdapter
+            startQuizBinding.imageContainer.visibility = View.VISIBLE
+            startQuizBinding.imageNumber.text = "1 / ${questionImageArr[currentAtQuestion].size}"
+            startQuizBinding.imageViewPager.addOnPageChangeListener(
+                object : ViewPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {}
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                    override fun onPageSelected(position: Int) {
+                        startQuizBinding.imageNumber.text = "${position + 1} / ${questionImageArr[currentAtQuestion].size}"
+                    }
+                }
+            )
+        }else{
+            startQuizBinding.imageContainer.visibility = View.GONE
         }
-        if(imageArr.isNotEmpty())
-            startQuizBinding.QuestionImage.setImageBitmap(imageArr[0])
-
 
 
         when(currentQuestion.questionType){
@@ -327,7 +351,7 @@ class  MPStartQuiz: AppCompatActivity() {
             val tfParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, vHeight)
             val textViewTrue : TextView = v.findViewById(R.id.option_true)
             val textViewFalse: TextView = v.findViewById(R.id.option_false)
-            tfParams.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescription.id)
+            tfParams.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescriptionContainer.id)
             v.layoutParams = tfParams
             v.id = View.generateViewId()
 

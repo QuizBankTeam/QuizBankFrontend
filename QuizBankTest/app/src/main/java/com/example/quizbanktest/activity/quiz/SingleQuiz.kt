@@ -25,7 +25,8 @@ import java.util.UUID
 
 class SingleQuiz: AppCompatActivity() {
     companion object{
-        var quizImages =  ArrayList< ArrayList<String> >()
+        var quizQuestionImages =  ArrayList< ArrayList<String> >()
+        var quizAnswerImages =  ArrayList< ArrayList<String> >()
     }
     private lateinit var quizBinding: ActivitySingleQuizBinding
     private lateinit var questionlist : ArrayList<Question>
@@ -77,13 +78,19 @@ class SingleQuiz: AppCompatActivity() {
             override fun sendQuiz(questionAddedList: ArrayList<Question>) {
                 val preparedAddedQ = ArrayList<Question>()
                 val preparedAddedQImages = ArrayList< ArrayList<String> >()
+                val preparedAddedAImages = ArrayList< ArrayList<String> >()
                 for(question in questionAddedList){
                     val qImage = ArrayList<String>()
+                    val aImage = ArrayList<String>()
                     val newQ = question.copy(_id = UUID.randomUUID().toString())
                     question.questionImage?.forEach {
                         qImage.add(it)
                     }
+                    question.answerImage?.forEach{
+                        aImage.add(it)
+                    }
                     preparedAddedQImages.add(qImage)
+                    preparedAddedAImages.add(aImage)
                     preparedAddedQ.add(newQ)
                 }
                 if(preparedAddedQ.size>0){
@@ -96,7 +103,8 @@ class SingleQuiz: AppCompatActivity() {
                     val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, preparedAddedQ)
 
                     ConstantsQuiz.putQuiz(this@SingleQuiz, putQuiz, onSuccess = {
-                        quizImages.addAll(preparedAddedQImages)
+                        quizQuestionImages.addAll(preparedAddedQImages)
+                        quizAnswerImages.addAll(preparedAddedAImages)
                         questionlist.clear()
                         questionlist.addAll(preparedAddedQ)
                         quizBinding.questionNumber.text = String.format( getString(R.string.Con2word),
@@ -233,14 +241,19 @@ class SingleQuiz: AppCompatActivity() {
             this.duringTime = duringTime
         }
         for(questionIndex in questionlist.indices){
-            if(questionlist[questionIndex].questionImage==null){
-                questionlist[questionIndex].questionImage = ArrayList()
-            }
+            questionlist[questionIndex].questionImage = questionlist[questionIndex].questionImage ?: ArrayList()
+            questionlist[questionIndex].answerImage = questionlist[questionIndex].answerImage ?: ArrayList()
             questionlist[questionIndex].questionImage?.clear()
+            questionlist[questionIndex].answerImage?.clear()
 
-            if(quizImages[questionIndex].isNotEmpty()){
-                for(img in SingleQuiz.Companion.quizImages[questionIndex]){
+            if(quizQuestionImages[questionIndex].isNotEmpty()){
+                for(img in SingleQuiz.Companion.quizQuestionImages[questionIndex]){
                     questionlist[questionIndex].questionImage!!.add(img)
+                }
+            }
+            if(quizAnswerImages[questionIndex].isNotEmpty()){
+                for(img in SingleQuiz.Companion.quizAnswerImages[questionIndex]){
+                    questionlist[questionIndex].answerImage!!.add(img)
                 }
             }
         }
@@ -260,7 +273,8 @@ class SingleQuiz: AppCompatActivity() {
         })
     }
     private fun backAndUpdateQuizInQuizList(){ //返回並更新quizList中的此Quiz
-        SingleQuizPage.Companion.quizListImages[quizIndex] = quizImages
+        SingleQuizPage.Companion.quizListQuestionImages[quizIndex] = quizQuestionImages
+        SingleQuizPage.Companion.quizListAnswerImages[quizIndex] = quizAnswerImages
         val intentBack = Intent()
         intentBack.putExtra("Key_title", quizTitle)
         intentBack.putExtra("Key_type", quizType)
@@ -368,7 +382,9 @@ class SingleQuiz: AppCompatActivity() {
         differentFromQuizList = false
         this.quizIndex = quizIndex
         this.duringTime = duringTime
-        quizImages = SingleQuizPage.Companion.quizListImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
+        quizQuestionImages = SingleQuizPage.Companion.quizListQuestionImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
+        quizAnswerImages = SingleQuizPage.Companion.quizListAnswerImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
+        Log.d("answer images size in quiz is", quizAnswerImages.size.toString())
         quizBinding.quizTitle.text = title
         quizBinding.questionNumber.text = String.format( getString(R.string.Con2word),
             getString(R.string.Question_CN), String.format(getString(R.string.brackets_with_int), questionlist.size) )
@@ -437,7 +453,8 @@ class SingleQuiz: AppCompatActivity() {
             }
         }else if(resultCode== Constants.RESULT_DELETE){
             isModified = true
-            quizImages.removeAt(requestCode)
+            quizQuestionImages.removeAt(requestCode)
+            quizAnswerImages.removeAt(requestCode)
             questionlist.removeAt(requestCode)
             quizAdapter?.notifyDataSetChanged()
             quizBinding.questionNumber.text = String.format( getString(R.string.Con2word),

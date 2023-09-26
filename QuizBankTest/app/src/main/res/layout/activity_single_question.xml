@@ -14,6 +14,7 @@
         android:orientation="vertical"
         android:background="@drawable/background_gradient">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -85,7 +86,7 @@
             android:layout_height="85dp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/Question_image"
+                android:id="@+id/image_background"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:paddingHorizontal="15dp"
@@ -155,12 +156,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/corner_radius_gray"
                 android:drawableStart="@drawable/baseline_edit"
-                android:visibility="gone"
                 android:minWidth="27dp"
-                android:minHeight="27dp" />
+                android:minHeight="27dp"
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -179,9 +180,31 @@
             </RelativeLayout>
 
         </FrameLayout>
+        <LinearLayout
+            android:id="@+id/question_description_container"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:orientation="vertical"
+            android:minHeight="80dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/textview_border">
 
+            <com.qdot.mathrendererlib.MathRenderView
+                android:id="@+id/question_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:text="this is math \\(\\int_{0}^{20}x^{20}\\) "
+                app:textColor="#000000"
+                android:textSize="14dp"
+                android:hint="輕觸輸入答案敘述"
+                app:mathBackgroundColor="#FFFFFF"/>
+        </LinearLayout>
 
-<!--        <com.qdot.mathrendererlib.MathRenderView-->
+<!--        <TextView-->
 <!--            android:id="@+id/question_description"-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="wrap_content"-->
@@ -191,30 +214,11 @@
 <!--            android:layout_marginHorizontal="20dp"-->
 <!--            android:layout_marginTop="10dp"-->
 <!--            android:layout_marginBottom="10dp"-->
-<!--            app:text="this is math \\(\\int_{0}^{20}x^{20}\\) "-->
-<!--            app:textColor="#000000"-->
 <!--            android:gravity="center_vertical"-->
 <!--            android:background="@drawable/textview_border"-->
 <!--            android:padding="10dp"-->
 <!--            android:textSize="14dp"-->
-<!--            android:hint="輕觸輸入答案敘述"-->
-<!--            app:mathBackgroundColor="#FFFFFF"/>-->
-
-        <TextView
-            android:id="@+id/question_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="80dp"
-            android:maxHeight="200dp"
-            android:clickable="true"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/textview_border"
-            android:padding="10dp"
-            android:textSize="14dp"
-            android:hint="輕觸輸入答案敘述"/>
+<!--            android:hint="輕觸輸入答案敘述"/>-->
 
 
         <androidx.core.widget.NestedScrollView

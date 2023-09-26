@@ -49,8 +49,8 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
                                 else context.getString(R.string.Filling_CN)
         holder.questionDescription.text = currentItem.description
 
-        if(position<SingleQuiz.Companion.quizImages.size) {
-            for (item in SingleQuiz.Companion.quizImages[position]) {
+        if(position<SingleQuiz.Companion.quizQuestionImages.size) {
+            for (item in SingleQuiz.Companion.quizQuestionImages[position]) {
                 val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 holder.questionImage.setImageBitmap(decodeImage)

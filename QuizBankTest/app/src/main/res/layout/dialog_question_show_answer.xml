@@ -53,6 +53,7 @@
         android:minHeight="150dp"
         android:layout_marginTop="3dp"
         android:layout_marginHorizontal="5dp"
+        android:paddingStart="3dp"
         android:hint="暫無敘述"
         android:background="@drawable/background_question_image"/>
 </LinearLayout>

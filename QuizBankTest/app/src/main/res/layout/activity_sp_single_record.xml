@@ -73,10 +73,13 @@
             </LinearLayout>
 
             <ImageButton
+                android:id="@+id/show_answer"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/white" />
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                android:src="@drawable/baseline_show_answer"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -84,18 +87,43 @@
             android:layout_margin="3dp"
             android:elevation="5dp"
             android:background="@color/underline"/>
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/Question_image"
-            android:layout_width="wrap_content"
-            android:layout_height="230dp"            android:layout_marginBottom="-10dp"
-            android:paddingHorizontal="15dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
+<!--        <com.google.android.material.imageview.ShapeableImageView-->
+<!--            android:id="@+id/Question_image"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="230dp"            -->
+<!--            android:layout_marginBottom="-10dp"-->
+<!--            android:paddingHorizontal="15dp"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            android:adjustViewBounds="true"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:paddingTop="10dp"-->
+<!--            android:background="@drawable/textview_border"-->
+<!--            android:src="@drawable/society98_1"-->
+<!--            app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>-->
+        <RelativeLayout
+            android:id="@+id/image_container"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="19dp"
             android:layout_gravity="center"
-            android:paddingTop="10dp"
-            android:background="@drawable/textview_border"
-            android:src="@drawable/society98_1"
-            app:shapeAppearanceOverlay="@style/ImageRoundCorner"/>
+            android:layout_marginTop="10dp">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/image_viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:background="@drawable/background_question_image" />
+            <TextView
+                android:id="@+id/image_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:textColor="#454545"
+                android:textSize="16sp"
+                tools:text="1/5" />
+        </RelativeLayout>
 
 
         <ScrollView
@@ -108,25 +136,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/question_description"
+                <LinearLayout
+                    android:id="@+id/question_description_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="80dp"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:minHeight="80dp"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/textview_border"
-                    android:padding="10dp"
-                    android:text="圖一為 2008 年的推估結果，顯示臺灣人口從 1960-2060 年間出生率與死亡率
-的預測變化，依圖所示，在不考慮社會增加率的情況下，下列何者最為正確？"
-                    android:textSize="14dp" />
+                    android:background="@drawable/textview_border">
+
+                    <com.qdot.mathrendererlib.MathRenderView
+                        android:id="@+id/question_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:text="this is math \\(\\int_{0}^{20}x^{20}\\) "
+                        app:textColor="#000000"
+                        android:textSize="14dp"
+                        android:hint="輕觸輸入答案敘述"
+                        app:mathBackgroundColor="#FFFFFF"/>
+                </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/question_description"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:minHeight="80dp"-->
+<!--                    android:layout_marginHorizontal="20dp"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:layout_marginBottom="10dp"-->
+<!--                    android:background="@drawable/textview_border"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="圖正確？"-->
+<!--                    android:textSize="14dp" />-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/QuestionOption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/question_description"
+                    android:layout_below="@id/question_description_container"
                     android:layout_marginHorizontal="20dp"
                     android:overScrollMode="never"
                     android:textColor="@color/white"
