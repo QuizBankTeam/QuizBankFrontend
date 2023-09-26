@@ -2,7 +2,10 @@ package com.example.quizbanktest.activity.quiz
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -138,8 +141,18 @@ class SPQuizFinish : AppCompatActivity(){
         for(index in questionlist.indices){
             val tmpId = UUID.randomUUID().toString()
             var isCorrect = false
+            val tmpQImg =  ArrayList<String>()
+            val tmpAImg =  ArrayList<String>()
 
             questionRecordId.add(tmpId)
+            for (item in SingleQuiz.Companion.quizQuestionImages[index]) {
+                tmpQImg.add(item)
+            }
+            for (item in SingleQuiz.Companion.quizAnswerImages[index]) {
+                tmpAImg.add(item)
+            }
+            questionlist[index].questionImage = tmpQImg
+            questionlist[index].answerImage = tmpAImg
 
             if(questionlist[index].questionType==Constants.questionTypeShortAnswer) {
                 hasShorAns = true

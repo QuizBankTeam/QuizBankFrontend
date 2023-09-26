@@ -2,12 +2,15 @@ package com.example.quizbanktest.utils
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.network.HoughRotateService
 import com.example.quizbanktest.network.RealEsrganService
 import com.google.gson.Gson
+import okhttp3.MultipartBody
 //import com.squareup.okhttp.OkHttpClient
 //import com.squareup.okhttp.ResponseBody
 import okhttp3.ResponseBody
@@ -27,15 +30,24 @@ import java.util.concurrent.TimeUnit
 
 object ConstantsHoughAlgo {
 
-    fun imageRotate(base64String: String, activity: Activity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    fun imageRotate(uri: Uri, activity: Activity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         if (Constants.isNetworkAvailable(activity)) {
+
+            val imagePart = ConstantsFunction.createMultipartFromUri(uri, activity)
+            val client = ConstantsFunction.createOkHttpClient()
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
             val api = retrofit.create(HoughRotateService::class.java)
-
-            val body = HoughRotateService.PostBody(base64String)
+            val multipartBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addPart(imagePart)
+                .build()
+            val contentType =
+                "multipart/form-data; charset=utf-8; boundary=" + multipartBody.boundary
+//            val body = HoughRotateService.PostBody(base64String)
 
             //TODO 拿到csrf token access token
             Log.e("access in scan ", Constants.accessToken)
@@ -45,7 +57,8 @@ object ConstantsHoughAlgo {
                 Constants.csrfToken,
                 Constants.accessToken,
                 Constants.refreshToken,
-                body
+                contentType,
+                multipartBody
             )
 
             call.enqueue(object : Callback<ResponseBody> {
@@ -53,14 +66,17 @@ object ConstantsHoughAlgo {
                                         response: Response<ResponseBody>) {
 
                     if (response!!.isSuccessful) {
+//                        val gson = Gson()
+//                        val houghResponse = gson.fromJson(
+//                            response.body()?.charStream(),
+//                            HoughResponse::class.java
+//                        )
+//                        Log.e("Response Result", houghResponse.image)
+//
+//                        onSuccess(houghResponse.image)
                         val gson = Gson()
-                        val houghResponse = gson.fromJson(
-                            response.body()?.charStream(),
-                            HoughResponse::class.java
-                        )
-                        Log.e("Response Result", houghResponse.image)
-
-                        onSuccess(houghResponse.image)
+                        val bitmap = BitmapFactory.decodeStream(response.body()?.byteStream())
+                        ConstantsFunction.encodeImage(bitmap)?.let { onSuccess(it) }
 
                     } else {
 

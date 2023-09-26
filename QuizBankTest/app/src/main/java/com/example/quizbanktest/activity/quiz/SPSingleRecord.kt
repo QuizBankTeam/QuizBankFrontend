@@ -8,17 +8,18 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.example.quizbanktest.R
+import com.example.quizbanktest.adapters.quiz.ImageRVAdapter
+import com.example.quizbanktest.adapters.quiz.ImageVPAdapter
 import com.example.quizbanktest.adapters.quiz.OptionAdapter
 import com.example.quizbanktest.databinding.ActivitySpSingleRecordBinding
 import com.example.quizbanktest.fragment.SingleQuizPage
@@ -29,6 +30,7 @@ import com.example.quizbanktest.models.QuizRecord
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuiz
 import com.example.quizbanktest.utils.ConstantsQuizRecord
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SPSingleRecord: AppCompatActivity()  {
     private lateinit var singleRecordBinding: ActivitySpSingleRecordBinding
@@ -36,7 +38,8 @@ class SPSingleRecord: AppCompatActivity()  {
     private lateinit var recordList: ArrayList<QuestionRecord>
     private lateinit var quizRecord: QuizRecord
     private lateinit var optionAdapter: OptionAdapter
-    private var imageArr = ArrayList<Bitmap>()
+    private var questionImageArr = ArrayList< ArrayList<Bitmap> >()
+    private var answerImageArr = ArrayList< ArrayList<Bitmap> >()
     private var currentAtQuestion: Int = 0
     private var shortAnswerView : TextView? = null
     private var trueOrFalseView: View? = null
@@ -44,6 +47,7 @@ class SPSingleRecord: AppCompatActivity()  {
     private val activitySingleQuiz = "SingleQuiz"
     private val activityRecordPage = "RecordPage"
     private lateinit var previousActivity: String
+    private lateinit var imageAdapter: ImageVPAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         singleRecordBinding = ActivitySpSingleRecordBinding.inflate(layoutInflater)
@@ -58,6 +62,9 @@ class SPSingleRecord: AppCompatActivity()  {
         }
         singleRecordBinding.backBtn.setOnClickListener {
             backBtn()
+        }
+        singleRecordBinding.showAnswer.setOnClickListener {
+            showAnswer()
         }
         singleRecordBinding.gotoPreviousQuestion.isEnabled = false
     }
@@ -92,41 +99,88 @@ class SPSingleRecord: AppCompatActivity()  {
     }
     private fun initQuestion(){
         singleRecordBinding.progressBar.max = recordList.size
-        for (record in recordList){
+        for ((index, record) in recordList.withIndex()){
+            val tmpQImg =  ArrayList<Bitmap>()
+            val tmpAImg =  ArrayList<Bitmap>()
+
             questionList.add(record.question)
+            if(previousActivity==activitySingleQuiz){
+                for (item in SingleQuiz.Companion.quizQuestionImages[index]) {
+                    val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    tmpQImg.add(decodeImage)
+                }
+                for (item in SingleQuiz.Companion.quizAnswerImages[index]) {
+                    val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
+                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    tmpAImg.add(decodeImage)
+                }
+            }else if(previousActivity==activityRecordPage){
+                record.question.questionImage?.forEach{
+                    val imageBytes: ByteArray = Base64.decode(it, Base64.DEFAULT)
+                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    tmpQImg.add(decodeImage)
+                }
+                record.question.answerImage?.forEach{
+                    val imageBytes: ByteArray = Base64.decode(it, Base64.DEFAULT)
+                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    tmpAImg.add(decodeImage)
+                }
+            }
+            questionImageArr.add(tmpQImg)
+            answerImageArr.add(tmpAImg)
         }
         setQuestion()
     }
+    private fun showAnswer(){
+        val currentQuestion = questionList[currentAtQuestion]
+        val answerDialog = BottomSheetDialog(this)
+        answerDialog.setContentView(R.layout.dialog_question_show_answer)
+        val answerDescription: EditText? = answerDialog.findViewById(R.id.answer_description)
+        val answerImageList: RecyclerView? = answerDialog.findViewById(R.id.image_list)
+        val imageNum: TextView? = answerDialog.findViewById(R.id.image_number)
+        val imgLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val dialogImageAdapter = ImageRVAdapter(this, answerImageArr[currentAtQuestion])
 
-    private fun setQuestionImage(currentQuestion: Question){
-        val imageArr = ArrayList<Bitmap>()
-        if(previousActivity==activitySingleQuiz){
-            if(currentAtQuestion<SingleQuiz.Companion.quizImages.size) {
-                for (item in SingleQuiz.Companion.quizImages[currentAtQuestion]) {
-                    val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
-                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                    imageArr.add(decodeImage)
+        answerDescription?.setText(currentQuestion.answerDescription)
+        answerImageList?.adapter = dialogImageAdapter
+        answerImageList?.layoutManager = imgLayoutManager
+        answerImageList?.setHasFixedSize(true)
+        if(answerImageArr[currentAtQuestion].size>0){
+            imageNum?.text = "1 / ${answerImageArr[currentAtQuestion].size}"
+            answerImageList?.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val imagePosition = imgLayoutManager.findFirstVisibleItemPosition()
+                    imageNum?.text = "${imagePosition + 1} / ${answerImageArr[currentAtQuestion].size}"
                 }
-            }else{
-                Toast.makeText(this, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
-            }
-        }else if(previousActivity==activityRecordPage){
-            if(!currentQuestion.questionImage.isNullOrEmpty()){
-                for(image in currentQuestion.questionImage!!){
-                    val imageBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
-                    val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                    imageArr.add(decodeImage)
-                }
-            }
-        }
-        if(imageArr.isNotEmpty()) {
-            singleRecordBinding.QuestionImage.visibility = View.VISIBLE
-            singleRecordBinding.QuestionImage.setImageBitmap(imageArr[0])
+            })
         }else{
-            singleRecordBinding.QuestionImage.visibility = View.GONE
+            imageNum?.text = "此題沒有答案圖片"
         }
-
+        answerDialog.show()
     }
+
+    private fun setQuestionImage(){
+        if(questionImageArr[currentAtQuestion].isNotEmpty()){
+            imageAdapter = ImageVPAdapter(this, questionImageArr[currentAtQuestion])
+            singleRecordBinding.imageViewPager.adapter = imageAdapter
+            singleRecordBinding.imageContainer.visibility = View.VISIBLE
+            singleRecordBinding.imageNumber.text = "1 / ${questionImageArr[currentAtQuestion].size}"
+            singleRecordBinding.imageViewPager.addOnPageChangeListener(
+                object : ViewPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {}
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                    override fun onPageSelected(position: Int) {
+                        singleRecordBinding.imageNumber.text = "${position + 1} / ${questionImageArr[currentAtQuestion].size}"
+                    }
+                }
+            )
+        }else{
+            singleRecordBinding.imageContainer.visibility = View.GONE
+        }
+    }
+
     private fun setQuestion(){
         val currentQuestion = questionList[currentAtQuestion]
         singleRecordBinding.QuestionType.text
@@ -138,7 +192,7 @@ class SPSingleRecord: AppCompatActivity()  {
         singleRecordBinding.questionDescription.text = currentQuestion.description
         singleRecordBinding.progressBar.progress = currentAtQuestion+1
         singleRecordBinding.tvProgress.text = (currentAtQuestion+1).toString() + "/" + questionList.size.toString()
-        setQuestionImage(currentQuestion)
+        setQuestionImage()
 
 
 
@@ -225,7 +279,7 @@ class SPSingleRecord: AppCompatActivity()  {
             textView.id = View.generateViewId()
             btnParam.setMargins(btnMarginH, btnMarginTop, btnMarginH, btnMarginBottom)
             layoutParam.setMargins(marginH, marginV, marginH, marginV)
-            layoutParam.addRule(RelativeLayout.BELOW, singleRecordBinding.questionDescription.id)
+            layoutParam.addRule(RelativeLayout.BELOW, singleRecordBinding.questionDescriptionContainer.id)
 
             if(isCorrect)
                 textView.setBackgroundResource(R.drawable.textview_answer_border)
@@ -239,7 +293,6 @@ class SPSingleRecord: AppCompatActivity()  {
             textView.text = recordList[currentAtQuestion].userAnswerDescription
             textView.hint = "你的答案"
             singleRecordBinding.lowerContainer.addView(textView, 1)
-            singleRecordBinding.questionDescription.minHeight = descriptionMinH
             val answerDescriptionView = singleRecordBinding.root.findViewById<TextView>(textView.id)
             this.shortAnswerView = answerDescriptionView
         }
@@ -263,7 +316,7 @@ class SPSingleRecord: AppCompatActivity()  {
             val textViewFalse: TextView = v.findViewById(R.id.option_false)
             val vHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics).toInt()
             val tfParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, vHeight)
-            tfParams.addRule(RelativeLayout.BELOW, singleRecordBinding.questionDescription.id)
+            tfParams.addRule(RelativeLayout.BELOW, singleRecordBinding.questionDescriptionContainer.id)
 
             v.layoutParams = tfParams
             v.id = View.generateViewId()

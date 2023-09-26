@@ -64,7 +64,7 @@ class MultiQuizPage : Fragment() {
                         }
                         imageArr2.add(imageArr1)
                     }
-                    SingleQuizPage.Companion.quizListImages.add(imageArr2)
+                    SingleQuizPage.Companion.quizListQuestionImages.add(imageArr2)
                 }
 
                 quizBinding.QuizList.layoutManager = LinearLayoutWrapper(requireContext())
@@ -96,7 +96,7 @@ class MultiQuizPage : Fragment() {
     }
     fun deleteQuiz(position: Int){
         QuizList.removeAt(position)
-        SingleQuizPage.quizListImages.removeAt(position)
+        SingleQuizPage.quizListQuestionImages.removeAt(position)
         quizListAdapter.notifyDataSetChanged()
 //        quizListAdapter.notifyItemChanged(position)
 //        for(index in position until QuizList.size){

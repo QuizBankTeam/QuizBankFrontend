@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Base64
@@ -19,9 +20,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import com.example.quizbanktest.R
+import com.example.quizbanktest.adapters.quiz.ImageVPAdapter
 import com.example.quizbanktest.adapters.quiz.OptionAdapter
 import com.example.quizbanktest.databinding.ActivitySpStartQuizBinding
 import com.example.quizbanktest.fragment.SingleQuizPage
@@ -53,6 +56,8 @@ class SPStartQuiz: AppCompatActivity() {
     private var currentRemain = 0
     private var imageArr = ArrayList<Bitmap>()
     private lateinit var countDownTimer: CountDownTimer
+    private lateinit var player : MediaPlayer
+    private lateinit var imageAdapter: ImageVPAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = ActivitySpStartQuizBinding.inflate(layoutInflater)
@@ -99,6 +104,17 @@ class SPStartQuiz: AppCompatActivity() {
         startQuizBinding.tvProgress.text = (currentAtQuestion+1).toString() + ":" + questionlist.size.toString()
         userAnsOptions =  ArrayList<ArrayList<String>>(questions!!.size)
         userAnsDescription = ArrayList<String>(questions.size)
+        player = MediaPlayer.create(this, R.raw.start_quiz_music)
+        player.setOnCompletionListener {
+            try {
+                player.stop()
+                player.prepare()
+                player.start()
+            }catch (e: Exception){
+            }
+        }
+        player.setVolume(6.0f, 6.0f)
+        player.start()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -137,8 +153,8 @@ class SPStartQuiz: AppCompatActivity() {
                                         else "填充題"
 
         val imageArr = ArrayList<Bitmap>()
-        if(currentAtQuestion<SingleQuiz.Companion.quizImages.size) {
-            for (item in SingleQuiz.Companion.quizImages[currentAtQuestion]) {
+        if(currentAtQuestion<SingleQuiz.Companion.quizQuestionImages.size) {
+            for (item in SingleQuiz.Companion.quizQuestionImages[currentAtQuestion]) {
                 val imageBytes: ByteArray = Base64.decode(item, Base64.DEFAULT)
                 val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 imageArr.add(decodeImage)
@@ -147,10 +163,21 @@ class SPStartQuiz: AppCompatActivity() {
             Toast.makeText(this, "quizImage index超出範圍 該題沒有圖片", Toast.LENGTH_LONG).show()
         }
         if(imageArr.isNotEmpty()){
-            startQuizBinding.QuestionImage.setImageBitmap(imageArr[0])
-            startQuizBinding.QuestionImage.visibility = View.VISIBLE
+            imageAdapter = ImageVPAdapter(this, imageArr)
+            startQuizBinding.imageViewPager.adapter = imageAdapter
+            startQuizBinding.imageContainer.visibility = View.VISIBLE
+            startQuizBinding.imageNumber.text = "1 / ${imageArr.size}"
+            startQuizBinding.imageViewPager.addOnPageChangeListener(
+                object : ViewPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {}
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                    override fun onPageSelected(position: Int) {
+                        startQuizBinding.imageNumber.text = "${position + 1} / ${imageArr.size}"
+                    }
+                }
+            )
         }else{
-            startQuizBinding.QuestionImage.visibility = View.GONE
+            startQuizBinding.imageContainer.visibility = View.GONE
         }
 
 
@@ -274,6 +301,7 @@ class SPStartQuiz: AppCompatActivity() {
     }
 
     private fun quizEnd(){
+        player.stop()
         val answerlist = ArrayList<ArrayList<String>>()
 //        for(item in answerRecords){
 //            val first = ArrayList<String>(item.size)
@@ -315,6 +343,7 @@ class SPStartQuiz: AppCompatActivity() {
     private fun setTimer(currentContext: Context){
          countDownTimer = object : CountDownTimer((duringTime*1000).toLong(), 1000) {
             override fun onFinish() {
+                player.stop()
                 val builder = AlertDialog.Builder(currentContext)
                 builder.setTitle("考試已結束")
                 builder.setPositiveButton("確定") { dialog, which ->
@@ -360,7 +389,7 @@ class SPStartQuiz: AppCompatActivity() {
             val layoutParam = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
 
             layoutParam.setMargins(marginH, marginV, marginH, marginV)
-            layoutParam.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescription.id)
+            layoutParam.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescriptionContainer.id)
 
 
             textView.id = View.generateViewId()
@@ -372,7 +401,6 @@ class SPStartQuiz: AppCompatActivity() {
             textView.minHeight = answerMinH
             textView.hint = "輕觸輸入答案"
             startQuizBinding.lowerContainer.addView(textView, 1)
-            startQuizBinding.questionDescription.minHeight = descriptionMinH
             val answerDescriptionView = startQuizBinding.root.findViewById<EditText>(textView.id)
             this.shortAnswerView = answerDescriptionView
         }
@@ -395,7 +423,7 @@ class SPStartQuiz: AppCompatActivity() {
             val tfParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, vHeight)
             val textViewTrue : TextView = v.findViewById(R.id.option_true)
             val textViewFalse: TextView = v.findViewById(R.id.option_false)
-            tfParams.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescription.id)
+            tfParams.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescriptionContainer.id)
 
             v.layoutParams = tfParams
             v.id = View.generateViewId()
@@ -427,6 +455,7 @@ class SPStartQuiz: AppCompatActivity() {
         btnParam.marginStart = hMargin
         btnParam.marginEnd = hMargin
 
+        currentQuestion.options?.shuffle()
         for(index in currentQuestion.options?.indices!!){
             val tmpOption = Option(Constants.optionNum[index], currentQuestion.options!![index])
             optionlist.add(tmpOption)
@@ -452,6 +481,7 @@ class SPStartQuiz: AppCompatActivity() {
             if (::countDownTimer.isInitialized) {
                 countDownTimer.cancel()
             }
+            player.stop()
             finish()
         }
         builder.setNegativeButton("取消", null)

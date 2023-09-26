@@ -29,7 +29,8 @@ private const val ARG_PARAM2 = "param2"
 
 class SingleQuizPage : Fragment() {
     companion object {
-        var quizListImages =  ArrayList< ArrayList< ArrayList<String> > >()
+        var quizListQuestionImages =  ArrayList< ArrayList< ArrayList<String> > >()
+        var quizListAnswerImages =  ArrayList< ArrayList< ArrayList<String> > >()
     }
 
     private lateinit var quizBinding: ListSpQuizBinding
@@ -55,19 +56,28 @@ class SingleQuizPage : Fragment() {
         val base64Image1 = Constants.bitmapToString(imageBitmap1)
 
         ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
+            SingleQuizPage.Companion.quizListQuestionImages.clear()
+            SingleQuizPage.Companion.quizListAnswerImages.clear()
             if(quizList!=null) {
                 QuizList = quizList
 
                 for (quiz in quizList) {
-                    val imageArr2 = ArrayList<ArrayList<String>>()
+                    val imageArr2d_q = ArrayList<ArrayList<String>>()
+                    val imageArr2d_a = ArrayList<ArrayList<String>>()
                     for (question in quiz.questions!!) {
-                        val imageArr1 = ArrayList<String>()
+                        val imageArr1d_q = ArrayList<String>()
+                        val imageArr1d_a = ArrayList<String>()
                         for (image in question.questionImage!!) {
-                            imageArr1.add(image)
+                            imageArr1d_q.add(image)
                         }
-                        imageArr2.add(imageArr1)
+                        for (image in question.answerImage!!){
+                            imageArr1d_a.add(image)
+                        }
+                        imageArr2d_q.add(imageArr1d_q)
+                        imageArr2d_a.add(imageArr1d_a)
                     }
-                    SingleQuizPage.Companion.quizListImages.add(imageArr2)
+                    SingleQuizPage.Companion.quizListQuestionImages.add(imageArr2d_q)
+                    SingleQuizPage.Companion.quizListAnswerImages.add(imageArr2d_a)
                 }
 
                 quizBinding.QuizList.layoutManager = LinearLayoutWrapper(requireContext())
@@ -92,15 +102,22 @@ class SingleQuizPage : Fragment() {
 //        for(index in 0 until QuizList.size){
 //            quizListAdapter.notifyItemChanged(index)
 //        }
-        val imageArr2 = ArrayList< ArrayList<String> >()
+        val imageArr2d_q = ArrayList<ArrayList<String>>()
+        val imageArr2d_a = ArrayList<ArrayList<String>>()
         for(question in quiz.questions!!){
-            val imageArr1 = ArrayList<String>()
+            val imageArr1d_q = ArrayList<String>()
+            val imageArr1d_a = ArrayList<String>()
             for(image in question.questionImage!!){
-                imageArr1.add(image)
+                imageArr1d_q.add(image)
             }
-            imageArr2.add(imageArr1)
+            for (image in question.answerImage!!){
+                imageArr1d_a.add(image)
+            }
+            imageArr2d_q.add(imageArr1d_q)
+            imageArr2d_a.add(imageArr1d_a)
         }
-        SingleQuizPage.Companion.quizListImages.add(0, imageArr2)
+        SingleQuizPage.Companion.quizListQuestionImages.add(0, imageArr2d_q)
+        SingleQuizPage.Companion.quizListAnswerImages.add(0, imageArr2d_a)
         quizListAdapter.notifyDataSetChanged()
     }
     fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
@@ -115,7 +132,8 @@ class SingleQuizPage : Fragment() {
 
     fun deleteQuiz(position: Int){
         QuizList.removeAt(position)
-        quizListImages.removeAt(position)
+        quizListQuestionImages.removeAt(position)
+        quizListAnswerImages.removeAt(position)
         quizListAdapter.notifyDataSetChanged()
 //        quizListAdapter.notifyItemChanged(position)
 //        for(index in position until QuizList.size){

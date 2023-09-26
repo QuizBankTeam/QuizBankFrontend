@@ -61,12 +61,15 @@ open class BaseActivity : AppCompatActivity() {
     private lateinit var showRotateDialog : Dialog
     private lateinit var showAutoCutOptionsDialog : Dialog
     private lateinit var showCutImageDialog : Dialog
-
+    private lateinit var uriForOcr : Uri
     private val uCropActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             val uri = UCrop.getOutput(result.data!!)
+            if (uri != null) {
+                uriForOcr = uri
+            }
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
             onImageSelected?.invoke(bitmap)
             deleteFileFromUri(this,uri!!)
@@ -88,10 +91,14 @@ open class BaseActivity : AppCompatActivity() {
         if(result.resultCode == RESULT_OK &&result.data!=null){
 
             val contentURI = result.data!!.data
+
             try {
                 val selectedImageBitmap =
                     BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI!!))
                 if(selectedImageBitmap!=null){
+                    if (contentURI != null) {
+                        uriForOcr = contentURI
+                    }
                     if (getUcropOptionsOrNot() == -1) {
                         showCutImageDialog(contentURI)
                     } else if (getUcropOptionsOrNot() == 1) {
@@ -327,6 +334,7 @@ open class BaseActivity : AppCompatActivity() {
                         MediaStore.EXTRA_OUTPUT,
                         uri1)
                     cameraPhotoUri = uri1
+                    uriForOcr = uri1
                     cameraLauncher.launch(intent)
                 }
                 override fun onPermissionRationaleShouldBeShown(
@@ -347,7 +355,7 @@ open class BaseActivity : AppCompatActivity() {
                     saveBitmapFileForPicturesDir(bitmap)
                 }
                 var base64String = ConstantsFunction.encodeImage(bitmap)
-                autoOcrAndRotate(base64String!!,flag,onSuccess1 = { it1 -> }, onFailure1 = { it1 -> })
+                autoOcrAndRotate(uriForOcr,base64String!!,flag,onSuccess1 = { it1 -> }, onFailure1 = { it1 -> })
             }else{
                 onFailure("can't choose empty photo")
                 Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
@@ -497,7 +505,7 @@ open class BaseActivity : AppCompatActivity() {
             Toast.makeText(this,"photo ocr",Toast.LENGTH_SHORT).show()
             if (bitmap != null) {
                 var base64String = ConstantsFunction.encodeImage(bitmap)
-                autoOcrAndRotate(base64String!!,flag,
+                autoOcrAndRotate(uriForOcr,base64String!!,flag,
                     onSuccess1 = { it1 ->
                     onSuccess(it1)
                    }
@@ -625,7 +633,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
      @SuppressLint("CommitPrefEdits")
-     fun showAutoRotateDialog(base64String:String) {
+     fun showAutoRotateDialog(uri: Uri,base64String:String) {
          showRotateDialog = Dialog(this)
          showRotateDialog.setContentView(R.layout.dialog_auto_rotate)
 
@@ -645,7 +653,7 @@ open class BaseActivity : AppCompatActivity() {
              showRotateDialog.dismiss()
              showProgressDialog("目前正在處理OCR之結果")
              ConstantsHoughAlgo.imageRotate(
-                 base64String,this@BaseActivity,
+                 uri,this@BaseActivity,
                  onSuccess = { it1 ->
 
                      ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
@@ -801,7 +809,7 @@ open class BaseActivity : AppCompatActivity() {
         }
 
     }
-    fun autoOcrAndRotate(base64String : String,flag: Int,onSuccess1: (String) -> Unit, onFailure1: (String) -> Unit){
+    fun autoOcrAndRotate(uri: Uri,base64String : String,flag: Int,onSuccess1: (String) -> Unit, onFailure1: (String) -> Unit){
 
         if(flag == 1){
 
@@ -819,14 +827,14 @@ open class BaseActivity : AppCompatActivity() {
 
             if(getRotateOrNot() == -1){
 
-                showAutoRotateDialog(base64String)
+                showAutoRotateDialog(uri,base64String)
                 onSuccess1("success")
             }
             else if(getRotateOrNot() == 1){
 
                 showProgressDialog("目前正在處理OCR之結果")
                 ConstantsHoughAlgo.imageRotate(
-                    base64String,this@BaseActivity,
+                    uri,this@BaseActivity,
                     onSuccess = { it1 ->
                         ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
                             processScan(it1)
