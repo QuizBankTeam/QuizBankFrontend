@@ -35,7 +35,7 @@ class SingleQuizPage : Fragment() {
 
     private lateinit var quizBinding: ListSpQuizBinding
     private var QuizList : ArrayList<Quiz> = ArrayList()
-    private lateinit var quizListAdapter: SPQuizAdapter
+    private var quizListAdapter: SPQuizAdapter? = null
     private var imageArr = ArrayList<String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -80,7 +80,7 @@ class SingleQuizPage : Fragment() {
                     SingleQuizPage.Companion.quizListAnswerImages.add(imageArr2d_a)
                 }
 
-                quizBinding.QuizList.layoutManager = LinearLayoutWrapper(requireContext())
+                quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
                 quizBinding.QuizList.setHasFixedSize(true)
                 quizListAdapter = SPQuizAdapter(requireActivity(), QuizList)
                 quizBinding.QuizList.adapter = quizListAdapter
@@ -118,7 +118,7 @@ class SingleQuizPage : Fragment() {
         }
         SingleQuizPage.Companion.quizListQuestionImages.add(0, imageArr2d_q)
         SingleQuizPage.Companion.quizListAnswerImages.add(0, imageArr2d_a)
-        quizListAdapter.notifyDataSetChanged()
+        quizListAdapter?.notifyDataSetChanged()
     }
     fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
         QuizList[position].title = title
@@ -127,20 +127,19 @@ class SingleQuizPage : Fragment() {
         QuizList[position].status = status
         QuizList[position].startDateTime = startDateTime
         QuizList[position].endDateTime = endDateTime
-        quizListAdapter.notifyItemChanged(position)
+        quizListAdapter?.notifyItemChanged(position)
     }
 
     fun deleteQuiz(position: Int){
         QuizList.removeAt(position)
         quizListQuestionImages.removeAt(position)
         quizListAnswerImages.removeAt(position)
-        quizListAdapter.notifyDataSetChanged()
+        quizListAdapter?.notifyDataSetChanged()
 //        quizListAdapter.notifyItemChanged(position)
 //        for(index in position until QuizList.size){
 //            quizListAdapter.notifyItemChanged(index)
 //        }
     }
-
     private fun initWithoutNetwork(){
         val title = "第一次考試"
         val imageBitmap1 = BitmapFactory.decodeResource(resources, R.drawable.society98_1 )

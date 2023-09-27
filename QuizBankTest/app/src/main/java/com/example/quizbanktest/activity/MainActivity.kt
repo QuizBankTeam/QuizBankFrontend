@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.BuildCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.account.MyProfileActivity
 import com.example.quizbanktest.activity.paint.PaintActivity
+import com.example.quizbanktest.activity.quiz.MPStartQuiz
+import com.example.quizbanktest.activity.quiz.SingleQuestion
 import com.example.quizbanktest.activity.scan.MathActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.adapters.main.RecentViewAdapter
@@ -69,6 +72,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupNavigationView()
 
         doubleCheckExit()
+        val joinText: androidx.appcompat.widget.AppCompatEditText =  findViewById(R.id.join_code_text)
+        val joinBtn: android.widget.Button = findViewById(R.id.btn_join)
+        joinBtn.setOnClickListener {
+            val jText = joinText.text.toString()
+            val intent = Intent()
+            intent.setClass(this, MPStartQuiz::class.java)
+            intent.putExtra("Key_id", jText)
+            startActivity(intent)
+        }
     }
 
 
