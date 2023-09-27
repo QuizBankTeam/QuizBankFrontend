@@ -29,11 +29,12 @@ private const val ARG_PARAM2 = "param2"
 
 class MultiQuizPage : Fragment() {
     companion object {
-        var quizListImages =  ArrayList< ArrayList< ArrayList<WeakReference<String>> > >()
+        var quizListQuestionImages =  ArrayList< ArrayList< ArrayList<String> > >()
+        var quizListAnswerImages =  ArrayList< ArrayList< ArrayList<String> > >()
     }
     private lateinit var quizBinding: ListMpQuizBinding
     private var QuizList : ArrayList<Quiz> = ArrayList()
-    private lateinit var quizListAdapter: MPQuizAdapter
+    private var quizListAdapter: MPQuizAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
@@ -53,21 +54,30 @@ class MultiQuizPage : Fragment() {
         val base64Image1 = bitmapToString(imageBitmap1)
 
         ConstantsQuiz.getAllQuizsWithBatch(requireContext(), quizType, batch, onSuccess = { quizList ->
+            MultiQuizPage.Companion.quizListQuestionImages.clear()
+            MultiQuizPage.Companion.quizListAnswerImages.clear()
             if(quizList!=null) {
                 QuizList = quizList
                 for (quiz in quizList) {
-                    val imageArr2 = ArrayList<ArrayList<String>>()
+                    val imageArr2d_q = ArrayList<ArrayList<String>>()
+                    val imageArr2d_a = ArrayList<ArrayList<String>>()
                     for (question in quiz.questions!!) {
-                        val imageArr1 = ArrayList<String>()
+                        val imageArr1d_q = ArrayList<String>()
+                        val imageArr1d_a = ArrayList<String>()
                         for (image in question.questionImage!!) {
-                            imageArr1.add(image)
+                            imageArr1d_q.add(image)
                         }
-                        imageArr2.add(imageArr1)
+                        for (image in question.answerImage!!){
+                            imageArr1d_a.add(image)
+                        }
+                        imageArr2d_q.add(imageArr1d_q)
+                        imageArr2d_a.add(imageArr1d_a)
                     }
-                    SingleQuizPage.Companion.quizListQuestionImages.add(imageArr2)
-                }
+                    MultiQuizPage.Companion.quizListQuestionImages.add(imageArr2d_q)
+                    MultiQuizPage.Companion.quizListAnswerImages.add(imageArr2d_a)
 
-                quizBinding.QuizList.layoutManager = LinearLayoutWrapper(requireContext())
+                }
+                quizBinding.QuizList.layoutManager = LinearLayoutManager(requireContext())
                 quizBinding.QuizList.setHasFixedSize(true)
                 quizListAdapter = MPQuizAdapter(requireActivity(), QuizList)
                 quizBinding.QuizList.adapter = quizListAdapter
@@ -81,7 +91,23 @@ class MultiQuizPage : Fragment() {
 
     fun postQuiz(quiz: Quiz){
         QuizList.add(0, quiz)
-        quizListAdapter.notifyDataSetChanged()
+        val imageArr2d_q = ArrayList<ArrayList<String>>()
+        val imageArr2d_a = ArrayList<ArrayList<String>>()
+        for(question in quiz.questions!!){
+            val imageArr1d_q = ArrayList<String>()
+            val imageArr1d_a = ArrayList<String>()
+            for(image in question.questionImage!!){
+                imageArr1d_q.add(image)
+            }
+            for (image in question.answerImage!!){
+                imageArr1d_a.add(image)
+            }
+            imageArr2d_q.add(imageArr1d_q)
+            imageArr2d_a.add(imageArr1d_a)
+        }
+        MultiQuizPage.Companion.quizListQuestionImages.add(0, imageArr2d_q)
+        MultiQuizPage.Companion.quizListAnswerImages.add(0, imageArr2d_a)
+        quizListAdapter?.notifyDataSetChanged()
     }
 
     fun putQuiz(quizIndex: Int, tmpQuestions: ArrayList<Question>?, tmpTitle: String?,  tmpCasualDuringTime: ArrayList<Int>?, tmpMembers: ArrayList<String>?, tmpStatus: String, tmpStartDateTime: String?, tmpEndDateTime: String?){
@@ -92,12 +118,15 @@ class MultiQuizPage : Fragment() {
         QuizList[quizIndex].status = tmpStatus
         QuizList[quizIndex].startDateTime = tmpStartDateTime
         QuizList[quizIndex].endDateTime = tmpEndDateTime
-        quizListAdapter.notifyItemChanged(quizIndex)
+        quizListAdapter?.notifyItemChanged(quizIndex)
     }
     fun deleteQuiz(position: Int){
         QuizList.removeAt(position)
-        SingleQuizPage.quizListQuestionImages.removeAt(position)
-        quizListAdapter.notifyDataSetChanged()
+
+        quizListQuestionImages.removeAt(position)
+        quizListAnswerImages.removeAt(position)
+        quizListAdapter?.notifyDataSetChanged()
+
 //        quizListAdapter.notifyItemChanged(position)
 //        for(index in position until QuizList.size){
 //            quizListAdapter.notifyItemChanged(index)

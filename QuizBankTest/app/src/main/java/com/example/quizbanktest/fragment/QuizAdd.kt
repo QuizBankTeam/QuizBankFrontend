@@ -26,12 +26,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class QuizAdd : Fragment() {
+class QuizAdd(private val quizType: String) : Fragment() {
     private lateinit var binding: FragmentQuizAddBinding
     private var questionList : ArrayList<Question> = ArrayList()
     private var returnToQuizList: ReturnToQuizList? = null
     val addedQList = ArrayList<quizService.QuestionInPostQuiz>()
-    private val quizType = Constants.quizTypeSingle
     private var casualDuringTime = ArrayList<Int>()
     private var quizStartDatetime = ""
     private var quizEndDatetime = ""
@@ -58,13 +57,19 @@ class QuizAdd : Fragment() {
         adapter.setOnDeleteClickListener(object : QuestionAddInAddQuiz.OnDeleteClickListener{
             override fun onclick(position: Int, holder: QuestionAddInAddQuiz.MyViewHolder) {
                 questionList.removeAt(position)
+                if(quizType==Constants.quizTypeCasual) {
+                    casualDuringTime.removeAt(position)
+                }
                 adapter.notifyDataSetChanged()
             }
         })
         binding.QuestionList.adapter = adapter
         binding.QuestionList.isClickable = true
-
         binding.QuizStartDate.text = LocalDateTime.now().format(Constants.dateTimeFormat)
+        binding.addQuizType.text = when(quizType) {
+            Constants.quizTypeSingle -> "新增單人考試"
+            else -> "新增多人考試"
+        }
         binding.cancelBtn.setOnClickListener {
             if(returnToQuizList==null){
                 Toast.makeText(requireContext(), "等待call back設定完成再返回!", Toast.LENGTH_SHORT).show()
@@ -97,6 +102,9 @@ class QuizAdd : Fragment() {
                 for(question in questionAddedList){
                     val newQ = question.copy(_id = UUID.randomUUID().toString())
                     preparedAddedQ.add(newQ)
+                    if(quizType==Constants.quizTypeCasual){
+                        casualDuringTime.add(20)
+                    }
                 }
                 if(preparedAddedQ.size>0){
                     questionList.addAll(preparedAddedQ)
@@ -122,7 +130,7 @@ class QuizAdd : Fragment() {
         }
         if(determineStatus(duringTime))
         {
-            val tmpPostQuiz = quizService.PostQuiz(titleText, Constants.quizTypeSingle, quizStatus, duringTime, ArrayList(),
+            val tmpPostQuiz = quizService.PostQuiz(titleText, quizType, quizStatus, duringTime, casualDuringTime,
                 quizStartDatetime, quizEndDatetime, quizMembers, addedQList)
             ConstantsQuiz.postQuiz(requireContext(), tmpPostQuiz, onSuccess = { postQuiz ->
                 returnToQuizList!!.backToQuiz(postQuiz, true)
