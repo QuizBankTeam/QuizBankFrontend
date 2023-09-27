@@ -118,7 +118,9 @@ class SingleQuizPage : Fragment() {
         }
         SingleQuizPage.Companion.quizListQuestionImages.add(0, imageArr2d_q)
         SingleQuizPage.Companion.quizListAnswerImages.add(0, imageArr2d_a)
+
         quizListAdapter?.notifyDataSetChanged()
+
     }
     fun putQuiz(position: Int, questions: ArrayList<Question>?, title: String?, duringTime: Int, status: String?, startDateTime: String?, endDateTime: String?){
         QuizList[position].title = title
@@ -134,7 +136,9 @@ class SingleQuizPage : Fragment() {
         QuizList.removeAt(position)
         quizListQuestionImages.removeAt(position)
         quizListAnswerImages.removeAt(position)
+
         quizListAdapter?.notifyDataSetChanged()
+
 //        quizListAdapter.notifyItemChanged(position)
 //        for(index in position until QuizList.size){
 //            quizListAdapter.notifyItemChanged(index)

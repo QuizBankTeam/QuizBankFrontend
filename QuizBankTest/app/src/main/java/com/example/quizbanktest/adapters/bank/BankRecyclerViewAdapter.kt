@@ -39,7 +39,6 @@ class BankRecyclerViewAdapter(var context: Context,
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         holder.tvBankTitle.text = questionBankModels[position].title
-        holder.tvBankType.text = questionBankModels[position].questionBankType
         holder.tvBankCreatedDate.text = questionBankModels[position].createdDate
 
     }
@@ -82,13 +81,11 @@ class BankRecyclerViewAdapter(var context: Context,
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
         var tvBankTitle: TextView
-        var tvBankType: TextView
         var tvBankCreatedDate: TextView
         var btnEditBank: ImageButton
 
         init {
             tvBankTitle = itemView.findViewById(R.id.bank_title)
-            tvBankType = itemView.findViewById(R.id.bank_type)
             tvBankCreatedDate = itemView.findViewById(R.id.bank_createdDate)
             btnEditBank = itemView.findViewById(R.id.btn_edit)
 
@@ -98,7 +95,7 @@ class BankRecyclerViewAdapter(var context: Context,
                     recyclerViewInterface.onItemClick(position)
                 }
             }
-            btnEditBank.setOnClickListener { recyclerViewInterface.settingCard() }
+            btnEditBank.setOnClickListener { recyclerViewInterface.settingCard(adapterPosition) }
         }
     }
 }

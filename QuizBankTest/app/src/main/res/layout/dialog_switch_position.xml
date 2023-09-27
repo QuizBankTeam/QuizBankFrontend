@@ -1,26 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="280dp"
-    android:layout_height="wrap_content"
-    android:maxHeight="500dp"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="10dp">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:maxHeight="500dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/switchBankRecyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".activity.BankActivity">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/switchBankRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".activity.BankActivity">
 
-    </LinearLayout>
+            </androidx.recyclerview.widget.RecyclerView>
 
-</com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_confirm_button"
+        android:clickable="true"
+        android:padding="5dp"
+        android:text="確定更改"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
+</RelativeLayout>

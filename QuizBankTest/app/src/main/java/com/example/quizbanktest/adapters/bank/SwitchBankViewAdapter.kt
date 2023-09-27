@@ -20,25 +20,37 @@ class SwitchBankViewAdapter(
     var activity: AppCompatActivity,
     var questionBanks: ArrayList<QuestionBankModel>,
     var recyclerViewInterface: RecyclerViewInterface
-) : RecyclerView.Adapter<BankRecyclerViewAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<SwitchBankViewAdapter.MyViewHolder>() {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): BankRecyclerViewAdapter.MyViewHolder {
+    var selectedPosition = -1
+    var lastSelectedPosition = -1
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         try {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.item_switchposition_card, parent, false)
-            return BankRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface)
+            return MyViewHolder(view, recyclerViewInterface)
         } catch (e: Exception) {
             Log.e("BankRecyclerViewAdapter", "onCreateView", e)
             throw e
         }
     }
 
-    override fun onBindViewHolder(holder: BankRecyclerViewAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.tvBankTitle.text = questionBanks[position].title
 
+        holder.itemView.setOnClickListener {
+            lastSelectedPosition = selectedPosition
+            selectedPosition = holder.adapterPosition
+            notifyItemChanged(lastSelectedPosition)
+            notifyItemChanged(selectedPosition)
+            recyclerViewInterface.switchBank(position)
+        }
+        if (selectedPosition == holder.adapterPosition) {
+            holder.cardView.strokeColor  = Color.parseColor("#c6fa73")
+        } else {
+            holder.cardView.strokeColor = Color.parseColor("#ffffff")
+        }
     }
 
     override fun getItemCount(): Int {
@@ -47,25 +59,24 @@ class SwitchBankViewAdapter(
 
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) :
         RecyclerView.ViewHolder(itemView) {
-        private var tvBankTitle: TextView
-        private var cardView: MaterialCardView
-        private var isClicked: Boolean = false
+        var tvBankTitle: TextView
+        var cardView: MaterialCardView
+        var isClicked: Boolean = false
+
+        var selectedPosition = -1
+        var lastSelectedPosition = -1
 
         init {
             tvBankTitle = itemView.findViewById(R.id.tv_bankTitle)
             cardView = itemView.findViewById(R.id.cardView)
 
-            itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    if (!isClicked) {
-                        cardView.strokeColor = Color.parseColor("#c6fa73")
-                        recyclerViewInterface.switchBank(position)
-                    } else {
-                        cardView.strokeColor = Color.parseColor("#ffffff")
-                    }
-                }
-            }
+//            itemView.setOnClickListener {
+//                val position = adapterPosition
+//                if (position != RecyclerView.NO_POSITION) {
+//                    lastSelectedPosition = selectedPosition // give the old position to the variable
+//                    selectedPosition = adapterPosition  // refresh the selected position
+//                }
+//            }
         }
     }
 

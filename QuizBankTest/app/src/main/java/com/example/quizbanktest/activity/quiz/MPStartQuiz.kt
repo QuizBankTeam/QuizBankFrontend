@@ -50,6 +50,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private lateinit var quizMembers: ArrayList<String>
     private lateinit var questionList : ArrayList<Question>
     private lateinit var userAnsOptions : ArrayList<ArrayList<String>>
+
     private lateinit var lobbyDialog: AlertDialog
     private var hasStart = false
     private var hasJoin = false
@@ -59,6 +60,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private var isCreator = false
     private lateinit var currentQuiz: Quiz
     private var questionImageArr = ArrayList< ArrayList<Bitmap> >()
+
     private lateinit var answerImageArr: ArrayList< ArrayList<Bitmap> >
     private var currentAtQuestion: Int = 0
     private var currentSelection = ArrayList<Int>() //被選過的option
@@ -70,9 +72,11 @@ class  MPStartQuiz: AppCompatActivity() {
     private var singleQuestionScore = 0
     private lateinit var countDownTimer: CountDownTimer
     private val roomNumber:Int = (100000 .. 999999).random()
+
     private lateinit var player : MediaPlayer
     private lateinit var imageAdapter: ImageVPAdapter
     private lateinit var socket: Socket
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startQuizBinding = ActivityMpStartQuizBinding.inflate(layoutInflater)
@@ -329,7 +333,9 @@ class  MPStartQuiz: AppCompatActivity() {
 
     private fun quizEnd(){
         val intent = Intent()
+
         finishQuiz()
+
         player.stop()
         for(i in currentAtQuestion until questionList.size){
             val tmpAnsOptions = ArrayList<String>()
@@ -425,10 +431,12 @@ class  MPStartQuiz: AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("確定退出考試?")
         builder.setPositiveButton("確定") { dialog, which ->
+
             if (::countDownTimer.isInitialized) {
                 countDownTimer.cancel()
             }
 //            player.stop()
+
             finish()
         }
         builder.setNegativeButton("取消", null)

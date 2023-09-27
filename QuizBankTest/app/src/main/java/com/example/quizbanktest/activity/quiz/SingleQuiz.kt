@@ -383,6 +383,7 @@ class SingleQuiz: AppCompatActivity() {
         differentFromQuizList = false
         this.quizIndex = quizIndex
         this.duringTime = duringTime
+
         if(quizType==Constants.quizTypeSingle){
             quizQuestionImages = SingleQuizPage.Companion.quizListQuestionImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
             quizAnswerImages = SingleQuizPage.Companion.quizListAnswerImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
@@ -390,6 +391,7 @@ class SingleQuiz: AppCompatActivity() {
             quizQuestionImages = MultiQuizPage.Companion.quizListQuestionImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
             quizAnswerImages = MultiQuizPage.Companion.quizListAnswerImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
         }
+
         quizBinding.quizTitle.text = title
         quizBinding.questionNumber.text = String.format( getString(R.string.Con2word),
             getString(R.string.Question_CN), String.format(getString(R.string.brackets_with_int), questionlist.size) )

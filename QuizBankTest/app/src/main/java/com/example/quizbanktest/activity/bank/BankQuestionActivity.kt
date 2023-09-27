@@ -11,7 +11,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
@@ -24,6 +23,7 @@ import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
 import com.example.quizbanktest.adapters.bank.SwitchBankViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
+import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
@@ -38,18 +38,22 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var questionAdapter: QuestionRecyclerViewAdapter
     private lateinit var switchBankRecyclerView: RecyclerView
     private lateinit var switchBankAdapter: SwitchBankViewAdapter
+    private lateinit var switchPositionDialog : Dialog
 
     // Question variable
     private var questionModels = ArrayList<QuestionModel>()
+    private var allQuestionBanks = ArrayList<QuestionBankModel>()
 
     // Variable
     private lateinit var bankTitle: String
     private lateinit var bankId: String
+    private lateinit var bankIdArray: ArrayList<String>
     private var toast: Toast? = null
     private lateinit var newQuestionTitle: String
     private lateinit var newQuestionType: String
     private lateinit var newQuestionDate: String
     private var isModified: Boolean = false
+    private var switchTargetPosition = -1
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,12 +79,12 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         questionRecyclerView.adapter = questionAdapter
         // add dividing line
-        questionRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                DividerItemDecoration.VERTICAL
-            )
-        )
+//        questionRecyclerView.addItemDecoration(
+//            DividerItemDecoration(
+//                this,
+//                DividerItemDecoration.VERTICAL
+//            )
+//        )
         questionRecyclerView.layoutManager = LinearLayoutManager(this)
 
         val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(questionRecyclerView) {
@@ -215,47 +219,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         }
     }
 
-    override fun settingCard() {
-        val settingQuestionDialog = Dialog(this)
-        settingQuestionDialog.setContentView(R.layout.dialog_setting_panel)
-        settingQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        settingQuestionDialog.window?.setGravity(Gravity.CENTER)
-        settingQuestionDialog.setCanceledOnTouchOutside(true)
-        settingQuestionDialog.setCancelable(true)
-        settingQuestionDialog.show()
-
-        val btnSwitchPosition = settingQuestionDialog.findViewById<TextView>(R.id.tv_switch_position)
-
-        btnSwitchPosition.setOnClickListener {
-            settingQuestionDialog.dismiss()
-
-            val switchPositionDialog = Dialog(this)
-            switchPositionDialog.setContentView(R.layout.dialog_switch_position)
-            switchPositionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            switchPositionDialog.window?.setGravity(Gravity.CENTER)
-
-            ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
-                onSuccess = { questionBanks ->
-                    Log.e("BankQuestionActivity", "There are ${questionBanks.size} banks available")
-                    switchBankRecyclerView = switchPositionDialog.findViewById(R.id.switchBankRecyclerView)
-                    switchBankAdapter = SwitchBankViewAdapter(this, this, questionBanks, this)
-                    switchBankRecyclerView.adapter = switchBankAdapter
-                    switchBankRecyclerView.addItemDecoration (
-                        DividerItemDecoration (
-                            this,
-                            DividerItemDecoration.VERTICAL
-                        )
-                    )
-                },
-                onFailure = { errorMessage ->
-                    Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
-                }
-            )
-
-            switchPositionDialog.show()
-        }
-    }
-
     @SuppressLint("UnsafeOptInUsageError")
     fun pullExit() {
         if (BuildCompat.isAtLeastT()) {
@@ -367,8 +330,74 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         startActivity(QuestionDetailActivity)
     }
 
-    override fun switchBank(position: Int) {
-        //TODO
+    // Here's switching question to another bank after clicking confirm button
+    override fun switchBank(newBankPosition: Int) {
+        val btnSubmit = switchPositionDialog.findViewById<TextView>(R.id.btn_submit)
+        btnSubmit.visibility = View.VISIBLE
+        btnSubmit.setOnClickListener {
+            switchPositionDialog.dismiss()
+            ConstantsQuestionFunction.moveQuestion(
+                this, questionModels[switchTargetPosition]._id, allQuestionBanks[newBankPosition]._id,
+                onSuccess = {
+                    showSuccessSnackBar("成功")
+                },
+                onFailure = {
+                    showErrorSnackBar("無效")
+                }
+            )
+        }
+    }
+
+    override fun settingCard(position: Int) {
+        switchTargetPosition = position
+
+        val settingQuestionDialog = Dialog(this)
+        settingQuestionDialog.setContentView(R.layout.dialog_setting_panel)
+        settingQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        settingQuestionDialog.window?.setGravity(Gravity.CENTER)
+        settingQuestionDialog.setCanceledOnTouchOutside(true)
+        settingQuestionDialog.setCancelable(true)
+        settingQuestionDialog.show()
+
+        val btnSwitchPosition = settingQuestionDialog.findViewById<TextView>(R.id.tv_switch_position)
+
+        // Show up switch bank dialog
+        btnSwitchPosition.setOnClickListener {
+            settingQuestionDialog.dismiss()
+
+            switchPositionDialog = Dialog(this)
+            switchPositionDialog.setContentView(R.layout.dialog_switch_position)
+            switchPositionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            switchPositionDialog.window?.setGravity(Gravity.CENTER)
+
+            // Get all bank to initialize recyclerview with filling bank name
+            ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
+                onSuccess = { questionBanks ->
+                    Log.e("BankQuestionActivity", "There are ${questionBanks.size} banks available")
+                    allQuestionBanks = questionBanks
+                    switchBankRecyclerView = switchPositionDialog.findViewById(R.id.switchBankRecyclerView)
+                    switchBankAdapter = SwitchBankViewAdapter(this, this, questionBanks, this)
+                    val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(applicationContext)
+                    switchBankRecyclerView.layoutManager = mLayoutManager
+                    switchBankRecyclerView.adapter = switchBankAdapter
+                    switchBankRecyclerView.addItemDecoration (
+                        DividerItemDecoration (
+                            this,
+                            DividerItemDecoration.VERTICAL
+                        )
+                    )
+                },
+                onFailure = { errorMessage ->
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            )
+            switchPositionDialog.show()
+
+        }
+    }
+
+    override fun updateOption(position: Int, newOption: String) {
+        // No need to define this function, this function is for question detail activity
     }
 
 }

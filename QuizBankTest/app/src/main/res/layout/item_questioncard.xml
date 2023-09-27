@@ -28,25 +28,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/question_image"
-            android:hint="This is title"
+            android:hint="Title"
             android:maxWidth="175dp"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/question_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:hint="This is question type"
-            android:singleLine="true"
-            android:textAlignment="textEnd"
-            android:textColor="#606060"
-            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/question_createdDate"
@@ -57,17 +43,33 @@
             android:layout_toEndOf="@id/question_image"
             android:hint="YYYY/MM/DD"
             android:textColor="#606060"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/question_type"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="30dp"
+            android:layout_toStartOf="@id/btn_edit"
+            android:gravity="center"
+            android:maxWidth="100dp"
+            android:minWidth="50dp"
+            android:padding="5dp"
+            android:text="type"
+            android:singleLine="true"
+            android:textColor="#606060"
+            android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit_pen"
-            android:background="@null"
-            android:layout_marginEnd="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_below="@id/question_type"/>
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:src="@drawable/ic_edit_pen" />
 
     </RelativeLayout>
 
