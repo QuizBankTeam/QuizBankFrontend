@@ -39,17 +39,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val showEmptyBankImage : ImageView = findViewById(R.id.show_empty_bank_list)
+        val showEmptyWrongQuizRecordImage : ImageView = findViewById(R.id.show_empty_wrong_list)
         showProgressDialog("處理資料中請稍等")
         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
             onSuccess = { questionBanks ->
                 setupRecentRecyclerView(questionBanks)
                 setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
                 hideProgressDialog()
-//                showEmptyBankImage.visibility = View.GONE
+                showEmptyBankImage.visibility = View.GONE
             },
             onFailure = { errorMessage ->
                 hideProgressDialog()
-                if(errorMessage.equals("empty")){
+                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+                if(errorMessage == "Request failed with status code "){
+                    Log.e("empty","eeeeeeeeeeeeeefjalsjfla;sjfl;asjf")
                     showEmptyBankImage.visibility = View.VISIBLE
                 }else{
                     showErrorSnackBar("題庫資料取得錯誤")
@@ -59,7 +62,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         )
         val quizRecordType = Constants.quizTypeSingle
         ConstantsQuizRecord.getAllQuizRecords(this, quizRecordType, onSuccess = { returnRecordList->
-            setupWrongListRecyclerView(returnRecordList)
+            if(returnRecordList.size == 0){
+                showEmptyWrongQuizRecordImage.visibility = View.VISIBLE
+            }else{
+                showEmptyWrongQuizRecordImage.visibility = View.GONE
+                setupWrongListRecyclerView(returnRecordList)
+            }
+
         }, onFailure = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })

@@ -126,6 +126,7 @@
                         android:id="@+id/line"
                         android:layout_width="match_parent"
                         android:layout_height="2px"
+                        android:visibility="visible"
                         android:background="@color/colorPrimaryDark"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -168,6 +169,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2px"
+                        android:visibility="visible"
                         android:background="@color/colorPrimaryDark"/>
 
                     <androidx.recyclerview.widget.RecyclerView
