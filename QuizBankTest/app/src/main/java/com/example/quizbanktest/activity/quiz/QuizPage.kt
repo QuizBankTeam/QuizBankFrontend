@@ -35,7 +35,13 @@ class QuizPage: BaseActivity() {
         setContentView(quizPageBinding.root)
 
         quizPageBinding.quizAdd.setOnClickListener {
-            addQuiz(Constants.quizTypeSingle)
+            if(quizPageBinding.quizPager.currentItem==0) {
+                Log.d("item is 0", "")
+                addQuiz(Constants.quizTypeSingle)
+            }else if(quizPageBinding.quizPager.currentItem==1){
+                addQuiz(Constants.quizTypeCasual)
+                Log.d("item is 1", "")
+            }
         }
         quizPageBinding.quizRecord.setOnClickListener {
             val intent = Intent()
@@ -84,7 +90,7 @@ class QuizPage: BaseActivity() {
                     fragmentAdapter.getSPFragment().deleteQuiz(requestCode)
 
                 }else if(quizType == Constants.quizTypeCasual){
-                    fragmentAdapter.getMPFragment()
+                    fragmentAdapter.getMPFragment().deleteQuiz(requestCode)
                 }
             }
         }
@@ -111,13 +117,15 @@ class QuizPage: BaseActivity() {
     }
 
     private fun addQuiz(addedQuizType: String){
-        val quizAdd = QuizAdd()
+        val quizAdd = QuizAdd(addedQuizType)
         val transaction = supportFragmentManager.beginTransaction()
         quizAdd.setReturnToQuizList(object : QuizAdd.ReturnToQuizList{
             override fun backToQuiz(postQuiz: Quiz?, isConfirm: Boolean) {
                 if(isConfirm){
                     if(addedQuizType == Constants.quizTypeSingle) {
                         fragmentAdapter.getSPFragment().postQuiz(postQuiz!!)
+                    }else if(addedQuizType == Constants.quizTypeCasual){
+                        fragmentAdapter.getMPFragment().postQuiz(postQuiz!!)
                     }
                 }
                 val finishTransaction = supportFragmentManager.beginTransaction()
