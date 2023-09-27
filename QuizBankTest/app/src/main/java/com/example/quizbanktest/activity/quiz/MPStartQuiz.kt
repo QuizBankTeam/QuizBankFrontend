@@ -501,7 +501,9 @@ class  MPStartQuiz: AppCompatActivity() {
         val data0 = args[0]
         socket.on("startQuiz", startReturn)
         Log.d("join successful", "user count is $data0")
-        Toast.makeText(this, "join successful ", Toast.LENGTH_SHORT).show()
+        runOnUiThread {
+            Toast.makeText(this, "join successful ", Toast.LENGTH_SHORT).show()
+        }
     }
     private val startReturn = Emitter.Listener { args->
         Log.d("start successful",args.toString())
