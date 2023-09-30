@@ -30,9 +30,10 @@ import com.example.quizbanktest.models.Quiz
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuiz
 import io.socket.client.IO
+import io.socket.client.Manager
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
-import org.json.JSONObject
+import io.socket.engineio.client.Transport
 import java.net.URISyntaxException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -50,7 +51,6 @@ class  MPStartQuiz: AppCompatActivity() {
     private lateinit var quizMembers: ArrayList<String>
     private lateinit var questionList : ArrayList<Question>
     private lateinit var userAnsOptions : ArrayList<ArrayList<String>>
-
     private lateinit var lobbyDialog: AlertDialog
     private var hasStart = false
     private var hasJoin = false
@@ -61,6 +61,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private lateinit var currentQuiz: Quiz
     private var questionImageArr = ArrayList< ArrayList<Bitmap> >()
 
+    private var eventNum = 1
     private lateinit var answerImageArr: ArrayList< ArrayList<Bitmap> >
     private var currentAtQuestion: Int = 0
     private var currentSelection = ArrayList<Int>() //被選過的option
@@ -71,8 +72,11 @@ class  MPStartQuiz: AppCompatActivity() {
     private var currentQuestionScore = 0
     private var singleQuestionScore = 0
     private lateinit var countDownTimer: CountDownTimer
-    private val roomNumber:Int = (100000 .. 999999).random()
-
+    private lateinit var roomNumber:TextView
+    private lateinit var join_check:TextView
+    private lateinit var connect_check:TextView
+    private lateinit var disconnect_check:TextView
+    private lateinit var error_connect_check:TextView
     private lateinit var player : MediaPlayer
     private lateinit var imageAdapter: ImageVPAdapter
     private lateinit var socket: Socket
@@ -81,10 +85,16 @@ class  MPStartQuiz: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         startQuizBinding = ActivityMpStartQuizBinding.inflate(layoutInflater)
         setContentView(startQuizBinding.root)
+        startQuizBinding.startQuizContainer.visibility  = View.GONE
+        val opts = io.socket.client.IO.Options()
+//        opts.host = "192.168.1.116"
+        opts.transports = arrayOf("websocket")
+//        opts.transportOptions
+//        opts.rememberUpgrade = false
+        socket = IO.socket("https://quizbank.soselab.tw/funnyQuiz", opts)
+
         init()
-
-
-
+        player = MediaPlayer.create(this, R.raw.start_quiz_music)
 
 
         //查看考試中成員的分數
@@ -393,15 +403,30 @@ class  MPStartQuiz: AppCompatActivity() {
         val roomNumberTextView:TextView  = v.findViewById(R.id.room_number)
         val copyQuizID: Button = v.findViewById(R.id.copy_quizID)
         val quizMembers: TextView = v.findViewById(R.id.Quiz_members)
+        val exitQuiz: ImageButton = v.findViewById(R.id.exit_quiz)
+        val j_check: TextView = v.findViewById(R.id.join_check)
+        val conn_check: TextView = v.findViewById(R.id.connection_check)
+        val dis_check: TextView = v.findViewById(R.id.disconnect_check)
+        val connErr_check: TextView = v.findViewById(R.id.connect_error_check)
 
+
+        quizMembers.text = Constants.userId + "(你)"
+        roomNumber = roomNumberTextView
+        roomNumber.text = quizId
+        join_check = j_check
+        connect_check = conn_check
+        disconnect_check = dis_check
+        error_connect_check = connErr_check
+        exitQuiz.setOnClickListener {
+            exitQuiz()
+        }
         copyQuizID.setOnClickListener {
             val cm: ClipboardManager = this.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val myClip = ClipData.newPlainText("邀請碼", quizId)
             cm.setPrimaryClip(myClip)
-            Toast.makeText(this, "成功複製邀請碼", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "成功複製邀請碼", Toast.LENGTH_SHORT).show()
         }
-        quizMembers.text = Constants.userId + "(你)"
-        roomNumberTextView.text = quizId
+
 
         if(isCreator){
             quizStart.setOnClickListener {
@@ -413,7 +438,7 @@ class  MPStartQuiz: AppCompatActivity() {
         }
     }
     private fun startMusic(){
-        player = MediaPlayer.create(this, R.raw.start_quiz_music)
+
         player.setOnCompletionListener {
             try {
                 player.stop()
@@ -423,7 +448,7 @@ class  MPStartQuiz: AppCompatActivity() {
                 Log.d("player error", e.toString())
             }
         }
-        player.setVolume(6.0f, 6.0f)
+        player.setVolume(30.0f, 30.0f)
         player.start()
 
     }
@@ -431,12 +456,14 @@ class  MPStartQuiz: AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("確定退出考試?")
         builder.setPositiveButton("確定") { dialog, which ->
-
             if (::countDownTimer.isInitialized) {
                 countDownTimer.cancel()
             }
-//            player.stop()
-
+            if(this::player.isInitialized){
+                player.stop()
+            }
+            startQuizBinding.startQuizContainer.visibility  = View.GONE
+            lobbyDialog.dismiss()
             finish()
         }
         builder.setNegativeButton("取消", null)
@@ -459,9 +486,12 @@ class  MPStartQuiz: AppCompatActivity() {
     private fun connectSocket(){
         val connectURL = Constants.BASE_URL + "funnyQuiz"
         try{
-            socket = IO.socket("https://quizbank.soselab.tw/funnyQuiz")
             socket.connect()
+            socket.on(Socket.EVENT_DISCONNECT, disconnectReturn)
+            socket.on(Socket.EVENT_CONNECT_ERROR, connectErrorReturn)
             socket.on(Socket.EVENT_CONNECT, connectReturn)
+
+            Log.d("now connecting", "")
         } catch (e: URISyntaxException) {
             Log.d("error in connecting occur\n\n\n\n\n", e.toString())
             e.printStackTrace()
@@ -469,30 +499,43 @@ class  MPStartQuiz: AppCompatActivity() {
     }
     private fun joinQuiz(){
         Log.d("now joining", "")
-        socket.emit("join_quiz", quizId, Constants.userId)
         socket.on("joinQuiz", joinReturn)
+        socket.emit("join_quiz", quizId, Constants.userId)
     }
     private fun startQuiz(){
         Log.d("now starting quiz", "")
-        socket.emit("start_quiz", quizId, questionList[0]._id, questionList.size)
         socket.on("startQuiz", startReturn)
+        socket.emit("start_quiz", quizId, questionList[0]._id, questionList.size)
     }
     private fun finishQuestion(){
+        Log.d("sending finishing question","")
+        val nextId = if((currentAtQuestion+1) < questionList.size) questionList[currentAtQuestion+1]._id else null
         socket.emit("finish_question", quizId, Constants.userId, userAnsOptions[currentAtQuestion], currentQuestionScore,
-            questionList[currentAtQuestion+1]._id)
+            nextId)
     }
     private fun timeOut(){
-        socket.emit("timeout", quizId, Constants.userId, questionList[currentAtQuestion+1]._id)
+        Log.d("sending time out","")
+        val nextId = if((currentAtQuestion+1) < questionList.size) questionList[currentAtQuestion+1]._id else null
+        socket.emit("timeout", quizId, Constants.userId, nextId)
     }
     private fun finishQuiz(){
         socket.emit("finish_quiz", quizId)
     }
     private fun returnQuizState(){
+        Log.d("now getting quizState", "")
         socket.emit("return_quiz_state", quizId)
+        socket.on("returnQuizState", quizStateReturn)
     }
     private val connectReturn = Emitter.Listener {args->
         Log.d("connect successful",args.toString())
+        for(i in args.indices){
+            Log.d("connect return $i is", args[i].toString())
+        }
+        runOnUiThread {
+            connect_check.text = "偵測到成功連接 ${eventNum++}"
+        }
 //        if(!hasJoin){
+
             joinQuiz()
 //        }
         hasJoin = true
@@ -502,19 +545,20 @@ class  MPStartQuiz: AppCompatActivity() {
         socket.on("startQuiz", startReturn)
         Log.d("join successful", "user count is $data0")
         runOnUiThread {
-            Toast.makeText(this, "join successful ", Toast.LENGTH_SHORT).show()
+            join_check.text = "偵測到成功加入考試 ${eventNum++}"
         }
     }
     private val startReturn = Emitter.Listener { args->
         Log.d("start successful",args.toString())
-        if(hasStart) {
+        if(!hasStart) {
             socket.on("finishQuestion", finishQuestionReturn)
             socket.on("timeout", timeOutReturn)
             socket.on("finishQuiz", finishQuizReturn)
             socket.on("returnQuizState", quizStateReturn)
             runOnUiThread {
-                Log.d("start successful 1", args.toString())
-//                startMusic()
+                Log.d("start successful", args.toString())
+                startQuizBinding.startQuizContainer.visibility  = View.VISIBLE
+                startMusic()
                 setQuestion()
                 lobbyDialog.dismiss()
             }
@@ -525,7 +569,10 @@ class  MPStartQuiz: AppCompatActivity() {
         Log.d("finish Question successful",args.toString())
         for(i in args.indices){
             Log.d("return finish question $i is", args[i].toString())
-            isNext = true
+            isNext = args[i] as Boolean
+        }
+        runOnUiThread {
+            Toast.makeText(this, "finish question return", Toast.LENGTH_SHORT).show()
         }
     }
     private val timeOutReturn = Emitter.Listener { args->
@@ -536,11 +583,34 @@ class  MPStartQuiz: AppCompatActivity() {
     }
     private val finishQuizReturn = Emitter.Listener { args->
         Log.d("finish Quiz successful", args.toString())
+        runOnUiThread {
+            Toast.makeText(this, "finish quiz return ", Toast.LENGTH_SHORT).show()
+        }
     }
     private val quizStateReturn = Emitter.Listener { args->
         Log.d("quiz state return successful",args.toString())
         for(i in args.indices){
             Log.d("return quiz state $i is", args[i].toString())
+        }
+    }
+    private val disconnectReturn = Emitter.Listener { args->
+        Log.d("disconnect return ", "")
+        for(i in args.indices){
+            Log.d("disconnect return $i is", args[i].toString())
+        }
+        runOnUiThread {
+            disconnect_check.text = "偵測到斷線 ${eventNum++}"
+//                Toast.makeText(this, "connect error ${args[i].toString()}", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private val connectErrorReturn = Emitter.Listener { args->
+        Log.d("connect error return ","")
+        for(i in args.indices){
+            Log.d("connect error return $i is", args[i].toString())
+        }
+        runOnUiThread {
+            error_connect_check.text = "偵測到連接錯誤 ${eventNum++}"
+//                Toast.makeText(this, "connect error ${args[i].toString()}", Toast.LENGTH_SHORT).show()
         }
     }
     override fun onDestroy() {
