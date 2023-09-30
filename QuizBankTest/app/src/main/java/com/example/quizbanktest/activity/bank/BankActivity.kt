@@ -86,25 +86,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
         bankRecyclerView.adapter = bankAdapter
         bankRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(bankRecyclerView) {
-            override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
-                var buttons = listOf<UnderlayButton>()
-                val deleteButton = deleteButton(position)
-                val settingButton = settingButton(position)
-                buttons = listOf(deleteButton, settingButton)
-//                val archiveButton = archiveButton(position)
-//                when (position) {
-//                    1 -> buttons = listOf(deleteButton)
-//                    2 -> buttons = listOf(deleteButton, markAsUnreadButton)
-//                    3 -> buttons = listOf(deleteButton, markAsUnreadButton, archiveButton)
-//                    else -> Unit
-//                }
-                return buttons
-            }
-        })
-
-        itemTouchHelper.attachToRecyclerView(bankRecyclerView)
     }
 
     private fun addBank() {
@@ -147,106 +128,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                         hideProgressDialog()
                     }
                 )
-            }
-        }
-    }
-
-    private fun toast(text: String) {
-        toast?.cancel()
-        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
-        toast?.show()
-    }
-
-    private fun deleteButton(position: Int): SwipeHelper.UnderlayButton {
-        return SwipeHelper.UnderlayButton(
-            this,
-            "刪除",
-            14.0f,
-            android.R.color.holo_red_light,
-            object : SwipeHelper.UnderlayButtonClickListener {
-                override fun onClick() {
-                    val deleteWarningDialog = Dialog(this@BankActivity)
-                    deleteWarningDialog.setContentView(R.layout.dialog_delete_warning)
-                    deleteWarningDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    deleteWarningDialog.window?.setGravity(Gravity.CENTER)
-                    deleteWarningDialog.show()
-
-                    val btnConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_confirm)
-                    val btnCancel = deleteWarningDialog.findViewById<TextView>(R.id.btn_cancel)
-
-                    btnConfirm.setOnClickListener {
-                        bankAdapter.deleteItem(position)
-                        toast("Deleted item $position")
-                        deleteWarningDialog.dismiss()
-                    }
-                    btnCancel.setOnClickListener {
-                        deleteWarningDialog.dismiss()
-                    }
-                }
-            })
-    }
-
-    private fun settingButton(position: Int): SwipeHelper.UnderlayButton {
-        return SwipeHelper.UnderlayButton(
-            this,
-            "編輯",
-            14.0f,
-            android.R.color.holo_green_light,
-            object : SwipeHelper.UnderlayButtonClickListener {
-                override fun onClick() {
-                    toast("Setting item $position")
-                    editBank(position)
-                }
-            })
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun editBank(position: Int) {
-        val editBankDialog = Dialog(this)
-        editBankDialog.setContentView(R.layout.dialog_bank_card)
-        editBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        editBankDialog.window?.setGravity(Gravity.CENTER)
-        editBankDialog.show()
-
-        val etBankTitle = editBankDialog.findViewById<EditText>(R.id.bank_title)
-        val etBankType = editBankDialog.findViewById<EditText>(R.id.bank_type)
-        val etBankDate = editBankDialog.findViewById<EditText>(R.id.bank_createdDate)
-        val btnSubmit = editBankDialog.findViewById<TextView>(R.id.btn_submit)
-
-        etBankTitle.setText(questionBankModels[position].title)
-        etBankType.setText(questionBankModels[position].questionBankType)
-        etBankDate.setText(questionBankModels[position].createdDate)
-
-        etBankType.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                newBankType = s.toString()
-                btnSubmit.visibility = View.VISIBLE
-                isModified = true
-            }
-        })
-
-        etBankDate.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                newBankDate = s.toString()
-                btnSubmit.visibility = View.VISIBLE
-                isModified = true
-            }
-        })
-
-        btnSubmit.setOnClickListener {
-            if (isModified) {
-                val data = QuestionBankModel(
-                    questionBankModels[position]._id, newBankTitle,
-                    newBankType, newBankDate, questionBankModels[position].members,
-                    questionBankModels[position].originateFrom, questionBankModels[position].creator
-                )
-                Log.e("BankActivity", "new data = $data")
-                bankAdapter.setItem(position, data)
-                editBankDialog.dismiss()
             }
         }
     }
@@ -371,10 +252,14 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         settingBankDialog.setContentView(R.layout.dialog_setting_panel)
         settingBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         settingBankDialog.window?.setGravity(Gravity.CENTER)
+        settingBankDialog.setCancelable(false)
         settingBankDialog.findViewById<TextView>(R.id.tv_switch_position).visibility = View.GONE
+        settingBankDialog.findViewById<View>(R.id.first_dividing_line).visibility = View.GONE
         settingBankDialog.show()
 
         val btnChangeTitle = settingBankDialog.findViewById<TextView>(R.id.tv_change_title)
+        val btnDelete = settingBankDialog.findViewById<TextView>(R.id.tv_delete)
+        val btnCancel = settingBankDialog.findViewById<TextView>(R.id.tv_cancel)
 
         // Show up change title dialog
         btnChangeTitle.setOnClickListener {
@@ -437,6 +322,29 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             }
             changeTitleDialog.setOnDismissListener { isModified = false }
         }
+
+        btnDelete.setOnClickListener {
+            val deleteWarningDialog = Dialog(this@BankActivity)
+            deleteWarningDialog.setContentView(R.layout.dialog_delete_warning)
+            deleteWarningDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            deleteWarningDialog.window?.setGravity(Gravity.CENTER)
+            deleteWarningDialog.show()
+
+            val btnConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_confirm)
+            val btnCancelConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_cancel)
+
+            btnConfirm.setOnClickListener {
+                bankAdapter.deleteItem(position)
+                showSuccessSnackBar("刪除成功")
+                deleteWarningDialog.dismiss()
+                settingBankDialog.dismiss()
+            }
+            btnCancelConfirm.setOnClickListener {
+                deleteWarningDialog.dismiss()
+            }
+        }
+
+        btnCancel.setOnClickListener { settingBankDialog.dismiss() }
     }
 
     override fun updateOption(position: Int, newOption: String) {

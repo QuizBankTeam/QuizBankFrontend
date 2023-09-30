@@ -21,6 +21,7 @@
             android:textSize="20sp" />
 
         <View
+            android:id="@+id/first_dividing_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/secondary_text_color"/>
@@ -40,11 +41,12 @@
             android:background="@color/secondary_text_color"/>
 
         <TextView
+            android:id="@+id/tv_delete"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:clickable="true"
             android:gravity="center"
-            android:text="待開放"
+            android:text="刪除"
             android:textSize="20sp" />
 
         <View
@@ -53,11 +55,12 @@
             android:background="@color/secondary_text_color"/>
 
         <TextView
+            android:id="@+id/tv_cancel"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:clickable="true"
             android:gravity="center"
-            android:text="待開放"
+            android:text="取消"
             android:textSize="20sp" />
 
     </TableLayout>

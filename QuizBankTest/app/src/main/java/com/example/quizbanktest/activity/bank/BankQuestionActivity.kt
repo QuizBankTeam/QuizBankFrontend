@@ -79,144 +79,8 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         questionAdapter = QuestionRecyclerViewAdapter(this, this, questionModels, this)
 
         questionRecyclerView.adapter = questionAdapter
-        // add dividing line
-//        questionRecyclerView.addItemDecoration(
-//            DividerItemDecoration(
-//                this,
-//                DividerItemDecoration.VERTICAL
-//            )
-//        )
         questionRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(questionRecyclerView) {
-            override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
-                var buttons = listOf<UnderlayButton>()
-                val deleteButton = deleteButton(position)
-                val settingButton = settingButton(position)
-                buttons = listOf(deleteButton, settingButton)
-//                val archiveButton = archiveButton(position)
-//                when (position) {
-//                    1 -> buttons = listOf(deleteButton)
-//                    2 -> buttons = listOf(deleteButton, markAsUnreadButton)
-//                    3 -> buttons = listOf(deleteButton, markAsUnreadButton, archiveButton)
-//                    else -> Unit
-//                }
-                return buttons
-            }
-        })
-
-        itemTouchHelper.attachToRecyclerView(questionRecyclerView)
-    }
-
-    private fun toast(text: String) {
-        toast?.cancel()
-        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
-        toast?.show()
-    }
-
-    private fun deleteButton(position: Int): SwipeHelper.UnderlayButton {
-        return SwipeHelper.UnderlayButton(
-            this,
-            "刪除",
-            14.0f,
-            android.R.color.holo_red_light,
-            object : SwipeHelper.UnderlayButtonClickListener {
-                override fun onClick() {
-                    val deleteWarningDialog = Dialog(this@BankQuestionActivity)
-                    deleteWarningDialog.setContentView(R.layout.dialog_delete_warning)
-                    deleteWarningDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    deleteWarningDialog.window?.setGravity(Gravity.CENTER)
-                    deleteWarningDialog.show()
-
-                    val btnConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_confirm)
-                    val btnCancel = deleteWarningDialog.findViewById<TextView>(R.id.btn_cancel)
-
-                    btnConfirm.setOnClickListener {
-                    questionAdapter.deleteItem(position)
-                        toast("Deleted item $position")
-                        deleteWarningDialog.dismiss()
-                    }
-                    btnCancel.setOnClickListener {
-                        deleteWarningDialog.dismiss()
-                    }
-                }
-            })
-    }
-
-    private fun settingButton(position: Int) : SwipeHelper.UnderlayButton {
-        return SwipeHelper.UnderlayButton(
-            this,
-            "編輯",
-            14.0f,
-            android.R.color.holo_green_light,
-            object : SwipeHelper.UnderlayButtonClickListener {
-                override fun onClick() {
-                    toast("Setting item $position")
-                    editQuestion(position)
-                }
-            })
-    }
-
-    private fun editQuestion(position: Int) {
-        val editQuestionDialog = Dialog(this)
-        editQuestionDialog.setContentView(R.layout.dialog_question_card)
-        editQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        editQuestionDialog.window?.setGravity(Gravity.CENTER)
-        editQuestionDialog.show()
-
-        val etQuestionTitle = editQuestionDialog.findViewById<EditText>(R.id.question_title)
-        val etQuestionType = editQuestionDialog.findViewById<EditText>(R.id.question_type)
-        val etQuestionDate = editQuestionDialog.findViewById<EditText>(R.id.question_createdDate)
-        val btnSubmit = editQuestionDialog.findViewById<TextView>(R.id.btn_submit)
-
-        etQuestionTitle.setText(questionModels[position].title)
-        etQuestionType.setText(questionModels[position].questionType)
-        etQuestionDate.setText(questionModels[position].createdDate)
-
-        etQuestionTitle.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                newQuestionTitle = s.toString()
-                btnSubmit.visibility = View.VISIBLE
-                isModified = true
-            }
-        })
-
-        etQuestionType.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                newQuestionType = s.toString()
-                btnSubmit.visibility = View.VISIBLE
-                isModified = true
-            }
-        })
-
-        etQuestionDate.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                newQuestionDate = s.toString()
-                btnSubmit.visibility = View.VISIBLE
-                isModified = true
-            }
-        })
-
-        btnSubmit.setOnClickListener {
-            if (isModified) {
-                val data = QuestionModel(questionModels[position]._id, newQuestionTitle,
-                    questionModels[position].number, questionModels[position].description,
-                    questionModels[position].options, newQuestionType,
-                    questionModels[position].bankType, questionModels[position].questionBank,
-                    questionModels[position].answerOptions, questionModels[position].answerDescription,
-                    questionModels[position].originateFrom, newQuestionDate,
-                    questionModels[position].image, questionModels[position].answerImage,
-                    questionModels[position].tag)
-                questionAdapter.setItem(position, data)
-                editQuestionDialog.dismiss()
-            }
-        }
     }
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -337,10 +201,13 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         settingQuestionDialog.setContentView(R.layout.dialog_setting_panel)
         settingQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         settingQuestionDialog.window?.setGravity(Gravity.CENTER)
+        settingQuestionDialog.setCancelable(false)
         settingQuestionDialog.show()
 
         val btnChangeTitle = settingQuestionDialog.findViewById<TextView>(R.id.tv_change_title)
         val btnSwitchPosition = settingQuestionDialog.findViewById<TextView>(R.id.tv_switch_position)
+        val btnDelete = settingQuestionDialog.findViewById<TextView>(R.id.tv_delete)
+        val btnCancel = settingQuestionDialog.findViewById<TextView>(R.id.tv_cancel)
 
         // Show up change title dialog
         btnChangeTitle.setOnClickListener {
@@ -436,6 +303,30 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             )
             switchPositionDialog.show()
         }
+
+        btnDelete.setOnClickListener {
+            val deleteWarningDialog = Dialog(this@BankQuestionActivity)
+            deleteWarningDialog.setContentView(R.layout.dialog_delete_warning)
+            deleteWarningDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            deleteWarningDialog.window?.setGravity(Gravity.CENTER)
+            deleteWarningDialog.show()
+
+            val btnConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_confirm)
+            val btnCancelConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_cancel)
+
+            btnConfirm.setOnClickListener {
+                questionAdapter.deleteItem(position)
+                showSuccessSnackBar("刪除成功")
+                deleteWarningDialog.dismiss()
+                settingQuestionDialog.dismiss()
+            }
+            btnCancelConfirm.setOnClickListener {
+                deleteWarningDialog.dismiss()
+            }
+        }
+
+        btnCancel.setOnClickListener { settingQuestionDialog.dismiss() }
+
     }
 
     // Here's switching question to specific bank after clicking confirm button

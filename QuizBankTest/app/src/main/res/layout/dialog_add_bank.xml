@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp"
@@ -19,8 +19,7 @@
             android:layout_marginBottom="3dp"
             android:gravity="center_horizontal"
             android:text="新增題庫"
-            android:textColor="@color/black"
-            android:textSize="25sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <View
@@ -52,7 +51,7 @@
             <EditText
                 android:id="@+id/bank_title"
                 android:layout_width="match_parent"
-                android:layout_height="50sp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:textSize="20sp"
                 android:background="@null"
@@ -68,10 +67,9 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/background_confirm_button"
             android:foreground="?actionBarItemBackground"
-            android:padding="9dp"
+            android:padding="5dp"
             android:text="新增題庫"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="17sp" />
 
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

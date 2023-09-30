@@ -64,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:hint="title"
+                    android:hint="請輸入新的名稱"
                     android:textSize="20sp" />
 
             </LinearLayout>
