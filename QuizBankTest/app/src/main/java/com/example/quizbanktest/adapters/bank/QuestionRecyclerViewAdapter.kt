@@ -71,6 +71,12 @@ class QuestionRecyclerViewAdapter(var context: Context,
             })
     }
 
+    fun moveItem(position: Int) {
+        questionModels.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, questionModels.size)
+    }
+
     class MyViewHolder(itemView: View, recyclerViewInterface: RecyclerViewInterface) : RecyclerView.ViewHolder(itemView) {
         var tvQuestionTitle: TextView
         var tvQuestionType: TextView

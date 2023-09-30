@@ -330,24 +330,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         startActivity(QuestionDetailActivity)
     }
 
-    // Here's switching question to another bank after clicking confirm button
-    override fun switchBank(newBankPosition: Int) {
-        val btnSubmit = switchPositionDialog.findViewById<TextView>(R.id.btn_submit)
-        btnSubmit.visibility = View.VISIBLE
-        btnSubmit.setOnClickListener {
-            switchPositionDialog.dismiss()
-            ConstantsQuestionFunction.moveQuestion(
-                this, questionModels[switchTargetPosition]._id, allQuestionBanks[newBankPosition]._id,
-                onSuccess = {
-                    showSuccessSnackBar("成功")
-                },
-                onFailure = {
-                    showErrorSnackBar("無效")
-                }
-            )
-        }
-    }
-
     override fun settingCard(position: Int) {
         switchTargetPosition = position
 
@@ -393,6 +375,25 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             )
             switchPositionDialog.show()
 
+        }
+    }
+
+    // Here's switching question to specific bank after clicking confirm button
+    override fun switchBank(newBankPosition: Int) {
+        val btnSubmit = switchPositionDialog.findViewById<TextView>(R.id.btn_submit)
+        btnSubmit.visibility = View.VISIBLE
+        btnSubmit.setOnClickListener {
+            switchPositionDialog.dismiss()
+            ConstantsQuestionFunction.moveQuestion(
+                this, questionModels[switchTargetPosition]._id, allQuestionBanks[newBankPosition]._id,
+                onSuccess = {
+                    questionAdapter.moveItem(switchTargetPosition)
+                    showSuccessSnackBar("成功")
+                },
+                onFailure = {
+                    showErrorSnackBar("無效")
+                }
+            )
         }
     }
 
