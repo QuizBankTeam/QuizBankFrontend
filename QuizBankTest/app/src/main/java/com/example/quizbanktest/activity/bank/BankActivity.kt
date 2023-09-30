@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
@@ -27,6 +28,7 @@ import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
+import org.w3c.dom.Text
 import java.time.LocalDate
 
 
@@ -83,12 +85,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         bankAdapter = BankRecyclerViewAdapter(this, this, questionBankModels, this)
 
         bankRecyclerView.adapter = bankAdapter
-//        bankRecyclerView.addItemDecoration(
-//            DividerItemDecoration(
-//                this,
-//                DividerItemDecoration.VERTICAL
-//            )
-//        )
         bankRecyclerView.layoutManager = LinearLayoutManager(this)
 
         val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(bankRecyclerView) {
@@ -119,31 +115,27 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         addBankDialog.show()
 
         val btnBankSubmit = addBankDialog.findViewById<TextView>(R.id.btn_bank_submit)
+
+        val bankMembers: ArrayList<String> = arrayListOf(Constants.userId)
+        val bankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
+
         btnBankSubmit.setOnClickListener {
-            val bankId = Constants.userId
-            val bankTitle =
-                addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
-            val bankType = "single"
-            val bankCreatedDate = LocalDate.now().toString()
-            val bankMembers: ArrayList<String> = arrayListOf()
-            bankMembers.add(Constants.userId)
-            val bankSource = Constants.userId
-            val bankCreator = Constants.userId
-            val tempQuestionBankModel = QuestionBankModel(
-                bankId, bankTitle, bankType, bankCreatedDate,
-                bankMembers, bankSource, bankCreator
+            val data = QuestionBankModel(
+                Constants.userId, bankTitle,
+                "single", LocalDate.now().toString(),
+                bankMembers, Constants.userId, Constants.userId,
             )
 
             if (bankTitle.isEmpty() || bankTitle == null) {
                 showErrorSnackBar("名稱不可為空")
             } else {
                 showProgressDialog("新增中")
-                ConstantsQuestionBankFunction.postQuestionBank(tempQuestionBankModel, this,
+                ConstantsQuestionBankFunction.postQuestionBank(data, this,
                     onSuccess = {
                         Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
                         Log.d("addBankDialog", "add bank success")
                         addBankDialog.dismiss()
-                        bankAdapter.addItem(tempQuestionBankModel)
+                        bankAdapter.addItem(data)
                         findViewById<ImageView>(R.id.img_empty).visibility = View.INVISIBLE
                         hideProgressDialog()
                     },
@@ -225,16 +217,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         etBankType.setText(questionBankModels[position].questionBankType)
         etBankDate.setText(questionBankModels[position].createdDate)
 
-        etBankTitle.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                newBankTitle = s.toString()
-                btnSubmit.visibility = View.VISIBLE
-                isModified = true
-            }
-        })
-
         etBankType.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -267,7 +249,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
                 editBankDialog.dismiss()
             }
         }
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -366,6 +347,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
         btnGroup = findViewById(R.id.bank_group)
         btnAddBank = findViewById(R.id.bank_add)
+
+
     }
 
     override fun onItemClick(position: Int) {
@@ -391,6 +374,69 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         settingBankDialog.findViewById<TextView>(R.id.tv_switch_position).visibility = View.GONE
         settingBankDialog.show()
 
+        val btnChangeTitle = settingBankDialog.findViewById<TextView>(R.id.tv_change_title)
+
+        // Show up change title dialog
+        btnChangeTitle.setOnClickListener {
+            settingBankDialog.dismiss()
+
+            val changeTitleDialog = Dialog(this)
+            changeTitleDialog.setContentView(R.layout.dialog_change_title)
+            changeTitleDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            changeTitleDialog.window?.setGravity(Gravity.CENTER)
+            changeTitleDialog.show()
+
+            val btnSubmit = changeTitleDialog.findViewById<TextView>(R.id.btn_submit)
+            val editingHint = changeTitleDialog.findViewById<TextView>(R.id.editing)
+            val etTitle = changeTitleDialog.findViewById<EditText>(R.id.et_title)
+            etTitle.setText(questionBankModels[position].title)
+
+            var count = 1
+            val handler = Handler()
+            handler.post(object : Runnable {
+                override fun run() {
+                    if (count % 4 == 0) {
+                        editingHint.setText("編輯中")
+                    } else {
+                        editingHint.append(".")
+                    }
+                    count++
+                    handler.postDelayed(this, 500) // set time here to refresh textView
+                }
+            })
+
+            val originDescription: String = questionBankModels[position].title
+            etTitle.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    if (s.toString() == originDescription) {
+                        btnSubmit.visibility = View.GONE
+                        isModified = false
+                    } else {
+                        btnSubmit.visibility = View.VISIBLE
+                        isModified = true
+                    }
+                }
+            })
+
+            btnSubmit.setOnClickListener {
+                if (isModified) {
+                    val data = QuestionBankModel(
+                        questionBankModels[position]._id, newBankTitle,
+                        questionBankModels[position].questionBankType,
+                        questionBankModels[position].createdDate,
+                        questionBankModels[position].members,
+                        questionBankModels[position].originateFrom,
+                        questionBankModels[position].creator
+                    )
+                    Log.e("BankActivity", "new data = $data")
+                    bankAdapter.setItem(position, data)
+                    changeTitleDialog.dismiss()
+                }
+            }
+            changeTitleDialog.setOnDismissListener { isModified = false }
+        }
     }
 
     override fun updateOption(position: Int, newOption: String) {

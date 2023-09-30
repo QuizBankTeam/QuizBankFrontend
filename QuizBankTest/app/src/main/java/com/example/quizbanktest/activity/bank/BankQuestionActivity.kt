@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -212,7 +213,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     questionModels[position].originateFrom, newQuestionDate,
                     questionModels[position].image, questionModels[position].answerImage,
                     questionModels[position].tag)
-                Log.e("BankActivity", "new data = \n$data")
                 questionAdapter.setItem(position, data)
                 editQuestionDialog.dismiss()
             }
@@ -337,11 +337,72 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         settingQuestionDialog.setContentView(R.layout.dialog_setting_panel)
         settingQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         settingQuestionDialog.window?.setGravity(Gravity.CENTER)
-        settingQuestionDialog.setCanceledOnTouchOutside(true)
-        settingQuestionDialog.setCancelable(true)
         settingQuestionDialog.show()
 
+        val btnChangeTitle = settingQuestionDialog.findViewById<TextView>(R.id.tv_change_title)
         val btnSwitchPosition = settingQuestionDialog.findViewById<TextView>(R.id.tv_switch_position)
+
+        // Show up change title dialog
+        btnChangeTitle.setOnClickListener {
+            settingQuestionDialog.dismiss()
+
+            val changeTitleDialog = Dialog(this)
+            changeTitleDialog.setContentView(R.layout.dialog_change_title)
+            changeTitleDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            changeTitleDialog.window?.setGravity(Gravity.CENTER)
+            changeTitleDialog.show()
+
+            val btnSubmit = changeTitleDialog.findViewById<TextView>(R.id.btn_submit)
+            val editingHint = changeTitleDialog.findViewById<TextView>(R.id.editing)
+            val etTitle = changeTitleDialog.findViewById<EditText>(R.id.et_title)
+            etTitle.setText(questionModels[position].title)
+
+            var count = 1
+            val handler = Handler()
+            handler.post(object : Runnable {
+                override fun run() {
+                    if (count % 4 == 0) {
+                        editingHint.setText("編輯中")
+                    } else {
+                        editingHint.append(".")
+                    }
+                    count++
+                    handler.postDelayed(this, 500) // set time here to refresh textView
+                }
+            })
+
+            val originDescription: String = questionModels[position].title
+            etTitle.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    if (s.toString() == originDescription) {
+                        btnSubmit.visibility = View.GONE
+                        isModified = false
+                    } else {
+                        btnSubmit.visibility = View.VISIBLE
+                        isModified = true
+                    }
+                }
+            })
+
+            btnSubmit.setOnClickListener {
+                if (isModified) {
+                    val data = QuestionModel(
+                        questionModels[position]._id, newQuestionTitle,
+                        questionModels[position].number, questionModels[position].description,
+                        questionModels[position].options, questionModels[position].questionType,
+                        questionModels[position].bankType, questionModels[position].questionBank,
+                        questionModels[position].answerOptions, questionModels[position].answerDescription,
+                        questionModels[position].originateFrom, questionModels[position].createdDate,
+                        questionModels[position].image, questionModels[position].answerImage,
+                        questionModels[position].tag)
+                    questionAdapter.setItem(position, data)
+                    changeTitleDialog.dismiss()
+                }
+            }
+            changeTitleDialog.setOnDismissListener { isModified = false }
+        }
 
         // Show up switch bank dialog
         btnSwitchPosition.setOnClickListener {
@@ -374,7 +435,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                 }
             )
             switchPositionDialog.show()
-
         }
     }
 

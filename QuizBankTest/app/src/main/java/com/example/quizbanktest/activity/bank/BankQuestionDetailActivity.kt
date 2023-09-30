@@ -247,6 +247,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                 descriptionDialog.dismiss()
             }
         }
+        descriptionDialog.setOnDismissListener { isModified = false }
     }
 
     @SuppressLint("NotifyDataSetChanged")
