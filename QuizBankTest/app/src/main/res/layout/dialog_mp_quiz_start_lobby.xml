@@ -17,17 +17,32 @@
             android:background="@color/colorPrimary"
             android:theme="@style/CustomToolbarStyle">
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/baseline_exit_quiz"
+                android:visibility="invisible"/>
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_weight="3"
                 android:gravity="center"
-
                 android:text="考試大廳"
                 android:textSize="25dp"
                 android:textStyle="bold"
                 android:textAppearance="@style/CustomToolbarStyle"
                 android:textColor="@color/colorPrimaryDark"/>
+            <ImageButton
+                android:id="@+id/exit_quiz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/baseline_exit_quiz"/>
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -156,4 +171,35 @@
             android:textSize="18dp"
             android:layout_gravity="center_vertical"/>
     </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/join_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="18dp"
+        android:layout_gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/connection_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text=""
+        android:textSize="18dp"
+        android:layout_gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/disconnect_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text=""
+        android:textSize="18dp"
+        android:layout_gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/connect_error_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text=""
+        android:textSize="18dp"
+        android:layout_gravity="center_vertical"/>
 </LinearLayout>
