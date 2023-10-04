@@ -1,162 +1,766 @@
+<!-- <!DOCTYPE html>
+<html>
+<body>
+  <p>$$\frac{\pi}{2}$$</p>
+  <math-field>x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}</math-field>
+  <script type="module">
+    window.addEventListener("DOMContentLoaded", () =>
+      import("//unpkg.com/mathlive?module").then((mathlive) =>
+        mathlive.renderMathInDocument()
+      ),
+      // import("//unpkg.com/@cortex-js/compute-engine?module").then((compute) =>
+      //   {
+      //     const ce = new ComputeEngine();
+      //     console.log(ce.parse("e^{i\\pi}").evaluate().latex);
+      //   }
+
+      // )
+    );
+
+  </script> -->
+
+<!--
+</body>
+</html> -->
+
+<!--
+
+
+
+x\in\mathbb{R} = [
+    "Element",
+    "x",
+    [
+        "Domain",
+        "RealNumbers"
+    ]
+]
+
+x\in\mathbb{Z} = [
+    "Element",
+    "x",
+    [
+        "Domain",
+        "Integers"
+    ]
+]
+
+x\subseteq y = [
+    "SubsetEqual",
+    "x",
+    "y"
+]
+
+\tan2\pi = [
+    "Tan",
+    [
+        "Multiply",
+        2,
+        "Pi"
+    ]
+]
+
+\lambda x\subseteq2x = [
+    "SubsetEqual",
+    [
+        "Multiply",
+        "lambda",
+        "x"
+    ],
+    [
+        "Multiply",
+        2,
+        "x"
+    ]
+]
+
+
+ -->
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
     <title>Math</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <!-- MathJax specific code START -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     <!-- MathJax specific code END -->
+    <script type="module"></script>
     <script type="module">
-      import * as mke from 'https://cdn.jsdelivr.net/npm/mathkeyboardengine@v1.0.1/dist/MathKeyboardEngine.es2017-esm.min.js';
+      import { ComputeEngine } from "https://unpkg.com/@cortex-js/compute-engine?module";
+      import * as mke from "https://cdn.jsdelivr.net/npm/mathkeyboardengine@v1.0.1/dist/MathKeyboardEngine.es2017-esm.min.js";
       let latexConfiguration = new mke.LatexConfiguration();
       let keyboardMemory = new mke.KeyboardMemory();
-      const supportsSelectionMode = 'supportsSelectionMode';
-      const darkSelectionModeColor = '#1668c7';
-      const lightSelectionModeColor = '#add8e6';
+      const supportsSelectionMode = "supportsSelectionMode";
+      const darkSelectionModeColor = "#1668c7";
+      const lightSelectionModeColor = "#add8e6";
+      const ce = new ComputeEngine();
+      console.log(parseLatexInJson("\\frac{x}{1-x}",ce))
+      // ➔  ["Divide", 7, -4]
+      // ➔ "-1"
+      document.getElementById("copy").onclick = function () {
+        let textToCopy = document.getElementById("viewModeLatex").innerText;
+        Android.copyToClipboard(textToCopy);
+        console.log(ce.parse(textToCopy, { canonical: false }).json);
+        handleMathJSONWithStack(
+          ce.parse(textToCopy, { canonical: false }).json
+        );
+      };
+      function parseLatexInJson(latexString,ce){
+        console.log(ce);
+        return ce.parse(latexString, { canonical: false }).json
+      }
 
-      const colorScheme = document.getElementById('colorScheme');
+      function handleMathJSONWithStack(mathJSON) {
+        let stack = [];
+        stack.push(mathJSON);
+        while (stack.length > 0) {
+          let current = stack.pop();
+          if (Array.isArray(current)) {
+            let operation = current.shift(); // Get the operation and remove it from the array
+            if (Array.isArray(operation) && operation[0] === "InverseFunction") {
+                let funcToInverse = operation[1];
+                switch (funcToInverse) {
+                    case "Cos":
+                        operation = "Arccos";
+                        break;
+                    case "Sin":
+                        operation = "Arcsin";
+                        break;
+                    default:
+                        console.log("Unknown inverse function: " + funcToInverse);
+                        continue; // 如果不能識別反函數，則跳過當前迴圈
+                }
+            }
+
+            switch (operation) {
+              case "Sum":
+                mke.insert(keyboardMemory, new mke.AscendingBranchingNode(String.raw`\sum_{`, "}^{", "}"));
+                stack.push(current[0],"MOVE_RIGHT", current[1]);
+                break;
+              case "Sqrt":
+                console.log("sqrt");
+                mke.insert(keyboardMemory, new mke.StandardBranchingNode(String.raw`\sqrt{`, "}"));
+                stack.push(current[0]);
+                break;
+              case "InverseFunction":
+                  let funcToInverse = current[0]; // 從當前的current中獲取三角函數
+                  let inverseFuncName;
+                  switch (funcToInverse) {
+                      case "Cos":
+                          console.log("cos in invert");
+                          inverseFuncName = "Arccos";
+                          break;
+                      case "Sin":
+                          console.log("sin in invert");
+                          inverseFuncName = "Arcsin";
+                          break;
+                      // 可以加入其他的反三角函數處理，例如Arctan等
+                      default:
+                          console.log("Unknown inverse function: " + funcToInverse);
+                          break;
+                  }
+                  // 推入反三角函數名稱和其後的所有元素
+                  stack.push(inverseFuncName);
+                  break;
+              case "Arccos": //cos 的反函數
+                console.log("arccos");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\cos^{-1}`));
+                mke.insert(keyboardMemory, new mke.RoundBracketsNode());
+                stack.push(current[0]);
+                break;
+              case "Delimiter": //小括號
+                console.log("Delimiter");
+                mke.insert(keyboardMemory, new mke.RoundBracketsNode());
+                stack.push(...current);
+                break;
+              case "Arcsin": //sin 的反函數
+                mke.insert(keyboardMemory, new mke.StandardLeafNode("\\arcsin"));
+                mke.insert(keyboardMemory, new mke.RoundBracketsNode());
+                stack.push(current[0]);
+                break;
+              case "Cos":
+                mke.insert(keyboardMemory, new mke.StandardLeafNode('\\cos'));
+                mke.insert(keyboardMemory, new mke.RoundBracketsNode());
+                stack.push(current[0]);
+                break;
+              case "Equal":
+                console.log("equal");
+                stack.push(current[1],"equal", current[0]);
+                break;
+              case "Multiply":
+                stack.push( current[1],"*", current[0]);
+                break;
+              case "Add":
+                stack.push( current[1],"add", current[0]);
+                break;
+              case "GreaterEqual":
+                stack.push( current[1],"greaterEqual", current[0]);
+                break;
+              case "Greater":
+                stack.push( current[1],"greater", current[0]);
+                break;
+              case "LessEqual":
+                stack.push( current[1],"lessEqual", current[0]);
+                break;
+              case "Less":
+                stack.push( current[1],"less", current[0]);
+                break;
+              case "Approx":
+                stack.push( current[1],"approx", current[0]);
+                break;
+              case "Subscript":
+                mke.insert(keyboardMemory,new mke.DescendingBranchingNode("", "_{", "}"));
+                stack.push(current[1],"MOVE_RIGHT",current[0],"MOVE_RIGHT");
+                break;
+              case "SetMinus":
+                stack.push( current[1],"setminus", current[0]);
+                break;
+              case "Integrate":
+                console.log("Integrate");
+                mke.insert(keyboardMemory, new mke.AscendingBranchingNode(String.raw`\int_{`, "}^{", "}"));
+                stack.push(current[0],"MOVE_RIGHT", current[1]);
+                break;
+              case "Divide":
+                console.log("insert frac");
+                // mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\frac{`, '}{', '}'));
+                mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\frac{`, '}{', '}'));
+                stack.push(current[1],"MOVE_RIGHT", current[0]);
+                break;
+              case "Rational":
+                console.log("insert frac");
+                mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\frac{`, '}{', '}'));
+                stack.push(current[1],"MOVE_RIGHT", current[0]);
+                break;
+              case "Sin":
+                console.log("sin");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode('\\sin'));
+                mke.insert(keyboardMemory, new mke.RoundBracketsNode());
+                stack.push(current[0]);
+                break;
+              case "Half":
+                mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\frac{`, "}{", "}"));
+                mke.insert(k, new mke.LeafNode('1'));
+                mke.moveRight(k);
+                mke.insert(k, new mke.DigitNode('2'));
+                stack.push(...current);
+                break;
+              case "PlusMinus":
+                console.log("plusminus");
+                stack.push(current[1],"pm", current[0]);
+                break;
+              case "Abs":
+                console.log("Abs");
+                mke.insert(keyboardMemory, new mke.StandardBranchingNode(String.raw`\left|`, String.raw`\right|`));
+                stack.push(...current);
+                break;
+              case "Root":
+                console.log("root");
+                mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\sqrt[`, "]{", "}"));
+                stack.push(current[0],"MOVE_RIGHT", current[1]);
+                break;
+              case "SubsetEqual":
+                console.log("SubsetEqual");
+                stack.push(current[1],"subsetEqual", current[0]);
+                break;
+              case "Tan":
+                console.log("Tan");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode('\\tan'));
+                mke.insert(keyboardMemory, new mke.RoundBracketsNode());
+                stack.push(current[0]);
+                break;
+              case "Element":
+                console.log("Element");
+                stack.push(current[1],"MOVE_RIGHT","belong", current[0]);
+                break;
+              case "Subset":
+                console.log("Subset");
+                stack.push(current[1],"MOVE_RIGHT","subset", current[0]);
+                break;
+              case "Domain":
+                console.log("Domain");
+                stack.push(...current);
+                break;
+              case "Triple":
+                console.log("Triple");
+                stack.push(current[2],"MOVE_RIGHT", current[1],current[0]);
+                break;
+              case "Product":
+                console.log("Product");
+                mke.insert(keyboardMemory, new mke.AscendingBranchingNode(String.raw`\prod_{`, "}^{", "}"));
+                stack.push(current[0],"MOVE_RIGHT", current[1]);
+                break;
+              case "Hold":
+                console.log("Hold");
+                stack.push(current[1],"equal", current[0]);
+                break;
+              case "And":
+                console.log("And");
+                stack.push(current[1],"and", current[0]);
+                break;
+              case "Or":
+                console.log("Or");
+                stack.push(current[1],"or", current[0]);
+                break;
+              case "Factorial":
+                console.log("Factorial");
+                stack.push(current[0],"Factorial");
+                break;
+              case "Subtract":
+                console.log("subtract");
+                stack.push(current[1],"minus", current[0]);
+                break;
+              case "Square":
+                mke.insert(keyboardMemory,new mke.AscendingBranchingNode('', '^{', '}'));
+                stack.push(current[1],"MOVE_RIGHT", 2);
+                console.log("power");
+                break;
+              case "Power":
+                mke.insert(keyboardMemory,new mke.AscendingBranchingNode('', '^{', '}'));
+                stack.push(current[1],"MOVE_RIGHT", current[0]);
+                console.log("power");
+                break;
+              default:
+                console.log("default"+operation);
+                for (let i = current.length - 1; i >= 0; i--) {
+                  stack.push(current[i]);
+                }
+                break;
+            }
+          } else if (typeof current === "string") {
+            console.log(current + "in string");
+            if (current === "x" ||current === "y" || current === "z" ) {
+              console.log(current);
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(current));
+            }else if(current === "alpha" || current === "beta" || current === "gamma" || current === "lambda" || current === "mu" || current === ""){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode("\\" + current));
+            }else if(current === "+Infinity"){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode("\\infinity"));
+            }else if(current === "Pi"){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode("\\pi"));
+            }else if (current === "Integers") {
+                console.log("Integers");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\mathbb{Z}`));
+            }else if (current === "RealNumbers") {
+                console.log("RealNumbers");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\mathbb{R}`));
+            }else if (current === "NonNegativeIntegers") {
+                console.log("NonNegativeIntegers");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\mathbb{N}`));
+            }else if (current === "MOVE_RIGHT") {
+                console.log("Moving right to process denominator or next part.");
+                mke.moveRight(keyboardMemory);
+            }else if (current === "MOVE_LEFT") {
+                console.log("Moving left to process denominator or next part.");
+                mke.moveLeft(keyboardMemory);
+            }else if (current === "add") {
+                console.log("add");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode("+"));
+            }else if (current === "greaterEqual") {
+                console.log("greaterEqual");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\geq`));
+            }else if (current === "greater") {
+                console.log("greater");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(">"));
+            }else if (current === "lessEqual") {
+                console.log("lessEqual");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\leq`));
+            }else if (current === "less") {
+                console.log("less");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode("<"));
+            }else if (current === "approx") {
+                console.log("approx");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode("\\approx"));
+            }else if (current === "setminus") {
+                console.log("setminus");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\setminus`));
+            }else if (current === "minus") {
+                console.log("minus");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode("-"));
+            }else if (current === "and") {
+                console.log("and");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\land`));
+            }else if (current === "or") {
+                console.log("or");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\lor`));
+            }else if (current === "Factorial") {
+                console.log("Factorial");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode("!"));
+            }else if (current === "pm") {
+                console.log("pm");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\pm`));
+            }else if (current === "equal") {
+                console.log("equal");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode("="));
+            }else if (current === "*") {
+              console.log("standard leaf times");
+              mke.insert(keyboardMemory, new mke.StandardLeafNode('\\times'));
+            }
+            else if (current === "subsetEqual") {
+              console.log("sq");
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\subseteq`));
+            }
+            else if (current === "belong") {
+              console.log("belong");
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\in`));
+            }else if (current === "subset") {
+              console.log("standard leaf times");
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\subset`));
+            }
+            else if(current === "Half") {
+              mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\frac{`, "}{", "}"));
+              mke.insert(k, new mke.LeafNode('1'));
+              mke.moveRight(k);
+              mke.insert(k, new mke.DigitNode('2'));
+            } else if(current === "a" || current === "b" || current === "c"){
+              console.log(current + "in abc");
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(current));
+            }
+          } else if (typeof current === "number") {
+            console.log(current + "in num");
+            let numStr = current.toString();
+
+            for (let i = 0; i < numStr.length; i++) {
+                console.log("insert"+numStr[i])
+                mke.insert(keyboardMemory, new mke.DigitNode(numStr[i]));
+                if (i < numStr.length - 1) {
+                  console.log("move right")
+                    // mke.moveRight(keyboardMemory);
+                }
+            }
+            console.log("standard leaf number" + current);
+            // mke.insert(keyboardMemory, new mke.DigitNode(current.toString()));
+          }
+        }
+        displayResult();
+      }
+      var countForDefault = 0;
+      const colorScheme = document.getElementById("colorScheme");
       const bodyClassList = document.body.classList;
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-        bodyClassList.remove('dark');
-        colorScheme.innerText = 'light';
+      if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: light)").matches
+      ) {
+        bodyClassList.remove("dark");
+        colorScheme.innerText = "light";
         setSelectionModeColor(lightSelectionModeColor);
       } else {
-        colorScheme.innerText = 'dark';
+        colorScheme.innerText = "dark";
         setSelectionModeColor(darkSelectionModeColor);
       }
 
-      document.getElementById('colorSchemeToggle').onclick = () => {
-        if (colorScheme.innerText == 'light') {
-          bodyClassList.add('dark');
-          colorScheme.innerText = 'dark';
+      document.getElementById("colorSchemeToggle").onclick = () => {
+        if (colorScheme.innerText == "light") {
+          bodyClassList.add("dark");
+          colorScheme.innerText = "dark";
           setSelectionModeColor(darkSelectionModeColor);
         } else {
-          bodyClassList.remove('dark');
-          colorScheme.innerText = 'light';
+          bodyClassList.remove("dark");
+          colorScheme.innerText = "light";
           setSelectionModeColor(lightSelectionModeColor);
         }
         displayResult();
       };
 
       function setSelectionModeColor(color) {
-        document.body.style.setProperty('--selection-mode-color', color);
+        document.body.style.setProperty("--selection-mode-color", color);
         setSelectionHightlightStart(color);
       }
 
       displayResult();
 
       for (let i = 0; i < 10; i++) {
-        registerNodeKey('digit' + i, () => new mke.DigitNode(i.toString()));
+        registerNodeKey("digit" + i, () => new mke.DigitNode(i.toString()));
       }
 
-      for (let letter of ['a', 'b', 'c', 'x', 'y', 'z']) {
+      for (let letter of ["a", "b", "c", "x", "y", "z"]) {
         registerNodeKey(letter, () => new mke.StandardLeafNode(letter));
       }
 
-      for (let s of ['alpha', 'beta', 'gamma', 'lambda', 'mu', 'pi', 'div', 'sin', 'tan', 'cos', 'arcsin', 'infty', 'leftarrow', 'rightarrow', 'uparrow', 'downarrow', 'approx']) {
-        registerNodeKey(s, () => new mke.StandardLeafNode('\\' + s));
+      for (let s of [
+        "alpha",
+        "beta",
+        "gamma",
+        "lambda",
+        "mu",
+        "pi",
+        "div",
+        "sin",
+        "tan",
+        "cos",
+        "arcsin",
+        "infty",
+        "leftarrow",
+        "rightarrow",
+        "uparrow",
+        "downarrow",
+        "approx",
+      ]) {
+        registerNodeKey(s, () => new mke.StandardLeafNode("\\" + s));
       }
 
-      const decimalSeparatorTypeElement = document.getElementById('decimalSeparatorType');
-      document.getElementById('decimalSeparatorToggle').onclick = () => {
-        const key = document.getElementById('decimalSeparator');
-        if (decimalSeparatorTypeElement.innerText == 'decimal comma') {
-          decimalSeparatorTypeElement.innerText = 'decimal point';
-          typesetLatexInKey('.', key);
+      const decimalSeparatorTypeElement = document.getElementById(
+        "decimalSeparatorType"
+      );
+      document.getElementById("decimalSeparatorToggle").onclick = () => {
+        const key = document.getElementById("decimalSeparator");
+        if (decimalSeparatorTypeElement.innerText == "decimal comma") {
+          decimalSeparatorTypeElement.innerText = "decimal point";
+          typesetLatexInKey(".", key);
         } else {
-          decimalSeparatorTypeElement.innerText = 'decimal comma';
-          typesetLatexInKey('{,}', key);
+          decimalSeparatorTypeElement.innerText = "decimal comma";
+          typesetLatexInKey("{,}", key);
         }
         displayResult();
       };
-      const getDecimalSeparatorNode = () => new mke.DecimalSeparatorNode(() => (decimalSeparatorTypeElement.innerText == 'decimal comma' ? '{,}' : '.'));
-      registerNodeKey('decimalSeparator', getDecimalSeparatorNode);
-      registerNodeKey('equal', () => new mke.StandardLeafNode('='));
-      registerNodeKey('notEqual', () => new mke.StandardLeafNode(String.raw`\neq`));
-      registerNodeKey('lessThan', () => new mke.StandardLeafNode('<'));
-      registerNodeKey('greaterThan', () => new mke.StandardLeafNode('>'));
-      registerNodeKey('lessThanOrEqual', () => new mke.StandardLeafNode(String.raw`\leq`));
-      registerNodeKey('greaterThanOrEqual', () => new mke.StandardLeafNode(String.raw`\geq`));
-      registerNodeKey('plusminus', () => new mke.StandardLeafNode(String.raw`\pm`));
-      registerNodeKey('plus', () => new mke.StandardLeafNode('+'));
-      registerNodeKey('minus', () => new mke.StandardLeafNode('-'));
+      const getDecimalSeparatorNode = () =>
+        new mke.DecimalSeparatorNode(() =>
+          decimalSeparatorTypeElement.innerText == "decimal comma" ? "{,}" : "."
+        );
+      registerNodeKey("decimalSeparator", getDecimalSeparatorNode);
+      registerNodeKey("equal", () => new mke.StandardLeafNode("="));
+      registerNodeKey(
+        "notEqual",
+        () => new mke.StandardLeafNode(String.raw`\neq`)
+      );
+      registerNodeKey("lessThan", () => new mke.StandardLeafNode("<"));
+      registerNodeKey("greaterThan", () => new mke.StandardLeafNode(">"));
+      registerNodeKey(
+        "lessThanOrEqual",
+        () => new mke.StandardLeafNode(String.raw`\leq`)
+      );
+      registerNodeKey(
+        "greaterThanOrEqual",
+        () => new mke.StandardLeafNode(String.raw`\geq`)
+      );
+      registerNodeKey(
+        "plusminus",
+        () => new mke.StandardLeafNode(String.raw`\pm`)
+      );
+      registerNodeKey("plus", () => new mke.StandardLeafNode("+"));
+      registerNodeKey("minus", () => new mke.StandardLeafNode("-"));
 
-      const multiplicationSignTypeElement = document.getElementById('multiplicationSignType');
-      document.getElementById('multiplicationSignToggle').onclick = () => {
-        multiplicationSignTypeElement.innerText = multiplicationSignTypeElement.innerText == 'cross' ? 'dot' : 'cross';
+      const multiplicationSignTypeElement = document.getElementById(
+        "multiplicationSignType"
+      );
+      document.getElementById("multiplicationSignToggle").onclick = () => {
+        multiplicationSignTypeElement.innerText =
+          multiplicationSignTypeElement.innerText == "cross" ? "dot" : "cross";
         displayResult();
       };
-      const getMultiplicationNode = () => new mke.StandardLeafNode(() => (multiplicationSignTypeElement.innerText == 'cross' ? String.raw`\times` : String.raw`\cdot`));
-      registerNodeKey('multiply', getMultiplicationNode);
-      registerNodeKey('ratio', () => new mke.StandardLeafNode(':'));
-      registerNodeKey('faculty', () => new mke.StandardLeafNode('!'));
-      const getFractionNode = () => new mke.DescendingBranchingNode(String.raw`\frac{`, '}{', '}');
-      registerNodeKey('fraction', getFractionNode, mke.insert, mke.insertWithEncapsulateSelection);
-      const getBinomialNode = () => new mke.DescendingBranchingNode(String.raw`\binom{`, '}{', '}');
-      registerNodeKey('binomial', getBinomialNode, mke.insert, mke.insertWithEncapsulateSelection);
-      const getPowerNode = () => new mke.AscendingBranchingNode('', '^{', '}');
-      registerNodeKey('power', getPowerNode, mke.insertWithEncapsulateCurrent, mke.insertWithEncapsulateSelectionAndPrevious);
-      const getSubscriptNode = () => new mke.DescendingBranchingNode('', '_{', '}');
-      registerNodeKey('subscript', getSubscriptNode, mke.insertWithEncapsulateCurrent, mke.insertWithEncapsulateSelectionAndPrevious);
-      const getSquareRootNode = () => new mke.StandardBranchingNode(String.raw`\sqrt{`, '}');
-      registerNodeKey('squareRoot', getSquareRootNode, mke.insert, mke.insertWithEncapsulateSelection);
-      registerNodeKey('nthRoot', () => new mke.DescendingBranchingNode(String.raw`\sqrt[`, ']{', '}'));
-      registerNodeKey('roundBrackets', () => new mke.RoundBracketsNode(), mke.insert, mke.insertWithEncapsulateSelection);
-      const getSquareBracketsNode = () => new mke.StandardBranchingNode(String.raw`\left[`, String.raw`\right]`);
-      registerNodeKey('squareBrackets', getSquareBracketsNode, mke.insert, mke.insertWithEncapsulateSelection);
-      const getPipesNode = () => new mke.StandardBranchingNode(String.raw`\left|`, String.raw`\right|`);
-      registerNodeKey('pipes', getPipesNode, mke.insert, mke.insertWithEncapsulateSelection);
-      registerNodeKey('doublePipes', () => new mke.StandardBranchingNode(String.raw`\left\|`, String.raw`\right\|`), mke.insert, mke.insertWithEncapsulateSelection);
-      const getCurlyBracketsNode = () => new mke.StandardBranchingNode(String.raw`\left\{`, String.raw`\right\}`);
-      registerNodeKey('curlyBrackets', getCurlyBracketsNode, mke.insert, mke.insertWithEncapsulateSelection);
-      registerNodeKey('naturalNumbers', () => new mke.StandardLeafNode(String.raw`\mathbb{N}`));
-      registerNodeKey('integers', () => new mke.StandardLeafNode(String.raw`\mathbb{Z}`));
-      registerNodeKey('realNumbers', () => new mke.StandardLeafNode(String.raw`\mathbb{R}`));
-      registerNodeKey('isMemberOf', () => new mke.StandardLeafNode(String.raw`\in`));
-      registerNodeKey('isProperSubsetOf', () => new mke.StandardLeafNode(String.raw`\subset`));
-      registerNodeKey('isSubsetOf', () => new mke.StandardLeafNode(String.raw`\subseteq`));
-      registerNodeKey('setDifference', () => new mke.StandardLeafNode(String.raw`\setminus`));
-      registerNodeKey('exists', () => new mke.StandardLeafNode(String.raw`\exists`));
-      registerNodeKey('forAll', () => new mke.StandardLeafNode(String.raw`\forall`));
-      registerNodeKey('not', () => new mke.StandardLeafNode(String.raw`\neg`));
-      registerNodeKey('or', () => new mke.StandardLeafNode(String.raw`\lor`));
-      registerNodeKey('and', () => new mke.StandardLeafNode(String.raw`\land`));
-      registerNodeKey('doubleRightArrow', () => new mke.StandardLeafNode(String.raw`\Rightarrow`));
-      registerNodeKey('doubleLeftArrow', () => new mke.StandardLeafNode(String.raw`\Leftarrow`));
-      registerNodeKey('cos-1', () => new mke.StandardLeafNode(String.raw`\cos^{-1}`));
-      registerNodeKey('taninv', () => new mke.StandardLeafNode(String.raw`\tan^{inv}`));
-      const getIntegralNode = () => new mke.AscendingBranchingNode(String.raw`\int_{`, '}^{', '}');
-      registerNodeKey('integral', getIntegralNode);
-      const getSumNode = () => new mke.AscendingBranchingNode(String.raw`\sum_{`, '}^{', '}');
-      registerNodeKey('sum', getSumNode);
-      const getProductNode = () => new mke.AscendingBranchingNode(String.raw`\prod_{`, '}^{', '}');
-      registerNodeKey('product', getProductNode);
-      const getLimitNode = () => new mke.StandardBranchingNode(String.raw`\lim_{`, '}');
-      registerNodeKey('limit', getLimitNode);
+      const getMultiplicationNode = () =>
+        new mke.StandardLeafNode(() =>
+          multiplicationSignTypeElement.innerText == "cross"
+            ? String.raw`\times`
+            : String.raw`\cdot`
+        );
+      registerNodeKey("multiply", getMultiplicationNode);
+      registerNodeKey("ratio", () => new mke.StandardLeafNode(":"));
+      registerNodeKey("faculty", () => new mke.StandardLeafNode("!"));
+      const getFractionNode = () =>
+        new mke.DescendingBranchingNode(String.raw`\frac{`, "}{", "}");
+      registerNodeKey(
+        "fraction",
+        getFractionNode,
+        mke.insert,
+        mke.insertWithEncapsulateSelection
+      );
+      const getBinomialNode = () =>
+        new mke.DescendingBranchingNode(String.raw`\binom{`, "}{", "}");
+      registerNodeKey(
+        "binomial",
+        getBinomialNode,
+        mke.insert,
+        mke.insertWithEncapsulateSelection
+      );
+      const getPowerNode = () => new mke.AscendingBranchingNode("", "^{", "}");
+      registerNodeKey(
+        "power",
+        getPowerNode,
+        mke.insertWithEncapsulateCurrent,
+        mke.insertWithEncapsulateSelectionAndPrevious
+      );
+      const getSubscriptNode = () =>
+        new mke.DescendingBranchingNode("", "_{", "}");
+      registerNodeKey(
+        "subscript",
+        getSubscriptNode,
+        mke.insertWithEncapsulateCurrent,
+        mke.insertWithEncapsulateSelectionAndPrevious
+      );
+      const getSquareRootNode = () =>
+        new mke.StandardBranchingNode(String.raw`\sqrt{`, "}");
+      registerNodeKey(
+        "squareRoot",
+        getSquareRootNode,
+        mke.insert,
+        mke.insertWithEncapsulateSelection
+      );
+      registerNodeKey(
+        "nthRoot",
+        () => new mke.DescendingBranchingNode(String.raw`\sqrt[`, "]{", "}")
+      );
+      registerNodeKey(
+        "roundBrackets",
+        () => new mke.RoundBracketsNode(),
+        mke.insert,
+        mke.insertWithEncapsulateSelection
+      );
+      const getSquareBracketsNode = () =>
+        new mke.StandardBranchingNode(String.raw`\left[`, String.raw`\right]`);
+      registerNodeKey(
+        "squareBrackets",
+        getSquareBracketsNode,
+        mke.insert,
+        mke.insertWithEncapsulateSelection
+      );
+      const getPipesNode = () =>
+        new mke.StandardBranchingNode(String.raw`\left|`, String.raw`\right|`);
+      registerNodeKey(
+        "pipes",
+        getPipesNode,
+        mke.insert,
+        mke.insertWithEncapsulateSelection
+      );
+      registerNodeKey(
+        "doublePipes",
+        () =>
+          new mke.StandardBranchingNode(
+            String.raw`\left\|`,
+            String.raw`\right\|`
+          ),
+        mke.insert,
+        mke.insertWithEncapsulateSelection
+      );
+      const getCurlyBracketsNode = () =>
+        new mke.StandardBranchingNode(
+          String.raw`\left\{`,
+          String.raw`\right\}`
+        );
+      registerNodeKey(
+        "curlyBrackets",
+        getCurlyBracketsNode,
+        mke.insert,
+        mke.insertWithEncapsulateSelection
+      );
+      registerNodeKey(
+        "naturalNumbers",
+        () => new mke.StandardLeafNode(String.raw`\mathbb{N}`)
+      );
+      registerNodeKey(
+        "integers",
+        () => new mke.StandardLeafNode(String.raw`\mathbb{Z}`)
+      );
+      registerNodeKey(
+        "realNumbers",
+        () => new mke.StandardLeafNode(String.raw`\mathbb{R}`)
+      );
+      registerNodeKey(
+        "isMemberOf",
+        () => new mke.StandardLeafNode(String.raw`\in`)
+      );
+      registerNodeKey(
+        "isProperSubsetOf",
+        () => new mke.StandardLeafNode(String.raw`\subset`)
+      );
+      registerNodeKey(
+        "isSubsetOf",
+        () => new mke.StandardLeafNode(String.raw`\subseteq`)
+      );
+      registerNodeKey(
+        "setDifference",
+        () => new mke.StandardLeafNode(String.raw`\setminus`)
+      );
+      registerNodeKey(
+        "exists",
+        () => new mke.StandardLeafNode(String.raw`\exists`)
+      );
+      registerNodeKey(
+        "forAll",
+        () => new mke.StandardLeafNode(String.raw`\forall`)
+      );
+      registerNodeKey("not", () => new mke.StandardLeafNode(String.raw`\neg`));
+      registerNodeKey("or", () => new mke.StandardLeafNode(String.raw`\lor`));
+      registerNodeKey("and", () => new mke.StandardLeafNode(String.raw`\land`));
+      registerNodeKey(
+        "doubleRightArrow",
+        () => new mke.StandardLeafNode(String.raw`\Rightarrow`)
+      );
+      registerNodeKey(
+        "doubleLeftArrow",
+        () => new mke.StandardLeafNode(String.raw`\Leftarrow`)
+      );
+      registerNodeKey(
+        "cos-1",
+        () => new mke.StandardLeafNode(String.raw`\cos^{-1}`)
+      );
+      registerNodeKey(
+        "taninv",
+        () => new mke.StandardLeafNode(String.raw`\tan^{inv}`)
+      );
+      const getIntegralNode = () =>
+        new mke.AscendingBranchingNode(String.raw`\int_{`, "}^{", "}");
+      registerNodeKey("integral", getIntegralNode);
+      const getSumNode = () =>
+        new mke.AscendingBranchingNode(String.raw`\sum_{`, "}^{", "}");
+      registerNodeKey("sum", getSumNode);
+      const getProductNode = () =>
+        new mke.AscendingBranchingNode(String.raw`\prod_{`, "}^{", "}");
+      registerNodeKey("product", getProductNode);
+      const getLimitNode = () =>
+        new mke.StandardBranchingNode(String.raw`\lim_{`, "}");
+      registerNodeKey("limit", getLimitNode);
 
-      const matrixWidthInputElement = document.getElementById('matrixWidth');
-      const matrixHeightInputElement = document.getElementById('matrixHeight');
+      const matrixWidthInputElement = document.getElementById("matrixWidth");
+      const matrixHeightInputElement = document.getElementById("matrixHeight");
       function reRegisterMatrix() {
-        registerNodeKey('pmatrix', () => new mke.MatrixNode('pmatrix', matrixWidthInputElement.value, matrixHeightInputElement.value));
-        registerNodeKey('vmatrix', () => new mke.MatrixNode('vmatrix', matrixWidthInputElement.value, matrixHeightInputElement.value));
+        registerNodeKey(
+          "pmatrix",
+          () =>
+            new mke.MatrixNode(
+              "pmatrix",
+              matrixWidthInputElement.value,
+              matrixHeightInputElement.value
+            )
+        );
+        registerNodeKey(
+          "vmatrix",
+          () =>
+            new mke.MatrixNode(
+              "vmatrix",
+              matrixWidthInputElement.value,
+              matrixHeightInputElement.value
+            )
+        );
       }
       reRegisterMatrix();
       matrixWidthInputElement.onchange = reRegisterMatrix;
       matrixHeightInputElement.onchange = reRegisterMatrix;
 
-      registerKey('moveLeft', mke.moveLeft, mke.selectLeft, false);
-      typesetLatexInKey(String.raw`\leftarrow`, document.getElementById('moveLeft'));
-      registerKey('moveRight', mke.moveRight, mke.selectRight, false);
-      typesetLatexInKey(String.raw`\rightarrow`, document.getElementById('moveRight'));
-      registerKey('moveUp', mke.moveUp);
-      typesetLatexInKey('\\uparrow', document.getElementById('moveUp'));
-      registerKey('moveDown', mke.moveDown);
-      typesetLatexInKey(String.raw`\downarrow`, document.getElementById('moveDown'));
-      registerKey('deleteLeft', mke.deleteLeft, mke.deleteSelection);
+      registerKey("moveLeft", mke.moveLeft, mke.selectLeft, false);
+      typesetLatexInKey(
+        String.raw`\leftarrow`,
+        document.getElementById("moveLeft")
+      );
+      registerKey("moveRight", mke.moveRight, mke.selectRight, false);
+      typesetLatexInKey(
+        String.raw`\rightarrow`,
+        document.getElementById("moveRight")
+      );
+      registerKey("moveUp", mke.moveUp);
+      typesetLatexInKey("\\uparrow", document.getElementById("moveUp"));
+      registerKey("moveDown", mke.moveDown);
+      typesetLatexInKey(
+        String.raw`\downarrow`,
+        document.getElementById("moveDown")
+      );
+      registerKey("deleteLeft", mke.deleteLeft, mke.deleteSelection);
 
-      registerKey('selectionModeToggle', (k) => {
+      registerKey("selectionModeToggle", (k) => {
         if (mke.inSelectionMode(k)) {
           myLeaveSelectionMode(k);
         } else {
@@ -164,22 +768,35 @@
         }
       });
 
+      console.log(mke);
+      mke.insert(keyboardMemory, new mke.AscendingBranchingNode("", "^{", "}"));
+      mke.insert(keyboardMemory, new mke.DigitNode("2"));
+      mke.moveRight(keyboardMemory);
+      mke.insert(keyboardMemory, new mke.DigitNode("1"));
+      mke.insert(keyboardMemory, new mke.DigitNode("0"));
+      displayResult();
+
       function myLeaveSelectionMode(k) {
         mke.leaveSelectionMode(k);
         let elements = document.getElementsByClassName(supportsSelectionMode);
         for (let element of elements) {
-          element.classList.remove('inSelectionMode');
+          element.classList.remove("inSelectionMode");
         }
       }
       function myEnterSelectionMode(k) {
         mke.enterSelectionMode(k);
         let elements = document.getElementsByClassName(supportsSelectionMode);
         for (let element of elements) {
-          element.classList.add('inSelectionMode');
+          element.classList.add("inSelectionMode");
         }
       }
 
-      function registerNodeKey(elementId, nodeGetter, onclickFuncForKeyboardMemoryAndNode = mke.insert, onclickSelectionModeArrowFuncForKeyboardMemoryAndNode = null) {
+      function registerNodeKey(
+        elementId,
+        nodeGetter,
+        onclickFuncForKeyboardMemoryAndNode = mke.insert,
+        onclickSelectionModeArrowFuncForKeyboardMemoryAndNode = null
+      ) {
         let element = document.getElementById(elementId);
         if (onclickSelectionModeArrowFuncForKeyboardMemoryAndNode != null) {
           element.classList.add(supportsSelectionMode);
@@ -190,7 +807,10 @@
         element.onclick = () => {
           if (mke.inSelectionMode(keyboardMemory)) {
             if (onclickSelectionModeArrowFuncForKeyboardMemoryAndNode != null) {
-              onclickSelectionModeArrowFuncForKeyboardMemoryAndNode(keyboardMemory, nodeGetter());
+              onclickSelectionModeArrowFuncForKeyboardMemoryAndNode(
+                keyboardMemory,
+                nodeGetter()
+              );
             } else {
               onclickFuncForKeyboardMemoryAndNode(keyboardMemory, nodeGetter());
             }
@@ -202,10 +822,30 @@
         };
       }
 
-      function registerKey(elementId, onclickArrowFuncForKeyboardMemory, onclickSelectionModeFuncForKeyboardMemory = null, shouldLeaveSelectionMode = true) {
+      function registerKey(
+        elementId,
+        onclickArrowFuncForKeyboardMemory,
+        onclickSelectionModeFuncForKeyboardMemory = null,
+        shouldLeaveSelectionMode = true
+      ) {
         let element = document.getElementById(elementId);
         if (onclickSelectionModeFuncForKeyboardMemory != null) {
           element.classList.add(supportsSelectionMode);
+        }
+        if (countForDefault == 0) {
+          console.log("mke");
+          mke.insert(
+            keyboardMemory,
+            new mke.AscendingBranchingNode("", "^{", "}")
+          );
+          mke.insert(keyboardMemory, new mke.DigitNode("2"));
+          mke.moveRight(keyboardMemory);
+          mke.insert(keyboardMemory, new mke.DigitNode("1"));
+          mke.insert(keyboardMemory, new mke.DigitNode("0"));
+          //   mke.insert(keyboardMemory, new mke.StandardLeafNode('\\sin'));
+          // mke.insert(keyboardMemory, new mke.RoundBracketsNode());
+          displayResult();
+          countForDefault = countForDefault + 1;
         }
 
         element.onclick = () => {
@@ -224,16 +864,28 @@
       }
 
       function displayResult() {
-        if (keyboardMemory.current instanceof mke.Placeholder && keyboardMemory.current.nodes.length == 0) {
+        if (
+          keyboardMemory.current instanceof mke.Placeholder &&
+          keyboardMemory.current.nodes.length == 0
+        ) {
           latexConfiguration.activePlaceholderShape = String.raw`\blacksquare`;
         } else {
-          latexConfiguration.activePlaceholderShape = '|';
+          latexConfiguration.activePlaceholderShape = "|";
         }
-        let editModeLatex = mke.getEditModeLatex(keyboardMemory, latexConfiguration);
-        typesetLatexInOutputBox(editModeLatex, document.getElementById('typesetEditModeLatex'));
+        let editModeLatex = mke.getEditModeLatex(
+          keyboardMemory,
+          latexConfiguration
+        );
+        typesetLatexInOutputBox(
+          editModeLatex,
+          document.getElementById("typesetEditModeLatex")
+        );
 
-        let viewModeLatex = mke.getViewModeLatex(keyboardMemory, latexConfiguration);
-        document.getElementById('viewModeLatex').innerText = viewModeLatex;
+        let viewModeLatex = mke.getViewModeLatex(
+          keyboardMemory,
+          latexConfiguration
+        );
+        document.getElementById("viewModeLatex").innerText = viewModeLatex;
       }
 
       // === MathJax specific code START ===
@@ -243,27 +895,35 @@
       }
 
       function typesetLatexInOutputBox(latex, element) {
-        element.innerText = String.raw`\(\displaystyle ` + latex + String.raw`\)`;
+        element.innerText =
+          String.raw`\(\displaystyle ` + latex + String.raw`\)`;
         MathJax.Hub.Typeset(element);
       }
 
       function setSelectionHightlightStart(color) {
-        latexConfiguration.selectionHightlightStart = String.raw`\bbox[` + color + ']{';
+        latexConfiguration.selectionHightlightStart =
+          String.raw`\bbox[` + color + "]{";
       }
-      latexConfiguration.selectionHightlightEnd = '}';
+      latexConfiguration.selectionHightlightEnd = "}";
       // === MathJax specific code END ===
 
       // === Handle key presses of a physical keyboard START ===
       let inShift = false;
       document.onkeyup = (e) => {
         const key = e.code;
-        if (key.startsWith('Shift')) {
+        if (key.startsWith("Shift")) {
           inShift = false;
         }
       };
 
-      function createHandler(matchingPredicateForKey, handleForKeyboardMemoryAndKey) {
-        return { canHandle: matchingPredicateForKey, handle: handleForKeyboardMemoryAndKey };
+      function createHandler(
+        matchingPredicateForKey,
+        handleForKeyboardMemoryAndKey
+      ) {
+        return {
+          canHandle: matchingPredicateForKey,
+          handle: handleForKeyboardMemoryAndKey,
+        };
       }
       // prettier-ignore
       const physicalKeydownHandlersForShift = [
@@ -318,43 +978,62 @@
       ];
 
       document.onkeydown = (e) => {
-        if (document.activeElement.classList.contains('disable-physical-keypress-math-input-when-focused')) {
+        if (
+          document.activeElement.classList.contains(
+            "disable-physical-keypress-math-input-when-focused"
+          )
+        ) {
           return;
         }
         const key = e.code;
-        if (key.startsWith('Shift')) {
+        if (key.startsWith("Shift")) {
           inShift = true;
         } else if (mke.inSelectionMode(keyboardMemory)) {
-          if (key == 'ArrowLeft') {
+          if (key == "ArrowLeft") {
             mke.selectLeft(keyboardMemory);
-          } else if (key == 'ArrowRight') {
+          } else if (key == "ArrowRight") {
             mke.selectRight(keyboardMemory);
           } else if (inShift) {
-            let handler = selectionModePhysicalKeydownHandlersForShift.find((handler) => handler.canHandle(key));
+            let handler = selectionModePhysicalKeydownHandlersForShift.find(
+              (handler) => handler.canHandle(key)
+            );
             if (handler != null) {
               handler.handle(keyboardMemory, key);
               myLeaveSelectionMode(keyboardMemory);
             } else {
               myLeaveSelectionMode(keyboardMemory, key);
-              physicalKeydownHandlersForShift.find((handler) => handler.canHandle(key))?.handle(keyboardMemory, key);
+              physicalKeydownHandlersForShift
+                .find((handler) => handler.canHandle(key))
+                ?.handle(keyboardMemory, key);
             }
           } else {
-            let handler = selectionModePhysicalKeydownHandlersNoShift.find((handler) => handler.canHandle(key));
+            let handler = selectionModePhysicalKeydownHandlersNoShift.find(
+              (handler) => handler.canHandle(key)
+            );
             if (handler != null) {
               handler.handle(keyboardMemory, key);
               myLeaveSelectionMode(keyboardMemory);
             } else {
               myLeaveSelectionMode(keyboardMemory);
-              physicalKeydownHandlersNoShift.find((handler) => handler.canHandle(key))?.handle(keyboardMemory, key);
+              physicalKeydownHandlersNoShift
+                .find((handler) => handler.canHandle(key))
+                ?.handle(keyboardMemory, key);
             }
           }
         } else {
-          let pureLatexElement = document.getElementById('pureLatexFromPhysicalKeys');
-          if (!inShift && key == 'Backslash') {
-            pureLatexElement.innerText = '\\';
+          let pureLatexElement = document.getElementById(
+            "pureLatexFromPhysicalKeys"
+          );
+          if (!inShift && key == "Backslash") {
+            pureLatexElement.innerText = "\\";
           } else if (pureLatexElement.innerText.length > 0) {
-            const roundBracketsRequested = key == 'Digit9' && inShift;
-            if (roundBracketsRequested || key == 'Space' || key == 'Enter' || key == 'Escape') {
+            const roundBracketsRequested = key == "Digit9" && inShift;
+            if (
+              roundBracketsRequested ||
+              key == "Space" ||
+              key == "Enter" ||
+              key == "Escape"
+            ) {
               const pureLatex = pureLatexElement.innerText;
               // prettier-ignore
               const node = pureLatex == '\\frac' ? getFractionNode()
@@ -369,10 +1048,13 @@
               if (roundBracketsRequested) {
                 mke.insert(keyboardMemory, new mke.RoundBracketsNode());
               }
-              pureLatexElement.innerText = '';
-            } else if (key == 'Backspace') {
-              pureLatexElement.innerText = pureLatexElement.innerText.substring(0, pureLatexElement.innerText.length - 1);
-            } else if (key.startsWith('Key')) {
+              pureLatexElement.innerText = "";
+            } else if (key == "Backspace") {
+              pureLatexElement.innerText = pureLatexElement.innerText.substring(
+                0,
+                pureLatexElement.innerText.length - 1
+              );
+            } else if (key.startsWith("Key")) {
               if (inShift) {
                 pureLatexElement.innerText += key[3];
               } else {
@@ -380,12 +1062,15 @@
               }
             }
           } else if (inShift) {
-            physicalKeydownHandlersForShift.find((handler) => handler.canHandle(key))?.handle(keyboardMemory, key);
+            physicalKeydownHandlersForShift
+              .find((handler) => handler.canHandle(key))
+              ?.handle(keyboardMemory, key);
           } else {
-            physicalKeydownHandlersNoShift.find((handler) => handler.canHandle(key))?.handle(keyboardMemory, key);
+            physicalKeydownHandlersNoShift
+              .find((handler) => handler.canHandle(key))
+              ?.handle(keyboardMemory, key);
           }
         }
-        displayResult();
       };
       // === Handle key presses of a physical keyboard END ===
     </script>
@@ -399,7 +1084,7 @@
       }
 
       html {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         user-select: none; /* supported by Chrome and Opera */
         -webkit-user-select: none; /* Safari */
         -khtml-user-select: none; /* Konqueror HTML */
@@ -416,7 +1101,7 @@
         width: 2.5rem;
       }
       .hidden-div {
-         display: none;
+        display: none;
       }
       #typesetEditModeLatex {
         border: 1px solid gray;
@@ -484,28 +1169,29 @@
         color: green;
       }
       .blue-button {
-    background-color: #46A3FF;
-    color: white; /* 將按鈕文字設為白色 */
-    border: none;
-    padding: 10px 20px; /* 設定上下和左右的間距 */
-    margin-right: 10px; /* 在按鈕之間添加一些間距 */
-    cursor: pointer; /* 當鼠標移到按鈕上時會出現手指形狀 */
-    border-radius: 5px; /* 為按鈕添加圓角 */
-}
+        background-color: #46a3ff;
+        color: white; /* 將按鈕文字設為白色 */
+        border: none;
+        padding: 10px 20px; /* 設定上下和左右的間距 */
+        margin-right: 10px; /* 在按鈕之間添加一些間距 */
+        cursor: pointer; /* 當鼠標移到按鈕上時會出現手指形狀 */
+        border-radius: 5px; /* 為按鈕添加圓角 */
+      }
 
-.blue-button:hover {
-    background-color: #357ABD; /* 當滑鼠移到按鈕上時的背景色 */
-}
+      .blue-button:hover {
+        background-color: #357abd; /* 當滑鼠移到按鈕上時的背景色 */
+      }
 
-.buttons-container {
-    display: flex; /* 使按鈕在同一行 */
-    justify-content: flex-start; /* 將按鈕對齊到行的開始位置 */
-}
-
-
+      .buttons-container {
+        display: flex; /* 使按鈕在同一行 */
+        justify-content: flex-start; /* 將按鈕對齊到行的開始位置 */
+      }
     </style>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -515,152 +1201,191 @@
 
     <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </head>
 <body class="light">
-
-<div class="d-flex align-items-center position-relative" style="background-color: #8ecae6;">
-    <button class="btn btn-outline-danger btn-sm position-absolute ml-2" style="left: 0;" onclick="Android.closeActivity()">❌</button>
-    <h3 class="mx-auto" style="margin-top: 13px; color: #2a4d69;">數學工作區</h3>
+<div
+        class="d-flex align-items-center position-relative"
+        style="background-color: #8ecae6"
+>
+    <button
+            class="btn btn-outline-danger btn-sm position-absolute ml-2"
+            style="left: 0"
+            onclick="Android.closeActivity()"
+    >
+        ❌
+    </button>
+    <h3 class="mx-auto" style="margin-top: 13px; color: #2a4d69">
+        數學工作區
+    </h3>
 </div>
 
 <br />
 
 <div class="d-flex justify-content-between align-items-center">
     <div id="pureLatexFromPhysicalKeys"></div>
-    <div id="typesetEditModeLatex" class="border border-info rounded-5 flex-grow-1"></div>
-    <button class="btn btn-info mr-1"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="(function(){
-        let textToCopy = document.getElementById('viewModeLatex').innerText;
-        Android.copyToClipboard(textToCopy);
-    })()">📄</button>
+    <div
+            id="typesetEditModeLatex"
+            class="border border-info rounded-5 flex-grow-1"
+    ></div>
+    <button
+            class="btn btn-info mr-1"
+            style="
+          --bs-btn-padding-y: 0.25rem;
+          --bs-btn-padding-x: 0.5rem;
+          --bs-btn-font-size: 0.75rem;
+        "
+            id="copy"
+    >
+        📄
+    </button>
 </div>
-
 
 <div id="viewModeLatex"></div>
 
 <div id="mathKeyboard" class="border border-info rounded">
-
     <div id="digit0" class="btn btn-outline-secondary"></div>
     <div id="digit1" class="btn btn-outline-secondary"></div>
     <div id="digit2" class="btn btn-outline-secondary"></div>
-    <div id="digit3"class="btn btn-outline-secondary"></div>
-    <div id="digit4"class="btn btn-outline-secondary"></div>
-    <div id="digit5"class="btn btn-outline-secondary"></div>
-    <div id="digit6"class="btn btn-outline-secondary"></div>
-    <div id="digit7"class="btn btn-outline-secondary"></div>
-    <div id="digit8"class="btn btn-outline-secondary"></div>
-    <div id="digit9"class="btn btn-outline-secondary"></div>
-    <div id="a"class="btn btn-outline-secondary"></div>
-    <div id="b"class="btn btn-outline-secondary"></div>
-    <div id="c"class="btn btn-outline-secondary"></div>
-    <div id="deleteLeft"class="btn btn-outline-secondary">🔙</div>
+    <div id="digit3" class="btn btn-outline-secondary"></div>
+    <div id="digit4" class="btn btn-outline-secondary"></div>
+    <div id="digit5" class="btn btn-outline-secondary"></div>
+    <div id="digit6" class="btn btn-outline-secondary"></div>
+    <div id="digit7" class="btn btn-outline-secondary"></div>
+    <div id="digit8" class="btn btn-outline-secondary"></div>
+    <div id="digit9" class="btn btn-outline-secondary"></div>
+    <div id="a" class="btn btn-outline-secondary"></div>
+    <div id="b" class="btn btn-outline-secondary"></div>
+    <div id="c" class="btn btn-outline-secondary"></div>
+    <div id="deleteLeft" class="btn btn-outline-secondary">🔙</div>
     <br />
     <div id="decimalSeparator"></div>
     <!--    <div id="selectionModeToggle" class="hidden-div"></div>-->
-    <div id="moveUp"class="btn btn-outline-secondary">⬆️</div>
+    <div id="moveUp" class="btn btn-outline-secondary">⬆️</div>
 
-
-    <div id="x"class="btn btn-outline-secondary"></div>
-    <div id="y"class="btn btn-outline-secondary"></div>
-    <div id="z"class="btn btn-outline-secondary"></div>
-    <div id="alpha"class="btn btn-outline-secondary"></div>
-    <div id="beta"class="btn btn-outline-secondary"></div>
-    <div id="gamma"class="btn btn-outline-secondary"></div>
-    <div id="lambda"class="btn btn-outline-secondary"></div>
-    <div id="mu"class="btn btn-outline-secondary"></div>
-    <div id="pi"class="btn btn-outline-secondary"></div>
+    <div id="x" class="btn btn-outline-secondary"></div>
+    <div id="y" class="btn btn-outline-secondary"></div>
+    <div id="z" class="btn btn-outline-secondary"></div>
+    <div id="alpha" class="btn btn-outline-secondary"></div>
+    <div id="beta" class="btn btn-outline-secondary"></div>
+    <div id="gamma" class="btn btn-outline-secondary"></div>
+    <div id="lambda" class="btn btn-outline-secondary"></div>
+    <div id="mu" class="btn btn-outline-secondary"></div>
+    <div id="pi" class="btn btn-outline-secondary"></div>
     <br />
-    <div id="moveLeft"class="btn btn-outline-secondary">⬅️</div>
-    <div id="moveDown"class="btn btn-outline-secondary">⬇️</div>
-    <div id="moveRight"class="btn btn-outline-secondary">➡️</div>
-    <div id="plusminus"class="btn btn-outline-secondary"></div>
-    <div id="plus"class="btn btn-outline-secondary"></div>
-    <div id="minus"class="btn btn-outline-secondary"></div>
-    <div id="multiply"class="btn btn-outline-secondary"></div>
-    <div id="ratio"class="btn btn-outline-secondary"></div>
-    <div id="div"class="btn btn-outline-secondary"></div>
-    <div id="faculty"class="btn btn-outline-secondary"></div>
-    <div id="binomial"class="btn btn-outline-secondary"></div>
-    <div id="fraction"class="btn btn-outline-secondary"></div>
+    <div id="moveLeft" class="btn btn-outline-secondary">⬅️</div>
+    <div id="moveDown" class="btn btn-outline-secondary">⬇️</div>
+    <div id="moveRight" class="btn btn-outline-secondary">➡️</div>
+    <div id="plusminus" class="btn btn-outline-secondary"></div>
+    <div id="plus" class="btn btn-outline-secondary"></div>
+    <div id="minus" class="btn btn-outline-secondary"></div>
+    <div id="multiply" class="btn btn-outline-secondary"></div>
+    <div id="ratio" class="btn btn-outline-secondary"></div>
+    <div id="div" class="btn btn-outline-secondary"></div>
+    <div id="faculty" class="btn btn-outline-secondary"></div>
+    <div id="binomial" class="btn btn-outline-secondary"></div>
+    <div id="fraction" class="btn btn-outline-secondary"></div>
     <br />
     <!--    <div onclick="const settingsContainer = document.getElementById('settingsContainer'); settingsContainer.style.display = settingsContainer.style.display == 'block' ? 'none' : 'block';" >-->
     <!--        <strong class="hidden-div">Settings</strong>-->
     <!--    </div>-->
 
     <div id="settingsContainer">
-        <div id="multiplicationSignToggle" class="setting">Output multiplication sign: <span class="setting-value" id="multiplicationSignType">cross</span></div>
-        <div id="decimalSeparatorToggle" class="setting">Decimal separator: <span class="setting-value" id="decimalSeparatorType">decimal point</span></div>
-        <div id="colorSchemeToggle" class="setting">Color scheme: <span class="setting-value" id="colorScheme"></span></div>
+        <div id="multiplicationSignToggle" class="setting">
+            Output multiplication sign:
+            <span class="setting-value" id="multiplicationSignType">cross</span>
+        </div>
+        <div id="decimalSeparatorToggle" class="setting">
+            Decimal separator:
+            <span class="setting-value" id="decimalSeparatorType"
+            >decimal point</span
+            >
+        </div>
+        <div id="colorSchemeToggle" class="setting">
+            Color scheme: <span class="setting-value" id="colorScheme"></span>
+        </div>
     </div>
 
     <br />
-    <div id="power"class="btn btn-outline-secondary"></div>
-    <div id="subscript"class="btn btn-outline-secondary"></div>
-    <div id="squareRoot"class="btn btn-outline-secondary"></div>
-    <div id="nthRoot"class="btn btn-outline-secondary"></div>
-    <div id="roundBrackets"class="btn btn-outline-secondary"></div>
-    <div id="squareBrackets"class="btn btn-outline-secondary"></div>
-    <div id="curlyBrackets"class="btn btn-outline-secondary"></div>
-    <div id="pipes"class="btn btn-outline-secondary"></div>
-    <div id="doublePipes"class="btn btn-outline-secondary"></div>
+    <div id="power" class="btn btn-outline-secondary"></div>
+    <div id="subscript" class="btn btn-outline-secondary"></div>
+    <div id="squareRoot" class="btn btn-outline-secondary"></div>
+    <div id="nthRoot" class="btn btn-outline-secondary"></div>
+    <div id="roundBrackets" class="btn btn-outline-secondary"></div>
+    <div id="squareBrackets" class="btn btn-outline-secondary"></div>
+    <div id="curlyBrackets" class="btn btn-outline-secondary"></div>
+    <div id="pipes" class="btn btn-outline-secondary"></div>
+    <div id="doublePipes" class="btn btn-outline-secondary"></div>
     <br />
 
     <div style="text-align: right">
         <label for="matrixHeight">矩陣高</label>
-        <input id="matrixHeight"class="btn btn-outline-secondary" type="number" value="2" min="1" class="disable-physical-keypress-math-input-when-focused" />
+        <input
+                id="matrixHeight"
+                class="btn btn-outline-secondary"
+                type="number"
+                value="2"
+                min="1"
+                class="disable-physical-keypress-math-input-when-focused"
+        />
         <br />
         <label for="matrixWidth">矩陣寬</label>
-        <input id="matrixWidth"class="btn btn-outline-secondary" type="number" value="2" min="1" class="disable-physical-keypress-math-input-when-focused" />
+        <input
+                id="matrixWidth"
+                class="btn btn-outline-secondary"
+                type="number"
+                value="2"
+                min="1"
+                class="disable-physical-keypress-math-input-when-focused"
+        />
     </div>
-    <div id="pmatrix"class="btn btn-outline-secondary"></div>
-    <div id="vmatrix"class="btn btn-outline-secondary"></div>
+    <div id="pmatrix" class="btn btn-outline-secondary"></div>
+    <div id="vmatrix" class="btn btn-outline-secondary"></div>
     <br />
     <br />
-    <div id="approx"class="btn btn-outline-secondary"></div>
-    <div id="equal"class="btn btn-outline-secondary"></div>
-    <div id="notEqual"class="btn btn-outline-secondary"></div>
-    <div id="lessThanOrEqual"class="btn btn-outline-secondary"></div>
-    <div id="greaterThanOrEqual"class="btn btn-outline-secondary"></div>
-    <div id="lessThan"class="btn btn-outline-secondary"></div>
-    <div id="greaterThan"class="btn btn-outline-secondary"></div>
+    <div id="approx" class="btn btn-outline-secondary"></div>
+    <div id="equal" class="btn btn-outline-secondary"></div>
+    <div id="notEqual" class="btn btn-outline-secondary"></div>
+    <div id="lessThanOrEqual" class="btn btn-outline-secondary"></div>
+    <div id="greaterThanOrEqual" class="btn btn-outline-secondary"></div>
+    <div id="lessThan" class="btn btn-outline-secondary"></div>
+    <div id="greaterThan" class="btn btn-outline-secondary"></div>
     <br />
-    <div id="naturalNumbers"class="btn btn-outline-secondary"></div>
-    <div id="integers"class="btn btn-outline-secondary"></div>
-    <div id="realNumbers"class="btn btn-outline-secondary"></div>
+    <div id="naturalNumbers" class="btn btn-outline-secondary"></div>
+    <div id="integers" class="btn btn-outline-secondary"></div>
+    <div id="realNumbers" class="btn btn-outline-secondary"></div>
 
-    <div id="isMemberOf"class="btn btn-outline-secondary"></div>
-    <div id="isProperSubsetOf"class="btn btn-outline-secondary"></div>
-    <div id="isSubsetOf"class="btn btn-outline-secondary"></div>
-    <div id="setDifference"class="btn btn-outline-secondary"></div>
-    <div id="exists"class="btn btn-outline-secondary"></div>
-    <div id="forAll"class="btn btn-outline-secondary"></div>
-    <div id="not"class="btn btn-outline-secondary"></div>
-    <div id="or"class="btn btn-outline-secondary"></div>
-    <div id="and"class="btn btn-outline-secondary"></div>
-    <div id="doubleRightArrow"class="btn btn-outline-secondary"></div>
-    <div id="doubleLeftArrow"class="btn btn-outline-secondary"></div>
+    <div id="isMemberOf" class="btn btn-outline-secondary"></div>
+    <div id="isProperSubsetOf" class="btn btn-outline-secondary"></div>
+    <div id="isSubsetOf" class="btn btn-outline-secondary"></div>
+    <div id="setDifference" class="btn btn-outline-secondary"></div>
+    <div id="exists" class="btn btn-outline-secondary"></div>
+    <div id="forAll" class="btn btn-outline-secondary"></div>
+    <div id="not" class="btn btn-outline-secondary"></div>
+    <div id="or" class="btn btn-outline-secondary"></div>
+    <div id="and" class="btn btn-outline-secondary"></div>
+    <div id="doubleRightArrow" class="btn btn-outline-secondary"></div>
+    <div id="doubleLeftArrow" class="btn btn-outline-secondary"></div>
     <br />
     <br />
-    <div id="sin"class="btn btn-outline-secondary"></div>
-    <div id="cos"class="btn btn-outline-secondary"></div>
-    <div id="tan"class="btn btn-outline-secondary"></div>
-    <div id="arcsin"class="btn btn-outline-secondary"></div>
-    <div id="cos-1"class="btn btn-outline-secondary"></div>
-    <div id="taninv"class="btn btn-outline-secondary"></div>
+    <div id="sin" class="btn btn-outline-secondary"></div>
+    <div id="cos" class="btn btn-outline-secondary"></div>
+    <div id="tan" class="btn btn-outline-secondary"></div>
+    <div id="arcsin" class="btn btn-outline-secondary"></div>
+    <div id="cos-1" class="btn btn-outline-secondary"></div>
+    <div id="taninv" class="btn btn-outline-secondary"></div>
     <br />
-    <div id="integral"class="btn btn-outline-secondary"></div>
-    <div id="sum"class="btn btn-outline-secondary"></div>
-    <div id="product"class="btn btn-outline-secondary"></div>
-    <div id="limit"class="btn btn-outline-secondary"></div>
-    <div id="leftarrow"class="btn btn-outline-secondary"></div>
-    <div id="rightarrow"class="btn btn-outline-secondary"></div>
-    <div id="uparrow"class="btn btn-outline-secondary"></div>
-    <div id="downarrow"class="btn btn-outline-secondary"></div>
-    <div id="infty"class="btn btn-outline-secondary"></div>
+    <div id="integral" class="btn btn-outline-secondary"></div>
+    <div id="sum" class="btn btn-outline-secondary"></div>
+    <div id="product" class="btn btn-outline-secondary"></div>
+    <div id="limit" class="btn btn-outline-secondary"></div>
+    <div id="leftarrow" class="btn btn-outline-secondary"></div>
+    <div id="rightarrow" class="btn btn-outline-secondary"></div>
+    <div id="uparrow" class="btn btn-outline-secondary"></div>
+    <div id="downarrow" class="btn btn-outline-secondary"></div>
+    <div id="infty" class="btn btn-outline-secondary"></div>
 </div>
-<br>
-<br>
-<br>
-
+<br />
+<br />
+<br />
 </body>
 </html>
