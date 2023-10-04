@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings.Global.putString
+import android.util.Base64
 import android.util.Log
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
@@ -646,7 +647,7 @@ open class BaseActivity : AppCompatActivity() {
              editor.putBoolean("doNotShowAgain", isChecked)
              editor.apply()
          }
-
+        Toast.makeText(this,"rotate call",Toast.LENGTH_SHORT).show()
          rotateEnter.setOnClickListener {
              editor.putBoolean("rotate", true)
              editor.apply()
@@ -655,16 +656,41 @@ open class BaseActivity : AppCompatActivity() {
              ConstantsHoughAlgo.imageRotate(
                  uri,this@BaseActivity,
                  onSuccess = { it1 ->
+                     Toast.makeText(this,"rotate success",Toast.LENGTH_SHORT).show()
+                     Log.e("rotate","success")
+                     val showHoughDialog = Dialog(this)
+                     showHoughDialog.setContentView(R.layout.dialog_hough_show)
+                     showHoughDialog.setTitle("旋轉結果")
 
-                     ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
-                         hideProgressDialog()
-                         processScan(it1)
-                     }, onFailure = { it1 ->
-                         hideProgressDialog()
-                         showErrorScan()
-                     })
+                     val showHoughImage : ImageView = showHoughDialog.findViewById(R.id.iv_hough_image)
+                     showHoughImage.setImageBitmap(base64ToBitmap(it1))
+                     val enterHough : TextView = showHoughDialog.findViewById(R.id.hough_image_enter)
+                     enterHough.setOnClickListener {
+                         showHoughDialog.cancel()
+                         ConstantsScanServiceFunction.scanBase64ToOcrText(it1, this@BaseActivity,1, onSuccess = { it1 ->
+                             hideProgressDialog()
+                             processScan(it1)
+                         }, onFailure = { it1 ->
+                             hideProgressDialog()
+                             showErrorScan()
+                         })
+                     }
+                     val cancelHough : TextView = showHoughDialog.findViewById(R.id.hough_image_cancel)
+                     cancelHough.setOnClickListener {
+                         showHoughDialog.cancel()
+                         ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
+                             hideProgressDialog()
+                             processScan(it1)
+                         }, onFailure = { it1 ->
+                             hideProgressDialog()
+                             showErrorScan()
+                         })
+                     }
+                     showHoughDialog.show()
+
                  }, onFailure = { it1 ->
-
+                    Toast.makeText(this,"rotate fail",Toast.LENGTH_SHORT).show()
+                     Log.e("rotate","fail")
                      ConstantsScanServiceFunction.scanBase64ToOcrText(base64String, this@BaseActivity,1, onSuccess = { it1 ->
                          hideProgressDialog()
                          processScan(it1)
@@ -677,6 +703,8 @@ open class BaseActivity : AppCompatActivity() {
          }
 
          rotateCancel.setOnClickListener {
+             Toast.makeText(this,"rotate cancel",Toast.LENGTH_SHORT).show()
+             Log.e("rotate","cancel")
              editor.putBoolean("rotate", false)
              editor.apply()
              showRotateDialog.dismiss()
@@ -760,7 +788,10 @@ open class BaseActivity : AppCompatActivity() {
         showCutImageDialog.show()
     }
 
-
+    fun base64ToBitmap(base64String: String): Bitmap? {
+        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+    }
     fun getRotateOrNot() : Int {
         val preferences = getSharedPreferences("settings", MODE_PRIVATE)
         val doNotShowAgain = preferences.getBoolean("doNotShowAgain", false)

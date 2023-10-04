@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
-                    android:text="單選題"
+                    tools:text="單選題"
                     android:textSize="22dp"
                     android:textColor="#000000"/>
                 <LinearLayout
@@ -60,7 +60,7 @@
                         android:layout_marginLeft="5dp"
                         android:textColorHint="#7A8089"
                         android:textSize="14sp"
-                        android:text="0/10" />
+                        tools:text="0/10" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -82,7 +82,7 @@
             android:indeterminate="false"
             android:max="10"
             android:minHeight="20dp"
-            android:progress="2" />
+            android:progress="10" />
 
 <!--        <com.google.android.material.imageview.ShapeableImageView-->
 <!--            android:id="@+id/Question_image"-->
@@ -148,7 +148,7 @@
                         android:id="@+id/question_description"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:text="this is math \\(\\int_{0}^{20}x^{20}\\) "
+                        app:text="考試尚未準備完成 \\(\\int_{0}^{20}x^{20}\\) "
                         app:textColor="#000000"
                         android:textSize="14dp"
                         android:hint="輕觸輸入答案敘述"

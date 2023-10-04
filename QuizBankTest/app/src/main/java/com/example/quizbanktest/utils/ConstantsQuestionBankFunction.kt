@@ -33,6 +33,7 @@ object ConstantsQuestionBankFunction {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(ConstantsFunction.createOkHttpClient())
                 .build()
             val api = retrofit.create(QuestionBankService::class.java)
             //TODO 拿到csrf token access token

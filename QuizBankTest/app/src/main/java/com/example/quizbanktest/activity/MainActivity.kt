@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.BuildCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.account.MyProfileActivity
 import com.example.quizbanktest.activity.paint.PaintActivity
+import com.example.quizbanktest.activity.quiz.MPStartQuiz
+import com.example.quizbanktest.activity.quiz.SingleQuestion
 import com.example.quizbanktest.activity.scan.MathActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.adapters.main.RecentViewAdapter
@@ -36,17 +39,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val showEmptyBankImage : ImageView = findViewById(R.id.show_empty_bank_list)
+        val showEmptyWrongQuizRecordImage : ImageView = findViewById(R.id.show_empty_wrong_list)
         showProgressDialog("處理資料中請稍等")
         ConstantsQuestionBankFunction.getAllUserQuestionBanks(this,
             onSuccess = { questionBanks ->
                 setupRecentRecyclerView(questionBanks)
                 setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
                 hideProgressDialog()
-//                showEmptyBankImage.visibility = View.GONE
+                showEmptyBankImage.visibility = View.GONE
             },
             onFailure = { errorMessage ->
                 hideProgressDialog()
-                if(errorMessage.equals("empty")){
+                setupRecommendRecyclerView(ConstantsRecommend.getQuestions())
+                if(errorMessage == "Request failed with status code "){
+                    Log.e("empty","eeeeeeeeeeeeeefjalsjfla;sjfl;asjf")
                     showEmptyBankImage.visibility = View.VISIBLE
                 }else{
                     showErrorSnackBar("題庫資料取得錯誤")
@@ -56,7 +62,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         )
         val quizRecordType = Constants.quizTypeSingle
         ConstantsQuizRecord.getAllQuizRecords(this, quizRecordType, onSuccess = { returnRecordList->
-            setupWrongListRecyclerView(returnRecordList)
+            if(returnRecordList.size == 0){
+                showEmptyWrongQuizRecordImage.visibility = View.VISIBLE
+            }else{
+                showEmptyWrongQuizRecordImage.visibility = View.GONE
+                setupWrongListRecyclerView(returnRecordList)
+            }
+
         }, onFailure = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
@@ -69,6 +81,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupNavigationView()
 
         doubleCheckExit()
+        val joinText: androidx.appcompat.widget.AppCompatEditText =  findViewById(R.id.join_code_text)
+        val joinBtn: android.widget.Button = findViewById(R.id.btn_join)
+        joinBtn.setOnClickListener {
+            val jText = joinText.text.toString()
+            val intent = Intent()
+            intent.setClass(this, MPStartQuiz::class.java)
+            intent.putExtra("Key_id", jText)
+            startActivity(intent)
+        }
     }
 
 

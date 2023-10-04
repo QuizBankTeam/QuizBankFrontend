@@ -13,6 +13,7 @@ import com.example.quizbanktest.adapters.quiz.LinearLayoutWrapper
 import com.example.quizbanktest.adapters.quiz.QuestionAdapter
 import com.example.quizbanktest.adapters.quiz.QuestionAddChooseQuestion
 import com.example.quizbanktest.databinding.ActivitySingleQuizBinding
+import com.example.quizbanktest.fragment.MultiQuizPage
 import com.example.quizbanktest.fragment.QuestionAddDialog
 import com.example.quizbanktest.fragment.SingleQuizPage
 import com.example.quizbanktest.models.Question
@@ -382,9 +383,15 @@ class SingleQuiz: AppCompatActivity() {
         differentFromQuizList = false
         this.quizIndex = quizIndex
         this.duringTime = duringTime
-        quizQuestionImages = SingleQuizPage.Companion.quizListQuestionImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
-        quizAnswerImages = SingleQuizPage.Companion.quizListAnswerImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
-        Log.d("answer images size in quiz is", quizAnswerImages.size.toString())
+
+        if(quizType==Constants.quizTypeSingle){
+            quizQuestionImages = SingleQuizPage.Companion.quizListQuestionImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
+            quizAnswerImages = SingleQuizPage.Companion.quizListAnswerImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
+        }else if(quizType==Constants.quizTypeCasual){
+            quizQuestionImages = MultiQuizPage.Companion.quizListQuestionImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
+            quizAnswerImages = MultiQuizPage.Companion.quizListAnswerImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
+        }
+
         quizBinding.quizTitle.text = title
         quizBinding.questionNumber.text = String.format( getString(R.string.Con2word),
             getString(R.string.Question_CN), String.format(getString(R.string.brackets_with_int), questionlist.size) )

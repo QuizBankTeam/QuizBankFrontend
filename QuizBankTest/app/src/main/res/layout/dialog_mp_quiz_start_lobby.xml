@@ -17,17 +17,32 @@
             android:background="@color/colorPrimary"
             android:theme="@style/CustomToolbarStyle">
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/baseline_exit_quiz"
+                android:visibility="invisible"/>
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_weight="3"
                 android:gravity="center"
-
                 android:text="考試大廳"
                 android:textSize="25dp"
                 android:textStyle="bold"
                 android:textAppearance="@style/CustomToolbarStyle"
                 android:textColor="@color/colorPrimaryDark"/>
+            <ImageButton
+                android:id="@+id/exit_quiz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/baseline_exit_quiz"/>
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -61,13 +76,30 @@
                     android:textSize="25dp"
                     android:textStyle="bold"
                     android:layout_marginBottom="10dp"/>
-                <TextView
-                    android:id="@+id/room_number"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="111111"
-                    android:textSize="25dp"
-                    android:textColor="@color/black"/>
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/room_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="111111"
+                        android:textSize="20dp"
+                        android:textColor="@color/black"/>
+                    <Button
+                        android:id="@+id/copy_quizID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="複製"
+                        android:textSize="20dp"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -139,4 +171,35 @@
             android:textSize="18dp"
             android:layout_gravity="center_vertical"/>
     </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/join_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="18dp"
+        android:layout_gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/connection_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text=""
+        android:textSize="18dp"
+        android:layout_gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/disconnect_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text=""
+        android:textSize="18dp"
+        android:layout_gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/connect_error_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text=""
+        android:textSize="18dp"
+        android:layout_gravity="center_vertical"/>
 </LinearLayout>
