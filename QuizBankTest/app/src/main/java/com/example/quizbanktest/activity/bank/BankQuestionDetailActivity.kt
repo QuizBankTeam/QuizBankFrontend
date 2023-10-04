@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
@@ -24,22 +26,26 @@ import com.example.quizbanktest.adapters.bank.QuestionOptionsRecyclerViewAdapter
 import com.example.quizbanktest.adapters.bank.ViewPagerAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
+import com.example.quizbanktest.utils.ConstantsFunction
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
+import com.qdot.mathrendererlib.MathRenderView
 
 
 class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
-    private lateinit var tvDescription: TextView
-    private lateinit var tvAnswerDescription: TextView
+    private lateinit var tvDescription: MathRenderView
+    private lateinit var tvAnswerDescription: MathRenderView
     private lateinit var tvImageNumber: TextView
     private lateinit var btnShowAnswer: TextView
     private lateinit var btnShowDetail: TextView
+    private lateinit var btnAddQuestionImage: ImageButton
+    private lateinit var btnAddAnswerImage: ImageButton
     private lateinit var optionRecyclerView: RecyclerView
     private lateinit var optionAdapter: QuestionOptionsRecyclerViewAdapter
-    private lateinit var imageViewPager: ViewPager
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private lateinit var questionImageViewPager: ViewPager
+    private lateinit var questionImageViewPagerAdapter: ViewPagerAdapter
 
     // Question variable
     private lateinit var questionId: String
@@ -76,6 +82,8 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
         btnShowDetail.setOnClickListener { showDetail() }
 
+        btnAddQuestionImage.setOnClickListener { addImage(btnAddQuestionImage) }
+
         tvDescription.setOnClickListener { editDescription() }
 
         tvAnswerDescription.setOnClickListener { editAnswerDescription() }
@@ -84,16 +92,16 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     private fun setupImage() {
-        viewPagerAdapter = ViewPagerAdapter(this@BankQuestionDetailActivity, questionImage)
-        imageViewPager.adapter = viewPagerAdapter
+        questionImageViewPagerAdapter = ViewPagerAdapter(this@BankQuestionDetailActivity, questionImage)
+        questionImageViewPager.adapter = questionImageViewPagerAdapter
         tvImageNumber.text = " "
 
         //select any page you want as your starting page
         val currentPageIndex = 0
-        imageViewPager.currentItem = currentPageIndex
+        questionImageViewPager.currentItem = currentPageIndex
 
         // registering for page change callback
-        imageViewPager.addOnPageChangeListener(
+        questionImageViewPager.addOnPageChangeListener(
             object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {}
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
@@ -102,10 +110,8 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                     //update the image number textview
                     tvImageNumber.text = "${position + 1} / ${questionImage.size}"
                 }
-
             }
         )
-
     }
 
     private fun setupOptions() {
@@ -242,6 +248,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                 descriptionDialog.dismiss()
             }
         }
+        descriptionDialog.setOnDismissListener { isModified = false }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -278,11 +285,11 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private fun showDetail() {
         val detailDialog = Dialog(this)
         detailDialog.setContentView(R.layout.dialog_bank_question_detail)
-        detailDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         detailDialog.window?.setGravity(Gravity.CENTER)
         detailDialog.show()
 
         val tvDescription = detailDialog.findViewById<TextView>(R.id.answer_description)
+        val btnAddAnswerImage = detailDialog.findViewById<ImageButton>(R.id.btn_add_answerImage)
         val answerImageViewPager = detailDialog.findViewById<ViewPager>(R.id.viewPager)
         val answerViewPagerAdapter = ViewPagerAdapter(this, answerImage)
         val tvImageNumber = detailDialog.findViewById<TextView>(R.id.imageNumberTV)
@@ -293,14 +300,12 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         tvDescription.setOnClickListener{ editAnswerDescription() }
 
         if (answerImage.isEmpty()) {
-            answerImageViewPager.visibility = View.INVISIBLE
-            tvImageNumber.visibility = View.GONE
-            detailDialog.findViewById<ImageView>(R.id.empty_box).visibility = View.VISIBLE
+            tvImageNumber.visibility = View.INVISIBLE
+            btnAddAnswerImage.visibility = View.VISIBLE
             showEmptySnackBar("目前照片為空喔")
         } else {
-            detailDialog.findViewById<ImageView>(R.id.empty_box).visibility = View.INVISIBLE
-
             answerImageViewPager.adapter = answerViewPagerAdapter
+
             //select any page you want as your starting page
             val currentPageIndex = 0
             answerImageViewPager.currentItem = currentPageIndex
@@ -322,6 +327,29 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                     }
                 }
             )
+        }
+
+        btnAddAnswerImage.setOnClickListener {addImage(btnAddAnswerImage)}
+    }
+
+    private fun addImage(view: View) {
+        choosePhotoFromGallery { bitmap ->
+            if (bitmap != null) {
+                val base64String = ConstantsFunction.encodeImage(bitmap)
+                when (view.id) {
+                    R.id.btn_add_questionImage -> {
+                        questionImage.add(base64String!!)
+                        questionImageViewPagerAdapter.refreshItem()
+                    }
+                    R.id.btn_add_answerImage -> {
+                        answerImage.add(base64String!!)
+
+                    }
+                    else -> {}
+                }
+            } else {
+                //
+            }
         }
     }
 
@@ -376,66 +404,77 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         questionTitle = intent.getStringExtra("title").toString()
         questionNumber = intent.getStringExtra("number").toString()
         questionDescription = intent.getStringExtra("description").toString()
+
         val questionOptions = intent.getStringArrayListExtra("options")
         if (questionOptions != null) {
             this.questionOptions = questionOptions
         }
+
         questionType = intent.getStringExtra("type").toString()
         bankType = intent.getStringExtra("bankType").toString()
+
         bankId = intent.getStringExtra("bankId").toString()
         val answerOptions = intent.getStringArrayListExtra("answerOptions")
         if (answerOptions != null) {
             this.answerOptions = answerOptions
             answerOptions.add("roughly")
         }
+
         answerDescription = intent.getStringExtra("answerDescription").toString()
         questionSource = intent.getStringExtra("source").toString()
         createdDate = intent.getStringExtra("createdDate").toString()
+
         val questionImage = intent.getStringArrayListExtra("image")
         if (questionImage != null) {
             this.questionImage = questionImage
         }
+
         val answerImage = intent.getStringArrayListExtra("answerImage")
         if (answerImage != null) {
             this.answerImage = answerImage
         }
+
         val questionTag = intent.getStringArrayListExtra("tag")
         if (questionTag != null) {
             this.questionTag = questionTag
         }
-
-        Log.e("BankQuestionDetailActivity", "image: $questionImage")
-        Log.e("BankQuestionDetailActivity", "answerImage: $answerImage")
 
         // View initialization
         tvTitle = findViewById(R.id.question_title)
         tvType = findViewById(R.id.question_type)
         tvDescription = findViewById(R.id.question_description)
         tvAnswerDescription = findViewById(R.id.answer_description)
+        btnAddQuestionImage = findViewById(R.id.btn_add_questionImage)
         btnShowAnswer = findViewById(R.id.btn_show_answer)
         btnShowDetail = findViewById(R.id.btn_show_detail)
         tvImageNumber = findViewById(R.id.imageNumberTV)
-        imageViewPager = findViewById(R.id.viewPager)
+        questionImageViewPager = findViewById(R.id.viewPager)
 
         tvTitle.text = questionTitle
-        tvTitle.movementMethod = ScrollingMovementMethod()
-        tvTitle.isSelected = true
+        if (tvTitle.length() < 10) {
+            tvTitle.isHorizontalScrollBarEnabled = false
+            tvTitle.gravity = Gravity.CENTER
+        } else {
+            tvTitle.movementMethod = ScrollingMovementMethod()
+            tvTitle.isSelected = true
+        }
+
         tvType.text = questionType
         tvType.setBackgroundColor(Color.parseColor("#ffeb3b"))
-        tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = questionDescription
-        tvAnswerDescription.movementMethod = ScrollingMovementMethod()
+        // code below is commented due to the mathRenderView
+//        tvDescription.movementMethod = ScrollingMovementMethod()
         tvAnswerDescription.text = answerDescription
+        // code below is commented due to the mathRenderView
+//        tvAnswerDescription.movementMethod = ScrollingMovementMethod()
 
         // Variable initialization
         newDescription = questionDescription
         newAnswerDescription = answerDescription
 
         if (questionImage!!.isEmpty()) {
-            imageViewPager.visibility = View.INVISIBLE
             tvImageNumber.visibility = View.INVISIBLE
-            findViewById<RelativeLayout>(R.id.image_layout).visibility = View.INVISIBLE
-            findViewById<ImageView>(R.id.img_empty).visibility = View.VISIBLE
+            btnAddQuestionImage.visibility = View.VISIBLE
             showEmptySnackBar("目前照片為空喔")
         } else {
             setupImage()

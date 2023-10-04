@@ -80,7 +80,7 @@
                         android:gravity="center"
                         android:clickable="true"
                         android:foreground="?attr/selectableItemBackground"
-                        android:background="@drawable/add_image"
+                        android:background="@drawable/btn_add_image"
                         android:text="新增圖片 ➕" />
                     <TextView
                         android:id="@+id/edit_image"
@@ -94,7 +94,7 @@
                         android:gravity="center"
                         android:clickable="true"
                         android:foreground="?attr/selectableItemBackground"
-                        android:background="@drawable/add_image"
+                        android:background="@drawable/btn_add_image"
                         android:text="編輯圖片 🖌" />
                     <TextView
                         android:id="@+id/delete_image"
@@ -108,7 +108,7 @@
                         android:gravity="center"
                         android:clickable="true"
                         android:foreground="?attr/selectableItemBackground"
-                        android:background="@drawable/add_image"
+                        android:background="@drawable/btn_add_image"
                         android:text="刪除圖片 🗑" />
                 </LinearLayout>
 

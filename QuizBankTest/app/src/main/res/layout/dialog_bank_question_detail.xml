@@ -3,22 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:id="@+id/image_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/empty_box"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_above="@id/answer_description"
-            android:layout_centerHorizontal="true"
-            android:padding="10dp"
-            android:src="@drawable/box" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
@@ -31,11 +21,23 @@
             android:id="@+id/imageNumberTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:gravity="center"
             android:padding="5dp"
             android:text="01/30"
             android:textColor="#454545"
             android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/btn_add_answerImage"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_above="@id/answer_description"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:padding="10dp"
+            android:src="@drawable/add_picture_svgrepo_com"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/answer_description"

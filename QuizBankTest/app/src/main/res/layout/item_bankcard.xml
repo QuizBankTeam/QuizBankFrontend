@@ -27,9 +27,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/bank_image"
-            android:maxWidth="175dp"
+            android:hint="Title"
+            android:maxWidth="140dp"
+            android:minWidth="100dp"
             android:singleLine="true"
-            android:text="This is title"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -40,14 +41,14 @@
             android:layout_below="@+id/bank_title"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/bank_image"
-            android:text="YYYY/MM/DD"
+            android:hint="YYYY/MM/DD"
             android:textColor="#606060"
             android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/btn_edit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"

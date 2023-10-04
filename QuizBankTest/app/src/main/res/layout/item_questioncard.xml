@@ -29,7 +29,8 @@
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/question_image"
             android:hint="Title"
-            android:maxWidth="175dp"
+            android:maxWidth="140dp"
+            android:minWidth="100dp"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="20sp" />
@@ -53,18 +54,17 @@
             android:layout_marginEnd="30dp"
             android:layout_toStartOf="@id/btn_edit"
             android:gravity="center"
-            android:maxWidth="100dp"
             android:minWidth="50dp"
             android:padding="5dp"
-            android:text="type"
             android:singleLine="true"
+            android:text="type"
             android:textColor="#606060"
             android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/btn_edit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
