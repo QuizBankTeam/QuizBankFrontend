@@ -32,6 +32,7 @@ import com.example.quizbanktest.utils.ConstantsQuestionFunction
 
 class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
+    private lateinit var searchView: SearchView
     private lateinit var tvTitle: TextView
     private lateinit var backArrowBtn: ImageButton
     private lateinit var btnAddQuestion: ImageButton
@@ -73,6 +74,17 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 //            startActivity(addQuestionActivity)
         }
 
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                /**調用RecyclerView內的Filter方法 */
+                questionAdapter.getFilter().filter(newText)
+                return false
+            }
+        })
+
         pullExit()
     }
     private fun setupQuestionModel() {
@@ -107,6 +119,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         bankId = intent.getStringExtra("BankId").toString()
         Log.e("BankQuestionActivity", "Bank title: $bankTitle, Bank id: $bankId")
 
+        searchView = findViewById(R.id.search_bar)
         backArrowBtn = findViewById(R.id.btn_back_arrow)
         tvTitle = findViewById(R.id.title)
         btnAddQuestion = findViewById(R.id.question_add)

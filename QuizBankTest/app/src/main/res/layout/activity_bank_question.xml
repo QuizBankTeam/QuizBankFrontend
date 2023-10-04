@@ -46,12 +46,51 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/layout_searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_bar"
+        android:orientation="horizontal">
+
+        <android.widget.SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="9"
+            android:background="@drawable/search_bar"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/search_hint" />
+
+        <ImageButton
+            android:id="@+id/menu_button"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="?actionBarItemBackground"
+            android:onClick="setPopupWindow"
+            android:src="@drawable/burger_menu_right_svgrepo_com" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dividing_view"
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:layout_below="@id/layout_searchBar"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/gradient_background"
+        android:paddingBottom="0dp" />
+
+    <LinearLayout
         android:id="@+id/question_layout"
         android:layout_width="match_parent"
         android:layout_height="550dp"
-        android:layout_below="@+id/title_bar"
+        android:layout_below="@id/dividing_view"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView

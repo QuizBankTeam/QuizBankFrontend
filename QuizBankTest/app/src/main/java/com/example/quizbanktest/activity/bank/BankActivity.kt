@@ -237,7 +237,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         btnAddBank = findViewById(R.id.bank_add)
         searchView = findViewById(R.id.search_bar)
 
-
     }
 
     override fun onItemClick(position: Int) {
