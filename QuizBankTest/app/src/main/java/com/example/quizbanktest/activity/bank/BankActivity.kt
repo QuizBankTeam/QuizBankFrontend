@@ -13,9 +13,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
@@ -28,7 +25,6 @@ import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.view.WrapLayout
 import jp.wasabeef.blurry.Blurry
-import org.w3c.dom.Text
 import java.time.LocalDate
 
 
@@ -77,6 +73,17 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         }
 
         btnAddBank.setOnClickListener { addBank() }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                /**調用RecyclerView內的Filter方法 */
+                bankAdapter.getFilter().filter(newText)
+                return false
+            }
+        })
     }
 
     private fun setupBankModel() {
@@ -86,50 +93,6 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
         bankRecyclerView.adapter = bankAdapter
         bankRecyclerView.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun addBank() {
-        val addBankDialog = Dialog(this)
-        addBankDialog.setContentView(R.layout.dialog_add_bank)
-        addBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        addBankDialog.window?.setGravity(Gravity.CENTER)
-        addBankDialog.show()
-
-        val btnBankSubmit = addBankDialog.findViewById<TextView>(R.id.btn_bank_submit)
-
-        val bankMembers: ArrayList<String> = arrayListOf(Constants.userId)
-        val bankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
-
-        btnBankSubmit.setOnClickListener {
-            val data = QuestionBankModel(
-                Constants.userId, bankTitle,
-                "single", LocalDate.now().toString(),
-                bankMembers, Constants.userId, Constants.userId,
-            )
-
-            if (bankTitle.isEmpty() || bankTitle == null) {
-                showErrorSnackBar("名稱不可為空")
-            } else {
-                showProgressDialog("新增中")
-                ConstantsQuestionBankFunction.postQuestionBank(data, this,
-                    onSuccess = {
-                        Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
-                        Log.d("addBankDialog", "add bank success")
-                        addBankDialog.dismiss()
-                        bankAdapter.addItem(data)
-                        findViewById<ImageView>(R.id.img_empty).visibility = View.INVISIBLE
-                        hideProgressDialog()
-                    },
-                    onFailure = {
-                        Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
-                        Log.e("addBankDialog", "add bank failed")
-                        addBankDialog.dismiss()
-                        showErrorSnackBar("新增失敗")
-                        hideProgressDialog()
-                    }
-                )
-            }
-        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -206,6 +169,50 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         hideProgressDialog()
     }
 
+    private fun addBank() {
+        val addBankDialog = Dialog(this)
+        addBankDialog.setContentView(R.layout.dialog_add_bank)
+        addBankDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        addBankDialog.window?.setGravity(Gravity.CENTER)
+        addBankDialog.show()
+
+        val btnBankSubmit = addBankDialog.findViewById<TextView>(R.id.btn_bank_submit)
+
+        val bankMembers: ArrayList<String> = arrayListOf(Constants.userId)
+        val bankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
+
+        btnBankSubmit.setOnClickListener {
+            val data = QuestionBankModel(
+                Constants.userId, bankTitle,
+                "single", LocalDate.now().toString(),
+                bankMembers, Constants.userId, Constants.userId,
+            )
+
+            if (bankTitle.isEmpty() || bankTitle == null) {
+                showErrorSnackBar("名稱不可為空")
+            } else {
+                showProgressDialog("新增中")
+                ConstantsQuestionBankFunction.postQuestionBank(data, this,
+                    onSuccess = {
+                        Toast.makeText(this, "add bank success", Toast.LENGTH_SHORT).show()
+                        Log.d("addBankDialog", "add bank success")
+                        addBankDialog.dismiss()
+                        bankAdapter.addItem(data)
+                        findViewById<ImageView>(R.id.img_empty).visibility = View.INVISIBLE
+                        hideProgressDialog()
+                    },
+                    onFailure = {
+                        Toast.makeText(this, "error type of data", Toast.LENGTH_SHORT).show()
+                        Log.e("addBankDialog", "add bank failed")
+                        addBankDialog.dismiss()
+                        showErrorSnackBar("新增失敗")
+                        hideProgressDialog()
+                    }
+                )
+            }
+        }
+    }
+
     fun init() {
         Log.e("BankActivity", "start init")
         if (ConstantsQuestionBankFunction.questionBankList != null) {
@@ -228,6 +235,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
         btnGroup = findViewById(R.id.bank_group)
         btnAddBank = findViewById(R.id.bank_add)
+        searchView = findViewById(R.id.search_bar)
 
 
     }
