@@ -28,14 +28,15 @@ import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsFunction
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
+import com.qdot.mathrendererlib.MathRenderView
 
 
 class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var tvTitle: TextView
     private lateinit var tvType: TextView
-    private lateinit var tvDescription: TextView
-    private lateinit var tvAnswerDescription: TextView
+    private lateinit var tvDescription: MathRenderView
+    private lateinit var tvAnswerDescription: MathRenderView
     private lateinit var tvImageNumber: TextView
     private lateinit var btnShowAnswer: TextView
     private lateinit var btnShowDetail: TextView
@@ -403,36 +404,40 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         questionTitle = intent.getStringExtra("title").toString()
         questionNumber = intent.getStringExtra("number").toString()
         questionDescription = intent.getStringExtra("description").toString()
+
         val questionOptions = intent.getStringArrayListExtra("options")
         if (questionOptions != null) {
             this.questionOptions = questionOptions
         }
+
         questionType = intent.getStringExtra("type").toString()
         bankType = intent.getStringExtra("bankType").toString()
+
         bankId = intent.getStringExtra("bankId").toString()
         val answerOptions = intent.getStringArrayListExtra("answerOptions")
         if (answerOptions != null) {
             this.answerOptions = answerOptions
             answerOptions.add("roughly")
         }
+
         answerDescription = intent.getStringExtra("answerDescription").toString()
         questionSource = intent.getStringExtra("source").toString()
         createdDate = intent.getStringExtra("createdDate").toString()
+
         val questionImage = intent.getStringArrayListExtra("image")
         if (questionImage != null) {
             this.questionImage = questionImage
         }
+
         val answerImage = intent.getStringArrayListExtra("answerImage")
         if (answerImage != null) {
             this.answerImage = answerImage
         }
+
         val questionTag = intent.getStringArrayListExtra("tag")
         if (questionTag != null) {
             this.questionTag = questionTag
         }
-
-        Log.e("BankQuestionDetailActivity", "image: $questionImage")
-        Log.e("BankQuestionDetailActivity", "answerImage: $answerImage")
 
         // View initialization
         tvTitle = findViewById(R.id.question_title)
@@ -456,10 +461,12 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
         tvType.text = questionType
         tvType.setBackgroundColor(Color.parseColor("#ffeb3b"))
-        tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = questionDescription
-        tvAnswerDescription.movementMethod = ScrollingMovementMethod()
+        // code below is commented due to the mathRenderView
+//        tvDescription.movementMethod = ScrollingMovementMethod()
         tvAnswerDescription.text = answerDescription
+        // code below is commented due to the mathRenderView
+//        tvAnswerDescription.movementMethod = ScrollingMovementMethod()
 
         // Variable initialization
         newDescription = questionDescription

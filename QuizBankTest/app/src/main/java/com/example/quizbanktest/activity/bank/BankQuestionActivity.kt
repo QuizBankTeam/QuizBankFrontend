@@ -67,9 +67,11 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         init()
 
         btnAddQuestion.setOnClickListener {
-            //TODO: go to scan workspace
+//            val addQuestionActivity = Intent(this, BankQuestionDetailActivity::class.java)
+
+//            addQuestionActivity.putExtra("id", bankId)
+//            startActivity(addQuestionActivity)
         }
-//        btnEditQuestion.setOnClickListener { settingQuestion() }
 
         pullExit()
     }
@@ -80,7 +82,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         questionRecyclerView.adapter = questionAdapter
         questionRecyclerView.layoutManager = LinearLayoutManager(this)
-
     }
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -95,17 +96,11 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     private var doubleBackToExitPressedOnce = false
-    private fun doubleBackToExit() {
-        finish()
-    }
+    private fun doubleBackToExit() { finish() }
 
-    fun backToPreviousPage(view: View?) {
-        finish()
-    }
+    fun backToPreviousPage(view: View?) { finish() }
 
-    override fun onBackPressed() {
-        finish()
-    }
+    override fun onBackPressed() { finish() }
 
     fun init() {
         bankTitle = intent.getStringExtra("BankTitle").toString()
@@ -126,7 +121,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                     showEmptySnackBar("裡面沒有題目喔~")
                     hideProgressDialog()
                 } else {
-//                    Log.e("BankQuestionActivity", "$questionList")
                     try {
                         for (item in questionList) {
                             if (item.image == null) {
@@ -139,25 +133,13 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                                 item.answerImage = answerImage
                             }
                             val questionModel = QuestionModel(
-                                item._id,
-                                item.title,
-                                item.number,
-                                item.description,
-                                item.options,
-                                item.questionType,
-                                item.bankType,
-                                item.questionBank,
-                                item.answerOptions,
-                                item.answerDescription,
-                                item.originateFrom,
-                                item.createdDate,
-                                item.image,
-                                item.answerImage,
-                                item.tag
+                                item._id, item.title, item.number, item.description,
+                                item.options, item.questionType, item.bankType, item.questionBank,
+                                item.answerOptions, item.answerDescription, item.originateFrom,
+                                item.createdDate, item.image, item.answerImage, item.tag
                             )
                             questionModels.add(questionModel)
                         }
-                        Log.e("BankQuestionActivity", "set question model finish")
                         setupQuestionModel()
                         hideProgressDialog()
                     } catch (e: Exception) {
@@ -197,6 +179,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     override fun settingCard(position: Int) {
         switchTargetPosition = position
 
+        // set up dialog
         val settingQuestionDialog = Dialog(this)
         settingQuestionDialog.setContentView(R.layout.dialog_setting_panel)
         settingQuestionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -204,6 +187,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         settingQuestionDialog.setCancelable(false)
         settingQuestionDialog.show()
 
+        // init id
         val btnChangeTitle = settingQuestionDialog.findViewById<TextView>(R.id.tv_change_title)
         val btnSwitchPosition = settingQuestionDialog.findViewById<TextView>(R.id.tv_switch_position)
         val btnDelete = settingQuestionDialog.findViewById<TextView>(R.id.tv_delete)
@@ -238,6 +222,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                 }
             })
 
+            // title text listener
             val originDescription: String = questionModels[position].title
             etTitle.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -253,6 +238,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                 }
             })
 
+            //
             btnSubmit.setOnClickListener {
                 if (isModified) {
                     val data = QuestionModel(
@@ -326,7 +312,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         }
 
         btnCancel.setOnClickListener { settingQuestionDialog.dismiss() }
-
     }
 
     // Here's switching question to specific bank after clicking confirm button
@@ -351,5 +336,4 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     override fun updateOption(position: Int, newOption: String) {
         // No need to define this function, this function is for question detail activity
     }
-
 }

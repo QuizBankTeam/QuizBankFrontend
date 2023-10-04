@@ -47,6 +47,7 @@
             android:clickable="true"
             android:gravity="center"
             android:text="刪除"
+            android:textColor="@color/red_200"
             android:textSize="20sp" />
 
         <View
