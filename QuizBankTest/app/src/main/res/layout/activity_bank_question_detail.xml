@@ -64,16 +64,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/img_empty"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@id/title_bar"
-        android:layout_centerInParent="true"
-        android:padding="10dp"
-        android:src="@drawable/box"
-        android:visibility="invisible" />
-
     <RelativeLayout
         android:id="@+id/image_layout"
         android:layout_width="match_parent"
@@ -104,11 +94,21 @@
 
     </RelativeLayout>
 
-    <TextView
+    <ImageButton
+        android:id="@+id/btn_add_questionImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/title_bar"
+        android:layout_centerInParent="true"
+        android:background="@null"
+        android:src="@drawable/add_picture_svgrepo_com"
+        android:visibility="invisible" />
+
+    <com.qdot.mathrendererlib.MathRenderView
         android:id="@+id/question_description"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_below="@id/img_empty"
+        android:layout_below="@id/btn_add_questionImage"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -121,7 +121,7 @@
         android:singleLine="false"
         android:textSize="20sp" />
 
-    <TextView
+    <com.qdot.mathrendererlib.MathRenderView
         android:id="@+id/answer_description"
         android:layout_width="match_parent"
         android:layout_height="150dp"

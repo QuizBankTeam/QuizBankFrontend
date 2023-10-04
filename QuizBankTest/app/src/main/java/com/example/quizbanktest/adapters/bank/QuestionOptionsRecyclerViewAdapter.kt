@@ -160,6 +160,8 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
             tvOption = itemView.findViewById(R.id.tv_option)
             cardView = itemView.findViewById(R.id.cardview_option)
 
+            tvTitle.text = ""
+
             val position = adapterPosition
 //            itemView.setOnClickListener {
 //                if (position != RecyclerView.NO_POSITION) {

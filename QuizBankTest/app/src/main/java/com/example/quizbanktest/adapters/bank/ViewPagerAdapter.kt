@@ -71,4 +71,8 @@ class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) :
         // on below line we are removing view
         container.removeView(`object` as RelativeLayout)
     }
+
+    fun refreshItem() {
+        notifyDataSetChanged()
+    }
 }
