@@ -109,9 +109,9 @@ x\subseteq y = [
                 let parsedMatrix = parseMatrixLaTeX(textToCopy, matrixType);
                 if (parsedMatrix) {
                     insertParsedMatrix(parsedMatrix, matrixType);
-                } else {
-                    handleMathJSONWithStack(ce.parse(textToCopy, { canonical: false }).json);
                 }
+            }else {
+               handleMathJSONWithStack(ce.parse(textToCopy, { canonical: false }).json);
             }
             Android.copyToClipboard(textToCopy);
         };
