@@ -104,15 +104,6 @@ x\subseteq y = [
       // ➔ "-1"
         document.getElementById("copy").onclick = function () {
             let textToCopy = document.getElementById("viewModeLatex").innerText;
-            let matrixType = detectMatrixType(textToCopy);
-            if (matrixType) {
-                let parsedMatrix = parseMatrixLaTeX(textToCopy, matrixType);
-                if (parsedMatrix) {
-                    insertParsedMatrix(parsedMatrix, matrixType);
-                }
-            }else {
-               handleMathJSONWithStack(ce.parse(textToCopy, { canonical: false }).json);
-            }
             Android.copyToClipboard(textToCopy);
         };
 
@@ -252,7 +243,7 @@ x\subseteq y = [
                 stack.push(current[1],"equal", current[0]);
                 break;
               case "Multiply":
-                stack.push( current[1],"*", current[0]);
+                stack.push( current[5],current[4],current[3],current[2],current[1],"*", current[0]);
                 break;
               case "Add":
                 stack.push( current[1],"add", current[0]);
@@ -932,18 +923,20 @@ x\subseteq y = [
         }
         if (countForDefault == 0) {
           console.log("mke");
-          mke.insert(
-            keyboardMemory,
-            new mke.AscendingBranchingNode("", "^{", "}")
-          );
-          mke.insert(keyboardMemory, new mke.DigitNode("2"));
-          mke.moveRight(keyboardMemory);
-          mke.insert(keyboardMemory, new mke.DigitNode("1"));
-          mke.insert(keyboardMemory, new mke.DigitNode("0"));
-          //   mke.insert(keyboardMemory, new mke.StandardLeafNode('\\sin'));
-          // mke.insert(keyboardMemory, new mke.RoundBracketsNode());
-          displayResult();
-          countForDefault = countForDefault + 1;
+          var textToCopy = Android.getExtra();
+          if(textToCopy == "null"){
+          }else{
+              let matrixType = detectMatrixType(textToCopy);
+                if (matrixType) {
+                    let parsedMatrix = parseMatrixLaTeX(textToCopy, matrixType);
+                    if (parsedMatrix) {
+                        insertParsedMatrix(parsedMatrix, matrixType);
+                    }
+                }else {
+                   handleMathJSONWithStack(ce.parse(textToCopy, { canonical: false }).json);
+                }
+          }
+          countForDefault = countForDefault+1;
         }
 
         element.onclick = () => {

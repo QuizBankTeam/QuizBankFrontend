@@ -1,21 +1,19 @@
 package com.example.quizbanktest.activity.scan
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.TextView
 import android.widget.Toast
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
+
 
 class MathActivity : BaseActivity() {
 
@@ -23,6 +21,10 @@ class MathActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_math)
         val webView: WebView = findViewById(R.id.webview)
+        val intent = intent
+        var latex = intent.getStringExtra("latex")
+        if(latex == null) latex = "null"
+
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = object : WebViewClient() {
             // 當網頁開始加載時
@@ -53,6 +55,12 @@ class MathActivity : BaseActivity() {
                 val clip = ClipData.newPlainText("copiedText", "\\("+escapeSpecialCharacters(text)+"\\)")
                 clipboard.setPrimaryClip(clip)
             }
+
+            @JavascriptInterface
+            fun getExtra(): String {
+                return latex
+            }
+
         }
 
         webView.addJavascriptInterface(WebAppInterface(this), "Android")

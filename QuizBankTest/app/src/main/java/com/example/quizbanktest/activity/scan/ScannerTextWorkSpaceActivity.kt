@@ -1,12 +1,16 @@
 package com.example.quizbanktest.activity.scan
 
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introducemyself.utils.ConstantsOcrResults
@@ -97,8 +101,33 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
         }
         val mathButton : ImageButton = findViewById(R.id.math_symbol_edit)
         mathButton.setOnClickListener {
-            val intent : Intent = Intent(this@ScannerTextWorkSpaceActivity,MathActivity::class.java)
-            startActivity(intent)
+            val mathDialog = Dialog(this@ScannerTextWorkSpaceActivity)
+            mathDialog.setContentView(R.layout.dialog_math_entry)
+            mathDialog.setTitle("Math WorkSpace")
+            val ocr = mathDialog.findViewById<TextView>(R.id.math_ocr_enter)
+            val editLatex = mathDialog.findViewById<TextView>(R.id.math_edit_enter)
+            val enter = mathDialog.findViewById<TextView>(R.id.math_empty_enter)
+            val latexString = mathDialog.findViewById<EditText>(R.id.edit_latex)
+            val edit_latex_enter = mathDialog.findViewById<TextView>(R.id.edit_latex_enter)
+            val editLayout = mathDialog.findViewById<LinearLayout>(R.id.edit_layout)
+            enter.setOnClickListener {
+                val intent : Intent = Intent(this@ScannerTextWorkSpaceActivity,MathActivity::class.java)
+                intent.putExtra("latex","null")
+                startActivity(intent)
+            }
+            ocr.setOnClickListener {
+                Toast.makeText(this,"待開發與後端串接",Toast.LENGTH_SHORT).show()
+            }
+            editLatex.setOnClickListener {
+                editLayout.visibility = View.VISIBLE
+            }
+            edit_latex_enter.setOnClickListener {
+                val latex = latexString.text.toString()
+                val intent : Intent = Intent(this@ScannerTextWorkSpaceActivity,MathActivity::class.java)
+                intent.putExtra("latex",latex)
+                startActivity(intent)
+            }
+            mathDialog.show()
         }
         val deleteButton : ImageButton = findViewById(R.id.delete_all_scan_result)
 
