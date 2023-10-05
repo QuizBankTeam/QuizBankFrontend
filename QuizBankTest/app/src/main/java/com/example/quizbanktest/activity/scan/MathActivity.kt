@@ -58,7 +58,7 @@ class MathActivity : BaseActivity() {
 
             @JavascriptInterface
             fun getExtra(): String {
-                return latex
+                return unprocessLatex(latex)
             }
 
         }
@@ -69,4 +69,17 @@ class MathActivity : BaseActivity() {
         // 先轉換 \\ 至 \\\\，再轉換 \ 至 \\，然後轉換 & 至 &amp;
         return input.replace("&", "&amp;")
     }
+    fun unprocessLatex(input: String): String {
+        // 移除 `\\(` 和 `\\)`
+        var result = input.trim()
+        if (result.startsWith("\\(") && result.endsWith("\\)")) {
+            result = result.drop(2).dropLast(2)
+        }
+
+        // 還原 &amp; 至 &
+        result = result.replace("&amp;", "&")
+
+        return result
+    }
+
 }
