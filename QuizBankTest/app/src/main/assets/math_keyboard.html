@@ -102,128 +102,72 @@ x\subseteq y = [
       console.log(parseLatexInJson("\\frac{x}{1-x}",ce))
       // ➔  ["Divide", 7, -4]
       // ➔ "-1"
-      document.getElementById("copy").onclick = function () {
-        let textToCopy = document.getElementById("viewModeLatex").innerText;
-        Android.copyToClipboard(textToCopy);
-        var isMatrix = parseMatrixLaTeX(textToCopy);
-        console.log(isMatrix);
-        if(isMatrix){
-          insertParsedMatrix(isMatrix);
-          console.log("is matrix");
-        }else{
-          isMatrix = parseVMatrixLaTeX(textToCopy);
-          if(isMatrix){
-            insertParsedVMatrix(isMatrix);
-            console.log("is matrix");
-          }else{
-            handleMathJSONWithStack(
-              ce.parse(textToCopy, { canonical: false }).json
-            );
-          }
+        document.getElementById("copy").onclick = function () {
+            let textToCopy = document.getElementById("viewModeLatex").innerText;
+            let matrixType = detectMatrixType(textToCopy);
+            if (matrixType) {
+                let parsedMatrix = parseMatrixLaTeX(textToCopy, matrixType);
+                if (parsedMatrix) {
+                    insertParsedMatrix(parsedMatrix, matrixType);
+                } else {
+                    handleMathJSONWithStack(ce.parse(textToCopy, { canonical: false }).json);
+                }
+            }
+            Android.copyToClipboard(textToCopy);
+        };
+
+        function detectMatrixType(latex) {
+            if (latex.startsWith("\\begin{pmatrix}") && latex.endsWith("\\end{pmatrix}")) return 'pmatrix';
+            if (latex.startsWith("\\begin{vmatrix}") && latex.endsWith("\\end{vmatrix}")) return 'vmatrix';
+            return null;
         }
-      };
 
-      function parseMatrixLaTeX(latex) {
-          if (!latex.startsWith("\\begin{pmatrix}") || !latex.endsWith("\\end{pmatrix}")) {
-              console.error("The given LaTeX is not a valid pmatrix structure.");
-              return;
-          }
+        function parseMatrixLaTeX(latex, type) {
+            if (!detectMatrixType(latex)) {
+                console.error("The given LaTeX is not a valid " + type + " structure.");
+                return;
+            }
 
-          // Extract the content inside the matrix environment
-          let content = latex.slice(15, -13).trim();
+            // Extract the content inside the matrix environment
+            let content = latex.slice(15, -13).trim();
+            // Split rows
+            let rows = content.split("\\\\");
+            // Split columns and count the number of columns
+            let matrixData = rows.map(row => row.split("&").map(cell => cell.trim()));
 
-          // Split rows
-          let rows = content.split("\\\\");
+            let numRows = matrixData.length;
+            let numCols = matrixData[0].length; // Assume all rows have the same number of columns
 
-          // Split columns and count the number of columns
-          let matrixData = rows.map(row => row.split("&").map(cell => cell.trim()));
+            return {
+                numRows: numRows,
+                numCols: numCols,
+                data: matrixData
+            };
+        }
 
-          let numRows = matrixData.length;
-          let numCols = matrixData[0].length; // Assume all rows have the same number of columns
+        function insertParsedMatrix(parsedMatrix, type) {
+            // First insert the matrix structure
+            mke.insert(keyboardMemory, new mke.MatrixNode(type, parsedMatrix.numCols, parsedMatrix.numRows));
 
-          return {
-              numRows: numRows,
-              numCols: numCols,
-              data: matrixData
-          };
-      }
-
-      function insertParsedMatrix(parsedMatrix) {
-          // First insert the matrix structure
-          console.log("cols "+"rows "+parsedMatrix.numCols+parsedMatrix.numRows)
-          mke.insert(keyboardMemory, new mke.MatrixNode("pmatrix", parsedMatrix.numCols, parsedMatrix.numRows));
-
-          // Navigate and insert the data
-          for (let i = 0; i < parsedMatrix.numRows; i++) {
-              for (let j = 0; j < parsedMatrix.numCols; j++) {
-                  let cellData = parsedMatrix.data[i][j];
-                  console.log("cell data",cellData);
-                  for (let k = 0; k < cellData.length; k++) {
-                      mke.insert(keyboardMemory, new mke.DigitNode(cellData[k]));
-                  }
-                  if (j < parsedMatrix.numCols - 1) {
-                      mke.moveRight(keyboardMemory); // Move to the next column
-                  }
-              }
-              if (i < parsedMatrix.numRows - 1) {
-                  mke.moveDown(keyboardMemory); // Move to the next row
-                  for(let k=0; k<parsedMatrix.numCols-1;k++){
-                    mke.moveLeft(keyboardMemory);
-                  }
-              }
-          }
-          displayResult();
-      }
-      function parseVMatrixLaTeX(latex) {
-          if (!latex.startsWith("\\begin{vmatrix}") || !latex.endsWith("\\end{vmatrix}")) {
-              console.error("The given LaTeX is not a valid pmatrix structure.");
-              return;
-          }
-
-          // Extract the content inside the matrix environment
-          let content = latex.slice(15, -13).trim();
-
-          // Split rows
-          let rows = content.split("\\\\");
-
-          // Split columns and count the number of columns
-          let matrixData = rows.map(row => row.split("&").map(cell => cell.trim()));
-
-          let numRows = matrixData.length;
-          let numCols = matrixData[0].length; // Assume all rows have the same number of columns
-
-          return {
-              numRows: numRows,
-              numCols: numCols,
-              data: matrixData
-          };
-      }
-
-      function insertParsedVMatrix(parsedMatrix) {
-          // First insert the matrix structure
-          console.log("cols "+"rows "+parsedMatrix.numCols+parsedMatrix.numRows)
-          mke.insert(keyboardMemory, new mke.MatrixNode("vmatrix", parsedMatrix.numCols, parsedMatrix.numRows));
-
-          // Navigate and insert the data
-          for (let i = 0; i < parsedMatrix.numRows; i++) {
-              for (let j = 0; j < parsedMatrix.numCols; j++) {
-                  let cellData = parsedMatrix.data[i][j];
-                  console.log("cell data",cellData);
-                  for (let k = 0; k < cellData.length; k++) {
-                      mke.insert(keyboardMemory, new mke.DigitNode(cellData[k]));
-                  }
-                  if (j < parsedMatrix.numCols - 1) {
-                      mke.moveRight(keyboardMemory); // Move to the next column
-                  }
-              }
-              if (i < parsedMatrix.numRows - 1) {
-                  mke.moveDown(keyboardMemory); // Move to the next row
-                  for(let k=0; k<parsedMatrix.numCols-1;k++){
-                    mke.moveLeft(keyboardMemory);
-                  }
-              }
-          }
-          displayResult();
+            // Navigate and insert the data
+            for (let i = 0; i < parsedMatrix.numRows; i++) {
+                for (let j = 0; j < parsedMatrix.numCols; j++) {
+                    let cellData = parsedMatrix.data[i][j];
+                    for (let k = 0; k < cellData.length; k++) {
+                        mke.insert(keyboardMemory, new mke.DigitNode(cellData[k]));
+                    }
+                    if (j < parsedMatrix.numCols - 1) {
+                        mke.moveRight(keyboardMemory); // Move to the next column
+                    }
+                }
+                if (i < parsedMatrix.numRows - 1) {
+                    mke.moveDown(keyboardMemory); // Move to the next row
+                    for(let k=0; k<parsedMatrix.numCols-1; k++) {
+                        mke.moveLeft(keyboardMemory);
+                    }
+                }
+            }
+            displayResult();
       }
       function parseLatexInJson(latexString,ce){
         console.log(ce);
