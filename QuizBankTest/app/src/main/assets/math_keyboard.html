@@ -195,7 +195,7 @@ x\subseteq y = [
                         continue; // 如果不能識別反函數，則跳過當前迴圈
                 }
             }
-
+            console.log("operation"+operation)
             switch (operation) {
               case "Sum":
                 mke.insert(keyboardMemory, new mke.AscendingBranchingNode(String.raw`\sum_{`, "}^{", "}"));
@@ -256,6 +256,12 @@ x\subseteq y = [
                 break;
               case "Add":
                 stack.push( current[1],"add", current[0]);
+                break;
+              case "Implies":
+                stack.push( current[1],"implies", current[0]);
+                break;
+              case "\\Leftarrow":
+                stack.push( current[1],"leftarrow", current[0]);
                 break;
               case "GreaterEqual":
                 stack.push( current[1],"greaterEqual", current[0]);
@@ -390,15 +396,42 @@ x\subseteq y = [
                 }
                 break;
             }
+          }else if (typeof current === "object" && current !== null) {
+              if (current["num"] === "+Infinity") {
+                mke.insert(keyboardMemory, new mke.StandardLeafNode("\\infty"));
+              }
+
           } else if (typeof current === "string") {
             console.log(current + "in string");
+            if(current === `'\\forall'`){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\forall`));
+            }
+            if(current === `'\\neq'`){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\neq`));
+            }
+            if(current === `'\\neg'`){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\neg`));
+            }
+            if(current === `'\\exists'`){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\exists`));
+            }
+            if(current === `'\\rightarrow'`){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode("\\rightarrow"));
+            }
+            if(current === `'\\leftarrow'`){
+              mke.insert(keyboardMemory, new mke.StandardLeafNode("\\leftarrow"));
+            }
+            if (current === `'\\Leftarrow'`) {
+                console.log("leftarrow");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\Leftarrow`));
+            }
             if (current === "x" ||current === "y" || current === "z" ) {
               console.log(current);
               mke.insert(keyboardMemory, new mke.StandardLeafNode(current));
             }else if(current === "alpha" || current === "beta" || current === "gamma" || current === "lambda" || current === "mu" || current === ""){
               mke.insert(keyboardMemory, new mke.StandardLeafNode("\\" + current));
             }else if(current === "+Infinity"){
-              mke.insert(keyboardMemory, new mke.StandardLeafNode("\\infinity"));
+              mke.insert(keyboardMemory, new mke.StandardLeafNode("\\infty"));
             }else if(current === "Pi"){
               mke.insert(keyboardMemory, new mke.StandardLeafNode("\\pi"));
             }else if (current === "Integers") {
@@ -419,6 +452,12 @@ x\subseteq y = [
             }else if (current === "add") {
                 console.log("add");
                 mke.insert(keyboardMemory, new mke.StandardLeafNode("+"));
+            }else if (current === "implies") {
+                console.log("implies");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\Rightarrow`));
+            }else if (current === "leftarrow") {
+                console.log("leftarrow");
+                mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\Leftarrow`));
             }else if (current === "greaterEqual") {
                 console.log("greaterEqual");
                 mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\geq`));
