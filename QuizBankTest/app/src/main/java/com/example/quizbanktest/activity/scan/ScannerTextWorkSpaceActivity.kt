@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -21,6 +23,10 @@ import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.adapters.scan.OcrResultViewAdapter
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.models.ScanQuestionModel
+import com.example.quizbanktest.utils.ConstantsLatexOcr
+import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
+import com.example.quizbanktest.utils.ConstantsRecommend
+import com.qdot.mathrendererlib.TextAlign
 
 
 class ScannerTextWorkSpaceActivity : BaseActivity() {
@@ -116,10 +122,36 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
                 startActivity(intent)
             }
             ocr.setOnClickListener {
+                val mathView : com.qdot.mathrendererlib.MathRenderView = mathDialog.findViewById(R.id.mathView)
+                mathView.visibility = View.VISIBLE
+                val ocrLayout : LinearLayout = mathDialog.findViewById(R.id.ocr_checkout_layout)
+                ocrLayout.visibility = View.VISIBLE
+                editLatex.visibility= View.GONE
+                enter.visibility = View.GONE
+                ocrCameraPick { uri ->
+                    if(uri!=null){
+                        Toast.makeText(this@ScannerTextWorkSpaceActivity,uri.toString(),Toast.LENGTH_SHORT).show()
+        //               ConstantsLatexOcr.latexOcr(uri,this@ScannerTextWorkSpaceActivity,
+        //                   onSuccess = { latexString ->
+        //                       mathView.apply {
+        //                           text = latexString
+        //                           textAlignment = TextAlign.START
+        //                           textColor = "#000000"
+        //                           mathBackgroundColor = "#FFFFFF"
+        //                       }
+        //               },
+        //                   onFailure = { errorMessage ->
+        //                       Toast.makeText(this@ScannerTextWorkSpaceActivity,"latex-ocr have some error",Toast.LENGTH_SHORT).show()
+        //                   })
+                    }
+                }
+
                 Toast.makeText(this,"待開發與後端串接",Toast.LENGTH_SHORT).show()
             }
             editLatex.setOnClickListener {
                 editLayout.visibility = View.VISIBLE
+                ocr.visibility = View.GONE
+                enter.visibility = View.GONE
             }
             edit_latex_enter.setOnClickListener {
                 val latex = latexString.text.toString()

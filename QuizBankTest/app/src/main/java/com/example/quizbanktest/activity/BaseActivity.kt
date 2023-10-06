@@ -73,7 +73,7 @@ open class BaseActivity : AppCompatActivity() {
             }
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
             onImageSelected?.invoke(bitmap)
-            deleteFileFromUri(this,uri!!)
+//            deleteFileFromUri(this,uri!!)
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             Log.e("cropResult","error")
             val cropError = UCrop.getError(result.data!!)
@@ -293,6 +293,38 @@ open class BaseActivity : AppCompatActivity() {
         }
         pictureDialog.show()
     }
+
+    fun ocrCameraPick(callback: (uri: Uri?) -> Unit){
+
+        val pictureDialog = AlertDialog.Builder(this)
+        pictureDialog.setTitle("Select Action")
+        val pictureDialogItems =
+            arrayOf("拍照","從相簿選擇")
+        pictureDialog.setItems(
+            pictureDialogItems
+        ) { dialog, which ->
+            when (which) {
+
+                0 -> takeMathToOcr( onSuccess = { it1 ->  callback(uriForOcr)  }, onFailure = { it1 -> callback(null) })
+                1 -> chooseMathPhotoToOcr(onSuccess = { it1 -> callback(uriForOcr) }, onFailure = { it1 -> callback(null) })
+            }
+        }
+        pictureDialog.show()
+    }
+    fun  takeMathToOcr(onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
+        takeCameraPhoto {
+                bitmap ->
+            if (bitmap != null) {
+                lifecycleScope.launch{
+                    saveBitmapFileForPicturesDir(bitmap)
+                }
+                onSuccess("true")
+            }else{
+                onFailure("can't choose empty photo")
+                Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     fun scanPhoto(){
         Dexter.withActivity(this)
             .withPermissions(
@@ -499,7 +531,18 @@ open class BaseActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
-
+    fun  chooseMathPhotoToOcr(onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
+        choosePhotoFromGallery {
+                bitmap ->
+            Toast.makeText(this,"photo ocr",Toast.LENGTH_SHORT).show()
+            if (bitmap != null) {
+                onSuccess("success")
+            }else{
+                onFailure("can't choose empty photo")
+                Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     fun  choosePhotoToOcr(flag : Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
         choosePhotoFromGallery {
             bitmap ->
