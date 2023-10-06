@@ -48,4 +48,6 @@
     <color name="answer_wrong">#FF7575</color>
     <color name="question_submit">#FF9013FE</color>
     <color name="underline">#D0CDCD</color>
+    <color name="dark_gray">#4F4F4F</color>
+    <color name="light_purple">#E6CAFF</color>
 </resources>

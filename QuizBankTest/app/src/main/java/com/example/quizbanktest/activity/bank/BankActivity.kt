@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -24,14 +23,14 @@ import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.view.WrapLayout
-import jp.wasabeef.blurry.Blurry
+import com.google.android.material.card.MaterialCardView
 import java.time.LocalDate
 
 
 class BankActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
     private lateinit var searchView: SearchView
-    private lateinit var menuButton: ImageButton
+    private lateinit var btnSort: ImageButton
     private lateinit var btnGroup: ImageButton
     private lateinit var btnAddBank: ImageButton
     private lateinit var bank_warning: TextView
@@ -47,13 +46,13 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private var questionBankModels = ArrayList<QuestionBankModel>()
 
     // Variable
-    private var wrapLayout: WrapLayout? = null
-    private var blurred = false
-    private var toast: Toast? = null
     private lateinit var newBankTitle: String
-    private lateinit var newBankType: String
-    private lateinit var newBankDate: String
+    private var wrapLayout: WrapLayout? = null
     private var isModified: Boolean = false
+    private val tagList: ArrayList<String> = ArrayList()
+    private val backGroundArray: ArrayList<String> = arrayListOf(
+        "#E6CAFF", "#FFB5B5", "#CECEFF", "#ACD6FF", "#FFF0AC", "#FFCBB3"
+    )
 
 
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
@@ -73,6 +72,8 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         }
 
         btnAddBank.setOnClickListener { addBank() }
+
+        btnSort.setOnClickListener { sortList() }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -95,78 +96,27 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         bankRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    fun setPopupWindow(view: View?) {
-        showProgressDialog("處理中")
-        if (blurred) {
-            blurred = false
-            Blurry.delete(findViewById(R.id.content))
-        } else {
-            blurred = true
-            val startMs = System.currentTimeMillis()
-            Blurry.with(this@BankActivity)
-                .radius(25)
-                .sampling(2)
-                .async()
-                .animate(200)
-                .onto(findViewById<View>(R.id.content) as ViewGroup)
-            Log.d(
-                getString(R.string.app_name),
-                "TIME " + (System.currentTimeMillis() - startMs).toString() + "ms"
-            )
-        }
+    private fun sortList() {
+        val sortDialog = Dialog(this)
+        sortDialog.setContentView(R.layout.dialog_sort_tags)
+        sortDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        sortDialog.window?.setGravity(Gravity.CENTER)
+        sortDialog.show()
 
         val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val myContentView = popupInflater.inflate(R.layout.popup_window, null)
-        myContentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-        val popupHeight = myContentView.measuredHeight
-
-        // popup window set up
-        val popupWindow = PopupWindow(this).apply {
-            contentView = myContentView
-            val displayMetrics = DisplayMetrics()
-            windowManager.defaultDisplay.getMetrics(displayMetrics)
-            height = displayMetrics.heightPixels - 200
-            width = displayMetrics.widthPixels - 200
-            animationStyle = R.style.PopupAnimation
-            isFocusable = true
-            isOutsideTouchable = false
-            isClippingEnabled = false
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        }
-
-        popupWindow.setOnDismissListener {
-            if (blurred) {
-                blurred = false
-                Blurry.delete(findViewById(R.id.content))
-            }
-        }
-
-        // automatically newline tags view
-        wrapLayout = myContentView.findViewById(R.id.clip_layout)
+        wrapLayout = sortDialog.findViewById(R.id.clip_layout)
         val strs = arrayOf(
-            "作業系統",
-            "離散數學",
-            "線性代數",
-            "資料結構",
-            "演算法",
-            "計算機組織",
-            "python",
-            "java"
+            "作業系統", "離散數學", "線性代數", "資料結構",
+            "演算法", "計算機組織", "python", "java"
         )
-        for (element in strs) {
+        Log.e("BankQuestionActivity", "Here are the all tags below:\n$tagList")
+        for (item in strs) {
             val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)
-            val name = itemLayout.findViewById<View>(R.id.name) as TextView
-            name.text = element
+            val tagName = itemLayout.findViewById<View>(R.id.name) as TextView
+            tagName.text = item
+            tagName.setBackgroundColor(Color.parseColor(backGroundArray[(0..5).random()]))
             wrapLayout!!.addView(itemLayout)
         }
-
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-        myContentView.setOnTouchListener { _, _ ->
-            popupWindow.dismiss()     /* It will dismiss the popup window when tapped in it */
-            return@setOnTouchListener true
-        }
-        hideProgressDialog()
     }
 
     private fun addBank() {
@@ -235,6 +185,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
         btnGroup = findViewById(R.id.bank_group)
         btnAddBank = findViewById(R.id.bank_add)
+        btnSort = findViewById(R.id.sort_button)
         searchView = findViewById(R.id.search_bar)
 
     }
@@ -288,7 +239,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             handler.post(object : Runnable {
                 override fun run() {
                     if (count % 4 == 0) {
-                        editingHint.setText("編輯中")
+                        editingHint.text = "編輯中"
                     } else {
                         editingHint.append(".")
                     }
