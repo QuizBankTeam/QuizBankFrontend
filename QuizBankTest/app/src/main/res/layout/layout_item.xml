@@ -17,8 +17,10 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:hint="tag"
-            android:padding="5dp"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="8dp"
             android:textColor="@color/white"
             android:textSize="18sp" />
 

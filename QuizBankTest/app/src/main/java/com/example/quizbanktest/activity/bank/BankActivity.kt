@@ -49,6 +49,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var newBankTitle: String
     private var wrapLayout: WrapLayout? = null
     private var isModified: Boolean = false
+    private var isDescending: Boolean = true
     private val tagList: ArrayList<String> = ArrayList()
     private val backGroundArray: ArrayList<String> = arrayListOf(
         "#E6CAFF", "#FFB5B5", "#CECEFF", "#ACD6FF", "#FFF0AC", "#FFCBB3"
@@ -73,7 +74,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
         btnAddBank.setOnClickListener { addBank() }
 
-        btnSort.setOnClickListener { sortList() }
+        btnSort.setOnClickListener { setSortDialog() }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -96,13 +97,19 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         bankRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun sortList() {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setSortDialog() {
         val sortDialog = Dialog(this)
         sortDialog.setContentView(R.layout.dialog_sort_tags)
         sortDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         sortDialog.window?.setGravity(Gravity.CENTER)
         sortDialog.show()
 
+        /** views init */
+        val btnSortByName = sortDialog.findViewById<TextView>(R.id.tv_sortByName)
+        val btnSortByDate = sortDialog.findViewById<TextView>(R.id.tv_sortByDate)
+
+        /** tags init */
         val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         wrapLayout = sortDialog.findViewById(R.id.clip_layout)
         val strs = arrayOf(
@@ -116,6 +123,27 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             tagName.text = item
             tagName.setBackgroundColor(Color.parseColor(backGroundArray[(0..5).random()]))
             wrapLayout!!.addView(itemLayout)
+        }
+
+        /** Listener area */
+        btnSortByName.setOnClickListener {
+            sortDialog.dismiss()
+        }
+        btnSortByDate.setOnClickListener {
+            try {
+                if (isDescending) {
+                    questionBankModels.sortByDescending { it.createdDate }
+                    bankAdapter.notifyDataSetChanged()
+                    isDescending = false
+                } else {
+                    questionBankModels.sortBy { it.createdDate }
+                    bankAdapter.notifyDataSetChanged()
+                    isDescending = true
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            sortDialog.dismiss()
         }
     }
 

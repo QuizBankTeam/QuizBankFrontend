@@ -30,6 +30,7 @@ class QuestionRecyclerViewAdapter(var context: Context,
 
     /** the arrayList that recyclerView use */
     var arrayList: java.util.ArrayList<QuestionModel> = questionModels
+
     /** store the original status of arrayList, which means questionBankModels above */
     var arrayListFilter: java.util.ArrayList<QuestionModel> = java.util.ArrayList()
 

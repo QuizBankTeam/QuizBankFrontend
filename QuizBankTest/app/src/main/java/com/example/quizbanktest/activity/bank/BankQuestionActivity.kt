@@ -27,7 +27,11 @@ import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
 import com.example.quizbanktest.view.WrapLayout
-import com.google.android.material.card.MaterialCardView
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
@@ -57,6 +61,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var newQuestionType: String
     private lateinit var newQuestionDate: String
     private var isModified: Boolean = false
+    private var isDescending: Boolean = true
     private var switchTargetPosition = -1
     private val backGroundArray: ArrayList<String> = arrayListOf(
         "#E6CAFF", "#FFB5B5", "#CECEFF", "#ACD6FF", "#FFF0AC", "#FFCBB3"
@@ -103,6 +108,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         questionRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
+    @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
     private fun sortList() {
         val sortDialog = Dialog(this)
         sortDialog.setContentView(R.layout.dialog_sort_tags)
@@ -110,6 +116,11 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         sortDialog.window?.setGravity(Gravity.CENTER)
         sortDialog.show()
 
+        /** views init */
+        val btnSortByName = sortDialog.findViewById<TextView>(R.id.tv_sortByName)
+        val btnSortByDate = sortDialog.findViewById<TextView>(R.id.tv_sortByDate)
+
+        /** tags init */
         val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         wrapLayout = sortDialog.findViewById(R.id.clip_layout)
         val strs = arrayOf(
@@ -123,6 +134,28 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             tagName.text = item
             tagName.setBackgroundColor(Color.parseColor(backGroundArray[(0..5).random()]))
             wrapLayout!!.addView(itemLayout)
+        }
+
+        /** Listener area */
+        btnSortByName.setOnClickListener {
+            sortDialog.dismiss()
+        }
+        btnSortByDate.setOnClickListener {
+            try {
+                if (isDescending) {
+                    questionModels.sortByDescending { it.createdDate }
+                    questionAdapter.notifyDataSetChanged()
+                    isDescending = false
+                } else {
+                    questionModels.sortBy { it.createdDate }
+                    questionAdapter.notifyDataSetChanged()
+                    isDescending = true
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("BankQuestionActivity", "Convert date fail")
+            }
+            sortDialog.dismiss()
         }
     }
 
