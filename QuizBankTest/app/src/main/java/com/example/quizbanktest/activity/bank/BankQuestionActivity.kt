@@ -11,14 +11,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import android.window.OnBackInvokedDispatcher
 import androidx.core.os.BuildCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
@@ -28,13 +26,21 @@ import com.example.quizbanktest.models.QuestionBankModel
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
+import com.example.quizbanktest.view.WrapLayout
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     // View variable
+    private lateinit var searchView: SearchView
     private lateinit var tvTitle: TextView
-    private lateinit var backArrowBtn: ImageButton
+    private lateinit var btnBackArrow: ImageButton
     private lateinit var btnAddQuestion: ImageButton
+    private lateinit var btnSort: ImageButton
     private lateinit var questionRecyclerView: RecyclerView
     private lateinit var questionAdapter: QuestionRecyclerViewAdapter
     private lateinit var switchBankRecyclerView: RecyclerView
@@ -48,13 +54,18 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     // Variable
     private lateinit var bankTitle: String
     private lateinit var bankId: String
-    private lateinit var bankIdArray: ArrayList<String>
+    private val tagList: ArrayList<String> = ArrayList()
     private var toast: Toast? = null
+    private var wrapLayout: WrapLayout? = null
     private lateinit var newQuestionTitle: String
     private lateinit var newQuestionType: String
     private lateinit var newQuestionDate: String
     private var isModified: Boolean = false
+    private var isDescending: Boolean = true
     private var switchTargetPosition = -1
+    private val backGroundArray: ArrayList<String> = arrayListOf(
+        "#E6CAFF", "#FFB5B5", "#CECEFF", "#ACD6FF", "#FFF0AC", "#FFCBB3"
+    )
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +84,19 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 //            startActivity(addQuestionActivity)
         }
 
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                /**調用RecyclerView內的Filter方法 */
+                questionAdapter.getFilter().filter(newText)
+                return false
+            }
+        })
+
+        btnSort.setOnClickListener { sortList() }
+
         pullExit()
     }
     private fun setupQuestionModel() {
@@ -82,6 +106,57 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
 
         questionRecyclerView.adapter = questionAdapter
         questionRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
+    private fun sortList() {
+        val sortDialog = Dialog(this)
+        sortDialog.setContentView(R.layout.dialog_sort_tags)
+        sortDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        sortDialog.window?.setGravity(Gravity.CENTER)
+        sortDialog.show()
+
+        /** views init */
+        val btnSortByName = sortDialog.findViewById<TextView>(R.id.tv_sortByName)
+        val btnSortByDate = sortDialog.findViewById<TextView>(R.id.tv_sortByDate)
+
+        /** tags init */
+        val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        wrapLayout = sortDialog.findViewById(R.id.clip_layout)
+        val strs = arrayOf(
+            "作業系統", "離散數學", "線性代數", "資料結構",
+            "演算法", "計算機組織", "python", "java"
+        )
+        Log.e("BankQuestionActivity", "Here are the all tags below:\n$tagList")
+        for (item in strs) {
+            val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)
+            val tagName = itemLayout.findViewById<View>(R.id.name) as TextView
+            tagName.text = item
+            tagName.setBackgroundColor(Color.parseColor(backGroundArray[(0..5).random()]))
+            wrapLayout!!.addView(itemLayout)
+        }
+
+        /** Listener area */
+        btnSortByName.setOnClickListener {
+            sortDialog.dismiss()
+        }
+        btnSortByDate.setOnClickListener {
+            try {
+                if (isDescending) {
+                    questionModels.sortByDescending { it.createdDate }
+                    questionAdapter.notifyDataSetChanged()
+                    isDescending = false
+                } else {
+                    questionModels.sortBy { it.createdDate }
+                    questionAdapter.notifyDataSetChanged()
+                    isDescending = true
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("BankQuestionActivity", "Convert date fail")
+            }
+            sortDialog.dismiss()
+        }
     }
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -107,9 +182,11 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         bankId = intent.getStringExtra("BankId").toString()
         Log.e("BankQuestionActivity", "Bank title: $bankTitle, Bank id: $bankId")
 
-        backArrowBtn = findViewById(R.id.btn_back_arrow)
+        searchView = findViewById(R.id.search_bar)
         tvTitle = findViewById(R.id.title)
+        btnBackArrow = findViewById(R.id.btn_back_arrow)
         btnAddQuestion = findViewById(R.id.question_add)
+        btnSort = findViewById(R.id.sort_button)
 
         tvTitle.text = bankTitle
 
@@ -138,8 +215,15 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                                 item.answerOptions, item.answerDescription, item.originateFrom,
                                 item.createdDate, item.image, item.answerImage, item.tag
                             )
+
+                            for (i in item.tag) {
+                                for (j in tagList.indices)
+                                    if (i != tagList[j]) { tagList.add(i) }
+                            }
+
                             questionModels.add(questionModel)
                         }
+
                         setupQuestionModel()
                         hideProgressDialog()
                     } catch (e: Exception) {
@@ -156,24 +240,24 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     override fun onItemClick(position: Int) {
-        val QuestionDetailActivity = Intent(this, BankQuestionDetailActivity::class.java)
+        val questionDetailActivity = Intent(this, BankQuestionDetailActivity::class.java)
 
-        QuestionDetailActivity.putExtra("id", questionModels[position]._id)
-        QuestionDetailActivity.putExtra("title", questionModels[position].title)
-        QuestionDetailActivity.putExtra("number", questionModels[position].number)
-        QuestionDetailActivity.putExtra("description", questionModels[position].description)
-        QuestionDetailActivity.putExtra("options", questionModels[position].options)
-        QuestionDetailActivity.putExtra("type", questionModels[position].questionType)
-        QuestionDetailActivity.putExtra("answerOptions", questionModels[position].answerOptions)
-        QuestionDetailActivity.putExtra("answerDescription", questionModels[position].answerDescription)
-        QuestionDetailActivity.putExtra("source", questionModels[position].originateFrom)
-        QuestionDetailActivity.putExtra("createdDate", questionModels[position].createdDate)
-        QuestionDetailActivity.putExtra("image", questionModels[position].image)
+        questionDetailActivity.putExtra("id", questionModels[position]._id)
+        questionDetailActivity.putExtra("title", questionModels[position].title)
+        questionDetailActivity.putExtra("number", questionModels[position].number)
+        questionDetailActivity.putExtra("description", questionModels[position].description)
+        questionDetailActivity.putExtra("options", questionModels[position].options)
+        questionDetailActivity.putExtra("type", questionModels[position].questionType)
+        questionDetailActivity.putExtra("answerOptions", questionModels[position].answerOptions)
+        questionDetailActivity.putExtra("answerDescription", questionModels[position].answerDescription)
+        questionDetailActivity.putExtra("source", questionModels[position].originateFrom)
+        questionDetailActivity.putExtra("createdDate", questionModels[position].createdDate)
+        questionDetailActivity.putExtra("image", questionModels[position].image)
 //        QuestionDetailActivity.putExtra("answerImage", questionModels[position].answerImage)
-        QuestionDetailActivity.putStringArrayListExtra("answerImage", questionModels[position].answerImage)
-        QuestionDetailActivity.putExtra("tag", questionModels[position].tag)
+        questionDetailActivity.putStringArrayListExtra("answerImage", questionModels[position].answerImage)
+        questionDetailActivity.putExtra("tag", questionModels[position].tag)
 
-        startActivity(QuestionDetailActivity)
+        startActivity(questionDetailActivity)
     }
 
     override fun settingCard(position: Int) {
@@ -238,7 +322,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                 }
             })
 
-            //
+            // put new data to backend
             btnSubmit.setOnClickListener {
                 if (isModified) {
                     val data = QuestionModel(
@@ -290,6 +374,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             switchPositionDialog.show()
         }
 
+        // Show up delete bank dialog
         btnDelete.setOnClickListener {
             val deleteWarningDialog = Dialog(this@BankQuestionActivity)
             deleteWarningDialog.setContentView(R.layout.dialog_delete_warning)

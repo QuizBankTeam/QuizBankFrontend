@@ -79,7 +79,7 @@
             android:queryHint="@string/search_hint" />
 
         <ImageButton
-            android:id="@+id/menu_button"
+            android:id="@+id/sort_button"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_marginHorizontal="10dp"
