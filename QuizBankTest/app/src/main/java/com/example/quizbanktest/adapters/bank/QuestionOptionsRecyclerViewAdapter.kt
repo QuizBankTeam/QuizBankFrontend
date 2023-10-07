@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,11 +57,9 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
     override fun onBindViewHolder(holder: MyViewHolder, @SuppressLint("RecyclerView") position: Int) {
         newOption = questionOptions[position]
 
-        Log.e("QuestionOptionsRecyclerViewAdapter", answerOptions.toString())
         for (item in answerOptions) {
             if (questionOptions[position] == item) {
                 if (isShowingAnswer) {
-                    Log.e("QuestionOptionsRecyclerViewAdapter", "show answer")
                     holder.tvOption.setBackgroundColor(Color.parseColor("#c6fa73"))
                     holder.tvTitle.setBackgroundColor(Color.parseColor("#c6fa73"))
                     holder.cardView.strokeColor = Color.parseColor("#c6fa73")
@@ -84,10 +84,10 @@ class QuestionOptionsRecyclerViewAdapter(var context: Context,
         holder.tvOption.text = questionOptions[position]
         holder.tvOption.movementMethod = ScrollingMovementMethod()
         holder.tvOption.setOnClickListener {
-            Log.e("BankQuestionDetailActivity", "show option$position dialog")
-            Log.e("BankQuestionDetailActivity", "option$position = " + questionOptions[position])
             val optionDialog = Dialog(context)
             optionDialog.setContentView(R.layout.dialog_bank_question_option)
+            optionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            optionDialog.window?.setGravity(Gravity.CENTER)
             optionDialog.show()
 
             val etOptionDescription = optionDialog.findViewById<EditText>(R.id.et_option_description)

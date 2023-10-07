@@ -46,6 +46,8 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var optionAdapter: QuestionOptionsRecyclerViewAdapter
     private lateinit var questionImageViewPager: ViewPager
     private lateinit var questionImageViewPagerAdapter: ViewPagerAdapter
+    private lateinit var answerImageViewPager: ViewPager
+    private lateinit var answerImageViewPagerAdapter: ViewPagerAdapter
 
     // Question variable
     private lateinit var questionId: String
@@ -132,7 +134,12 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
         when (questionType) {
             "TrueOrFalse" -> {
-                optionRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+                val myLinearLayoutManager = object : LinearLayoutManager(this, RecyclerView.HORIZONTAL, false) {
+                    override fun canScrollHorizontally(): Boolean {
+                        return false
+                    }
+                }
+                optionRecyclerView.layoutManager = myLinearLayoutManager
             }
             "Filling" -> {
 
@@ -141,7 +148,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                 optionRecyclerView.layoutManager = LinearLayoutManager(this)
             }
         }
-
         optionRecyclerView.adapter = optionAdapter
     }
 
@@ -288,13 +294,13 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         detailDialog.window?.setGravity(Gravity.CENTER)
         detailDialog.show()
 
+        val tvAnswerImageNumber = detailDialog.findViewById<TextView>(R.id.imageNumberTV)
         val tvDescription = detailDialog.findViewById<TextView>(R.id.answer_description)
-        val btnAddAnswerImage = detailDialog.findViewById<ImageButton>(R.id.btn_add_answerImage)
-        val answerImageViewPager = detailDialog.findViewById<ViewPager>(R.id.viewPager)
-        val answerViewPagerAdapter = ViewPagerAdapter(this, answerImage)
-        val tvImageNumber = detailDialog.findViewById<TextView>(R.id.imageNumberTV)
-        tvImageNumber.text = " "
+        btnAddAnswerImage = detailDialog.findViewById(R.id.btn_add_answerImage)
+        answerImageViewPager = detailDialog.findViewById(R.id.viewPager)
+        answerImageViewPagerAdapter = ViewPagerAdapter(this, answerImage)
 
+        tvAnswerImageNumber.text = " "
         tvDescription.movementMethod = ScrollingMovementMethod()
         tvDescription.text = answerDescription
         tvDescription.setOnClickListener{ editAnswerDescription() }
@@ -304,7 +310,8 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
             btnAddAnswerImage.visibility = View.VISIBLE
             showEmptySnackBar("目前照片為空喔")
         } else {
-            answerImageViewPager.adapter = answerViewPagerAdapter
+            btnAddAnswerImage.visibility = View.INVISIBLE
+            answerImageViewPager.adapter = answerImageViewPagerAdapter
 
             //select any page you want as your starting page
             val currentPageIndex = 0
@@ -313,23 +320,17 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
             answerImageViewPager.addOnPageChangeListener(
                 object : ViewPager.OnPageChangeListener {
                     override fun onPageScrollStateChanged(state: Int) {}
-                    override fun onPageScrolled(
-                        position: Int,
-                        positionOffset: Float,
-                        positionOffsetPixels: Int
-                    ) {
-                    }
-
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                     @SuppressLint("SetTextI18n")
                     override fun onPageSelected(position: Int) {
-                        //update the image number textview
+                        // update the image number textview when switching pages
                         tvImageNumber.text = "${position + 1} / ${questionImage.size}"
                     }
                 }
             )
         }
 
-        btnAddAnswerImage.setOnClickListener {addImage(btnAddAnswerImage)}
+        btnAddAnswerImage.setOnClickListener { addImage(btnAddAnswerImage) }
     }
 
     private fun addImage(view: View) {
@@ -343,12 +344,10 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                     }
                     R.id.btn_add_answerImage -> {
                         answerImage.add(base64String!!)
-
+                        answerImageViewPagerAdapter.refreshItem()
                     }
                     else -> {}
                 }
-            } else {
-                //
             }
         }
     }
@@ -477,6 +476,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
             btnAddQuestionImage.visibility = View.VISIBLE
             showEmptySnackBar("目前照片為空喔")
         } else {
+            btnAddQuestionImage.visibility = View.INVISIBLE
             setupImage()
         }
     }
