@@ -1,7 +1,7 @@
 package com.example.quizbanktest.adapters.bank
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.animation.Animator
+import android.app.Dialog
 import android.graphics.drawable.Drawable
 import android.util.Base64
 import android.util.Log
@@ -17,6 +17,9 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.quizbanktest.R
 import com.example.quizbanktest.databinding.ItemImageBinding
 import android.content.Context
+import android.graphics.*
+import android.media.Image
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -24,6 +27,15 @@ import androidx.viewpager.widget.PagerAdapter
 import java.util.*
 
 class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) : PagerAdapter() {
+
+    // Hold a reference to the current animator so that it can be canceled
+    // midway.
+    private var currentAnimator: Animator? = null
+
+    // The system "short" animation time duration in milliseconds. This duration
+    // is ideal for subtle animations or animations that occur frequently.
+    private var shortAnimationDuration: Int = 0
+
     // on below line we are creating a method
     // as get count to return the size of the list.
     override fun getCount(): Int {
@@ -50,9 +62,11 @@ class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) :
         // on below line we are initializing
         // our image view with the id.
         val imageView: ImageView = itemView.findViewById<View>(R.id.iv_image) as ImageView
+        imageView.setOnClickListener{ enlargeImage(position) }
 
         // on below line we are setting
         // image resource for image view.
+        Log.e("ViewPagerAdapter", "position: $position")
         val imageBytes = Base64.decode(imageList[position], Base64.DEFAULT)
         val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         imageView.setImageBitmap(decodedImage)
@@ -74,5 +88,17 @@ class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) :
 
     fun refreshItem() {
         notifyDataSetChanged()
+    }
+
+    private fun enlargeImage(position: Int) {
+        val enlargeDialog = Dialog(context)
+        enlargeDialog.setContentView(R.layout.dialog_bank_question_detail)
+        enlargeDialog.window?.setGravity(Gravity.CENTER)
+        enlargeDialog.show()
+
+        val imageView = enlargeDialog.findViewById<ImageView>(R.id.image)
+        val imageBytes = Base64.decode(imageList[position], Base64.DEFAULT)
+        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        imageView.setImageBitmap(decodedImage)
     }
 }
