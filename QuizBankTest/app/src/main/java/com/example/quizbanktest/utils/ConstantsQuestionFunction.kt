@@ -35,12 +35,13 @@ object ConstantsQuestionFunction {
     var questionList : ArrayList<QuestionModel> = ArrayList()
     var postQuestionPosition : Int = 0
     fun postQuestion(question : ScanQuestionModel, activity: AppCompatActivity, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
-
+        val client = ConstantsFunction.createOkHttpClient()
         if (Constants.isNetworkAvailable(activity)) {
             Log.e("question post",question.toString())
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
             val api = retrofit.create(QuestionService::class.java)
 //            data class PostQuestionBody(val title: String,val number: String,val description: String,val options: ArrayList<String>,val questionType:String,val bankType:String,val questionBank:String,val answerOptions:ArrayList<String>,val answerDescription:String,val provider:String,val originateFrom:String,val createdDate:String,val image : String,val tag:ArrayList<String>)
