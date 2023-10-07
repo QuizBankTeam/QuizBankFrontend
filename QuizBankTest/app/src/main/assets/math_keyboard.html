@@ -190,12 +190,12 @@ x\subseteq y = [
             switch (operation) {
               case "Sum":
                 mke.insert(keyboardMemory, new mke.AscendingBranchingNode(String.raw`\sum_{`, "}^{", "}"));
-                stack.push(current[0],"MOVE_RIGHT", current[1]);
+                stack.push("MOVE_RIGHT",current[0],"MOVE_RIGHT", current[1]);
                 break;
               case "Sqrt":
                 console.log("sqrt");
                 mke.insert(keyboardMemory, new mke.StandardBranchingNode(String.raw`\sqrt{`, "}"));
-                stack.push(current[0]);
+                stack.push("MOVE_RIGHT",current[0]);
                 break;
               case "InverseFunction":
                   let funcToInverse = current[0]; // 從當前的current中獲取三角函數
@@ -221,22 +221,22 @@ x\subseteq y = [
                 console.log("arccos");
                 mke.insert(keyboardMemory, new mke.StandardLeafNode(String.raw`\cos^{-1}`));
                 mke.insert(keyboardMemory, new mke.RoundBracketsNode());
-                stack.push(current[0]);
+                stack.push("MOVE_RIGHT",current[0]);
                 break;
               case "Delimiter": //小括號
                 console.log("Delimiter");
                 mke.insert(keyboardMemory, new mke.RoundBracketsNode());
-                stack.push(...current);
+                stack.push("MOVE_RIGHT",...current);
                 break;
               case "Arcsin": //sin 的反函數
                 mke.insert(keyboardMemory, new mke.StandardLeafNode("\\arcsin"));
                 mke.insert(keyboardMemory, new mke.RoundBracketsNode());
-                stack.push(current[0]);
+                stack.push("MOVE_RIGHT",current[0]);
                 break;
               case "Cos":
                 mke.insert(keyboardMemory, new mke.StandardLeafNode('\\cos'));
                 mke.insert(keyboardMemory, new mke.RoundBracketsNode());
-                stack.push(current[0]);
+                stack.push("MOVE_RIGHT",current[0]);
                 break;
               case "Equal":
                 console.log("equal");
@@ -271,7 +271,7 @@ x\subseteq y = [
                 break;
               case "Subscript":
                 mke.insert(keyboardMemory,new mke.DescendingBranchingNode("", "_{", "}"));
-                stack.push(current[1],"MOVE_RIGHT",current[0],"MOVE_RIGHT");
+                stack.push("MOVE_RIGHT",current[1],"MOVE_RIGHT",current[0]);
                 break;
               case "SetMinus":
                 stack.push( current[1],"setminus", current[0]);
@@ -279,7 +279,7 @@ x\subseteq y = [
               case "Integrate":
                 console.log("Integrate");
                 mke.insert(keyboardMemory, new mke.AscendingBranchingNode(String.raw`\int_{`, "}^{", "}"));
-                stack.push(current[0],"MOVE_RIGHT", current[1]);
+                stack.push("MOVE_RIGHT",current[0],"MOVE_RIGHT", current[1]);
                 break;
               case "Divide":
                 console.log("insert frac");
@@ -290,20 +290,20 @@ x\subseteq y = [
               case "Rational":
                 console.log("insert frac");
                 mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\frac{`, '}{', '}'));
-                stack.push(current[1],"MOVE_RIGHT", current[0]);
+                stack.push("MOVE_RIGHT",current[1],"MOVE_RIGHT", current[0]);
                 break;
               case "Sin":
                 console.log("sin");
                 mke.insert(keyboardMemory, new mke.StandardLeafNode('\\sin'));
                 mke.insert(keyboardMemory, new mke.RoundBracketsNode());
-                stack.push(current[0]);
+                stack.push("MOVE_RIGHT",current[0]);
                 break;
               case "Half":
                 mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\frac{`, "}{", "}"));
                 mke.insert(k, new mke.LeafNode('1'));
                 mke.moveRight(k);
                 mke.insert(k, new mke.DigitNode('2'));
-                stack.push(...current);
+                stack.push("MOVE_RIGHT",...current);
                 break;
               case "PlusMinus":
                 console.log("plusminus");
@@ -312,12 +312,12 @@ x\subseteq y = [
               case "Abs":
                 console.log("Abs");
                 mke.insert(keyboardMemory, new mke.StandardBranchingNode(String.raw`\left|`, String.raw`\right|`));
-                stack.push(...current);
+                stack.push("MOVE_RIGHT",...current);
                 break;
               case "Root":
                 console.log("root");
                 mke.insert(keyboardMemory, new mke.DescendingBranchingNode(String.raw`\sqrt[`, "]{", "}"));
-                stack.push(current[0],"MOVE_RIGHT", current[1]);
+                stack.push("MOVE_RIGHT",current[0],"MOVE_RIGHT", current[1]);
                 break;
               case "SubsetEqual":
                 console.log("SubsetEqual");
@@ -327,7 +327,7 @@ x\subseteq y = [
                 console.log("Tan");
                 mke.insert(keyboardMemory, new mke.StandardLeafNode('\\tan'));
                 mke.insert(keyboardMemory, new mke.RoundBracketsNode());
-                stack.push(current[0]);
+                stack.push("MOVE_RIGHT",current[0]);
                 break;
               case "Element":
                 console.log("Element");
@@ -364,7 +364,7 @@ x\subseteq y = [
                 break;
               case "Factorial":
                 console.log("Factorial");
-                stack.push(current[0],"Factorial");
+                stack.push("MOVE_RIGHT",current[0],"Factorial");
                 break;
               case "Subtract":
                 console.log("subtract");
@@ -372,12 +372,12 @@ x\subseteq y = [
                 break;
               case "Square":
                 mke.insert(keyboardMemory,new mke.AscendingBranchingNode('', '^{', '}'));
-                stack.push(current[1],"MOVE_RIGHT", 2);
+                stack.push("MOVE_RIGHT",current[1],"MOVE_RIGHT", 2);
                 console.log("power");
                 break;
               case "Power":
                 mke.insert(keyboardMemory,new mke.AscendingBranchingNode('', '^{', '}'));
-                stack.push(current[1],"MOVE_RIGHT", current[0]);
+                stack.push("MOVE_RIGHT",current[1],"MOVE_RIGHT", current[0]);
                 console.log("power");
                 break;
               default:
