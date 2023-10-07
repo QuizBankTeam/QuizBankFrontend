@@ -15,7 +15,7 @@ data class QuestionModel(
     var answerDescription: String, //dialog create
     var originateFrom: String, // user id
     var createdDate: String,
-    var image: ArrayList<String>, // base64 // dialog
+    var questionImage: ArrayList<String>, // base64 // dialog
     var answerImage: ArrayList<String>? = null, // base64 // dialog
     var tag: ArrayList<String>
 

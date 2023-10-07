@@ -188,7 +188,7 @@ object ConstantsQuestionFunction {
                 val answerImage : ArrayList<String> = ArrayList()
                 question.answerImage = answerImage
             }
-            val body = QuestionService.PutQuestionBody(question._id, question.title, question.number, question.description, question.options, question.questionType, question.bankType, question.answerOptions, question.answerDescription, question.image,
+            val body = QuestionService.PutQuestionBody(question._id, question.title, question.number, question.description, question.options, question.questionType, question.bankType, question.answerOptions, question.answerDescription, question.questionImage,
                 question.answerImage!!, question.tag)
             //TODO 拿到csrf token access token
             val call = api.updateQuestion(
