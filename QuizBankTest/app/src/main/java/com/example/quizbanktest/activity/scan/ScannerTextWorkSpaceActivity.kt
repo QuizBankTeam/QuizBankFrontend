@@ -93,7 +93,6 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
                 finish()
             }
         }
-
         val addEmptyButton : ImageButton = findViewById(R.id.add_empty_scan_result)
 
         addEmptyButton.setOnClickListener {
