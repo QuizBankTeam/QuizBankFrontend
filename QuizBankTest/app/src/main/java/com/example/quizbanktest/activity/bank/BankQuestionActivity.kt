@@ -200,9 +200,9 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                 } else {
                     try {
                         for (item in questionList) {
-                            if (item.image == null) {
+                            if (item.questionImage == null) {
                                 val image : ArrayList<String> = ArrayList()
-                                item.image = image
+                                item.questionImage = image
                             }
 
                             if (item.answerImage == null) {
@@ -213,7 +213,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                                 item._id, item.title, item.number, item.description,
                                 item.options, item.questionType, item.bankType, item.questionBank,
                                 item.answerOptions, item.answerDescription, item.originateFrom,
-                                item.createdDate, item.image, item.answerImage, item.tag
+                                item.createdDate, item.questionImage, item.answerImage, item.tag
                             )
 
                             for (i in item.tag) {
@@ -252,7 +252,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         questionDetailActivity.putExtra("answerDescription", questionModels[position].answerDescription)
         questionDetailActivity.putExtra("source", questionModels[position].originateFrom)
         questionDetailActivity.putExtra("createdDate", questionModels[position].createdDate)
-        questionDetailActivity.putExtra("image", questionModels[position].image)
+        questionDetailActivity.putExtra("image", questionModels[position].questionImage)
 //        QuestionDetailActivity.putExtra("answerImage", questionModels[position].answerImage)
         questionDetailActivity.putStringArrayListExtra("answerImage", questionModels[position].answerImage)
         questionDetailActivity.putExtra("tag", questionModels[position].tag)
@@ -332,7 +332,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                         questionModels[position].bankType, questionModels[position].questionBank,
                         questionModels[position].answerOptions, questionModels[position].answerDescription,
                         questionModels[position].originateFrom, questionModels[position].createdDate,
-                        questionModels[position].image, questionModels[position].answerImage,
+                        questionModels[position].questionImage, questionModels[position].answerImage,
                         questionModels[position].tag)
                     questionAdapter.setItem(position, data)
                     changeTitleDialog.dismiss()

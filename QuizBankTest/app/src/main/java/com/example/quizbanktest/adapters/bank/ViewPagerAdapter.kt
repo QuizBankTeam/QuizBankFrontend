@@ -92,13 +92,13 @@ class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) :
 
     private fun enlargeImage(position: Int) {
         val enlargeDialog = Dialog(context)
-        enlargeDialog.setContentView(R.layout.dialog_bank_question_detail)
+        enlargeDialog.setContentView(R.layout.dialog_enlarged_image)
         enlargeDialog.window?.setGravity(Gravity.CENTER)
         enlargeDialog.show()
 
-        val imageView = enlargeDialog.findViewById<ImageView>(R.id.image)
+        val enlargedImageView = enlargeDialog.findViewById<ImageView>(R.id.image)
         val imageBytes = Base64.decode(imageList[position], Base64.DEFAULT)
         val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        imageView.setImageBitmap(decodedImage)
+        enlargedImageView.setImageBitmap(decodedImage)
     }
 }
