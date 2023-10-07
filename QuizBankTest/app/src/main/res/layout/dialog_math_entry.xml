@@ -72,6 +72,55 @@
                         android:foreground="?attr/selectableItemBackground"
                         android:background="@drawable/shape_add_option"
                         android:text="掃描數學並編輯  📸" />
+                    <com.qdot.mathrendererlib.MathRenderView
+                        android:id="@+id/mathView"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="4dp"
+                        app:text="this is math \\(\\int_{0}^{20}x^{20}\\) "
+                        android:textAlignment="center"
+                        app:textColor="#000000"
+                        app:mathBackgroundColor="#FFFFFF"/>
+                    <LinearLayout
+                        android:id="@+id/ocr_checkout_layout"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/ocr_edit"
+                            android:layout_width="0dp"
+                            android:layout_height="38dp"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:background="@drawable/shape_add_option"
+                            android:text="ocr字串編輯 🖊️ ️" />
+                        <TextView
+                            android:id="@+id/ocr_enter"
+                            android:layout_width="0dp"
+                            android:layout_height="38dp"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:background="@drawable/shape_add_option"
+                            android:text="直接使用 ✅" />
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/math_edit_enter"
                         android:layout_width="match_parent"

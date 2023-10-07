@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.Settings.Global.putString
 import android.util.Base64
 import android.util.Log
 import android.widget.*
@@ -73,7 +72,7 @@ open class BaseActivity : AppCompatActivity() {
             }
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
             onImageSelected?.invoke(bitmap)
-            deleteFileFromUri(this,uri!!)
+//            deleteFileFromUri(this,uri!!)
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             Log.e("cropResult","error")
             val cropError = UCrop.getError(result.data!!)
@@ -293,6 +292,38 @@ open class BaseActivity : AppCompatActivity() {
         }
         pictureDialog.show()
     }
+
+    fun ocrCameraPick(callback: (uri: Uri?) -> Unit){
+
+        val pictureDialog = AlertDialog.Builder(this)
+        pictureDialog.setTitle("Select Action")
+        val pictureDialogItems =
+            arrayOf("拍照","從相簿選擇")
+        pictureDialog.setItems(
+            pictureDialogItems
+        ) { dialog, which ->
+            when (which) {
+
+                0 -> takeMathToOcr( onSuccess = { it1 ->  callback(uriForOcr)  }, onFailure = { it1 -> callback(null) })
+                1 -> chooseMathPhotoToOcr(onSuccess = { it1 -> callback(uriForOcr) }, onFailure = { it1 -> callback(null) })
+            }
+        }
+        pictureDialog.show()
+    }
+    fun  takeMathToOcr(onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
+        takeCameraPhoto {
+                bitmap ->
+            if (bitmap != null) {
+                lifecycleScope.launch{
+                    saveBitmapFileForPicturesDir(bitmap)
+                }
+                onSuccess("true")
+            }else{
+                onFailure("can't choose empty photo")
+                Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     fun scanPhoto(){
         Dexter.withActivity(this)
             .withPermissions(
@@ -499,7 +530,18 @@ open class BaseActivity : AppCompatActivity() {
             }).onSameThread()
             .check()
     }
-
+    fun  chooseMathPhotoToOcr(onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
+        choosePhotoFromGallery {
+                bitmap ->
+            Toast.makeText(this,"photo ocr",Toast.LENGTH_SHORT).show()
+            if (bitmap != null) {
+                onSuccess("success")
+            }else{
+                onFailure("can't choose empty photo")
+                Toast.makeText(this@BaseActivity,"You can't choose empty photo to ocr",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     fun  choosePhotoToOcr(flag : Int,onSuccess: (String) -> Unit, onFailure: (String) -> Unit){ // 0 :普通掃描 1:重新掃描
         choosePhotoFromGallery {
             bitmap ->
@@ -840,8 +882,27 @@ open class BaseActivity : AppCompatActivity() {
         }
 
     }
+    @Throws(java.lang.Exception::class)
+    protected open fun convertFileToContentUri(context: Context, file: File): Uri? {
+
+        //Uri localImageUri = Uri.fromFile(localImageFile); // Not suitable as it's not a content Uri
+        val cr = context.contentResolver
+        val imagePath = file.absolutePath
+        val imageName: String? = null
+        val imageDescription: String? = null
+        Log.e("image name",imagePath.toString())
+        val uriString =
+            MediaStore.Images.Media.insertImage(cr, imagePath, imageName, imageDescription)
+        return Uri.parse(uriString)
+    }
     fun autoOcrAndRotate(uri: Uri,base64String : String,flag: Int,onSuccess1: (String) -> Unit, onFailure1: (String) -> Unit){
 
+        var uri = uri
+        if(uri.scheme == "file"){
+            val file = File(uri.path)
+            uri = convertFileToContentUri(this@BaseActivity,file)!!
+
+        }
         if(flag == 1){
 
             showProgressDialog("重新掃描中")
