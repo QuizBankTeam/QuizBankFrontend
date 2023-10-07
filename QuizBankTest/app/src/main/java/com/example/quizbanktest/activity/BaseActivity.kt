@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.Settings.Global.putString
 import android.util.Base64
 import android.util.Log
 import android.widget.*
@@ -883,8 +882,27 @@ open class BaseActivity : AppCompatActivity() {
         }
 
     }
+    @Throws(java.lang.Exception::class)
+    protected open fun convertFileToContentUri(context: Context, file: File): Uri? {
+
+        //Uri localImageUri = Uri.fromFile(localImageFile); // Not suitable as it's not a content Uri
+        val cr = context.contentResolver
+        val imagePath = file.absolutePath
+        val imageName: String? = null
+        val imageDescription: String? = null
+        Log.e("image name",imagePath.toString())
+        val uriString =
+            MediaStore.Images.Media.insertImage(cr, imagePath, imageName, imageDescription)
+        return Uri.parse(uriString)
+    }
     fun autoOcrAndRotate(uri: Uri,base64String : String,flag: Int,onSuccess1: (String) -> Unit, onFailure1: (String) -> Unit){
 
+        var uri = uri
+        if(uri.scheme == "file"){
+            val file = File(uri.path)
+            uri = convertFileToContentUri(this@BaseActivity,file)!!
+
+        }
         if(flag == 1){
 
             showProgressDialog("重新掃描中")

@@ -7,6 +7,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ContentValues
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -348,6 +349,11 @@ class PaintActivity : AppCompatActivity() {
             val imageBackground: ImageView = findViewById(R.id.iv_background)
             val backgroundBitmap = getBitmapFromView(imageBackground)
             if(sourceUriForUcrop!=null){
+                if(sourceUriForUcrop!!.scheme == "file"){
+                    val file = File(sourceUriForUcrop!!.path)
+                    sourceUriForUcrop = convertFileToContentUri(this@PaintActivity,file)!!
+                }
+               
                 showProgressDialog("提升畫質中請耐心等候")
                 ConstantsRealESRGAN.realEsrgan(
                     sourceUriForUcrop!!, this@PaintActivity,
@@ -775,5 +781,18 @@ class PaintActivity : AppCompatActivity() {
     }
     fun hideProgressDialog() {
         mProgressDialog.dismiss()
+    }
+    @Throws(java.lang.Exception::class)
+    protected  fun convertFileToContentUri(context: Context, file: File): Uri? {
+
+        //Uri localImageUri = Uri.fromFile(localImageFile); // Not suitable as it's not a content Uri
+        val cr = context.contentResolver
+        val imagePath = file.absolutePath
+        val imageName: String? = null
+        val imageDescription: String? = null
+        Log.e("image name",imagePath.toString())
+        val uriString =
+            MediaStore.Images.Media.insertImage(cr, imagePath, imageName, imageDescription)
+        return Uri.parse(uriString)
     }
 }
