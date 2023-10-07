@@ -304,8 +304,22 @@ open class BaseActivity : AppCompatActivity() {
         ) { dialog, which ->
             when (which) {
 
-                0 -> takeMathToOcr( onSuccess = { it1 ->  callback(uriForOcr)  }, onFailure = { it1 -> callback(null) })
-                1 -> chooseMathPhotoToOcr(onSuccess = { it1 -> callback(uriForOcr) }, onFailure = { it1 -> callback(null) })
+                0 -> takeMathToOcr( onSuccess = { it1 ->
+                    var uri = uriForOcr
+                    if(uri.scheme == "file"){
+                        val file = File(uri.path)
+                        uri = convertFileToContentUri(this@BaseActivity,file)!!
+
+                    }
+                    callback(uri)  }, onFailure = { it1 -> callback(null) })
+                1 -> chooseMathPhotoToOcr(onSuccess = { it1 ->
+                    var uri = uriForOcr
+                    if(uri.scheme == "file"){
+                        val file = File(uri.path)
+                        uri = convertFileToContentUri(this@BaseActivity,file)!!
+
+                    }
+                    callback(uri) }, onFailure = { it1 -> callback(null) })
             }
         }
         pictureDialog.show()
