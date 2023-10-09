@@ -109,6 +109,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         val btnSortByName = sortDialog.findViewById<TextView>(R.id.tv_sortByName)
         val btnSortByDate = sortDialog.findViewById<TextView>(R.id.tv_sortByDate)
 
+        /*
         /** tags init */
         val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         wrapLayout = sortDialog.findViewById(R.id.clip_layout)
@@ -123,7 +124,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
             tagName.text = item
             tagName.setBackgroundColor(Color.parseColor(backGroundArray[(0..5).random()]))
             wrapLayout!!.addView(itemLayout)
-        }
+        }*/
 
         /** Listener area */
         btnSortByName.setOnClickListener {
