@@ -1,41 +1,21 @@
 package com.example.quizbanktest.adapters.bank
 
-import android.animation.Animator
 import android.app.Dialog
-import android.graphics.drawable.Drawable
+import android.content.Context
+import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
-import com.example.quizbanktest.R
-import com.example.quizbanktest.databinding.ItemImageBinding
-import android.content.Context
-import android.graphics.*
-import android.media.Image
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.viewpager.widget.PagerAdapter
+import com.example.quizbanktest.R
 import java.util.*
 
 class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) : PagerAdapter() {
-
-    // Hold a reference to the current animator so that it can be canceled
-    // midway.
-    private var currentAnimator: Animator? = null
-
-    // The system "short" animation time duration in milliseconds. This duration
-    // is ideal for subtle animations or animations that occur frequently.
-    private var shortAnimationDuration: Int = 0
-
     // on below line we are creating a method
     // as get count to return the size of the list.
     override fun getCount(): Int {
@@ -58,6 +38,7 @@ class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) :
         // on below line we are inflating our custom
         // layout file which we have created.
         val itemView: View = mLayoutInflater.inflate(R.layout.item_image, container, false)
+        itemView.tag = "View$position"
 
         // on below line we are initializing
         // our image view with the id.
@@ -86,6 +67,11 @@ class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) :
         container.removeView(`object` as RelativeLayout)
     }
 
+    /** this override function is used for update all item when calling notifyDataSetChanged() */
+    override fun getItemPosition(`object`: Any): Int {
+        return POSITION_NONE
+    }
+
     fun refreshItem() {
         notifyDataSetChanged()
     }
@@ -101,4 +87,5 @@ class ViewPagerAdapter(val context: Context, val imageList: ArrayList<String>) :
         val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         enlargedImageView.setImageBitmap(decodedImage)
     }
+
 }

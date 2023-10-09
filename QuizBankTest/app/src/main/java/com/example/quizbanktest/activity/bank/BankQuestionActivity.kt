@@ -180,7 +180,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     fun init() {
         bankTitle = intent.getStringExtra("BankTitle").toString()
         bankId = intent.getStringExtra("BankId").toString()
-        Log.e("BankQuestionActivity", "Bank title: $bankTitle, Bank id: $bankId")
 
         searchView = findViewById(R.id.search_bar)
         tvTitle = findViewById(R.id.title)
