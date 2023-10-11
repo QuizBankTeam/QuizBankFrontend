@@ -81,6 +81,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         init()
 
         btnAddQuestion.setOnClickListener {
+            
 //            val addQuestionActivity = Intent(this, BankQuestionDetailActivity::class.java)
 
 //            addQuestionActivity.putExtra("id", bankId)

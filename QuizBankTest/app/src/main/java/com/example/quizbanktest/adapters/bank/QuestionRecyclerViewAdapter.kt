@@ -36,6 +36,7 @@ class QuestionRecyclerViewAdapter(var context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         try {
+
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.item_questioncard, parent, false)
             arrayListFilter.clear()
