@@ -627,7 +627,7 @@ class SingleQuestion : AppCompatActivity(){
             intent.action = Intent.ACTION_GET_CONTENT
             intent.type = "image/*"
             editImageAction = "add"
-            if(questionImageArr.size>4){
+            if(questionImageArr.size>2){
                 addImageBtn.isEnabled = false
             }
             imageNum.text = "${editImagePosition + 1} / ${questionImageArr.size+1}"
