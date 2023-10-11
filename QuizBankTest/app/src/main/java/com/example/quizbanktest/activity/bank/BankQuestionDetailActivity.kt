@@ -1,14 +1,13 @@
 package com.example.quizbanktest.activity.bank
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.media.Image
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
@@ -38,10 +37,15 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private lateinit var tvDescription: MathRenderView
     private lateinit var tvAnswerDescription: MathRenderView
     private lateinit var tvImageNumber: TextView
+    private lateinit var tvAnswerImageNumber: TextView
     private lateinit var btnShowAnswer: TextView
     private lateinit var btnShowDetail: TextView
     private lateinit var btnAddQuestionImage: ImageButton
     private lateinit var btnAddAnswerImage: ImageButton
+    private lateinit var btnAddViewPager: ImageButton
+    private lateinit var btnAddAnswerViewPager: ImageButton
+    private lateinit var btnRemoveViewPager: ImageButton
+    private lateinit var btnRemoveAnswerViewPager: ImageButton
     private lateinit var optionRecyclerView: RecyclerView
     private lateinit var optionAdapter: QuestionOptionsRecyclerViewAdapter
     private lateinit var questionImageViewPager: ViewPager
@@ -71,6 +75,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     private var isModified: Boolean = false
     private var isShowingAnswer: Boolean = true
     private var isShowingFillingAnswer: Boolean = false
+    private var currentPageIndex : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
@@ -86,6 +91,10 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
 
         btnAddQuestionImage.setOnClickListener { addImage(btnAddQuestionImage) }
 
+        btnAddViewPager.setOnClickListener { editViewPager(btnAddViewPager) }
+
+        btnRemoveViewPager.setOnClickListener{ editViewPager(btnRemoveViewPager) }
+
         tvDescription.setOnClickListener { editDescription() }
 
         tvAnswerDescription.setOnClickListener { editAnswerDescription() }
@@ -99,7 +108,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         tvImageNumber.text = " "
 
         //select any page you want as your starting page
-        val currentPageIndex = 0
+        currentPageIndex = 0
         questionImageViewPager.currentItem = currentPageIndex
 
         // registering for page change callback
@@ -110,6 +119,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                 @SuppressLint("SetTextI18n")
                 override fun onPageSelected(position: Int) {
                     //update the image number textview
+                    currentPageIndex = position
                     tvImageNumber.text = "${position + 1} / ${questionImage.size}"
                 }
             }
@@ -211,11 +221,14 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         descriptionDialog.window?.setGravity(Gravity.CENTER)
         descriptionDialog.show()
 
+        val tvTitle = descriptionDialog.findViewById<TextView>(R.id.tv_description_title)
         val etDescription = descriptionDialog.findViewById<EditText>(R.id.et_question_description)
         val btnSubmit = descriptionDialog.findViewById<TextView>(R.id.btn_submit)
         val editingHint = descriptionDialog.findViewById<TextView>(R.id.editing)
 
+        tvTitle.text = "解答描述"
         etDescription.setText(newAnswerDescription)
+
         var count = 1
         val handler = Handler()
         handler.post(object : Runnable {
@@ -236,7 +249,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString() == originDescription) {
-                    btnSubmit.visibility = View.GONE
+                    btnSubmit.visibility = View.INVISIBLE
                     isModified = false
                 } else {
                     btnSubmit.visibility = View.VISIBLE
@@ -255,6 +268,63 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
             }
         }
         descriptionDialog.setOnDismissListener { isModified = false }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun editViewPager(view: View) {
+        Log.e("BankQuestionDetailActivity", view.id.toString())
+        when (view.id) {
+            /** Add image through green add button */
+            R.id.btn_add_viewPager, R.id.btn_add_answerViewPager -> {
+                if (view.id == R.id.btn_add_viewPager) { addImage(btnAddViewPager) }
+                else { addImage(btnAddAnswerViewPager) }
+            }
+            /** Remove image through red trashcan button */
+            R.id.btn_remove_viewPager, R.id.btn_remove_answerViewPager -> {
+                val deleteWarningDialog = Dialog(this)
+                deleteWarningDialog.setContentView(R.layout.dialog_delete_warning)
+                deleteWarningDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                deleteWarningDialog.window?.setGravity(Gravity.CENTER)
+                deleteWarningDialog.show()
+
+                val btnConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_confirm)
+                val btnCancelConfirm = deleteWarningDialog.findViewById<TextView>(R.id.btn_cancel)
+
+                btnConfirm.setOnClickListener {
+                    if (view.id == R.id.btn_remove_viewPager) {
+                        val position: Int = questionImageViewPager.currentItem
+                        val `object`: Any = questionImageViewPager.findViewWithTag("View$position")
+                        questionImage.removeAt(position)
+//                        questionImageViewPagerAdapter.destroyItem(questionImageViewPager, position, `object`)
+                        questionImageViewPagerAdapter.refreshItem()
+                        /** update the page number which is at the top-left corner */
+                        if (questionImage.size == 0) {
+                            tvImageNumber.visibility = View.INVISIBLE
+                        } else {
+                            tvImageNumber.text = "${position + 1} / ${questionImage.size}"
+                        }
+                    } else {
+                        val position: Int = answerImageViewPager.currentItem
+                        val `object`: Any = answerImageViewPager.findViewWithTag("View$position")
+                        answerImage.removeAt(position)
+//                        answerImageViewPagerAdapter.destroyItem(answerImageViewPager, position, `object`)
+                        answerImageViewPagerAdapter.refreshItem()
+                        /** update the page number which is at the top-left corner */
+                        if (answerImage.size == 0) {
+                            tvAnswerImageNumber.visibility = View.INVISIBLE
+                        } else {
+                            tvAnswerImageNumber.text = "${position + 1} / ${answerImage.size}"
+                        }
+                    }
+                    showSuccessSnackBar("刪除成功")
+                    deleteWarningDialog.dismiss()
+                    isModified = true
+                }
+                btnCancelConfirm.setOnClickListener {
+                    deleteWarningDialog.dismiss()
+                }
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -288,14 +358,57 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         }
     }
 
+    private fun addImage(view: View) {
+        choosePhotoFromGallery { bitmap ->
+            if (bitmap != null) {
+                val base64String = ConstantsFunction.encodeImage(bitmap)
+                when (view.id) {
+                    /** Add image through empty_image.xml imageButton */
+                    R.id.btn_add_questionImage, R.id.btn_add_answerImage -> {
+                        if (view.id == R.id.btn_add_questionImage) {
+                            btnAddViewPager.visibility = View.VISIBLE
+                            btnRemoveViewPager.visibility = View.VISIBLE
+                            tvImageNumber.visibility = View.VISIBLE
+                            questionImage.add(base64String!!)
+                            questionImageViewPagerAdapter.refreshItem()
+                            btnAddQuestionImage.visibility = View.INVISIBLE
+                            tvImageNumber.text = "1 / 1"
+                        } else {
+                            btnAddAnswerViewPager.visibility = View.VISIBLE
+                            btnRemoveAnswerViewPager.visibility = View.VISIBLE
+                            tvAnswerImageNumber.visibility = View.VISIBLE
+                            answerImage.add(base64String!!)
+                            answerImageViewPagerAdapter.refreshItem()
+                            btnAddAnswerImage.visibility = View.INVISIBLE
+                            tvAnswerImageNumber.text = "1 / 1"
+                        }
+                    }
+                    /** Add image through green add imageButton */
+                    R.id.btn_add_viewPager, R.id.btn_add_answerViewPager -> {
+                        if (view.id == R.id.btn_add_viewPager) {
+                            questionImage.add(base64String!!)
+                            questionImageViewPagerAdapter.refreshItem()
+                        } else {
+                            answerImage.add(base64String!!)
+                            answerImageViewPagerAdapter.refreshItem()
+                        }
+                    }
+                }
+            }
+        }
+        isModified = true
+    }
+
     private fun showDetail() {
         val detailDialog = Dialog(this)
         detailDialog.setContentView(R.layout.dialog_bank_question_detail)
         detailDialog.window?.setGravity(Gravity.CENTER)
         detailDialog.show()
 
-        val tvAnswerImageNumber = detailDialog.findViewById<TextView>(R.id.imageNumberTV)
         val tvDescription = detailDialog.findViewById<TextView>(R.id.answer_description)
+        tvAnswerImageNumber = detailDialog.findViewById(R.id.imageNumberTV)
+        btnAddAnswerViewPager = detailDialog.findViewById(R.id.btn_add_answerViewPager)
+        btnRemoveAnswerViewPager = detailDialog.findViewById(R.id.btn_remove_answerViewPager)
         btnAddAnswerImage = detailDialog.findViewById(R.id.btn_add_answerImage)
         answerImageViewPager = detailDialog.findViewById(R.id.viewPager)
         answerImageViewPagerAdapter = ViewPagerAdapter(this, answerImage)
@@ -306,8 +419,10 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         tvDescription.setOnClickListener{ editAnswerDescription() }
 
         if (answerImage.isEmpty()) {
-            tvImageNumber.visibility = View.INVISIBLE
+            tvAnswerImageNumber.visibility = View.INVISIBLE
             btnAddAnswerImage.visibility = View.VISIBLE
+            btnAddAnswerViewPager.visibility = View.INVISIBLE
+            btnRemoveAnswerViewPager.visibility = View.INVISIBLE
             showEmptySnackBar("目前照片為空喔")
         } else {
             btnAddAnswerImage.visibility = View.INVISIBLE
@@ -324,48 +439,54 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                     @SuppressLint("SetTextI18n")
                     override fun onPageSelected(position: Int) {
                         // update the image number textview when switching pages
-                        tvImageNumber.text = "${position + 1} / ${questionImage.size}"
+                        tvImageNumber.text = "${position + 1} / ${answerImage.size}"
                     }
                 }
             )
         }
 
+        btnAddAnswerViewPager.setOnClickListener { editViewPager(btnAddAnswerViewPager) }
+        btnRemoveAnswerViewPager.setOnClickListener { editViewPager(btnRemoveAnswerViewPager) }
         btnAddAnswerImage.setOnClickListener { addImage(btnAddAnswerImage) }
     }
 
-    private fun addImage(view: View) {
-        choosePhotoFromGallery { bitmap ->
-            if (bitmap != null) {
-                val base64String = ConstantsFunction.encodeImage(bitmap)
-                when (view.id) {
-                    R.id.btn_add_questionImage -> {
-                        questionImage.add(base64String!!)
-                        questionImageViewPagerAdapter.refreshItem()
-                    }
-                    R.id.btn_add_answerImage -> {
-                        answerImage.add(base64String!!)
-                        answerImageViewPagerAdapter.refreshItem()
-                    }
-                    else -> {}
-                }
-            }
-        }
-    }
-
     private fun putQuestion() {
-        Log.e("BankQuestionDetailActivity", "put question")
         if (isModified) {
-            val putQuestionBody = QuestionModel(questionId, questionTitle, questionNumber, questionDescription, questionOptions, questionType, bankType, bankId, answerOptions, answerDescription, questionSource, createdDate, questionImage, answerImage, questionTag)
-            ConstantsQuestionFunction.putQuestion(this, putQuestionBody,
-                onSuccess = {
-                    Log.e("BankQuestionDetailActivity", "upload success")
-                },
-                onFailure = { errorMessage ->
-                    showErrorSnackBar("網路連線狀況不好")
-                    hideProgressDialog()
-                    Log.e("BankQuestionDetailActivity", "Error Message: $errorMessage" )
+            AlertDialog.Builder(this, R.style.CustomDialogTheme)
+                .setTitle("注意")
+                .setMessage("是否儲存編輯?")
+                .setPositiveButton("好") { _, _ ->
+                    Toast.makeText(applicationContext, "好", Toast.LENGTH_SHORT).show()
+                    val putQuestionBody = QuestionModel(
+                        questionId, questionTitle, questionNumber, questionDescription,
+                        questionOptions, questionType, bankType, bankId, answerOptions,
+                        answerDescription, questionSource, createdDate, questionImage,
+                        answerImage, questionTag
+                    )
+                    ConstantsQuestionFunction.putQuestion(this, putQuestionBody,
+                        onSuccess = {
+                            Log.e("BankQuestionDetailActivity", "upload success")
+                        },
+                        onFailure = { errorMessage ->
+                            showErrorSnackBar("網路連線狀況不好")
+                            hideProgressDialog()
+                            Log.e("BankQuestionDetailActivity", "Error Message: $errorMessage")
+                        }
+                    )
+                    this.finish()
                 }
-            )
+                .setNeutralButton("繼續編輯") { _, _ ->
+                    Toast.makeText(applicationContext, "繼續編輯", Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("取消") { _, _ ->
+                    Toast.makeText(applicationContext, "取消", Toast.LENGTH_SHORT).show()
+                    this.finish()
+                }
+                .setCancelable(false)
+                .show()
+                .window?.setLayout(1000, 600)
+        } else {
+            Log.e("BankQuestionDetailActivity", "didn't modify")
         }
     }
 
@@ -381,20 +502,29 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     fun backToPreviousPage(view: View?) {
-        putQuestion()
-        this.finish()
+        if (isModified) {
+            putQuestion()
+        } else {
+            finish()
+        }
     }
 
     private var doubleBackToExitPressedOnce = false
     private fun doubleBackToExit() {
-        putQuestion()
-        finish()
+        if (isModified) {
+            putQuestion()
+        } else {
+            finish()
+        }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        putQuestion()
-        finish()
+        if (isModified) {
+            putQuestion()
+        } else {
+            finish()
+        }
     }
 
     private fun init() {
@@ -446,6 +576,8 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         btnAddQuestionImage = findViewById(R.id.btn_add_questionImage)
         btnShowAnswer = findViewById(R.id.btn_show_answer)
         btnShowDetail = findViewById(R.id.btn_show_detail)
+        btnAddViewPager = findViewById(R.id.btn_add_viewPager)
+        btnRemoveViewPager = findViewById(R.id.btn_remove_viewPager)
         tvImageNumber = findViewById(R.id.imageNumberTV)
         questionImageViewPager = findViewById(R.id.viewPager)
 
@@ -474,11 +606,16 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
         if (questionImage!!.isEmpty()) {
             tvImageNumber.visibility = View.INVISIBLE
             btnAddQuestionImage.visibility = View.VISIBLE
+            btnAddViewPager.visibility = View.INVISIBLE
+            btnRemoveViewPager.visibility = View.INVISIBLE
             showEmptySnackBar("目前照片為空喔")
         } else {
+            tvImageNumber.visibility = View.VISIBLE
             btnAddQuestionImage.visibility = View.INVISIBLE
-            setupImage()
+            btnAddViewPager.visibility = View.VISIBLE
+            btnRemoveViewPager.visibility = View.VISIBLE
         }
+        setupImage()
     }
 
     override fun onItemClick(position: Int) {}
@@ -488,5 +625,6 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
     override fun updateOption(position: Int, newOption: String) {
         // update question option's description data
         questionOptions[position] = newOption
+        isModified = true
     }
 }

@@ -11,7 +11,10 @@
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="25dp">
+        app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@null"
+        app:strokeWidth="2dp">
 
         <TextView
             android:id="@+id/name"
@@ -19,10 +22,17 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:hint="tag"
-            android:paddingVertical="5dp"
             android:paddingHorizontal="8dp"
+            android:paddingVertical="5dp"
             android:textColor="@color/white"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:visibility="gone" />
 
     </com.google.android.material.card.MaterialCardView>
 

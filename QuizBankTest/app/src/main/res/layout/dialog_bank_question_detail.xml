@@ -39,6 +39,28 @@
             android:src="@drawable/add_picture_svgrepo_com"
             android:visibility="invisible" />
 
+        <ImageButton
+            android:id="@+id/btn_add_answerViewPager"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/viewPager"
+            android:layout_toEndOf="@id/viewPager"
+            android:layout_marginTop="-40dp"
+            android:layout_marginStart="-40dp"
+            android:background="@null"
+            android:src="@drawable/add_circle" />
+
+        <ImageButton
+            android:id="@+id/btn_remove_answerViewPager"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/viewPager"
+            android:layout_toStartOf="@id/viewPager"
+            android:layout_marginTop="-40dp"
+            android:layout_marginEnd="-40dp"
+            android:background="@null"
+            android:src="@drawable/delete_recycle" />
+
         <TextView
             android:id="@+id/answer_description"
             android:layout_width="match_parent"

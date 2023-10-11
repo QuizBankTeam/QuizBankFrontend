@@ -27,6 +27,8 @@ import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsQuestionFunction
 import com.example.quizbanktest.view.WrapLayout
+import com.google.android.material.card.MaterialCardView
+import org.w3c.dom.Text
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -50,12 +52,13 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     // Question variable
     private var questionModels = ArrayList<QuestionModel>()
     private var allQuestionBanks = ArrayList<QuestionBankModel>()
+    private var tagQuestionModels = ArrayList<QuestionModel>()
 
     // Variable
     private lateinit var bankTitle: String
     private lateinit var bankId: String
-    private val tagList: ArrayList<String> = ArrayList()
-    private var toast: Toast? = null
+    private val allTagList: ArrayList<String> = ArrayList()
+    private val showingTagList: ArrayList<String> = ArrayList()
     private var wrapLayout: WrapLayout? = null
     private lateinit var newQuestionTitle: String
     private lateinit var newQuestionType: String
@@ -95,7 +98,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             }
         })
 
-        btnSort.setOnClickListener { sortList() }
+        btnSort.setOnClickListener { setSortDialog() }
 
         pullExit()
     }
@@ -109,7 +112,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     }
 
     @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
-    private fun sortList() {
+    private fun setSortDialog() {
         val sortDialog = Dialog(this)
         sortDialog.setContentView(R.layout.dialog_sort_tags)
         sortDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -123,17 +126,86 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         /** tags init */
         val popupInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         wrapLayout = sortDialog.findViewById(R.id.clip_layout)
-        val strs = arrayOf(
-            "作業系統", "離散數學", "線性代數", "資料結構",
-            "演算法", "計算機組織", "python", "java"
-        )
-        Log.e("BankQuestionActivity", "Here are the all tags below:\n$tagList")
-        for (item in strs) {
-            val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)
-            val tagName = itemLayout.findViewById<View>(R.id.name) as TextView
-            tagName.text = item
-            tagName.setBackgroundColor(Color.parseColor(backGroundArray[(0..5).random()]))
-            wrapLayout!!.addView(itemLayout)
+        if (allTagList.isEmpty()) {
+            Log.e("BankQuestionActivity", "No tags inside, using the example")
+            val example = arrayOf(
+                "作業系統", "離散數學", "線性代數", "資料結構",
+                "演算法", "計算機組織", "python", "java"
+            )
+            for (item in example) {
+                val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)
+                val tagName = itemLayout.findViewById<View>(R.id.name) as TextView
+                val isClickedBefore = itemLayout.findViewById<View>(R.id.check) as TextView
+                val cardView = itemLayout.findViewById<MaterialCardView>(R.id.cardView)
+                isClickedBefore.text = "0"
+                tagName.text = item
+                tagName.setBackgroundColor(Color.parseColor(backGroundArray[(0..5).random()]))
+                tagName.setTextColor(Color.parseColor("#FCFCFC"))
+                tagName.setOnClickListener {
+                    if (isClickedBefore.text == "1") {
+                        cardView.strokeColor = Color.TRANSPARENT
+                        isClickedBefore.text = "0"
+                        showingTagList.remove(tagName.text.toString())
+                    } else {
+                        cardView.strokeColor = Color.parseColor("#8ecae6")
+                        isClickedBefore.text = "1"
+                        showingTagList.add(tagName.text.toString())
+                    }
+                    Log.e("BankQuestionDetailActivity", "All tags you pick now: $showingTagList")
+                }
+                wrapLayout!!.addView(itemLayout)
+            }
+        } else {
+            Log.e("BankQuestionActivity", "Here are all the tags below:\n$allTagList")
+            var isRepeated = false
+            for (item in allTagList) {
+                isRepeated = false
+                /** Check if there are the same tags inside */
+                for (j in allTagList.indices) {
+                    if (item == allTagList[j]) {
+                        isRepeated = true
+                        break
+                    }
+                }
+                if (isRepeated) { continue }
+                else {
+                    val itemLayout = popupInflater.inflate(R.layout.layout_item, wrapLayout, false)
+                    val tagName = itemLayout.findViewById<View>(R.id.name) as TextView
+                    val isClickedBefore = itemLayout.findViewById<TextView>(R.id.check)
+                    val cardView = itemLayout.findViewById<MaterialCardView>(R.id.cardView)
+                    isClickedBefore.text = "0"
+                    tagName.text = item
+                    tagName.setBackgroundColor(Color.parseColor(backGroundArray[(0..5).random()]))
+                    tagName.setTextColor(Color.parseColor("#FCFCFC"))
+                    tagName.setOnClickListener {
+                        if (isClickedBefore.text == "1") {
+                            /** The tag was clicked before, convert the border into transparent */
+                            cardView.strokeColor = Color.TRANSPARENT
+                            isClickedBefore.text = "0"
+                            showingTagList.remove(tagName.text.toString())
+                        } else {
+                            /** The tag wasn't clicked before, the border still transparent */
+                            cardView.strokeColor = Color.parseColor("#8ECAE6")
+                            isClickedBefore.text = "1"
+                            showingTagList.add(tagName.text.toString())
+                        }
+                        Log.e("BankQuestionDetailActivity", "All tags you pick now: $showingTagList")
+                        tagQuestionModels.addAll(questionModels)
+                        /** select those questions that contain the tags which were chosen above */
+                        for (showingTag in showingTagList) {
+                            for (i in tagQuestionModels.indices) {
+                                for (tag in tagQuestionModels[i].tag) {
+                                    if (tag != showingTag) { tagQuestionModels.removeAt(i) }
+                                }
+                            }
+                        }
+                        /** refresh the view */
+                        questionAdapter = QuestionRecyclerViewAdapter(
+                            this, this, tagQuestionModels, this)
+                    }
+                    wrapLayout!!.addView(itemLayout)
+                }
+            }
         }
 
         /** Listener area */
@@ -180,7 +252,6 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
     fun init() {
         bankTitle = intent.getStringExtra("BankTitle").toString()
         bankId = intent.getStringExtra("BankId").toString()
-        Log.e("BankQuestionActivity", "Bank title: $bankTitle, Bank id: $bankId")
 
         searchView = findViewById(R.id.search_bar)
         tvTitle = findViewById(R.id.title)
@@ -217,8 +288,8 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
                             )
 
                             for (i in item.tag) {
-                                for (j in tagList.indices)
-                                    if (i != tagList[j]) { tagList.add(i) }
+                                for (j in allTagList.indices)
+                                    if (i != allTagList[j]) { allTagList.add(i) }
                             }
 
                             questionModels.add(questionModel)

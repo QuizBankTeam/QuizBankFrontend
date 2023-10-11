@@ -43,7 +43,7 @@
             android:padding="5dp"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/question_title"
@@ -100,9 +100,32 @@
         android:layout_height="200dp"
         android:layout_below="@id/title_bar"
         android:layout_centerInParent="true"
+        android:layout_marginHorizontal="20dp"
         android:background="@null"
         android:src="@drawable/add_picture_svgrepo_com"
         android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/btn_add_viewPager"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/image_layout"
+        android:layout_toEndOf="@id/image_layout"
+        android:layout_marginTop="-40dp"
+        android:layout_marginStart="-60dp"
+        android:background="@null"
+        android:src="@drawable/add_circle" />
+
+    <ImageButton
+        android:id="@+id/btn_remove_viewPager"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/image_layout"
+        android:layout_toStartOf="@id/image_layout"
+        android:layout_marginTop="-40dp"
+        android:layout_marginEnd="-60dp"
+        android:background="@null"
+        android:src="@drawable/delete_recycle" />
 
     <com.qdot.mathrendererlib.MathRenderView
         android:id="@+id/question_description"
