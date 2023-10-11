@@ -159,6 +159,7 @@ object ConstantsAccountServiceFunction {
                         userAccount = accountResponse.user
                         Log.e("account",accountResponse.toString())
                         Constants.userId = userAccount!!._id
+                        Constants.username =  userAccount!!.username
                         Constants.accessToken = accessToken!!
                         Constants.refreshToken = refreshToken!!
                         var cookie: String = Constants.cookie + ";"
