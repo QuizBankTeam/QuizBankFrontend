@@ -9,6 +9,7 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -83,6 +84,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private var selectedView = ArrayList<View>()  //被選過的option的background index和currentSelection 相同
     private var trueOrFalseView: View? = null
     private var trueOrFalseSelected = false
+    private lateinit var textViewTrue: TextView
     private var currentAnswer : String = ""
     private var currentQuestionScore = 0
     private var singleQuestionScore = 0
@@ -347,6 +349,7 @@ class  MPStartQuiz: AppCompatActivity() {
             val tfParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, vHeight)
             val textViewTrue : TextView = v.findViewById(R.id.option_true)
             val textViewFalse: TextView = v.findViewById(R.id.option_false)
+            this.textViewTrue = textViewTrue
             tfParams.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescriptionContainer.id)
             v.layoutParams = tfParams
             v.id = View.generateViewId()
@@ -949,6 +952,20 @@ class  MPStartQuiz: AppCompatActivity() {
                     }
                     1 -> {
                         hookAnim()
+                        if(questionList[currentAtQuestion].questionType == Constants.questionTypeTrueOrFalse){
+                            if(this::textViewTrue.isInitialized){
+                                textViewTrue.isClickable = false
+                                textViewTrue.setBackgroundColor(Color.parseColor("#D0D0D0"))
+                                if(currentAnswer=="true"){
+                                    currentAnswer = ""
+                                    trueOrFalseSelected = false
+                                }
+                            }
+                        }else{
+                                if(this::optionAdapter.isInitialized){
+                                    optionAdapter.steal()
+                                }
+                        }
                         Toast.makeText(this, "你被偷走了一個選項!", Toast.LENGTH_SHORT).show()
 
                     }
@@ -986,6 +1003,9 @@ class  MPStartQuiz: AppCompatActivity() {
             socket.off("finishQuiz")
             socket.off("returnQuizState")
             socket.off("useAbility")
+        }
+        if(this::player.isInitialized){
+            player.stop()
         }
     }
 }

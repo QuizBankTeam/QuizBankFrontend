@@ -22,7 +22,7 @@ class OptionAdapter(private val context: Activity, private  val arrayList: Array
     private var selectOption: ArrayList<Int> = ArrayList()
     private var answerIsCorrect: Boolean = false
     private var selectOnClickListener: SelectOnClickListener? = null
-
+    private var stealItem = false
     interface SelectOnClickListener {
         fun onclick(position: Int, holder: MyViewHolder)
     }
@@ -49,6 +49,9 @@ class OptionAdapter(private val context: Activity, private  val arrayList: Array
             adaptSingleQuestion(holder, position)
         } else if (inRecord) {
             adaptInRecord(holder, position)
+        }
+        if(stealItem && position==0){
+            holder.optionBackground.setBackgroundColor(Color.parseColor("#D0D0D0"))
         }
     }
 
@@ -138,5 +141,9 @@ class OptionAdapter(private val context: Activity, private  val arrayList: Array
         for(index in change){
             notifyItemChanged(index)
         }
+    }
+    fun steal(){
+        stealItem = true
+        notifyItemChanged(0)
     }
 }
