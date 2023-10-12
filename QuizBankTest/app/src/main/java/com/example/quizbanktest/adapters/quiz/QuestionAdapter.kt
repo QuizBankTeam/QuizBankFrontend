@@ -50,7 +50,7 @@ class QuestionAdapter(private val context: Activity, private val questionList: A
         holder.questionDescription.text = currentItem.description
         Log.d("position is", "$position")
 
-        holder.questionImage.setImageResource(0)
+        holder.questionImage.setImageResource(R.drawable.notepad_and_pen_svgrepo_com)
         if(position<SingleQuiz.Companion.quizQuestionImages.size) {
             for (item in SingleQuiz.Companion.quizQuestionImages[position]) {
                 Log.d("position is $position", "contains img")
