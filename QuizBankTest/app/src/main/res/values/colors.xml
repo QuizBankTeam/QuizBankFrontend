@@ -50,4 +50,5 @@
     <color name="underline">#D0CDCD</color>
     <color name="dark_gray">#4F4F4F</color>
     <color name="light_purple">#E6CAFF</color>
+    <color name="choose_page">#D0D0D0</color>
 </resources>

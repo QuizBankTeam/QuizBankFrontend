@@ -17,6 +17,7 @@ import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.account.MyProfileActivity
 import com.example.quizbanktest.activity.paint.PaintActivity
 import com.example.quizbanktest.activity.quiz.MPStartQuiz
+import com.example.quizbanktest.activity.quiz.SPSingleRecord
 import com.example.quizbanktest.activity.quiz.SingleQuestion
 import com.example.quizbanktest.activity.scan.MathActivity
 import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
@@ -88,10 +89,25 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             val intent = Intent()
             intent.setClass(this, MPStartQuiz::class.java)
             intent.putExtra("Key_id", jText)
-            startActivity(intent)
+            startActivityForResult(intent, 2000)
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == RESULT_OK){ //前往考試紀錄
+            val intent = Intent()
+            intent.setClass(this, SPSingleRecord::class.java)
+            val questionRecordList = data?.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
+            val quizRecord = data?.getParcelableExtra<QuizRecord>("Key_quizRecord")
+            val activityMain = "activityMain"
+
+            intent.putExtra("previousActivity", activityMain)
+            intent.putParcelableArrayListExtra("Key_questionRecord", questionRecordList)
+            intent.putExtra("Key_quizRecord", quizRecord)
+            startActivity(intent)
+        }
+    }
 
 
     private fun setupRecentRecyclerView(quizBankList: ArrayList<QuestionBankModel>) {

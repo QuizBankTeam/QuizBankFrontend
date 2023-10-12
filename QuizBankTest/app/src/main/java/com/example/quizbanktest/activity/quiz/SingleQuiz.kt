@@ -104,6 +104,10 @@ class SingleQuiz: AppCompatActivity() {
                     val putQuiz = Quiz(quizId, quizTitle, quizType, quizStatus, duringTime, casualDuringTime, quizStartDateTime, quizEndDateTime, quizMembers, preparedAddedQ)
 
                     ConstantsQuiz.putQuiz(this@SingleQuiz, putQuiz, onSuccess = {
+                        preparedAddedQImages.addAll(0, quizQuestionImages)
+                        preparedAddedAImages.addAll(0, quizAnswerImages)
+                        quizQuestionImages.clear()
+                        quizAnswerImages.clear()
                         quizQuestionImages.addAll(preparedAddedQImages)
                         quizAnswerImages.addAll(preparedAddedAImages)
                         questionlist.clear()
@@ -388,6 +392,7 @@ class SingleQuiz: AppCompatActivity() {
             quizQuestionImages = SingleQuizPage.Companion.quizListQuestionImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
             quizAnswerImages = SingleQuizPage.Companion.quizListAnswerImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
         }else if(quizType==Constants.quizTypeCasual){
+            Log.d("mp image size is", "${MultiQuizPage.Companion.quizListQuestionImages.size}")
             quizQuestionImages = MultiQuizPage.Companion.quizListQuestionImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
             quizAnswerImages = MultiQuizPage.Companion.quizListAnswerImages[quizIndex].toMutableList() as ArrayList<ArrayList<String>>
         }
@@ -430,6 +435,12 @@ class SingleQuiz: AppCompatActivity() {
                     tmpTag.add(data.getStringExtra("Key_tag$i")!!)
                 }
 
+                if(imageChange){
+                    Log.d("image is changing", "")
+                }
+                for( (index, imgArr) in quizQuestionImages.withIndex()){
+                    Log.d("image$index size is ", imgArr.size.toString())
+                }
                 if(tmpTag!=tmpQuestion.tag || tmpTitle!=tmpQuestion.title || tmpDescription!=tmpQuestion.description ||
                     tmpAnswerOptions!=tmpQuestion.answerOptions || tmpAnswerDescription!=tmpQuestion.answerDescription ||
                     tmpNumber!=tmpQuestion.number || tmpQuestionType!=tmpQuestion.questionType ||

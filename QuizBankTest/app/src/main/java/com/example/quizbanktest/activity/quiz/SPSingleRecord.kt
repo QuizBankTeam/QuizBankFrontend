@@ -46,6 +46,7 @@ class SPSingleRecord: AppCompatActivity()  {
     private  var quizIndex: Int = 0
     private val activitySingleQuiz = "SingleQuiz"
     private val activityRecordPage = "RecordPage"
+    private val activityMain = "activityMain"
     private lateinit var previousActivity: String
     private lateinit var imageAdapter: ImageVPAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +87,14 @@ class SPSingleRecord: AppCompatActivity()  {
                 this.recordList = spRecordList
             }
             initQuestion()
-        }else if(previousActivity==activityRecordPage){
+        }else if(previousActivity==activityMain){ //從首頁加入多人考試再回傳的
+            val spRecordList = intent.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
+            if (spRecordList != null) {
+                this.recordList = spRecordList
+            }
+            initQuestion()
+        }
+        else if(previousActivity==activityRecordPage){
             ConstantsQuizRecord.getSingleQuizRecord(this, quizRecord._id, onSuccess = { quizRecord, questionRecords->
                 this.recordList = questionRecords
                 initQuestion()
@@ -115,7 +123,15 @@ class SPSingleRecord: AppCompatActivity()  {
                     val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                     tmpAImg.add(decodeImage)
                 }
-            }else if(previousActivity==activityRecordPage){
+            }else if(previousActivity==activityMain){
+                for (item in MPStartQuiz.Companion.questionImageArr[index]) {
+                    tmpQImg.add(item)
+                }
+                for (item in MPStartQuiz.Companion.answerImageArr[index]) {
+                    tmpAImg.add(item)
+                }
+            }
+            else if(previousActivity==activityRecordPage){
                 record.question.questionImage?.forEach{
                     val imageBytes: ByteArray = Base64.decode(it, Base64.DEFAULT)
                     val decodeImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
