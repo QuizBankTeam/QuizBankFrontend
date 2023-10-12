@@ -64,7 +64,18 @@ object ConstantsLatexOcr {
 
                     if (response!!.isSuccessful) {
                         val gson = Gson()
-                        onSuccess(response.body().toString())
+                        val ocrResponse = gson.fromJson(
+                            response.body()?.charStream(),
+                            LatexOCRResponse::class.java
+                        )
+
+                        if(!ocrResponse.latex.equals("")){
+                            onSuccess(ocrResponse.latex)
+                        }else{
+                            onFailure("辨識不出來目前的圖片請重新上傳")
+                        }
+
+
 
                     } else {
 
@@ -115,6 +126,7 @@ object ConstantsLatexOcr {
 
 
     }
+    data class LatexOCRResponse(val latex: String)
     fun escapeSpecialCharacters(input: String): String {
         // 先轉換 \\ 至 \\\\，再轉換 \ 至 \\，然後轉換 & 至 &amp;
         return input.replace("&", "&amp;")

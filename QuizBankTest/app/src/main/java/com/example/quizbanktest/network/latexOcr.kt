@@ -10,7 +10,7 @@ import retrofit2.http.Part
 
 interface LatexOcrService {
     @Multipart
-    @POST("/latexOcr")
+    @POST("/latexocr")
     fun realesrgan(
         @Header("Cookie") cookie: String,
         @Header("X-CSRF-Token") csrfToken: String,

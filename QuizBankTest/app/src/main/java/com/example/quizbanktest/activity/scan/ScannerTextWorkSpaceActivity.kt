@@ -2,6 +2,9 @@ package com.example.quizbanktest.activity.scan
 
 
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +27,7 @@ import com.example.quizbanktest.adapters.scan.OcrResultViewAdapter
 import com.example.quizbanktest.models.QuestionModel
 import com.example.quizbanktest.models.ScanQuestionModel
 import com.example.quizbanktest.utils.ConstantsLatexOcr
+import com.example.quizbanktest.utils.ConstantsLatexOcr.escapeSpecialCharacters
 import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
 import com.example.quizbanktest.utils.ConstantsRecommend
 import com.qdot.mathrendererlib.TextAlign
@@ -89,7 +93,6 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
                 finish()
             }
         }
-
         val addEmptyButton : ImageButton = findViewById(R.id.add_empty_scan_result)
 
         addEmptyButton.setOnClickListener {
@@ -110,43 +113,61 @@ class ScannerTextWorkSpaceActivity : BaseActivity() {
             val mathDialog = Dialog(this@ScannerTextWorkSpaceActivity)
             mathDialog.setContentView(R.layout.dialog_math_entry)
             mathDialog.setTitle("Math WorkSpace")
+            val ocrEditBtn = mathDialog.findViewById<TextView>(R.id.ocr_edit)
+            val ocrChoose = mathDialog.findViewById<TextView>(R.id.ocr_enter)
             val ocr = mathDialog.findViewById<TextView>(R.id.math_ocr_enter)
             val editLatex = mathDialog.findViewById<TextView>(R.id.math_edit_enter)
             val enter = mathDialog.findViewById<TextView>(R.id.math_empty_enter)
             val latexString = mathDialog.findViewById<EditText>(R.id.edit_latex)
             val edit_latex_enter = mathDialog.findViewById<TextView>(R.id.edit_latex_enter)
             val editLayout = mathDialog.findViewById<LinearLayout>(R.id.edit_layout)
+            val mathView : com.qdot.mathrendererlib.MathRenderView = mathDialog.findViewById(R.id.mathView)
+            ocrEditBtn.setOnClickListener {
+                val latex = mathView.text.toString()
+                val intent : Intent = Intent(this@ScannerTextWorkSpaceActivity,MathActivity::class.java)
+                intent.putExtra("latex",latex)
+                startActivity(intent)
+            }
+            ocrChoose.setOnClickListener {
+                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("copiedText", mathView.text.toString())
+                clipboard.setPrimaryClip(clip)
+            }
             enter.setOnClickListener {
                 val intent : Intent = Intent(this@ScannerTextWorkSpaceActivity,MathActivity::class.java)
                 intent.putExtra("latex","null")
                 startActivity(intent)
             }
             ocr.setOnClickListener {
-                val mathView : com.qdot.mathrendererlib.MathRenderView = mathDialog.findViewById(R.id.mathView)
                 mathView.visibility = View.VISIBLE
                 val ocrLayout : LinearLayout = mathDialog.findViewById(R.id.ocr_checkout_layout)
                 ocrLayout.visibility = View.VISIBLE
                 editLatex.visibility= View.GONE
                 enter.visibility = View.GONE
+                showProgressDialog("掃描中")
                 ocrCameraPick { uri ->
                     if(uri!=null){
                         Toast.makeText(this@ScannerTextWorkSpaceActivity,uri.toString(),Toast.LENGTH_SHORT).show()
-        //               ConstantsLatexOcr.latexOcr(uri,this@ScannerTextWorkSpaceActivity,
-        //                   onSuccess = { latexString ->
-        //                       mathView.apply {
-        //                           text = latexString
-        //                           textAlignment = TextAlign.START
-        //                           textColor = "#000000"
-        //                           mathBackgroundColor = "#FFFFFF"
-        //                       }
-        //               },
-        //                   onFailure = { errorMessage ->
-        //                       Toast.makeText(this@ScannerTextWorkSpaceActivity,"latex-ocr have some error",Toast.LENGTH_SHORT).show()
-        //                   })
+                       ConstantsLatexOcr.latexOcr(uri,this@ScannerTextWorkSpaceActivity,
+                           onSuccess = { latexString ->
+                               mathView.apply {
+                                   text = "\\("+escapeSpecialCharacters(latexString)+"\\)"
+                                   Log.e("latex-ocr-string",latexString)
+                                   textAlignment = TextAlign.START
+                                   textColor = "#000000"
+                                   mathBackgroundColor = "#FFFFFF"
+                                   hideProgressDialog()
+                               }
+                       },
+                           onFailure = { errorMessage ->
+                               hideProgressDialog()
+                               Toast.makeText(this@ScannerTextWorkSpaceActivity,"latex-ocr have some error",Toast.LENGTH_SHORT).show()
+
+                           })
                     }
                 }
 
-                Toast.makeText(this,"待開發與後端串接",Toast.LENGTH_SHORT).show()
+
             }
             editLatex.setOnClickListener {
                 editLayout.visibility = View.VISIBLE
