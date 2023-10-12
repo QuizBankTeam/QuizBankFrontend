@@ -133,29 +133,30 @@
         android:textStyle="bold"
         android:textSize="20dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/add_members"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="8dp"
-            android:background="@drawable/background_round_primary"
-            android:src="@drawable/baseline_add_24" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="center_vertical"
-            android:text="邀請成員"
-            android:textSize="20dp"/>
-    </LinearLayout>
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+<!--        <ImageView-->
+<!--            android:id="@+id/add_members"-->
+<!--            android:layout_width="35dp"-->
+<!--            android:layout_height="35dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginHorizontal="8dp"-->
+<!--            android:background="@drawable/background_round_primary"-->
+<!--            android:src="@drawable/baseline_add_24" />-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:text="邀請成員"-->
+<!--            android:textSize="20dp"/>-->
+<!--    </LinearLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/members_in_lobby"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>
