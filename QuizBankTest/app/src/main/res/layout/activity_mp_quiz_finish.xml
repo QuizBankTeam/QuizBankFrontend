@@ -7,15 +7,17 @@
 
     <ImageView
         android:id="@+id/user_figure"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_gravity="center"
         android:visibility="gone"/>
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/finish_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,9 +40,11 @@
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
     <LinearLayout
+        android:id="@+id/page_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="30dp"

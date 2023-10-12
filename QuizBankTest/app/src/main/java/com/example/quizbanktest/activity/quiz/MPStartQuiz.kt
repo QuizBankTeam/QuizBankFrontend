@@ -89,6 +89,9 @@ class  MPStartQuiz: AppCompatActivity() {
     private lateinit var countDownTimer: CountDownTimer
     private lateinit var roomNumber:TextView
     private lateinit var player : MediaPlayer
+    private lateinit var correctPlayer: MediaPlayer
+    private lateinit var wrongPlayer: MediaPlayer
+    private lateinit var eggPlayer: MediaPlayer
     private lateinit var imageAdapter: ImageVPAdapter
     private lateinit var socket: Socket
     private var onReturnStateListener: OnReturnStateListener? = null
@@ -117,8 +120,9 @@ class  MPStartQuiz: AppCompatActivity() {
 
         init()
         player = MediaPlayer.create(this, R.raw.start_quiz_music)
-
-
+        correctPlayer =  MediaPlayer.create(this, R.raw.correct_sound)
+        wrongPlayer = MediaPlayer.create(this, R.raw.wrong_sound)
+//        eggPlayer = MediaPlayer.create(this, R.raw.)
         //查看考試中成員的分數
         startQuizBinding.checkScore.setOnClickListener {
             setOnReturnStateListener(object : MPStartQuiz.OnReturnStateListener{
@@ -456,6 +460,7 @@ class  MPStartQuiz: AppCompatActivity() {
         val endDateTimeStr = endDate.format(Constants.dateTimeFormat)
 
         player.stop()
+
         for(i in currentAtQuestion until questionList.size){
             val tmpAnsOptions = ArrayList<String>()
             userAnsOptions.add(tmpAnsOptions)
@@ -486,6 +491,15 @@ class  MPStartQuiz: AppCompatActivity() {
             }
             if(this::player.isInitialized){
                 player.stop()
+            }
+            if(this::correctPlayer.isInitialized){
+                correctPlayer.stop()
+            }
+            if(this::wrongPlayer.isInitialized){
+                wrongPlayer.stop()
+            }
+            if(this::eggPlayer.isInitialized){
+                eggPlayer.stop()
             }
             startQuizBinding.startQuizContainer.visibility  = View.GONE
             lobbyDialog.dismiss()
@@ -547,6 +561,18 @@ class  MPStartQuiz: AppCompatActivity() {
         player.setVolume(30.0f, 30.0f)
         player.start()
     }
+    private fun correctMusic(){
+        correctPlayer.setVolume(30.0f, 30.0f)
+        correctPlayer.start()
+    }
+    private fun wrongMusic(){
+        wrongPlayer.setVolume(30.0f, 30.0f)
+        wrongPlayer.start()
+    }
+    private fun eggMusic(){
+        eggPlayer.setVolume(30.0f, 30.0f)
+        eggPlayer.start()
+    }
     private fun showUserFigure(){
         val builder = AlertDialog.Builder(this)
         val actions:View =  layoutInflater.inflate(R.layout.dialog_show_user_figure, startQuizBinding.root,false)
@@ -561,8 +587,10 @@ class  MPStartQuiz: AppCompatActivity() {
         dialogWindow?.attributes = dialogParm
         if(currentQuestionScore==1){
             isCorrectStr.text = "正確!"
+            correctMusic()
         }else{
             isCorrectStr.text = "錯誤!"
+            wrongMusic()
         }
 
         val incorrectNum = currentAtQuestion - userTotalCorrect
