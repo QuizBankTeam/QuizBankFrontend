@@ -9,6 +9,7 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -83,12 +84,16 @@ class  MPStartQuiz: AppCompatActivity() {
     private var selectedView = ArrayList<View>()  //被選過的option的background index和currentSelection 相同
     private var trueOrFalseView: View? = null
     private var trueOrFalseSelected = false
+    private lateinit var textViewTrue: TextView
     private var currentAnswer : String = ""
     private var currentQuestionScore = 0
     private var singleQuestionScore = 0
     private lateinit var countDownTimer: CountDownTimer
     private lateinit var roomNumber:TextView
     private lateinit var player : MediaPlayer
+    private lateinit var correctPlayer: MediaPlayer
+    private lateinit var wrongPlayer: MediaPlayer
+    private lateinit var eggPlayer: MediaPlayer
     private lateinit var imageAdapter: ImageVPAdapter
     private lateinit var socket: Socket
     private var onReturnStateListener: OnReturnStateListener? = null
@@ -117,8 +122,9 @@ class  MPStartQuiz: AppCompatActivity() {
 
         init()
         player = MediaPlayer.create(this, R.raw.start_quiz_music)
-
-
+        correctPlayer =  MediaPlayer.create(this, R.raw.correct_sound)
+        wrongPlayer = MediaPlayer.create(this, R.raw.wrong_sound)
+//        eggPlayer = MediaPlayer.create(this, R.raw.)
         //查看考試中成員的分數
         startQuizBinding.checkScore.setOnClickListener {
             setOnReturnStateListener(object : MPStartQuiz.OnReturnStateListener{
@@ -343,6 +349,7 @@ class  MPStartQuiz: AppCompatActivity() {
             val tfParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, vHeight)
             val textViewTrue : TextView = v.findViewById(R.id.option_true)
             val textViewFalse: TextView = v.findViewById(R.id.option_false)
+            this.textViewTrue = textViewTrue
             tfParams.addRule(RelativeLayout.BELOW, startQuizBinding.questionDescriptionContainer.id)
             v.layoutParams = tfParams
             v.id = View.generateViewId()
@@ -456,6 +463,7 @@ class  MPStartQuiz: AppCompatActivity() {
         val endDateTimeStr = endDate.format(Constants.dateTimeFormat)
 
         player.stop()
+
         for(i in currentAtQuestion until questionList.size){
             val tmpAnsOptions = ArrayList<String>()
             userAnsOptions.add(tmpAnsOptions)
@@ -486,6 +494,15 @@ class  MPStartQuiz: AppCompatActivity() {
             }
             if(this::player.isInitialized){
                 player.stop()
+            }
+            if(this::correctPlayer.isInitialized){
+                correctPlayer.stop()
+            }
+            if(this::wrongPlayer.isInitialized){
+                wrongPlayer.stop()
+            }
+            if(this::eggPlayer.isInitialized){
+                eggPlayer.stop()
             }
             startQuizBinding.startQuizContainer.visibility  = View.GONE
             lobbyDialog.dismiss()
@@ -547,6 +564,18 @@ class  MPStartQuiz: AppCompatActivity() {
         player.setVolume(30.0f, 30.0f)
         player.start()
     }
+    private fun correctMusic(){
+        correctPlayer.setVolume(30.0f, 30.0f)
+        correctPlayer.start()
+    }
+    private fun wrongMusic(){
+        wrongPlayer.setVolume(30.0f, 30.0f)
+        wrongPlayer.start()
+    }
+    private fun eggMusic(){
+        eggPlayer.setVolume(30.0f, 30.0f)
+        eggPlayer.start()
+    }
     private fun showUserFigure(){
         val builder = AlertDialog.Builder(this)
         val actions:View =  layoutInflater.inflate(R.layout.dialog_show_user_figure, startQuizBinding.root,false)
@@ -561,8 +590,10 @@ class  MPStartQuiz: AppCompatActivity() {
         dialogWindow?.attributes = dialogParm
         if(currentQuestionScore==1){
             isCorrectStr.text = "正確!"
+            correctMusic()
         }else{
             isCorrectStr.text = "錯誤!"
+            wrongMusic()
         }
 
         val incorrectNum = currentAtQuestion - userTotalCorrect
@@ -921,6 +952,20 @@ class  MPStartQuiz: AppCompatActivity() {
                     }
                     1 -> {
                         hookAnim()
+                        if(questionList[currentAtQuestion].questionType == Constants.questionTypeTrueOrFalse){
+                            if(this::textViewTrue.isInitialized){
+                                textViewTrue.isClickable = false
+                                textViewTrue.setBackgroundColor(Color.parseColor("#D0D0D0"))
+                                if(currentAnswer=="true"){
+                                    currentAnswer = ""
+                                    trueOrFalseSelected = false
+                                }
+                            }
+                        }else{
+                                if(this::optionAdapter.isInitialized){
+                                    optionAdapter.steal()
+                                }
+                        }
                         Toast.makeText(this, "你被偷走了一個選項!", Toast.LENGTH_SHORT).show()
 
                     }
@@ -958,6 +1003,9 @@ class  MPStartQuiz: AppCompatActivity() {
             socket.off("finishQuiz")
             socket.off("returnQuizState")
             socket.off("useAbility")
+        }
+        if(this::player.isInitialized){
+            player.stop()
         }
     }
 }

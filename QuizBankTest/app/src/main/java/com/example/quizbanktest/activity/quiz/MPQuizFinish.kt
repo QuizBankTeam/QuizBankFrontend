@@ -3,6 +3,7 @@ package com.example.quizbanktest.activity.quiz
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -208,29 +209,58 @@ class MPQuizFinish: AppCompatActivity() {
         when {
             correctDiff < -2 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image0)
+                val player = MediaPlayer.create(this, R.raw.figure_music0)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
             }
             correctDiff == -2 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image1)
+                val player = MediaPlayer.create(this, R.raw.figure_music1)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
             }
             correctDiff == -1 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image2)
+                val player = MediaPlayer.create(this, R.raw.figure_music2)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
             }
             correctDiff == 0 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image3)
+                val player = MediaPlayer.create(this, R.raw.figure_music3)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
             }
             correctDiff == 1 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image4)
+                val player = MediaPlayer.create(this, R.raw.figure_music4)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
             }
             correctDiff == 2 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image5)
+                val player = MediaPlayer.create(this, R.raw.figure_music5)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
             }
             correctDiff == 3 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image6)
+                val player = MediaPlayer.create(this, R.raw.figure_music6)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
             }
             correctDiff == 4 -> {
-                finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image7)            }
+                finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image6)
+                val player = MediaPlayer.create(this, R.raw.figure_music6)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
+            }
             correctDiff > 4 -> {
-                finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image8)            }
+                finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image8)
+                val player = MediaPlayer.create(this, R.raw.figure_music7)
+                player.setVolume(30.0f, 30.0f)
+                player.start()
+            }
         }
 
         finishQuizBinding.userFigure.visibility = View.VISIBLE
@@ -242,7 +272,10 @@ class MPQuizFinish: AppCompatActivity() {
             override fun onAnimationEnd(animation: Animation?) {
                 finishQuizBinding.userFigure.postDelayed({
                     finishQuizBinding.root.removeView(finishQuizBinding.userFigure)
+                    finishQuizBinding.finishTitle.visibility = View.VISIBLE
+                    finishQuizBinding.pageContainer.visibility = View.VISIBLE
                     finishQuizBinding.rankContainer.visibility = View.VISIBLE
+
                 }, 2000)
             }
             override fun onAnimationRepeat(animation: Animation?) {
