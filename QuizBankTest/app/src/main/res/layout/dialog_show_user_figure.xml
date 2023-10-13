@@ -35,8 +35,9 @@
             <TextView
                 android:id="@+id/is_correct"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="正確!"
+                android:layout_height="37dp"
+                android:text="正確!  技能點+1"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 android:gravity="center" />
         </LinearLayout>

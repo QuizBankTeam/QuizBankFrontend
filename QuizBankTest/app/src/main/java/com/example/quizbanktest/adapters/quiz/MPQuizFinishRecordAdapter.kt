@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -24,7 +26,13 @@ import org.w3c.dom.Text
 class MPQuizFinishRecordAdapter(private val context: Activity, private val questionList: ArrayList<Question>, private val correctList:ArrayList<Int>,
                                 private val totalMembers: Int):
     RecyclerView.Adapter<MPQuizFinishRecordAdapter.MyViewHolder>()  {
-
+    private var onAddListener: SelectOnAddListener? = null
+    fun setOnAddListener(onAddListener: SelectOnAddListener) {
+        this.onAddListener = onAddListener
+    }
+    interface SelectOnAddListener {
+        fun onAdd(position: Int)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.item_mp_total_record, parent, false)
         return MyViewHolder(itemView)
@@ -40,7 +48,7 @@ class MPQuizFinishRecordAdapter(private val context: Activity, private val quest
         else if(q.questionType=="MultipleChoiceM") context.getString(R.string.MultipleChoiceM_CN)
         else context.getString(R.string.TrueOrFalse_CN)
 
-        holder.correctRate.text = "正確率: " + ((correctList[position]/totalMembers)*100).toString() + "%"
+        holder.correctRate.text = "正確率: " + (correctList[position]*100/totalMembers).toString() + "%"
         holder.questionNumber.text = (position+1).toString()
         holder.description.text = q.description
 
@@ -89,7 +97,11 @@ class MPQuizFinishRecordAdapter(private val context: Activity, private val quest
             holder.option.adapter = optionAdapter
             holder.option.setHasFixedSize(true)
         }
-
+        holder.addQBtn.setOnClickListener {
+            if(onAddListener!=null){
+                onAddListener!!.onAdd(position)
+            }
+        }
 
     }
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
@@ -100,8 +112,7 @@ class MPQuizFinishRecordAdapter(private val context: Activity, private val quest
         val imageNumber: TextView = itemView.findViewById(R.id.image_number) //
         val imageViewPager: ViewPager = itemView.findViewById(R.id.image_viewPager) //
         val imageContainer: RelativeLayout = itemView.findViewById(R.id.image_container) //
-        val lowerContainer: RelativeLayout = itemView.findViewById(R.id.lower_container)
-        val descriptionContainer: LinearLayout = itemView.findViewById(R.id.question_description_container)
+        val addQBtn: ImageView = itemView.findViewById(R.id.add_question)
         val trueOrFalseContainer: LinearLayout = itemView.findViewById(R.id.TrueOrFalse_container) //
         val optionTrue: TextView = itemView.findViewById(R.id.option_true) //
         val optionFalse: TextView = itemView.findViewById(R.id.option_false) //
