@@ -56,6 +56,15 @@
                 android:gravity="end"
                 android:textColor="@color/black"
                 android:text="答對率:"/>
+            <ImageView
+                android:id="@+id/add_question"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="5dp"
+                android:clickable="true"
+                android:background="@drawable/background_round_yellow"
+                android:src="@drawable/baseline_add_24" />
         </LinearLayout>
 
         <RelativeLayout

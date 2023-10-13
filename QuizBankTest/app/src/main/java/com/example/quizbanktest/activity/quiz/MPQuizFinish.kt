@@ -9,22 +9,29 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.quizbanktest.R
-import com.example.quizbanktest.adapters.quiz.MPQuizFinishRecordAdapter
-import com.example.quizbanktest.adapters.quiz.QuizMember
-import com.example.quizbanktest.adapters.quiz.QuizMembersRankingAdapter
+import com.example.quizbanktest.adapters.quiz.*
 import com.example.quizbanktest.databinding.ActivityMpQuizFinishBinding
+import com.example.quizbanktest.fragment.QuestionAddDialog
 import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
+import com.example.quizbanktest.models.Quiz
 import com.example.quizbanktest.models.QuizRecord
 import com.example.quizbanktest.utils.Constants
+import com.example.quizbanktest.utils.ConstantsQuiz
 import com.example.quizbanktest.utils.ConstantsQuizRecord
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,6 +45,8 @@ class MPQuizFinish: AppCompatActivity() {
     private lateinit var userAnsDescription: ArrayList<String>
     private lateinit var questionRecordDate: String
     private lateinit var quizId: String
+    private lateinit var sendQList: RecyclerView
+    private lateinit var sendingQuestion: Question
     private var quizType = Constants.quizTypeCasual
     private var quizMembers = ArrayList<QuizMember>()
     private val membersCorrectRate = ArrayList<Int>()
@@ -75,6 +84,27 @@ class MPQuizFinish: AppCompatActivity() {
         finishQuizBinding.gotoHome.setOnClickListener {
             backBtn()
         }
+
+        //傳送題目
+        recordListAdapter.setOnAddListener(object : MPQuizFinishRecordAdapter.SelectOnAddListener{
+            override fun onAdd(position: Int) {
+                val qImage = MPStartQuiz.Companion.questionImageArr[position]
+                val aImage = MPStartQuiz.Companion.answerImageArr[position]
+                val qImageB64 = ArrayList<String>()
+                val aImageB64 = ArrayList<String>()
+                qImage.forEach {
+                    qImageB64.add(Constants.bitmapToString(it)!!)
+                }
+                aImage.forEach {
+                    aImageB64.add(Constants.bitmapToString(it)!!)
+                }
+                sendingQuestion = questionlist[position].copy(_id = UUID.randomUUID().toString())
+                sendingQuestion.questionImage = qImageB64
+                sendingQuestion.answerImage = aImageB64
+                showAddDialog()
+            }
+        })
+
         //傳送questionRecordList quizRecord
         finishQuizBinding.gotoRecord.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -234,7 +264,7 @@ class MPQuizFinish: AppCompatActivity() {
             correctDiff == 1 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image4)
                 val player = MediaPlayer.create(this, R.raw.figure_music4)
-                player.setVolume(30.0f, 30.0f)
+                player.setVolume(50.0f, 50.0f)
                 player.start()
             }
             correctDiff == 2 -> {
@@ -250,11 +280,12 @@ class MPQuizFinish: AppCompatActivity() {
                 player.start()
             }
             correctDiff == 4 -> {
-                finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image6)
+                finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image7)
                 val player = MediaPlayer.create(this, R.raw.figure_music6)
                 player.setVolume(30.0f, 30.0f)
                 player.start()
             }
+
             correctDiff > 4 -> {
                 finishQuizBinding.userFigure.setImageResource(R.drawable.figure_image8)
                 val player = MediaPlayer.create(this, R.raw.figure_music7)
@@ -283,6 +314,72 @@ class MPQuizFinish: AppCompatActivity() {
         })
         finishQuizBinding.userFigure.startAnimation(animation)
     }
+    private fun showAddDialog(){
+        val sendDialog = BottomSheetDialog(this)
+        sendDialog.setContentView(R.layout.dialog_mp_send_question)
+        val sp: ImageView? = sendDialog.findViewById(R.id.send_to_singleQuiz)
+        val mp: ImageView? = sendDialog.findViewById(R.id.send_to_multiQuiz)
+        val backBtn: Button? = sendDialog.findViewById(R.id.cancel_btn)
+        val baseView: LinearLayout? = sendDialog.findViewById(R.id.base_view)
+        val qList: RecyclerView? = sendDialog.findViewById(R.id.quiz_list)
+        val cancelBtnStr = "❌"
+        val backBtnStr = "⬅"
+        if (qList != null) {
+            sendQList = qList
+        }
+
+        sp?.setOnClickListener {
+            backBtn?.text = backBtnStr
+            baseView?.visibility = View.GONE
+            qList?.visibility = View.VISIBLE
+            showQuiz(Constants.quizTypeSingle, sendDialog)
+        }
+        mp?.setOnClickListener {
+            backBtn?.text = backBtnStr
+            baseView?.visibility = View.GONE
+            qList?.visibility = View.VISIBLE
+            showQuiz(Constants.quizTypeCasual, sendDialog)
+        }
+        backBtn?.setOnClickListener {
+            if(backBtn.text ==cancelBtnStr){
+                sendDialog.dismiss()
+            }else{
+                backBtn.text = cancelBtnStr
+                baseView?.visibility = View.VISIBLE
+                qList?.visibility = View.GONE
+            }
+        }
+        sendDialog.show()
+    }
+    private fun showQuiz(quizType: String, dialog: BottomSheetDialog){
+        ConstantsQuiz.getAllQuizsWithBatch(this, quizType, batch = 0, onSuccess = { quizList ->
+            if(quizList!=null) {
+                val adapter = MPQuizFinishSendQAdapter(this, quizList)
+                sendQList.layoutManager = LinearLayoutManager(this)
+                sendQList.setHasFixedSize(true)
+                sendQList.adapter = adapter
+
+                adapter.setOnSendListener(object : MPQuizFinishSendQAdapter.OnSendListener{
+                    override fun onSend(position: Int) {
+                        val putQuiz = quizList[position]
+                        putQuiz.questions?.add(sendingQuestion)
+                        if(quizType==Constants.quizTypeCasual){
+                            putQuiz.duringTime = putQuiz.duringTime?.plus(20)
+                            putQuiz.casualDuringTime?.add(20)
+                        }
+                        dialog.dismiss()
+                        ConstantsQuiz.putQuiz(this@MPQuizFinish, putQuiz, onSuccess = {
+                            Toast.makeText(this@MPQuizFinish, "儲存成功", Toast.LENGTH_SHORT).show()
+                        }, onFailure = {
+                            Toast.makeText(this@MPQuizFinish, it, Toast.LENGTH_SHORT).show()
+                        })
+                    }
+                })
+            }
+        }, onFailure = {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        })
+    }
 
     private fun saveQuizRecord(quizRecord: QuizRecord, questionRecordList: ArrayList<QuestionRecord>){
         ConstantsQuizRecord.postQuizRecord(this, quizRecord, questionRecordList, onSuccess = {
@@ -303,7 +400,7 @@ class MPQuizFinish: AppCompatActivity() {
         builder.show()
     }
     override fun onBackPressed() {
-        finish()
+        backBtn()
     }
     @SuppressLint("UnsafeOptInUsageError")
     fun doubleCheckExit(){
