@@ -276,7 +276,7 @@ class QuestionAddDialog : BottomSheetDialogFragment() {
                         ConstantsQuestionFunction.getQuestion(rootContext, currentBank._id, onSuccess = { questionModelList->
                             val tmpQList = ArrayList<Question>()
                             for(qmodel in questionModelList){
-                                val tmpQuestion = Question(qmodel._id, qmodel.title, qmodel.number, qmodel.description, qmodel.options, qmodel.questionType, qmodel.bankType, qmodel.questionBank, qmodel.answerOptions, qmodel.answerDescription, Constants.userId, qmodel.originateFrom, ArrayList(), qmodel.questionImage, qmodel.tag, qmodel.createdDate)
+                                val tmpQuestion = Question(qmodel._id, qmodel.title, qmodel.number, qmodel.description, qmodel.options, qmodel.questionType, qmodel.bankType, qmodel.questionBank, qmodel.answerOptions, qmodel.answerDescription, Constants.userId, qmodel.originateFrom, qmodel.answerImage, qmodel.questionImage, qmodel.tag, qmodel.createdDate)
                                 tmpQList.add(tmpQuestion)
                             }
                             F_ChooseQuestion[position]!!.setUpQuestionList(rootContext, rootActivity, tmpQList, questionAddedList)
