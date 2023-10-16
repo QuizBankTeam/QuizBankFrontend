@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -12,6 +14,8 @@ import com.example.quizbanktest.activity.IntroActivity
 import com.example.quizbanktest.activity.MainActivity
 import com.example.quizbanktest.databinding.ActivityLoginBinding
 import com.example.quizbanktest.utils.ConstantsAccountServiceFunction
+import com.example.quizbanktest.utils.ConstantsQuestionBankFunction
+import com.example.quizbanktest.utils.ConstantsRecommend
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileOutputStream
@@ -26,6 +30,30 @@ class LoginActivity : AppCompatActivity() {
         mProgressDialog = Dialog(this)
 
         mProgressDialog.setContentView(R.layout.dialog_progress)
+        binding.forgetBtn.setOnClickListener {
+            val forgetDialog = Dialog(this@LoginActivity)
+
+            forgetDialog.setContentView(R.layout.dialog_forget_pwd)
+
+            var enterBtn = forgetDialog.findViewById<TextView>(R.id.forget_enter)
+            var cancelBen = forgetDialog.findViewById<TextView>(R.id.forget_cancel)
+            var email = forgetDialog.findViewById<EditText>(R.id.forget_email)
+            enterBtn.setOnClickListener {
+                if(email.text.toString().isNotEmpty()){
+                    mProgressDialog.show()
+                    ConstantsAccountServiceFunction.forgetPwd(this,email.text.toString(), onSuccess = {mProgressDialog.dismiss()}, onFailure = {
+                        Toast.makeText(this@LoginActivity,"user not found",Toast.LENGTH_SHORT).show()
+                        mProgressDialog.dismiss()
+                    })
+                }
+                forgetDialog.cancel()
+            }
+            cancelBen.setOnClickListener {
+                forgetDialog.cancel()
+            }
+
+            forgetDialog.show()
+        }
         binding.backBtn.setOnClickListener {
             val intent = Intent(this,IntroActivity::class.java)
             startActivity(intent)

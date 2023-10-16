@@ -46,7 +46,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
     private var questionBankModels = ArrayList<QuestionBankModel>()
 
     // Variable
-    private lateinit var newBankTitle: String
+    private var newBankTitle: String = ""
     private var wrapLayout: WrapLayout? = null
     private var isModified: Boolean = false
     private var isDescending: Boolean = true
@@ -158,16 +158,16 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
         val btnBankSubmit = addBankDialog.findViewById<TextView>(R.id.btn_bank_submit)
 
         val bankMembers: ArrayList<String> = arrayListOf(Constants.userId)
-        val bankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title).text.toString()
+        val bankTitle = addBankDialog.findViewById<EditText>(R.id.bank_title)
 
         btnBankSubmit.setOnClickListener {
             val data = QuestionBankModel(
-                Constants.userId, bankTitle,
+                Constants.userId, bankTitle.text.toString(),
                 "single", LocalDate.now().toString(),
                 bankMembers, Constants.userId, Constants.userId,
             )
 
-            if (bankTitle.isEmpty() || bankTitle == null) {
+            if (bankTitle.text.toString().isEmpty() || bankTitle == null) {
                 showErrorSnackBar("名稱不可為空")
             } else {
                 showProgressDialog("新增中")
@@ -294,6 +294,7 @@ class BankActivity : BaseActivity(), RecyclerViewInterface {
 
             btnSubmit.setOnClickListener {
                 if (isModified) {
+                    newBankTitle = etTitle.text.toString()
                     val data = QuestionBankModel(
                         questionBankModels[position]._id, newBankTitle,
                         questionBankModels[position].questionBankType,

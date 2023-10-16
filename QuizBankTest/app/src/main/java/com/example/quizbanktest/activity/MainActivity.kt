@@ -61,15 +61,28 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             }
         )
+
         val quizRecordType = Constants.quizTypeSingle
         ConstantsQuizRecord.getAllQuizRecords(this, quizRecordType, onSuccess = { returnRecordList->
-            if(returnRecordList.size == 0){
-                showEmptyWrongQuizRecordImage.visibility = View.VISIBLE
-            }else{
-                showEmptyWrongQuizRecordImage.visibility = View.GONE
-                setupWrongListRecyclerView(returnRecordList)
-            }
-
+            ConstantsQuizRecord.getAllQuizRecords(this, Constants.quizTypeCasual, onSuccess = { returnRecordList2->
+                if(returnRecordList2.size != 0){
+                    returnRecordList.addAll(returnRecordList2)
+                }
+                if(returnRecordList.size == 0){
+                    showEmptyWrongQuizRecordImage.visibility = View.VISIBLE
+                }else{
+                    showEmptyWrongQuizRecordImage.visibility = View.GONE
+                    setupWrongListRecyclerView(returnRecordList)
+                }
+            }, onFailure = {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                if(returnRecordList.size == 0){
+                    showEmptyWrongQuizRecordImage.visibility = View.VISIBLE
+                }else{
+                    showEmptyWrongQuizRecordImage.visibility = View.GONE
+                    setupWrongListRecyclerView(returnRecordList)
+                }
+            })
         }, onFailure = {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })

@@ -81,6 +81,7 @@
 
 
             <Button
+                android:id="@+id/forgetBtn"
                 android:layout_width="77dp"
                 android:layout_height="wrap_content"
                 android:foreground="?actionBarItemBackground"

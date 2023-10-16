@@ -276,6 +276,71 @@ object ConstantsAccountServiceFunction {
             ).show()
         }
     }
+    fun forgetPwd(context: Context, email: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+
+        if (Constants.isNetworkAvailable(context)) {
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val api = retrofit.create(AccountService::class.java)
+//            Constants.username = "test"
+//            Constants.password = "test"
+            val body = AccountService.ForgetBody(email)
+//            val body = AccountService.PostBody(Constants.username , Constants.password)
+            //TODO 用csrf token 拿access token
+
+            val call = api.forgotPassword(Constants.cookie, Constants.csrfToken, Constants.session, body)
+
+            call.enqueue(object : Callback<ResponseBody> {
+
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if (response!!.isSuccessful) {
+                        Toast.makeText(context,"驗證信已發出請去信箱重設密碼",Toast.LENGTH_SHORT).show()
+                        onSuccess(response.body().toString())
+                    } else {
+
+                        val sc = response.code()
+                        when (sc) {
+                            400 -> {
+                                Log.e(
+                                    "in forget Error 400", "Bad Re" +
+                                            "" +
+                                            "quest" + response.body()
+                                )
+                            }
+                            404 -> {
+                                Log.e("in forget Error 404", "user Not Found")
+                            }
+                            401 -> {
+                                val intent = Intent(context, IntroActivity::class.java)
+                                context.startActivity(intent)
+                            }
+                            else -> {
+                                Log.e("in forget Error", "Generic Error")
+                            }
+                        }
+                        onFailure("Request failed with status code $sc")
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e("in forget Errorrrrr", t?.message.toString())
+                    onFailure("Request failed with status code ")
+                }
+            })
+        } else {
+            Toast.makeText(
+                context,
+                "No internet connection available.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
     fun logout(context: Context) {
         if (Constants.isNetworkAvailable(context)) {
             val retrofit: Retrofit = Retrofit.Builder()

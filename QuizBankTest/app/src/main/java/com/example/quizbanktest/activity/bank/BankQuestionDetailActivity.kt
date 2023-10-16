@@ -469,7 +469,7 @@ class BankQuestionDetailActivity : BaseActivity(), RecyclerViewInterface {
                         },
                         onFailure = { errorMessage ->
                             showErrorSnackBar("網路連線狀況不好")
-                            hideProgressDialog()
+//                            hideProgressDialog()
                             Log.e("BankQuestionDetailActivity", "Error Message: $errorMessage")
                         }
                     )
