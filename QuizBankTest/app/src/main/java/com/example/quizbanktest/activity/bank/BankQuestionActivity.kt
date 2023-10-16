@@ -19,6 +19,7 @@ import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.*
 import com.example.quizbanktest.R
 import com.example.quizbanktest.activity.BaseActivity
+import com.example.quizbanktest.activity.scan.ScannerTextWorkSpaceActivity
 import com.example.quizbanktest.adapters.bank.QuestionRecyclerViewAdapter
 import com.example.quizbanktest.adapters.bank.SwitchBankViewAdapter
 import com.example.quizbanktest.fragment.interfaces.RecyclerViewInterface
@@ -79,12 +80,10 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
         doubleCheckExit()
 
         init()
-
+        btnAddQuestion = findViewById(R.id.question_add)
         btnAddQuestion.setOnClickListener {
-//            val addQuestionActivity = Intent(this, BankQuestionDetailActivity::class.java)
-
-//            addQuestionActivity.putExtra("id", bankId)
-//            startActivity(addQuestionActivity)
+            val addQuestionActivity = Intent(this, ScannerTextWorkSpaceActivity::class.java)
+            startActivity(addQuestionActivity)
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

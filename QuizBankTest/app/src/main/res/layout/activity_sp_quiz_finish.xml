@@ -16,7 +16,6 @@
             android:orientation="horizontal"
             android:background="@color/colorPrimary"
             android:theme="@style/CustomToolbarStyle">
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,12 +109,17 @@
         android:text="決定簡答題是否正確:"
         android:textSize="20dp"/>
 
-    <LinearLayout
-        android:id="@+id/question_container"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/question_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
