@@ -20,6 +20,7 @@ interface AccountService {
     data class PostBody(val username: String,val password:String) //login
     data class PostBodyForRegister(val username: String,val email: String,val password:String,val createdDate: String) //register
 
+    data class ForgetBody(val email : String)
 
     @POST("/login")
     fun login(
@@ -29,7 +30,13 @@ interface AccountService {
         @Body body: PostBody
     ): Call<ResponseBody>
 
-
+    @POST("/forgotPassword")
+    fun forgotPassword(
+        @Header("Cookie") cookie:String,
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Header("Session-Token")session : String,
+        @Body body: ForgetBody
+    ): Call<ResponseBody>
 
     @GET("/profile/{userId}")
     fun getUserProfile(
