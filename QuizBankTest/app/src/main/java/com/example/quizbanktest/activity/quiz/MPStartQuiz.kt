@@ -76,7 +76,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private var correctPoints = 0
     private var userTotalCorrect = 0
     private var requestState = 1
-    private var requestFinishQuestion = 1
+    private var badNetWorkEnd = 1
     private var requestStart = 0
     private var currentAtQuestion: Int = 0
     private var quizMemberNumber = 0
@@ -480,14 +480,22 @@ class  MPStartQuiz: AppCompatActivity() {
         intent.putParcelableArrayListExtra("Key_questions", questionList)
         setOnReturnStateListener(object : MPStartQuiz.OnReturnStateListener{
             override fun onReturn() {
+                badNetWorkEnd = 0
                 startActivityForResult(intent, 1000)
             }
         })
         Handler().postDelayed({
             returnQuizState()
+        }, 500)
+        Handler().postDelayed({
             finishQuiz()
-        }, 1000)
-
+        }, 1500)
+        Handler().postDelayed({
+            if(badNetWorkEnd == 1){
+                startActivityForResult(intent, 1000)
+                Toast.makeText(this, "網路太差 考試答題記錄取得錯誤", Toast.LENGTH_SHORT).show()
+            }
+        }, 1500)
 
     }
     private fun exitQuiz(){
