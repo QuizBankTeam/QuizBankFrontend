@@ -209,7 +209,7 @@ class MPQuizFinish: AppCompatActivity() {
             isCorrect = userAnsOptions[index].toSet() == questionlist[index].answerOptions!!.toSet()
             totalScore = if(isCorrect) totalScore+1 else totalScore
 
-            val tmpQuestionRecord = QuestionRecord(tmpId, Constants.userId, userAnsOptions[index], "none", isCorrect, questionRecordDate, questionlist[index], quizRecordId)
+            val tmpQuestionRecord = QuestionRecord(tmpId, userAnsOptions[index], "none", isCorrect, questionlist[index])
             questionRecordList.add(tmpQuestionRecord)
 
             for(member in quizMembers){
@@ -228,7 +228,7 @@ class MPQuizFinish: AppCompatActivity() {
         correctNum = totalScore
         quizTitle = quizTitle.ifEmpty { "none" }
         Log.d("totalscore is", ((correctNum*100)/questionlist.size).toString())
-        val tmpQuizRecord = QuizRecord(quizRecordId, quizTitle, quizId, quizType, ((correctNum*100)/questionlist.size),
+        val tmpQuizRecord = QuizRecord(quizRecordId, quizTitle, quizId, Constants.userId, quizType, ((correctNum*100)/questionlist.size),
             quizDuringTime, startDateTime, endDateTime, membersStr, questionRecordId)
         this.quizRecord = tmpQuizRecord
     }
