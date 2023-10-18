@@ -279,9 +279,11 @@ object ConstantsAccountServiceFunction {
     fun forgetPwd(context: Context, email: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
 
         if (Constants.isNetworkAvailable(context)) {
+            val client = ConstantsFunction.createOkHttpClient()
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
             val api = retrofit.create(AccountService::class.java)
 //            Constants.username = "test"
