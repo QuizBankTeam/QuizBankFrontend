@@ -82,7 +82,7 @@ class SingleRecordPage: Fragment() {
         val tmpMembers = arrayListOf<String>("jacky")
         val tmpQuestionId = arrayOf("question id 1", "question id 2","question id 3","question id 4","question id 5","question id 6")
         val tmpQuestionRecordId = arrayListOf<String>("QuestionRecord id 1", "QuestionRecord id 2","QuestionRecord id 3","QuestionRecord id 4")
-        val tmpQuizRecord = QuizRecord("Record Id 1", "test quiz", "Quiz id 1", "single", 80, 120, "2023-07-20 23:24:30", "2023-07-20 23:34:30", tmpMembers, tmpQuestionRecordId)
+        val tmpQuizRecord = QuizRecord("Record Id 1", "test quiz", "Quiz id 1", "asdf", "single", 80, 120, "2023-07-20 23:24:30", "2023-07-20 23:34:30", tmpMembers, tmpQuestionRecordId)
         recordList.add(tmpQuizRecord)
     }
 }

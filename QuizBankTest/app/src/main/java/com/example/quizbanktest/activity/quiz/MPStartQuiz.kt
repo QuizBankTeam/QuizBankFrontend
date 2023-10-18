@@ -117,7 +117,9 @@ class  MPStartQuiz: AppCompatActivity() {
         opts.transports = arrayOf("websocket")
 //        opts.transportOptions
 //        opts.rememberUpgrade = false
-        socket = IO.socket("https://quizbank.soselab.tw/funnyQuiz", opts)
+//        socket = IO.socket("https://quizbank.soselab.tw/funnyQuiz", opts)
+        val connectURL = Constants.BASE_URL + "funnyQuiz"
+        socket = IO.socket(connectURL, opts)
 
         init()
         player = MediaPlayer.create(this, R.raw.start_quiz_music)
@@ -130,7 +132,7 @@ class  MPStartQuiz: AppCompatActivity() {
                 override fun onReturn() {
                     showQuizMemberState()
                 }
-            })
+          })
             returnQuizState()
         }
 
@@ -486,7 +488,7 @@ class  MPStartQuiz: AppCompatActivity() {
         })
         Handler().postDelayed({
             returnQuizState()
-        }, 500)
+        }, 700)
         Handler().postDelayed({
             finishQuiz()
         }, 1500)

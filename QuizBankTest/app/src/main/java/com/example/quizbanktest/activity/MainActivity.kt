@@ -108,11 +108,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 2000){ //前往考試紀錄
+        if(requestCode == 2000 && data!=null){ //前往考試紀錄
             val intent = Intent()
             intent.setClass(this, SPSingleRecord::class.java)
-            val questionRecordList = data?.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
-            val quizRecord = data?.getParcelableExtra<QuizRecord>("Key_quizRecord")
+            val questionRecordList = data.getParcelableArrayListExtra<QuestionRecord>("Key_questionRecord")
+            val quizRecord = data.getParcelableExtra<QuizRecord>("Key_quizRecord")
             val activityMain = "activityMain"
 
             intent.putExtra("previousActivity", activityMain)

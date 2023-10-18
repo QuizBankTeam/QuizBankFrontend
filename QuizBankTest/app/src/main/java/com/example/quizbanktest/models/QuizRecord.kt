@@ -7,6 +7,7 @@ data class QuizRecord(
     val _id: String,
     val title: String,
     val quizId: String,
+    val user: String,
     val type: String, //casual, single
     var totalScore:Int,
     val duringTime: Int?,
@@ -15,6 +16,7 @@ data class QuizRecord(
     val members: ArrayList<String>, // user id
     val questionRecords: ArrayList<String>) : Parcelable{
     constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -32,6 +34,7 @@ data class QuizRecord(
         parcel.writeString(_id)
         parcel.writeString(title)
         parcel.writeString(quizId)
+        parcel.writeString(user)
         parcel.writeString(type)
         parcel.writeInt(totalScore)
         parcel.writeValue(duringTime)
