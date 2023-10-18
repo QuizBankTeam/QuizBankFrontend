@@ -84,7 +84,7 @@ object ConstantsQuizRecord {
                             tmpQuestionRecordIds.add(questionRecord._id)
                         }
                         val tmpQuizRecord = QuizRecord(quizRecordResponse.quizRecord._id, quizRecordResponse.quizRecord.title,
-                            quizRecordResponse.quizRecord.quizId, quizRecordResponse.quizRecord.type,
+                            quizRecordResponse.quizRecord.quizId, Constants.userId, quizRecordResponse.quizRecord.type,
                             quizRecordResponse.quizRecord.totalScore, quizRecordResponse.quizRecord.duringTime,
                             quizRecordResponse.quizRecord.startDateTime, quizRecordResponse.quizRecord.endDateTime,
                             quizRecordResponse.quizRecord.members, tmpQuestionRecordIds)
@@ -129,12 +129,12 @@ object ConstantsQuizRecord {
 
                 questionRecord.userAnswerOptions = if(questionRecord.userAnswerOptions==null) ArrayList() else questionRecord.userAnswerOptions
                 questionRecord.userAnswerDescription = questionRecord.userAnswerDescription.ifEmpty { "none" }
-                val tmpQRInPostQuizRecord = quizRecordService.QuestionRecordInPostQuizRecord(questionRecord.user, questionRecord.userAnswerOptions!!, questionRecord.userAnswerDescription,
-                questionRecord.correct!!, questionRecord.date, tmpQuestionInPostQuizRecord)
+                val tmpQRInPostQuizRecord = quizRecordService.QuestionRecordInPostQuizRecord(questionRecord.userAnswerOptions!!, questionRecord.userAnswerDescription,
+                questionRecord.correct!!, tmpQuestionInPostQuizRecord)
                 QRInPostQuizRecordList.add(tmpQRInPostQuizRecord)
             }
             quizRecord.totalScore = if(quizRecord.totalScore==0) -1 else quizRecord.totalScore
-            val postQuizRecordModel = quizRecordService.PostQuizRecord(quizRecord.title, quizRecord.quizId, quizRecord.type, quizRecord.totalScore, quizRecord.duringTime!!, quizRecord.startDateTime, quizRecord.endDateTime, quizRecord.members, QRInPostQuizRecordList)
+            val postQuizRecordModel = quizRecordService.PostQuizRecord(quizRecord.title, quizRecord.quizId, Constants.userId, quizRecord.type, quizRecord.totalScore, quizRecord.duringTime!!, quizRecord.startDateTime, quizRecord.endDateTime, quizRecord.members, QRInPostQuizRecordList)
 
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

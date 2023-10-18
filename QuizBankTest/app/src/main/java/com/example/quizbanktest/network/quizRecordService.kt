@@ -70,9 +70,9 @@ interface quizRecordService {
                                  val answerDescription: String,  val provider: String, val originateFrom: String,
                                  val createdDate: String, val answerImage: ArrayList<String>,
                                  val questionImage: ArrayList<String>, val tag: ArrayList<String>)
-    data class QuestionRecordInPostQuizRecord(val user: String, val userAnswerOptions: ArrayList<String>, val userAnswerDescription: String,
-                                              val correct: Boolean, val date: String, val question: QuestionInPostQuizRecord)
-    data class PostQuizRecord(val title: String, val quizId: String, val type: String,
+    data class QuestionRecordInPostQuizRecord(val userAnswerOptions: ArrayList<String>, val userAnswerDescription: String,
+                                              val correct: Boolean, val question: QuestionInPostQuizRecord)
+    data class PostQuizRecord(val title: String, val quizId: String, val user: String, val type: String,
                                   val totalScore: Int, val duringTime: Int, val startDateTime: String, val endDateTime: String,
                                   val members: ArrayList<String>, val questionRecords: ArrayList<QuestionRecordInPostQuizRecord>)
     data class AllQuizRecordsResponse(val message: String, val quizRecordList: ArrayList<QuizRecord>, val status: String)
@@ -85,6 +85,7 @@ interface quizRecordService {
     data class QuizRecordWithQuestionRecords(val _id: String,
                                              val title: String,
                                              val quizId: String,
+                                             val user: String,
                                              val type: String,
                                              val totalScore:Int,
                                              val duringTime: Int?,

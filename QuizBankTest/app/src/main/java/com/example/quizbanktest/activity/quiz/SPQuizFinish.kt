@@ -164,7 +164,7 @@ class SPQuizFinish : AppCompatActivity(){
 
             totalScore = if(isCorrect) totalScore+1 else totalScore
 
-            val tmpQuestionRecord = QuestionRecord(tmpId, Constants.userId, userAnsOptions[index], userAnsDescription[index], isCorrect, questionRecordDate, questionlist[index], quizRecordId)
+            val tmpQuestionRecord = QuestionRecord(tmpId, userAnsOptions[index], userAnsDescription[index], isCorrect, questionlist[index])
             questionRecordList.add(tmpQuestionRecord)
         }
         if(!hasShorAns){
@@ -173,7 +173,7 @@ class SPQuizFinish : AppCompatActivity(){
         correctNum = totalScore
         quizTitle = quizTitle.ifEmpty { "none" }
         Log.d("totalscore is", ((correctNum*100)/questionlist.size).toString())
-        val tmpQuizRecord = QuizRecord(quizRecordId, quizTitle, quizId, quizType, ((correctNum*100)/questionlist.size),
+        val tmpQuizRecord = QuizRecord(quizRecordId, quizTitle, quizId, Constants.userId, quizType, ((correctNum*100)/questionlist.size),
                                         duringTime, startDateTime, endDateTime, members, questionRecordId)
         this.quizRecord = tmpQuizRecord
     }
