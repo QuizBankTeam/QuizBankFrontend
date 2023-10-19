@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 
 object Constants {
 //
-//    const val BASE_URL: String = "http://10.0.2.2:5000/"
+//    const val BASE_URL: String = "http://192.168.1.116:5000/"
     const val BASE_URL: String = "https://quizbank.soselab.tw/"
     const val RESULT_DELETE = 1500
     var username : String = "test"
