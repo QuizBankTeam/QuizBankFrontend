@@ -6,14 +6,23 @@
 
 
 ## 架構圖:
-![image](https://drive.google.com/file/d/1UNVoz-aGXMUFnbfIOvpQVz-ulpploLiH/view?usp=sharing)
+![image](https://github.com/QuizBankTeam/QuizBankFrontend/blob/main/images/%E9%AB%98%E9%9A%8E%E8%A8%AD%E8%A8%88%E5%9C%96%20(2).jpg)
 
 ## 核心成果圖
-![image](https://drive.google.com/file/d/1ztylCwcseS8xksBiCz54ezy1PgJSK57A/view?usp=sharing)
-![image](https://drive.google.com/file/d/1YzUtdW7rqwr1K9V-BkgYTHwsPpfROKV0/view?usp=sharing)
-![image](https://drive.google.com/file/d/1tknrzbIeeIp-677tvLqXCEx2XFkHnMtX/view?usp=sharing)
-![image](https://drive.google.com/file/d/1A7GR_LNznVV5_MB3bt-OsHbX-7CH63rO/view?usp=sharing)
-![image](https://drive.google.com/file/d/1KFfBicBFrR4Fhqfhwt3UhoGZ-NIsGNU2/view?usp=sharing)
+### 提升解析度:
+![image](https://github.com/QuizBankTeam/QuizBankFrontend/blob/main/images/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202023-10-22%20014613.png)
+
+### 霍夫旋轉:
+![image](https://github.com/QuizBankTeam/QuizBankFrontend/blob/main/images/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202023-10-22%20014641.png)
+
+### 數學工作區
+![image](https://github.com/QuizBankTeam/QuizBankFrontend/blob/main/images/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202023-10-22%20014704.png)
+
+### 圖片工作區
+![image](https://github.com/QuizBankTeam/QuizBankFrontend/blob/main/images/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202023-10-22%20014732.png)
+
+### 多人考試
+![image](https://github.com/QuizBankTeam/QuizBankFrontend/blob/main/images/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202023-10-22%20014756.png)
 
 ## DEMO
 [QuizBank_Demo](https://www.youtube.com/watch?v=dr4nWhgp6fk&feature=youtu.be&ab_channel=%E6%9D%B1%E7%A9%BA)
