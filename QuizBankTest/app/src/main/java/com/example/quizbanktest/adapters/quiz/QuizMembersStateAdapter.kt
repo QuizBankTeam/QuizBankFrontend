@@ -67,9 +67,9 @@ class QuizMembersStateAdapter(private val context: Activity, private val members
                 holder.userFigure.setImageResource(R.drawable.figure_image8)
             }
         }
-        val name = membersList[position].userName.substring(0,2)
+        val name = membersList[position].userName
         holder.userNameWithPoints.text = name + ": " + membersList[position].userScore
-        if(membersList[position].userName == Constants.userId){
+        if(membersList[position].userID == Constants.userId){
             holder.attackBtn.visibility = View.GONE
             holder.userNameWithPoints.text = name + "(你): " + membersList[position].userScore
         }else{

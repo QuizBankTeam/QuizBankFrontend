@@ -70,6 +70,7 @@ class  MPStartQuiz: AppCompatActivity() {
     private var isNext = false //是否所有人都傳送答案到後端了
     private var currentQuestionTimeOut = false
     private var invitingMembers = ArrayList<String>() //在主辦人按下考試前就邀請的成員
+    private val memberIDToName: MutableMap<String, String> = mutableMapOf()
     private var isCreator = false
     private var duringTime = 0
     private lateinit var currentQuiz: Quiz
@@ -325,6 +326,7 @@ class  MPStartQuiz: AppCompatActivity() {
             override fun onFinish() {
                 questionSubmit()
                 if(currentAtQuestion == questionList.size-1) {
+                    startQuizBinding.QuestionOption.visibility = View.GONE
                     currentAtQuestion+=1
                     showUserFigure()
                     quizEnd()
@@ -416,7 +418,6 @@ class  MPStartQuiz: AppCompatActivity() {
     private fun questionSubmit(){
         val currentQuestion = questionList[currentAtQuestion]
         val addUserAns = ArrayList<String>(currentSelection.size)
-        Log.d("in question submit", "")
 
         when(currentQuestion.questionType){
             "MultipleChoiceS", "MultipleChoiceM" -> {
@@ -606,7 +607,7 @@ class  MPStartQuiz: AppCompatActivity() {
         }
 
         val incorrectNum = currentAtQuestion - userTotalCorrect
-        val correctDiff = correctPoints - incorrectNum
+        val correctDiff = userTotalCorrect - incorrectNum
 
         when {
             correctDiff < -2 -> {
@@ -864,10 +865,12 @@ class  MPStartQuiz: AppCompatActivity() {
 
         Log.d("join successful member num is",args[0].toString())
         quizMembers.clear()
-        val membersArr = args[1] as JSONArray
-        for(mIndex in 0 until membersArr.length()){
-            Log.d("member $mIndex is", membersArr[mIndex].toString())
-            val joinMember = QuizMember(membersArr[mIndex].toString(), 0, "123", 0, ArrayList())
+        val membersArr = args[1] as JSONObject
+        Log.d("all member is", args[1].toString())
+        for(memberKey in membersArr.keys()){
+            val memberName = membersArr.getString(memberKey)
+            memberIDToName[memberKey] = memberName
+            val joinMember = QuizMember(memberName, 0, memberKey, 0, ArrayList())
             quizMembers.add(joinMember)
         }
 
@@ -924,8 +927,9 @@ class  MPStartQuiz: AppCompatActivity() {
                 val userstate = userStateString.getJSONObject(userID)
                 val userRecord = userstate.getJSONObject("records")
                 val userScore = userstate.getInt("score").toInt()
-                Log.d("userRecord = ", userRecord.toString())
-                Log.d("user Score =", userScore.toString())
+                val userName = memberIDToName[userID] ?: userID.substring(0, 3)
+//                Log.d("userRecord = ", userRecord.toString())
+//                Log.d("user Score =", userScore.toString())
                 for (qID in userRecord.keys()) {
                     val singleRecord = ArrayList<String>()
                     if (!userRecord.isNull(qID)) {
@@ -936,7 +940,7 @@ class  MPStartQuiz: AppCompatActivity() {
                     }
                     totalRecords.add(singleRecord)
                 }
-                val joinMember = QuizMember(userID, userScore * singleQuestionScore, userID, userScore, totalRecords)
+                val joinMember = QuizMember(userName, userScore * singleQuestionScore, userID, userScore, totalRecords)
                 quizMembers.add(joinMember)
             }
             quizMembers.sortByDescending { it.correctAnswerNum }
@@ -954,10 +958,12 @@ class  MPStartQuiz: AppCompatActivity() {
         if(args[0].toString() == Constants.userId){
             runOnUiThread {
                 val attackType = args[2] as Int
+                val attacker = args[1] as String
+                val attackerName = memberIDToName[attacker] ?: "unknown"
                 when (attackType) {
                     0 -> {
                         shakeAnim()
-                        Toast.makeText(this, "你被同學翻考卷的氣勢嚇到了!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "你被${attackerName}翻考卷的氣勢嚇到了!", Toast.LENGTH_SHORT).show()
                     }
                     1 -> {
                         hookAnim()
@@ -975,12 +981,12 @@ class  MPStartQuiz: AppCompatActivity() {
                                     optionAdapter.steal()
                                 }
                         }
-                        Toast.makeText(this, "你被偷走了一個選項!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "你被${attackerName}偷走了一個選項!", Toast.LENGTH_SHORT).show()
 
                     }
                     2 -> {
                         throwEggAnim()
-                        Toast.makeText(this, "你被雞蛋糊了一臉!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "你被${attackerName}用雞蛋糊了一臉!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

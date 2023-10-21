@@ -147,7 +147,7 @@
                         app:cardElevation="3dp">
 
                         <TextView
-                            android:id="@+id/option_false"
+                            android:id="@+id/option_true"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -163,7 +163,7 @@
                         app:cardElevation="3dp">
 
                         <TextView
-                            android:id="@+id/option_true"
+                            android:id="@+id/option_false"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
