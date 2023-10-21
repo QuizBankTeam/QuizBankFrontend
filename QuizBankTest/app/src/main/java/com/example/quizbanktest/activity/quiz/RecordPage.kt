@@ -12,6 +12,7 @@ import com.example.quizbanktest.adapters.quiz.RecordPageAdapter
 import com.example.quizbanktest.databinding.ActivityRecordPageBinding
 import com.example.quizbanktest.fragment.MultiRecordPage
 import com.example.quizbanktest.fragment.SingleRecordPage
+import com.example.quizbanktest.utils.Constants
 import com.google.android.material.tabs.TabLayout
 
 
@@ -59,20 +60,31 @@ class RecordPage: AppCompatActivity() {
             }
         })
         recordBinding.QuizRecordDelete.setOnClickListener {
+            var selectQuizType = Constants.quizTypeSingle
+            if(recordBinding.recordPager.currentItem==0) {
+                selectQuizType = Constants.quizTypeSingle
+                Log.d("item is 0", "")
+            }else if(recordBinding.recordPager.currentItem==1){
+                selectQuizType = Constants.quizTypeCasual
+                Log.d("item is 1", "")
+            }
+
             if(deleteBtnVisible){
                 recordBinding.QuizRecordDelete.setImageResource(R.drawable.baseline_trash_bin)
                 deleteBtnVisible = false
-                fragmentAdapter.getSRPFragment().onDeleteBtnClick(false)
+                if (selectQuizType == Constants.quizTypeSingle){
+                    SRPFragment.onDeleteBtnClick(false)
+                }else{
+                    MRPFragment.onDeleteBtnClick(false)
+                }
             }else{
                 recordBinding.QuizRecordDelete.setImageResource(R.drawable.baseline_cancel_24)
                 deleteBtnVisible = true
-
-                if(currentPosition==0){
-                    fragmentAdapter.getSRPFragment().onDeleteBtnClick(true)
+                if (selectQuizType == Constants.quizTypeSingle){
+                    SRPFragment.onDeleteBtnClick(true)
                 }else{
-                    Toast.makeText(this, "多人考試目前無法瀏覽", Toast.LENGTH_SHORT).show()
+                    MRPFragment.onDeleteBtnClick(true)
                 }
-
             }
 
         }
