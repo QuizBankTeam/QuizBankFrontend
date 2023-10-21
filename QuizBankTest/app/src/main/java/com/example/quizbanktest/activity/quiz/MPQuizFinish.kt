@@ -28,6 +28,7 @@ import com.example.quizbanktest.models.Question
 import com.example.quizbanktest.models.QuestionRecord
 import com.example.quizbanktest.models.Quiz
 import com.example.quizbanktest.models.QuizRecord
+import com.example.quizbanktest.network.quizService
 import com.example.quizbanktest.utils.Constants
 import com.example.quizbanktest.utils.ConstantsQuiz
 import com.example.quizbanktest.utils.ConstantsQuizRecord
@@ -67,7 +68,7 @@ class MPQuizFinish: AppCompatActivity() {
 
         init()
         makeRecords()
-        Log.d("members size is", quizMembers.size.toString())
+
         rankingAdapter = QuizMembersRankingAdapter(this, quizMembers, questionlist.size)
         finishQuizBinding.rankList.layoutManager = LinearLayoutManager(this)
         finishQuizBinding.rankList.adapter = rankingAdapter
@@ -374,6 +375,14 @@ class MPQuizFinish: AppCompatActivity() {
                             Toast.makeText(this@MPQuizFinish, it, Toast.LENGTH_SHORT).show()
                         })
                     }
+                })
+            }else{
+                val tmpPostQuiz = quizService.PostQuiz("預設題庫", quizType, quizStatus, duringTime, casualDuringTime,
+                    quizStartDatetime, quizEndDatetime, quizMembers, addedQList)
+                ConstantsQuiz.postQuiz(requireContext(), tmpPostQuiz, onSuccess = { postQuiz ->
+                    returnToQuizList!!.backToQuiz(postQuiz, true)
+                }, onFailure = {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                 })
             }
         }, onFailure = {
