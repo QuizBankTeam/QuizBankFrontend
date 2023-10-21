@@ -77,7 +77,7 @@ class QuizMembersRankingAdapter(private val context: Activity, private val membe
         }
         val name = membersList[position].userName
         holder.userNameWithPoints.text = name + ": " + membersList[position].userScore + "分"
-        if(membersList[position].userName == Constants.userId){
+        if(membersList[position].userID == Constants.userId){
             holder.userNameWithPoints.text = name + "(你): " + membersList[position].userScore + "分"
         }
 

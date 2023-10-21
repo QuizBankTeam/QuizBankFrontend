@@ -326,9 +326,7 @@ class  MPStartQuiz: AppCompatActivity() {
             override fun onFinish() {
                 questionSubmit()
                 if(currentAtQuestion == questionList.size-1) {
-                    optionAdapter.setSelectClickListener(object: OptionAdapter.SelectOnClickListener{
-                        override fun onclick(position: Int, holder: OptionAdapter.MyViewHolder) {}
-                    })
+                    startQuizBinding.QuestionOption.visibility = View.GONE
                     currentAtQuestion+=1
                     showUserFigure()
                     quizEnd()

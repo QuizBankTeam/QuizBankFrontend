@@ -354,36 +354,62 @@ class MPQuizFinish: AppCompatActivity() {
     }
     private fun showQuiz(quizType: String, dialog: BottomSheetDialog){
         ConstantsQuiz.getAllQuizsWithBatch(this, quizType, batch = 0, onSuccess = { quizList ->
-            if(quizList!=null) {
-                val adapter = MPQuizFinishSendQAdapter(this, quizList)
-                sendQList.layoutManager = LinearLayoutManager(this)
-                sendQList.setHasFixedSize(true)
-                sendQList.adapter = adapter
+            if (quizList != null) {
+                if(quizList.size > 0) {
+                    val adapter = MPQuizFinishSendQAdapter(this, quizList)
+                    sendQList.layoutManager = LinearLayoutManager(this)
+                    sendQList.setHasFixedSize(true)
+                    sendQList.adapter = adapter
 
-                adapter.setOnSendListener(object : MPQuizFinishSendQAdapter.OnSendListener{
-                    override fun onSend(position: Int) {
-                        val putQuiz = quizList[position]
-                        putQuiz.questions?.add(sendingQuestion)
-                        if(quizType==Constants.quizTypeCasual){
-                            putQuiz.duringTime = putQuiz.duringTime?.plus(20)
-                            putQuiz.casualDuringTime?.add(20)
+                    adapter.setOnSendListener(object : MPQuizFinishSendQAdapter.OnSendListener{
+                        override fun onSend(position: Int) {
+                            val putQuiz = quizList[position]
+                            putQuiz.questions?.add(sendingQuestion)
+                            if(quizType==Constants.quizTypeCasual){
+                                putQuiz.duringTime = putQuiz.duringTime?.plus(20)
+                                putQuiz.casualDuringTime?.add(20)
+                            }
+                            dialog.dismiss()
+                            ConstantsQuiz.putQuiz(this@MPQuizFinish, putQuiz, onSuccess = {
+                                Toast.makeText(this@MPQuizFinish, "儲存成功", Toast.LENGTH_SHORT).show()
+                            }, onFailure = {
+                                Toast.makeText(this@MPQuizFinish, it, Toast.LENGTH_SHORT).show()
+                            })
                         }
-                        dialog.dismiss()
-                        ConstantsQuiz.putQuiz(this@MPQuizFinish, putQuiz, onSuccess = {
-                            Toast.makeText(this@MPQuizFinish, "儲存成功", Toast.LENGTH_SHORT).show()
-                        }, onFailure = {
-                            Toast.makeText(this@MPQuizFinish, it, Toast.LENGTH_SHORT).show()
+                    })
+                }else{
+                    Log.d("No quiz List", "")
+                    val tmpPostQuiz = quizService.PostQuiz("預設題庫", quizType, Constants.quizStatusDraft, 60, ArrayList(),
+                        "", "", ArrayList(), ArrayList()
+                    )
+                    ConstantsQuiz.postQuiz(this, tmpPostQuiz, onSuccess = { postQuiz ->
+                        val newQuiz = ArrayList<Quiz>()
+                        newQuiz.add(postQuiz)
+                        val adapter = MPQuizFinishSendQAdapter(this, newQuiz)
+                        sendQList.layoutManager = LinearLayoutManager(this)
+                        sendQList.setHasFixedSize(true)
+                        sendQList.adapter = adapter
+
+                        adapter.setOnSendListener(object : MPQuizFinishSendQAdapter.OnSendListener{
+                            override fun onSend(position: Int) {
+                                postQuiz.questions?.add(sendingQuestion)
+                                if(quizType==Constants.quizTypeCasual){
+                                    postQuiz.duringTime = postQuiz.duringTime?.plus(20)
+                                    postQuiz.casualDuringTime?.add(20)
+                                }
+                                Log.d("no quiz list sending q", "")
+                                dialog.dismiss()
+                                ConstantsQuiz.putQuiz(this@MPQuizFinish, postQuiz, onSuccess = {
+                                    Toast.makeText(this@MPQuizFinish, "儲存成功", Toast.LENGTH_SHORT).show()
+                                }, onFailure = {
+                                    Toast.makeText(this@MPQuizFinish, it, Toast.LENGTH_SHORT).show()
+                                })
+                            }
                         })
-                    }
-                })
-            }else{
-                val tmpPostQuiz = quizService.PostQuiz("預設題庫", quizType, quizStatus, duringTime, casualDuringTime,
-                    quizStartDatetime, quizEndDatetime, quizMembers, addedQList)
-                ConstantsQuiz.postQuiz(requireContext(), tmpPostQuiz, onSuccess = { postQuiz ->
-                    returnToQuizList!!.backToQuiz(postQuiz, true)
-                }, onFailure = {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                })
+                    }, onFailure = {
+                        Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                    })
+                }
             }
         }, onFailure = {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
