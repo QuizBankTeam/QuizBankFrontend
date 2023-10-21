@@ -38,7 +38,7 @@
             android:layout_height="220dp"
             android:layout_gravity="center"
             android:scaleType="fitCenter"
-            android:src="@drawable/quizbank_icon"
+            android:src="@drawable/qb_icon"
             app:shapeAppearanceOverlay="@style/RoundCorner" />
 
         <TextView

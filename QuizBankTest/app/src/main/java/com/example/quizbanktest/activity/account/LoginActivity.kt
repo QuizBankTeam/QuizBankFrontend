@@ -41,10 +41,20 @@ class LoginActivity : AppCompatActivity() {
             enterBtn.setOnClickListener {
                 if(email.text.toString().isNotEmpty()){
                     mProgressDialog.show()
-                    ConstantsAccountServiceFunction.forgetPwd(this,email.text.toString(), onSuccess = {mProgressDialog.dismiss()}, onFailure = {
-                        Toast.makeText(this@LoginActivity,"user not found",Toast.LENGTH_SHORT).show()
-                        mProgressDialog.dismiss()
-                    })
+                    ConstantsAccountServiceFunction.getCsrfToken(this,
+                        onSuccess = { it1 ->
+                            Log.d("get csrf success", it1)
+                            ConstantsAccountServiceFunction.forgetPwd(this,email.text.toString(), onSuccess = {mProgressDialog.dismiss()}, onFailure = {
+                                Toast.makeText(this@LoginActivity,"user not found",Toast.LENGTH_SHORT).show()
+                                mProgressDialog.dismiss()
+                            })
+                        },
+                        onFailure = { it1 ->
+                            hideProgressDialog()
+                            showErrorSnackBar("伺服器回應失敗")
+                            Log.d("get csrf fail", it1)
+                        })
+
                 }
                 forgetDialog.cancel()
             }
