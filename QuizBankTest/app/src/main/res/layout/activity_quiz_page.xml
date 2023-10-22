@@ -36,11 +36,11 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"/>
+                    android:layout_weight="1"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:layout_gravity="center"
                     android:paddingLeft="13dp"
                     android:text="考試 📝️"
@@ -48,22 +48,30 @@
                     android:textStyle="bold"
                     android:textAppearance="@style/CustomToolbarStyle"
                     android:textColor="@color/colorPrimaryDark"/>
-                <ImageButton
-                    android:id="@+id/quiz_record"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="?actionBarItemBackground"
-                    android:src="@drawable/baseline_record"/>
-                <ImageButton
-                    android:id="@+id/quiz_add"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:background="?actionBarItemBackground"
-                    android:src="@drawable/baseline_add_black"/>
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/quiz_record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="8dp"
+                        android:background="?actionBarItemBackground"
+                        android:src="@drawable/baseline_record"/>
+                    <ImageButton
+                        android:id="@+id/quiz_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginHorizontal="8dp"
+                        android:background="?actionBarItemBackground"
+                        android:src="@drawable/baseline_add_black"/>
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
 

@@ -396,7 +396,7 @@ class BankQuestionActivity : BaseActivity(), RecyclerViewInterface {
             btnSubmit.setOnClickListener {
                 if (isModified) {
                     val data = QuestionModel(
-                        questionModels[position]._id, newQuestionTitle,
+                        questionModels[position]._id, etTitle.text.toString(),
                         questionModels[position].number, questionModels[position].description,
                         questionModels[position].options, questionModels[position].questionType,
                         questionModels[position].bankType, questionModels[position].questionBank,
